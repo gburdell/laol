@@ -1,0 +1,49 @@
+// All objects are immutable (val) by default
+
+class List {
+    def append(data) {
+        ele = Ele.new(data);
+        if m_head.nil?
+            m_head, m_tail = ele, ele;
+        else {
+            m_tail.next=(ele);
+            m_tail = ele;
+        }
+        m_size++;
+        return this;
+    }
+
+    def prepend(data) {
+        ele = Ele.new(data);
+        if m_head.nil?
+            m_head, m_tail = ele, ele;
+        else {
+            ele.next=(m_head);
+            m_head = ele;
+        }
+        m_size++;
+        return this;
+    }
+
+    def length {
+        return m_size;
+    }
+
+    def empty? {
+        return length == 0;
+    }
+
+    alias << append;
+    alias >> prepend;
+
+    private var m_head, m_tail = nil, nil;
+    private var m_size = 0;
+
+    // The constructor initializers are instance variables: m_data and m_next
+    private class Ele(m_data, private var m_next=nil) {
+        // wrapper around private var m_next
+        def next=(n) {
+            m_next = n;
+        }
+    }
+}
