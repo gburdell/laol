@@ -27,14 +27,14 @@ regexp_primary <-
 	'/' !('/' / '*') ('\\' . / !'/' .)+ '/'
 /	"%r{" ('\\' . / !'}' .)+ '}'
 
-hash_primary <- LCURLY hash_key_value (COMMA hash_key_value)* RCURLY
+hash_primary <- LCURLY (hash_key_value (COMMA hash_key_value)*)? RCURLY
 
 hash_key <- STRING / IDENT
 
 hash_key_value <- hash_key COLON expression
 
 array_primary <-
-	LBRACK expression (COMMA expression) RBRACK
+	LBRACK (expression (COMMA expression)*)? RBRACK
 	#array of words or symbols
 /	'%' [wi] '{' ('\\' . / !'}')* '}'
 
@@ -48,7 +48,7 @@ postfix_expression <-
 dot_suffix <-
 	DOT (	K_NIL QMARK?
 		/	K_NEW
-		/	method_name (EXCL / QMARK)?
+		/	METHOD_NAME_IDENT (EXCL / QMARK)?
 		)
 
 block <- anonymous_function
@@ -65,7 +65,7 @@ param_expression_list <- unnamed_param? named_param?
 
 unary_expression <-
 	(PLUS2 / MINUS2 / AND / STAR) unary_expression
-	unary_op unary_expression
+/	unary_op unary_expression
 /	postfix_expression
 
 unary_op <- TILDE /	EXCL / PLUS / MINUS	
@@ -83,20 +83,24 @@ binary_op <-
 
 expression <-
 	expression QMARK expression COLON expression
+/	LPAREN expression RPAREN
 /	binary_expression
 
 array_select_expression <-
 	expression (DOT2 / COLON) expression
 /	expression (COMMA expression)?
 
-assignment_lhs <- lhs_decl (COMMA lhs_decl)*
+var_decl <- lhs_decl IDENT (COMMA IDENT)*
 
-// We allow (first) assignment to specify mutability
-lhs_decl <-
-	access_modifier? K_STATIC? mutability? lhs_ref
+assignment_lhs <- lhs_decl lhs_ref (COMMA lhs_ref)*
+
+lhs_decl <- access_modifier? K_STATIC? mutability?
 
 lhs_ref <-
 	lhs_ref LBRACK array_select_expression RBRACK
+/	lhs_ref LPAREN param_expression_list? RPAREN
+/	lhs_ref DOT METHOD_NAME_IDENT (EXCL / QMARK)?
+/	lhs_ref (PLUS2 / MINUS2) 
 /	variable_name
 
 assignment_op <-
@@ -122,6 +126,7 @@ file_item <-
 
 module_item <-
 	SEMI	
+/	var_decl s_tail
 /	assignment_lhs assignment_op assignment_rhs
 /	class_declaration statement_modifier?
 /	method_declaration statement_modifier?
@@ -129,6 +134,7 @@ module_item <-
 
 statement <- 
 	SEMI	
+/	var_decl s_tail
 /	assignment_lhs assignment_op assignment_rhs
 /	expression s_tail
 /	case_statement statement_modifier?
@@ -159,7 +165,7 @@ assignment_rhs <-
 	expression (COMMA expression)* s_tail	
 /	anonymous_function statement_modifier?
 
-return_statement <- K_RETURN expression
+return_statement <- K_RETURN expression?
 
 throw_statement <- K_THROW expression
 
@@ -209,7 +215,7 @@ method_param_decl_modifier <- access_modifier? mutability?
 
 method_param_decl_ele <-
 	//NOTE: only last in list can have STAR (marks as varargs)
-	// AND (&) marks as block parameter (only last in list)
+	// AND (&) marks as function parameter
 	method_param_decl_modifier (AND / STAR)? IDENT method_param_decl_default?
 
 method_param_decl_default <- EQ expression
@@ -218,7 +224,6 @@ method_param_decl_list <- method_param_decl_ele (COMMA method_param_decl_ele)*
 
 class_extends <- (K_EXTENDS IDENT)? (K_IMPLEMENTS IDENT (COMMA IDENT))?
 
-//we use AND to be consistent w/ param convention
 anonymous_function <- ARROW method_param_decl LCURLY method_body RCURLY
 
 method_declaration <-
@@ -234,7 +239,10 @@ method_name <-
 /	METHOD_NAME_IDENT
 
 method_name_op <-
-	unary_op
+	LBRACK RBRACK EQ  // []=
+/	LBRACK RBRACK     // []
+/   LPAREN RPAREN	  // ()
+/	unary_op
 /	binary_op
 /	QMARK
 /	EXCL

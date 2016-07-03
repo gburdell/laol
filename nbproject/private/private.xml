@@ -3,13 +3,7 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/home/gburdell/projects/laol/test/data/list.laol</file>
-            <file>file:/home/gburdell/projects/laol/test/laol/ast/NumberTest.java</file>
-            <file>file:/home/gburdell/projects/laol/test/laol/ast/PrimaryExpressionTest.java</file>
-            <file>file:/home/gburdell/projects/laol/test/laol/ast/MyStringTest.java</file>
-            <file>file:/home/gburdell/projects/laol/test/laol/parser/GrammarTest.java</file>
-            <file>file:/home/gburdell/projects/laol/src/laol/ast/Number.java</file>
-            <file>file:/home/gburdell/projects/laol/test/laol/ast/SymbolTest.java</file>
+            <file>file:/home/gburdell/projects/laol/src/laol/parser/laol.peg</file>
         </group>
     </open-files>
 </project-private>

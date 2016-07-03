@@ -1,0 +1,9 @@
+#!/bin/csh -f
+
+# Process tokens.txt to generate side collateral
+
+echo "generate 'codes' for ITokenCode.java"
+awk '{printf"\tpublic static final int %s = %d ;\n",$1,NR}' tokens.txt >! codes
+
+echo "generate 'create' for sv2009.flex"
+awk '{printf"\t%s {return create(%s);}\n",$2,$1}' tokens.txt >! create

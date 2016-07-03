@@ -24,3 +24,5 @@ all
 this todo
 THERE;
 
+b = a.f + 5;
+a = v.a % 12;

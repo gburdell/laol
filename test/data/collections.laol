@@ -6,7 +6,7 @@ class List {
         if m_head.nil?
             m_head, m_tail = ele, ele;
         else {
-            m_tail.next=(ele);
+            m_tail.next = ele;
             m_tail = ele;
         }
         m_size++;
@@ -33,8 +33,29 @@ class List {
         return length == 0;
     }
 
+    def contains?(ele) {
+        each->(e) {
+            return true if ele == e;
+        };
+        return false;
+    }
+
     alias << append;
-    alias >> prepend;
+
+    def each(&f) {
+        p = m_head;
+        until p.nil? {
+            f(p.m_data);
+            p = p.next;
+        }
+    }
+
+    //TODO: semantics not right here.  (see line 80 too!)
+    def *(n) {
+        ar = [];
+        n.times->(_) {ar << List.new;};
+        return ar;
+    }
 
     private var m_head, m_tail = nil, nil;
     private var m_size = 0;
@@ -45,5 +66,16 @@ class List {
         def next=(n) {
             m_next = n;
         }
+        def next {
+            return m_next;
+        }
     }
+}
+
+class Map {
+    def []=(k,v) {
+        slot = k.hashcode % NSLOTS;
+    }
+    private val NSLOTS = 13;
+    private var m_slots = List.new * NSLOTS;    //array [NSLOTS] of List
 }
