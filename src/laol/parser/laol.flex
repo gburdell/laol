@@ -2,8 +2,9 @@ package laol.parser;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
-import apfe.runtimev2.Token;
-import apfe.runtimev2.Scanner;
+import java.util.HashMap;
+import apfe.runtime.Token;
+import apfe.runtime.Scanner;
 
 %%
 
@@ -65,6 +66,108 @@ import apfe.runtimev2.Scanner;
   public boolean isEOF() {
     return zzAtEOF;
     }
+
+	@Override
+	public String getAsString(int tokCode) {
+		return stMap.get(tokCode);
+	}
+
+	private static final HashMap<Integer,String> stMap = new HashMap<>();
+	static {
+		stMap.put(COMMENT,"<COMMENT>");
+		stMap.put(STRING_LITERAL,"<STRING>");
+		//contents of map
+		stMap.put(K_ABSTRACT,"abstract");
+		stMap.put(K_ALIAS,"alias");
+		stMap.put(K_BREAK,"break");
+		stMap.put(K_CASE,"case");
+		stMap.put(K_CATCH,"catch");
+		stMap.put(K_CLASS,"class");
+		stMap.put(K_DEF,"def");
+		stMap.put(K_ELSE,"else");
+		stMap.put(K_ELSIF,"elsif");
+		stMap.put(K_EXTENDS,"extends");
+		stMap.put(K_FALSE,"false");
+		stMap.put(K_FINALLY,"finally");
+		stMap.put(K_FOR,"for");
+		stMap.put(K_IF,"if");
+		stMap.put(K_IMPLEMENTS,"implements");
+		stMap.put(K_IN,"in");
+		stMap.put(K_MIXIN,"mixin");
+		stMap.put(K_MODULE,"module");
+		stMap.put(K_NEXT,"next");
+		stMap.put(K_NEW,"new");
+		stMap.put(K_NIL,"nil");
+		stMap.put(K_PRIVATE,"private");
+		stMap.put(K_PROTECTED,"protected");
+		stMap.put(K_PUBLIC,"public");
+		stMap.put(K_REQUIRE,"require");
+		stMap.put(K_RETURN,"return");
+		stMap.put(K_STATIC,"static");
+		stMap.put(K_SUPER,"super");
+		stMap.put(K_THIS,"this");
+		stMap.put(K_THROW,"throw");
+		stMap.put(K_TRUE,"true");
+		stMap.put(K_TRY,"try");
+		stMap.put(K_UNLESS,"unless");
+		stMap.put(K_UNTIL,"until");
+		stMap.put(K_VAL,"val");
+		stMap.put(K_VAR,"var");
+		stMap.put(K_WHEN,"when");
+		stMap.put(K_WHILE,"while");
+		stMap.put(K_FILE,"__FILE__");
+		stMap.put(K_TARGET,"__TARGET__");
+		stMap.put(COLON,":");
+		stMap.put(COLON2,"::");
+		stMap.put(SEMI,";");
+		stMap.put(DOT,".");
+		stMap.put(DOT2,"..");
+		stMap.put(COMMA,",");
+		stMap.put(LT,"<");
+		stMap.put(LTEQ,"<=");
+		stMap.put(LT2,"<<");
+		stMap.put(LT2_EQ,"<<=");
+		stMap.put(GT,">");
+		stMap.put(GTEQ,">=");
+		stMap.put(GT2,">>");
+		stMap.put(GT2_EQ,">>=");
+		stMap.put(EQ,"=");
+		stMap.put(EQ2,"==");
+		stMap.put(NEQ,"!=");
+		stMap.put(EXCL,"!");
+		stMap.put(TILDE,"~");
+		stMap.put(CARET,"^");
+		stMap.put(AND,"&");
+		stMap.put(AND2,"&&");
+		stMap.put(AND_EQ,"&=");
+		stMap.put(OR,"|");
+		stMap.put(OR2,"||");
+		stMap.put(OR_EQ,"|=");
+		stMap.put(STAR,"*");
+		stMap.put(STAR_EQ,"*=");
+		stMap.put(MINUS,"-");
+		stMap.put(MINUS2,"--");
+		stMap.put(MINUS_EQ,"-=");
+		stMap.put(ARROW,"->");
+		stMap.put(PLUS,"+");
+		stMap.put(PLUS2,"++");
+		stMap.put(PLUS_EQ,"+=");
+		stMap.put(QMARK,"?");
+		stMap.put(DIV,"/");
+		stMap.put(DIV_EQ,"/=");
+		stMap.put(LCURLY,"{");
+		stMap.put(RCURLY,"}");
+		stMap.put(LPAREN,"(");
+		stMap.put(RPAREN,")");
+		stMap.put(LBRACK,"[");
+		stMap.put(RBRACK,"]");
+		stMap.put(PCNT,"%");
+		stMap.put(PCNT_EQ,"%=");
+		stMap.put(IDENT,"<IDENT>");
+		stMap.put(UNSIGNED_NUMBER,"<UNSIGNED_NUMBER>");
+		stMap.put(REAL_NUMBER,"<REAL_NUMBER>");
+		stMap.put(BASED_NUMBER,"<BASED_NUMBER>");
+	}
 %}
 
 /* main character classes */
@@ -118,46 +221,46 @@ StringCharacter = [^\r\n\"\\]
     {Comment}     		{return create(COMMENT);}
 
     //{insert 'create'
-	"abstract" {return create(ABSTRACT_K);}
-	"alias" {return create(ALIAS_K);}
-	"break" {return create(BREAK_K);}
-	"case" {return create(CASE_K);}
-	"catch" {return create(CATCH_K);}
-	"class" {return create(CLASS_K);}
-	"def" {return create(DEF_K);}
-	"else" {return create(ELSE_K);}
-	"elsif" {return create(ELSIF_K);}
-	"extends" {return create(EXTENDS_K);}
-	"false" {return create(FALSE_K);}
-	"finally" {return create(FINALLY_K);}
-	"for" {return create(FOR_K);}
-	"if" {return create(IF_K);}
-	"implements" {return create(IMPLEMENTS_K);}
-	"in" {return create(IN_K);}
-	"mixin" {return create(MIXIN_K);}
-	"module" {return create(MODULE_K);}
-	"next" {return create(NEXT_K);}
-	"new" {return create(NEW_K);}
-	"nil" {return create(NIL_K);}
-	"private" {return create(PRIVATE_K);}
-	"protected" {return create(PROTECTED_K);}
-	"public" {return create(PUBLIC_K);}
-	"require" {return create(REQUIRE_K);}
-	"return" {return create(RETURN_K);}
-	"static" {return create(STATIC_K);}
-	"super" {return create(SUPER_K);}
-	"this" {return create(THIS_K);}
-	"throw" {return create(THROW_K);}
-	"true" {return create(TRUE_K);}
-	"try" {return create(TRY_K);}
-	"unless" {return create(UNLESS_K);}
-	"until" {return create(UNTIL_K);}
-	"val" {return create(VAL_K);}
-	"var" {return create(VAR_K);}
-	"when" {return create(WHEN_K);}
-	"while" {return create(WHILE_K);}
-	"__FILE__" {return create(FILE_K);}
-	"__TARGET__" {return create(TARGET_K);}
+	"abstract" {return create(K_ABSTRACT);}
+	"alias" {return create(K_ALIAS);}
+	"break" {return create(K_BREAK);}
+	"case" {return create(K_CASE);}
+	"catch" {return create(K_CATCH);}
+	"class" {return create(K_CLASS);}
+	"def" {return create(K_DEF);}
+	"else" {return create(K_ELSE);}
+	"elsif" {return create(K_ELSIF);}
+	"extends" {return create(K_EXTENDS);}
+	"false" {return create(K_FALSE);}
+	"finally" {return create(K_FINALLY);}
+	"for" {return create(K_FOR);}
+	"if" {return create(K_IF);}
+	"implements" {return create(K_IMPLEMENTS);}
+	"in" {return create(K_IN);}
+	"mixin" {return create(K_MIXIN);}
+	"module" {return create(K_MODULE);}
+	"next" {return create(K_NEXT);}
+	"new" {return create(K_NEW);}
+	"nil" {return create(K_NIL);}
+	"private" {return create(K_PRIVATE);}
+	"protected" {return create(K_PROTECTED);}
+	"public" {return create(K_PUBLIC);}
+	"require" {return create(K_REQUIRE);}
+	"return" {return create(K_RETURN);}
+	"static" {return create(K_STATIC);}
+	"super" {return create(K_SUPER);}
+	"this" {return create(K_THIS);}
+	"throw" {return create(K_THROW);}
+	"true" {return create(K_TRUE);}
+	"try" {return create(K_TRY);}
+	"unless" {return create(K_UNLESS);}
+	"until" {return create(K_UNTIL);}
+	"val" {return create(K_VAL);}
+	"var" {return create(K_VAR);}
+	"when" {return create(K_WHEN);}
+	"while" {return create(K_WHILE);}
+	"__FILE__" {return create(K_FILE);}
+	"__TARGET__" {return create(K_TARGET);}
 	":" {return create(COLON);}
 	"::" {return create(COLON2);}
 	";" {return create(SEMI);}

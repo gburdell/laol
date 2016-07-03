@@ -1,0 +1,47 @@
+# Specify default property values for generate.
+
+genMaze: false
+
+#Set true when using jflex/tokens
+genTerminal: false
+
+# Output directory for generated files.
+# Make sure to accomodate packageName.
+# E.g. if packageName is apfe.dsl.grammar, then
+# outputDir must end in /.../apfe/dsl/grammar.
+outputDir: apfe
+
+# package name (related to outputDir)
+packageName: laol.parser.apfe
+
+# Base class for non-left-recursive
+baseCls: Acceptor
+
+# Base class for left-recursive
+lrBaseCls: LeftRecursiveAcceptor
+
+# Template for non-left-recursive class
+baseJavaTemplate: base.java.tmpl
+
+# Template for left-recursive class
+dlrBaseJavaTemplate: dlrbase.java.tmpl
+
+# Generate listeners
+#genListeners: true
+genListeners: false
+
+# Generate memoize
+#genMemoize: true
+genMemoize: false
+
+# Generated class names use CamelCase
+genClsAsCamelCase: true
+#genClsAsCamelCase: false
+
+# Class name prefix: so do not clash with runtime names
+#clsNmPrefix: ag_
+clsNmPrefix:
+
+# Specify toplevel class name for all-in-one generation; else leave blank.
+#topLevelClsNm: LaolParser
+topLevelClsNm:

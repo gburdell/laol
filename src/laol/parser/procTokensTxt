@@ -5,5 +5,8 @@
 echo "generate 'codes' for ITokenCode.java"
 awk '{printf"\tpublic static final int %s = %d ;\n",$1,NR}' tokens.txt >! codes
 
-echo "generate 'create' for sv2009.flex"
+echo "generate 'create' for *.flex"
 awk '{printf"\t%s {return create(%s);}\n",$2,$1}' tokens.txt >! create
+
+echo "generate 'map' for token string by code (for subclass of Scanner to implement getAsString()"
+awk '{printf"\t\tstMap.put(%s,%s);\n",$1,$2}' tokens.txt | sed -e 's/,{/,"</' -e 's/})/>")/' >! map

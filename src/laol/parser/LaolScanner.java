@@ -4,8 +4,9 @@ package laol.parser;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
-import apfe.runtimev2.Token;
-import apfe.runtimev2.Scanner;
+import java.util.HashMap;
+import apfe.runtime.Token;
+import apfe.runtime.Scanner;
 
 
 /**
@@ -611,6 +612,108 @@ public class LaolScanner extends Scanner implements ITokenCodes {
     return zzAtEOF;
     }
 
+	@Override
+	public String getAsString(int tokCode) {
+		return stMap.get(tokCode);
+	}
+
+	private static final HashMap<Integer,String> stMap = new HashMap<>();
+	static {
+		stMap.put(COMMENT,"<COMMENT>");
+		stMap.put(STRING_LITERAL,"<STRING>");
+		//contents of map
+		stMap.put(K_ABSTRACT,"abstract");
+		stMap.put(K_ALIAS,"alias");
+		stMap.put(K_BREAK,"break");
+		stMap.put(K_CASE,"case");
+		stMap.put(K_CATCH,"catch");
+		stMap.put(K_CLASS,"class");
+		stMap.put(K_DEF,"def");
+		stMap.put(K_ELSE,"else");
+		stMap.put(K_ELSIF,"elsif");
+		stMap.put(K_EXTENDS,"extends");
+		stMap.put(K_FALSE,"false");
+		stMap.put(K_FINALLY,"finally");
+		stMap.put(K_FOR,"for");
+		stMap.put(K_IF,"if");
+		stMap.put(K_IMPLEMENTS,"implements");
+		stMap.put(K_IN,"in");
+		stMap.put(K_MIXIN,"mixin");
+		stMap.put(K_MODULE,"module");
+		stMap.put(K_NEXT,"next");
+		stMap.put(K_NEW,"new");
+		stMap.put(K_NIL,"nil");
+		stMap.put(K_PRIVATE,"private");
+		stMap.put(K_PROTECTED,"protected");
+		stMap.put(K_PUBLIC,"public");
+		stMap.put(K_REQUIRE,"require");
+		stMap.put(K_RETURN,"return");
+		stMap.put(K_STATIC,"static");
+		stMap.put(K_SUPER,"super");
+		stMap.put(K_THIS,"this");
+		stMap.put(K_THROW,"throw");
+		stMap.put(K_TRUE,"true");
+		stMap.put(K_TRY,"try");
+		stMap.put(K_UNLESS,"unless");
+		stMap.put(K_UNTIL,"until");
+		stMap.put(K_VAL,"val");
+		stMap.put(K_VAR,"var");
+		stMap.put(K_WHEN,"when");
+		stMap.put(K_WHILE,"while");
+		stMap.put(K_FILE,"__FILE__");
+		stMap.put(K_TARGET,"__TARGET__");
+		stMap.put(COLON,":");
+		stMap.put(COLON2,"::");
+		stMap.put(SEMI,";");
+		stMap.put(DOT,".");
+		stMap.put(DOT2,"..");
+		stMap.put(COMMA,",");
+		stMap.put(LT,"<");
+		stMap.put(LTEQ,"<=");
+		stMap.put(LT2,"<<");
+		stMap.put(LT2_EQ,"<<=");
+		stMap.put(GT,">");
+		stMap.put(GTEQ,">=");
+		stMap.put(GT2,">>");
+		stMap.put(GT2_EQ,">>=");
+		stMap.put(EQ,"=");
+		stMap.put(EQ2,"==");
+		stMap.put(NEQ,"!=");
+		stMap.put(EXCL,"!");
+		stMap.put(TILDE,"~");
+		stMap.put(CARET,"^");
+		stMap.put(AND,"&");
+		stMap.put(AND2,"&&");
+		stMap.put(AND_EQ,"&=");
+		stMap.put(OR,"|");
+		stMap.put(OR2,"||");
+		stMap.put(OR_EQ,"|=");
+		stMap.put(STAR,"*");
+		stMap.put(STAR_EQ,"*=");
+		stMap.put(MINUS,"-");
+		stMap.put(MINUS2,"--");
+		stMap.put(MINUS_EQ,"-=");
+		stMap.put(ARROW,"->");
+		stMap.put(PLUS,"+");
+		stMap.put(PLUS2,"++");
+		stMap.put(PLUS_EQ,"+=");
+		stMap.put(QMARK,"?");
+		stMap.put(DIV,"/");
+		stMap.put(DIV_EQ,"/=");
+		stMap.put(LCURLY,"{");
+		stMap.put(RCURLY,"}");
+		stMap.put(LPAREN,"(");
+		stMap.put(RPAREN,")");
+		stMap.put(LBRACK,"[");
+		stMap.put(RBRACK,"]");
+		stMap.put(PCNT,"%");
+		stMap.put(PCNT_EQ,"%=");
+		stMap.put(IDENT,"<IDENT>");
+		stMap.put(UNSIGNED_NUMBER,"<UNSIGNED_NUMBER>");
+		stMap.put(REAL_NUMBER,"<REAL_NUMBER>");
+		stMap.put(BASED_NUMBER,"<BASED_NUMBER>");
+	}
+
 
   /**
    * Creates a new scanner
@@ -1137,11 +1240,11 @@ public class LaolScanner extends Scanner implements ITokenCodes {
             }
           case 147: break;
           case 39: 
-            { return create(IF_K);
+            { return create(K_IF);
             }
           case 148: break;
           case 40: 
-            { return create(IN_K);
+            { return create(K_IN);
             }
           case 149: break;
           case 41: 
@@ -1253,31 +1356,31 @@ public class LaolScanner extends Scanner implements ITokenCodes {
             }
           case 176: break;
           case 68: 
-            { return create(TRY_K);
+            { return create(K_TRY);
             }
           case 177: break;
           case 69: 
-            { return create(DEF_K);
+            { return create(K_DEF);
             }
           case 178: break;
           case 70: 
-            { return create(FOR_K);
+            { return create(K_FOR);
             }
           case 179: break;
           case 71: 
-            { return create(NIL_K);
+            { return create(K_NIL);
             }
           case 180: break;
           case 72: 
-            { return create(NEW_K);
+            { return create(K_NEW);
             }
           case 181: break;
           case 73: 
-            { return create(VAR_K);
+            { return create(K_VAR);
             }
           case 182: break;
           case 74: 
-            { return create(VAL_K);
+            { return create(K_VAL);
             }
           case 183: break;
           case 75: 
@@ -1293,27 +1396,27 @@ public class LaolScanner extends Scanner implements ITokenCodes {
             }
           case 186: break;
           case 78: 
-            { return create(TRUE_K);
+            { return create(K_TRUE);
             }
           case 187: break;
           case 79: 
-            { return create(THIS_K);
+            { return create(K_THIS);
             }
           case 188: break;
           case 80: 
-            { return create(CASE_K);
+            { return create(K_CASE);
             }
           case 189: break;
           case 81: 
-            { return create(ELSE_K);
+            { return create(K_ELSE);
             }
           case 190: break;
           case 82: 
-            { return create(NEXT_K);
+            { return create(K_NEXT);
             }
           case 191: break;
           case 83: 
-            { return create(WHEN_K);
+            { return create(K_WHEN);
             }
           case 192: break;
           case 84: 
@@ -1321,103 +1424,103 @@ public class LaolScanner extends Scanner implements ITokenCodes {
             }
           case 193: break;
           case 85: 
-            { return create(ALIAS_K);
+            { return create(K_ALIAS);
             }
           case 194: break;
           case 86: 
-            { return create(BREAK_K);
+            { return create(K_BREAK);
             }
           case 195: break;
           case 87: 
-            { return create(SUPER_K);
+            { return create(K_SUPER);
             }
           case 196: break;
           case 88: 
-            { return create(THROW_K);
+            { return create(K_THROW);
             }
           case 197: break;
           case 89: 
-            { return create(CATCH_K);
+            { return create(K_CATCH);
             }
           case 198: break;
           case 90: 
-            { return create(CLASS_K);
+            { return create(K_CLASS);
             }
           case 199: break;
           case 91: 
-            { return create(ELSIF_K);
+            { return create(K_ELSIF);
             }
           case 200: break;
           case 92: 
-            { return create(FALSE_K);
+            { return create(K_FALSE);
             }
           case 201: break;
           case 93: 
-            { return create(MIXIN_K);
+            { return create(K_MIXIN);
             }
           case 202: break;
           case 94: 
-            { return create(UNTIL_K);
+            { return create(K_UNTIL);
             }
           case 203: break;
           case 95: 
-            { return create(WHILE_K);
+            { return create(K_WHILE);
             }
           case 204: break;
           case 96: 
-            { return create(STATIC_K);
+            { return create(K_STATIC);
             }
           case 205: break;
           case 97: 
-            { return create(RETURN_K);
+            { return create(K_RETURN);
             }
           case 206: break;
           case 98: 
-            { return create(MODULE_K);
+            { return create(K_MODULE);
             }
           case 207: break;
           case 99: 
-            { return create(PUBLIC_K);
+            { return create(K_PUBLIC);
             }
           case 208: break;
           case 100: 
-            { return create(UNLESS_K);
+            { return create(K_UNLESS);
             }
           case 209: break;
           case 101: 
-            { return create(REQUIRE_K);
+            { return create(K_REQUIRE);
             }
           case 210: break;
           case 102: 
-            { return create(EXTENDS_K);
+            { return create(K_EXTENDS);
             }
           case 211: break;
           case 103: 
-            { return create(FINALLY_K);
+            { return create(K_FINALLY);
             }
           case 212: break;
           case 104: 
-            { return create(PRIVATE_K);
+            { return create(K_PRIVATE);
             }
           case 213: break;
           case 105: 
-            { return create(FILE_K);
+            { return create(K_FILE);
             }
           case 214: break;
           case 106: 
-            { return create(ABSTRACT_K);
+            { return create(K_ABSTRACT);
             }
           case 215: break;
           case 107: 
-            { return create(PROTECTED_K);
+            { return create(K_PROTECTED);
             }
           case 216: break;
           case 108: 
-            { return create(TARGET_K);
+            { return create(K_TARGET);
             }
           case 217: break;
           case 109: 
-            { return create(IMPLEMENTS_K);
+            { return create(K_IMPLEMENTS);
             }
           case 218: break;
           default:
