@@ -39,10 +39,14 @@ import apfe.runtime.Scanner;
   	return create(id, yytext());
   }
 
-  public LaolScanner(String fn) throws FileNotFoundException {
-    this(new FileReader(fn));
-    setFileName(fn);
-  }
+    public static LaolScanner create(String fn) throws IOException {
+        try (FileReader rdr = new FileReader(fn)) {
+            LaolScanner scanner = new LaolScanner(rdr);
+            setFileName(fn);
+            scanner.slurp();
+            return scanner;
+        }
+    }
 
   //TODO: derive from RuntimeException to pass back to parser
   private void error(String msg) {
@@ -76,7 +80,11 @@ import apfe.runtime.Scanner;
 	static {
 		stMap.put(COMMENT,"<COMMENT>");
 		stMap.put(STRING_LITERAL,"<STRING>");
-		//contents of map
+		stMap.put(ARRAY_OF,"%[wi]{...}");
+		stMap.put(REGEXP,"/.../|%r{...}");
+		stMap.put(PREFIX_OP,"(--|++)_");
+		stMap.put(NL,"\\n");
+		//{contents of map
 		stMap.put(K_ABSTRACT,"abstract");
 		stMap.put(K_ALIAS,"alias");
 		stMap.put(K_BREAK,"break");
@@ -167,6 +175,7 @@ import apfe.runtime.Scanner;
 		stMap.put(UNSIGNED_NUMBER,"<UNSIGNED_NUMBER>");
 		stMap.put(REAL_NUMBER,"<REAL_NUMBER>");
 		stMap.put(BASED_NUMBER,"<BASED_NUMBER>");
+		//}map
 	}
 %}
 
@@ -179,6 +188,9 @@ Space = [ \t\f]
 /* comments */
 Comment = ("/*" ~"*/") | {EndOfLineComment}
 EndOfLineComment = "//" {InputCharacter}* {LineTerminator}?
+
+Regexp  = (\/[^\s/]+\/) | (%r\{[^\}]*\})
+ArrayOf = %[wi]\{[^\}]*\}
 
 /* identifiers */
 IDENT = [a-zA-Z_][a-zA-Z_0-9]*
@@ -217,8 +229,12 @@ StringCharacter = [^\r\n\"\\]
 
 <YYINITIAL> {
     {Space}+      		{ /* ignore */ }
-    {LineTerminator}   	{return create(EOL);}
+    {LineTerminator}   	{return create(NL);}
     {Comment}     		{return create(COMMENT);}
+	{Regexp}			{return create(REGEXP);}
+	{ArrayOf} 	        {return create(ARRAY_OF);}
+
+	"--_" | "++_"		{return create(PREFIX_OP);}
 
     //{insert 'create'
 	"abstract" {return create(K_ABSTRACT);}
@@ -332,7 +348,7 @@ StringCharacter = [^\r\n\"\\]
   "\\'"                          { string.append( '\'' ); }
   "\\\\"                         { string.append( '\\' ); }
   \\[0-3]?{OctDigit}?{OctDigit}  { char val = (char) Integer.parseInt(yytext().substring(1),8); string.append( val ); }
-  \\h{HexDigit}?{HexDigit}  { char val = (char) Integer.parseInt(yytext().substring(1),16); string.append( val ); }
+  \\h{HexDigit}?{HexDigit}       { char val = (char) Integer.parseInt(yytext().substring(1),16); string.append( val ); }
   
   /* error cases */
   \\.                            { error("Illegal escape sequence"); }

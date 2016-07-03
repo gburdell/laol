@@ -1,7 +1,13 @@
 # PEG grammar for laol
 # Ruby: http://ruby-doc.org/docs/ruby-doc-bundle/Manual/man-1.4/syntax.html
 
-Grammar <- EOL* contents? EOF
+Grammar <- nlc contents? EOF
+
+nlc <- (NL / wcomment)*
+c   <- wcomment*
+
+// Wrap comment so we can use callback to collect
+wcomment <- COMMENT
 
 for_variable_name <- IDENT
 
@@ -14,29 +20,27 @@ primary_expression <-
 /	K_FILE / K_TARGET
 /	K_TRUE / K_FALSE
 /	K_THIS / K_SUPER
-/	here_doc
+//TODO: /	here_doc
 / 	variable_name (QMARK / EXCL)?
-/	STRING
-/	SYMBOL
-/	Number
+/	STRING_LITERAL
+/	symbol
+/	number
 /	hash_primary
 /	array_primary
 /	regexp_primary
 
-regexp_primary <-
-	'/' !('/' / '*') ('\\' . / !'/' .)+ '/'
-/	"%r{" ('\\' . / !'}' .)+ '}'
+regexp_primary <- REGEXP
 
 hash_primary <- LCURLY (hash_key_value (COMMA hash_key_value)*)? RCURLY
 
-hash_key <- STRING / IDENT
+hash_key <- STRING_LITERAL / IDENT
 
 hash_key_value <- hash_key COLON expression
 
 array_primary <-
 	LBRACK (expression (COMMA expression)*)? RBRACK
 	#array of words or symbols
-/	'%' [wi] '{' ('\\' . / !'}')* '}'
+/	ARRAY_OF
 
 postfix_expression <-
 	postfix_expression LBRACK array_select_expression RBRACK block?
@@ -48,7 +52,7 @@ postfix_expression <-
 dot_suffix <-
 	DOT (	K_NIL QMARK?
 		/	K_NEW
-		/	METHOD_NAME_IDENT (EXCL / QMARK)?
+		/	method_name_ident (EXCL / QMARK)?
 		)
 
 block <- anonymous_function
@@ -99,7 +103,7 @@ lhs_decl <- access_modifier? K_STATIC? mutability?
 lhs_ref <-
 	lhs_ref LBRACK array_select_expression RBRACK
 /	lhs_ref LPAREN param_expression_list? RPAREN
-/	lhs_ref DOT METHOD_NAME_IDENT (EXCL / QMARK)?
+/	lhs_ref DOT method_name_ident (EXCL / QMARK)?
 /	lhs_ref (PLUS2 / MINUS2) 
 /	variable_name
 
@@ -118,7 +122,7 @@ assignment_op <-
 contents <-
 	require_statement* file_item+
 
-require_statement <- K_REQUIRE STRING s_tail
+require_statement <- K_REQUIRE STRING_LITERAL s_tail
 
 file_item <-
 	module_declaration
@@ -235,8 +239,8 @@ method_declaration <-
 		)
 	
 method_name <-
-	METHOD_NAME_IDENT? method_name_op
-/	METHOD_NAME_IDENT
+	method_name_ident? method_name_op
+/	method_name_ident
 
 method_name_op <-
 	LBRACK RBRACK EQ  // []=
@@ -248,7 +252,7 @@ method_name_op <-
 /	EXCL
 /	assignment_op
 /	PLUS2 / MINUS2	//postix operator
-/	"++_" / "--_"	//prefix operator
+/	PREFIX_OP //"++_" / "--_"	//prefix operator
 
 method_body <- statement*
 	
@@ -272,19 +276,19 @@ for_statement <- K_FOR for_variable_name K_IN enumerable_expression statement
 ;
 
 // a bit more complicated, so customize
-here_doc.
+//TODO: here_doc.
 
-SYMBOL  <- COLON IDENT Spacing ;
+symbol <- COLON IDENT ;
 
 // Allow class methods to include keywords too
-METHOD_NAME_IDENT <-
-	[a-zA-Z] IdentCont* Spacing
+//TODO: fix to allow keywords too
+method_name_ident <- IDENT ;
 
-Number <-	(	BasedNumber
-			/	Integer
-			/	Float
-			) Spacing
-			;
+number <-
+	UNSIGNED_NUMBER
+/	REAL_NUMBER
+/	BASED_NUMBER
+;
 
 #
 # Tokens from flex:
@@ -379,3 +383,9 @@ IDENT.
 UNSIGNED_NUMBER.
 REAL_NUMBER.
 BASED_NUMBER.
+STRING_LITERAL.
+REGEXP.
+ARRAY_OF.
+PREFIX_OP.
+NL.
+COMMENT.

@@ -3,7 +3,7 @@
 genMaze: false
 
 #Set true when using jflex/tokens
-genTerminal: false
+genTerminal: true
 
 # Output directory for generated files.
 # Make sure to accomodate packageName.

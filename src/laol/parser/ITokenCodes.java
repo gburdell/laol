@@ -22,6 +22,7 @@
  * THE SOFTWARE.
  */
 package laol.parser;
+import apfe.runtime.Token;
 
 /**
  *
@@ -30,7 +31,11 @@ package laol.parser;
 public interface ITokenCodes {
     public static final int STRING_LITERAL = 999;
     public static final int COMMENT = 998;
-    public static final int EOL = 997;
+    public static final int ARRAY_OF = 996;
+    public static final int REGEXP = 995;
+    public static final int PREFIX_OP = 994;
+    public static final int EOF = Token.EOF;
+    public static final int NL = 500;
     
     //{ insert 'codes'
 	public static final int K_ABSTRACT = 1 ;
