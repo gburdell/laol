@@ -1,7 +1,7 @@
 # PEG grammar for laol
 # Ruby: http://ruby-doc.org/docs/ruby-doc-bundle/Manual/man-1.4/syntax.html
 
-Grammar <- Spacing contents? EOF
+Grammar <- (EOL / WS / Comment)* contents? EOF
 
 for_variable_name <- IDENT
 
@@ -27,7 +27,7 @@ regexp_primary <-
 	'/' !('/' / '*') ('\\' . / !'/' .)+ '/'
 /	"%r{" ('\\' . / !'}' .)+ '}'
 
-hash_primary <- LCURLY (hash_key_value (COMMA hash_key_value)*)? RCURLY
+hash_primary <- LCURLY nlc (hash_key_value (COMMA nlc hash_key_value)*)? RCURLY
 
 hash_key <- STRING / IDENT
 
@@ -53,12 +53,12 @@ dot_suffix <-
 
 block <- anonymous_function
 
-unnamed_param <- expression (COMMA expression)*
+unnamed_param <- expression (COMMA nlc expression)*
 
 named_param_ele <- IDENT COLON expression
 
 // last: can be vararg
-named_param <- named_param_ele (COMMA named_param_ele)* (COMMA expression)*
+named_param <- named_param_ele (COMMA nlc named_param_ele)* (COMMA nlc expression)*
 
 // Any named params are at the end
 param_expression_list <- unnamed_param? named_param?
@@ -88,11 +88,11 @@ expression <-
 
 array_select_expression <-
 	expression (DOT2 / COLON) expression
-/	expression (COMMA expression)?
+/	expression (COMMA nlc expression)?
 
-var_decl <- lhs_decl IDENT (COMMA IDENT)*
+var_decl <- lhs_decl IDENT (COMMA nlc IDENT)*
 
-assignment_lhs <- lhs_decl lhs_ref (COMMA lhs_ref)*
+assignment_lhs <- lhs_decl lhs_ref (COMMA nlc lhs_ref)*
 
 lhs_decl <- access_modifier? K_STATIC? mutability?
 
@@ -125,33 +125,32 @@ file_item <-
 /	statement
 
 module_item <-
-	SEMI	
+	EOL Spacing
 /	var_decl s_tail
-/	assignment_lhs assignment_op assignment_rhs
-/	class_declaration statement_modifier?
-/	method_declaration statement_modifier?
-/	module_declaration statement_modifier?
+/	assignment_lhs assignment_op assignment_rhs s_tail
+/	class_declaration s_tail
+/	method_declaration s_tail
+/	module_declaration s_tail
 
 statement <- 
-	SEMI	
+	EOL Spacing
 /	var_decl s_tail
-/	assignment_lhs assignment_op assignment_rhs
+/	assignment_lhs assignment_op assignment_rhs s_tail
 /	expression s_tail
-/	case_statement statement_modifier?
-//NOTE: We dont allow statement modifier on an if-stmt.  Seems redundant...
-/	if_statement
-/	while_statement
-/	until_statement
-/	for_statement
-/	LCURLY statement* RCURLY statement_modifier?
+/	case_statement s_tail
+/	if_statement s_tail
+/	while_statement s_tail
+/	until_statement s_tail
+/	for_statement s_tail
+/	LCURLY statement* RCURLY s_tail
 /	K_BREAK s_tail
 /	K_NEXT s_tail
 /	K_ALIAS method_name method_name s_tail
 /	return_statement s_tail
-/	try_statement
+/	try_statement s_tail
 /	throw_statement s_tail
-/	class_declaration statement_modifier?
-/	method_declaration statement_modifier?
+/	class_declaration s_tail
+/	method_declaration s_tail
 /	mixin_statement s_tail
 
 try_statement <-
@@ -162,8 +161,8 @@ try_statement <-
 // NOTE: while ruby allows most statements as rhs; e.g.: "foo = if xxx; 12", 
 // we will not.  Use method to do so.
 assignment_rhs <-
-	expression (COMMA expression)* s_tail	
-/	anonymous_function statement_modifier?
+	expression (COMMA nlc expression)*
+/	anonymous_function
 
 return_statement <- K_RETURN expression?
 
@@ -173,43 +172,43 @@ catch_statement <- K_CATCH expression statement
 
 finally_statement <- K_FINALLY statement
 
-statement_modifier <- ((K_IF / K_UNLESS / K_WHILE / K_UNTIL) expression)+ SEMI
+statement_modifier <- ((K_IF / K_UNLESS / K_WHILE / K_UNTIL) expression)+
 
 mixin_name <-
 	IDENT (COLON2 IDENT)*
 
-mixin_statement <- K_MIXIN mixin_name (COMMA mixin_name)*
+mixin_statement <- K_MIXIN mixin_name (COMMA nlc mixin_name)*
 	
 s_tail <-
-	statement_modifier
-/	SEMI
+	statement_modifier nls
+/	nls
 
 module_declaration <-
-	K_MODULE IDENT LCURLY
+	K_MODULE nlc IDENT nlc LCURLY
 		module_item*
 	RCURLY
 
 class_declaration <-
 	// Scala style
 	access_modifier?
-	K_ABSTRACT?
-	K_CLASS IDENT 
-		method_param_decl?
-		class_extends?
-		LCURLY
+	(K_ABSTRACT nlc)?
+	K_CLASS nlc IDENT nlc
+		(method_param_decl nlc)?
+		(class_extends nlc)?
+		LCURLY nlc
 			class_body
 		RCURLY
 
 //1st statement is initializer
 class_body <- base_class_initializer? statement*
 
-base_class_initializer <- K_SUPER method_param_decl?  SEMI
+base_class_initializer <- K_SUPER nlc method_param_decl nls
 
-method_param_decl <- LPAREN method_param_decl_list? RPAREN
+method_param_decl <- LPAREN nlc method_param_decl_list? RPAREN
 
-access_modifier <- (K_PRIVATE / K_PROTECTED / K_PUBLIC)
+access_modifier <- (K_PRIVATE / K_PROTECTED / K_PUBLIC) nlc
 
-mutability <- (K_VAL / K_VAR)
+mutability <- (K_VAL / K_VAR) nlc
 
 method_param_decl_modifier <- access_modifier? mutability?
 
@@ -220,18 +219,18 @@ method_param_decl_ele <-
 
 method_param_decl_default <- EQ expression
 
-method_param_decl_list <- method_param_decl_ele (COMMA method_param_decl_ele)*	
+method_param_decl_list <- method_param_decl_ele (COMMA nlc method_param_decl_ele)*	
 
-class_extends <- (K_EXTENDS IDENT)? (K_IMPLEMENTS IDENT (COMMA IDENT))?
+class_extends <- (K_EXTENDS nlc IDENT nlc)? (K_IMPLEMENTS nlc IDENT nlc (COMMA nlc IDENT))?
 
-anonymous_function <- ARROW method_param_decl LCURLY method_body RCURLY
+anonymous_function <- ARROW nlc method_param_decl LCURLY method_body RCURLY
 
 method_declaration <-
 	access_modifier?
-	K_ABSTRACT?
+	(K_ABSTRACT nlc)?
 	K_DEF method_name method_param_decl?
 		(	LCURLY method_body RCURLY
-		/	SEMI //case of abstract
+		/	nls //case of abstract
 		)
 	
 method_name <-
@@ -253,9 +252,9 @@ method_name_op <-
 method_body <- statement*
 	
 case_statement <-
-	K_CASE expression LCURLY
-		(K_WHEN expression (COMMA expression)* COLON statement)*
-		(K_ELSE statement)?
+	K_CASE expression nlc LCURLY nlc
+		(K_WHEN expression (COMMA nlc expression)* COLON nlc statement)*
+		(K_ELSE nlc statement)?
 	RCURLY
 
 if_statement <-
@@ -400,12 +399,15 @@ STRING <-
 	'"' ('\\' . / !'"' .)* '"' Spacing
 /	'\'' ('\\' . / !'\'' .)? '\'' Spacing
 
-Spacing <- (Space / Comment)*
-Comment <- SL_COMMENT / ML_COMMENT
-//WS    <- ' ' / '\t'
-Space <- ' ' / '\t' / EOL
+Spacing <- (WS / Comment)*
+Comment <- SL_COMMENT / ML_COMMENT;
+WS.	// ' '/'\t'
 
 SL_COMMENT  <- "//" (!EOL .)* EOL
 
 ML_COMMENT <- "/*" (!"*/" .)* "*/"
 
+nlc  <- (EOL Spacing)?
+nls	 <- EOL Spacing / &(WS* '}') ATRUE / SEMI ;
+
+ATRUE.	//always true
