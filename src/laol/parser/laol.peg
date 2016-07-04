@@ -3,8 +3,9 @@
 
 Grammar <- nlc contents? EOF
 
-nlc <- (NL / wcomment)*
-c   <- wcomment*
+nlc  <- (NL / wcomment)*
+c    <- wcomment*
+nls  <- (NL / SEMI)
 
 // Wrap comment so we can use callback to collect
 wcomment <- COMMENT
@@ -31,14 +32,14 @@ primary_expression <-
 
 regexp_primary <- REGEXP
 
-hash_primary <- LCURLY (hash_key_value (COMMA hash_key_value)*)? RCURLY
+hash_primary <- LCURLY nlc (hash_key_value (COMMA nlc hash_key_value)*)? RCURLY
 
 hash_key <- STRING_LITERAL / IDENT
 
 hash_key_value <- hash_key COLON expression
 
 array_primary <-
-	LBRACK (expression (COMMA expression)*)? RBRACK
+	LBRACK nlc (expression (COMMA nlc expression)*)? RBRACK
 	#array of words or symbols
 /	ARRAY_OF
 
@@ -57,12 +58,12 @@ dot_suffix <-
 
 block <- anonymous_function
 
-unnamed_param <- expression (COMMA expression)*
+unnamed_param <- expression (COMMA nlc expression)*
 
 named_param_ele <- IDENT COLON expression
 
 // last: can be vararg
-named_param <- named_param_ele (COMMA named_param_ele)* (COMMA expression)*
+named_param <- named_param_ele (COMMA nlc named_param_ele)* (COMMA nlc expression)*
 
 // Any named params are at the end
 param_expression_list <- unnamed_param? named_param?
@@ -75,7 +76,7 @@ unary_expression <-
 unary_op <- TILDE /	EXCL / PLUS / MINUS	
 
 binary_expression <-
-	binary_expression binary_op unary_expression
+	binary_expression nlc binary_op nlc unary_expression
 /	unary_expression
 
 binary_op <-
@@ -86,17 +87,17 @@ binary_op <-
 /	AND2 / OR2
 
 expression <-
-	expression QMARK expression COLON expression
-/	LPAREN expression RPAREN
+	expression QMARK nlc expression COLON nlc expression
+/	LPAREN nlc expression RPAREN
 /	binary_expression
 
 array_select_expression <-
 	expression (DOT2 / COLON) expression
-/	expression (COMMA expression)?
+/	expression (COMMA nlc expression)?
 
-var_decl <- lhs_decl IDENT (COMMA IDENT)*
+var_decl <- lhs_decl IDENT (COMMA nlc IDENT)*
 
-assignment_lhs <- lhs_decl lhs_ref (COMMA lhs_ref)*
+assignment_lhs <- lhs_decl lhs_ref (COMMA nlc lhs_ref)*
 
 lhs_decl <- access_modifier? K_STATIC? mutability?
 
@@ -129,7 +130,7 @@ file_item <-
 /	statement
 
 module_item <-
-	SEMI	
+	nlc
 /	var_decl s_tail
 /	assignment_lhs assignment_op assignment_rhs
 /	class_declaration statement_modifier?
@@ -137,9 +138,9 @@ module_item <-
 /	module_declaration statement_modifier?
 
 statement <- 
-	SEMI	
+	nlc
 /	var_decl s_tail
-/	assignment_lhs assignment_op assignment_rhs
+/	assignment_lhs assignment_op nlc assignment_rhs
 /	expression s_tail
 /	case_statement statement_modifier?
 //NOTE: We dont allow statement modifier on an if-stmt.  Seems redundant...
@@ -147,7 +148,7 @@ statement <-
 /	while_statement
 /	until_statement
 /	for_statement
-/	LCURLY statement* RCURLY statement_modifier?
+/	LCURLY nlc statement* RCURLY statement_modifier?
 /	K_BREAK s_tail
 /	K_NEXT s_tail
 /	K_ALIAS method_name method_name s_tail
@@ -166,76 +167,76 @@ try_statement <-
 // NOTE: while ruby allows most statements as rhs; e.g.: "foo = if xxx; 12", 
 // we will not.  Use method to do so.
 assignment_rhs <-
-	expression (COMMA expression)* s_tail	
+	expression (COMMA nlc expression)* s_tail	
 /	anonymous_function statement_modifier?
 
-return_statement <- K_RETURN expression?
+return_statement <- K_RETURN expression? nls
 
-throw_statement <- K_THROW expression
+throw_statement <- K_THROW expression nls
 
-catch_statement <- K_CATCH expression statement
+catch_statement <- K_CATCH expression statement nls
 
-finally_statement <- K_FINALLY statement
+finally_statement <- K_FINALLY statement nls
 
-statement_modifier <- ((K_IF / K_UNLESS / K_WHILE / K_UNTIL) expression)+ SEMI
+statement_modifier <- ((K_IF / K_UNLESS / K_WHILE / K_UNTIL) expression)+ nls
 
 mixin_name <-
 	IDENT (COLON2 IDENT)*
 
-mixin_statement <- K_MIXIN mixin_name (COMMA mixin_name)*
+mixin_statement <- K_MIXIN mixin_name (COMMA nlc mixin_name)* nls
 	
 s_tail <-
 	statement_modifier
-/	SEMI
+/	nls
 
 module_declaration <-
-	K_MODULE IDENT LCURLY
+	K_MODULE nlc IDENT nlc LCURLY nlc
 		module_item*
 	RCURLY
 
 class_declaration <-
 	// Scala style
-	access_modifier?
-	K_ABSTRACT?
-	K_CLASS IDENT 
-		method_param_decl?
-		class_extends?
-		LCURLY
+	access_modifier? nlc
+	K_ABSTRACT? nlc
+	K_CLASS nlc IDENT nlc
+		method_param_decl? nlc
+		class_extends? nlc
+		LCURLY nlc
 			class_body
 		RCURLY
 
 //1st statement is initializer
 class_body <- base_class_initializer? statement*
 
-base_class_initializer <- K_SUPER method_param_decl?  SEMI
+base_class_initializer <- K_SUPER method_param_decl?  nls
 
-method_param_decl <- LPAREN method_param_decl_list? RPAREN
+method_param_decl <- LPAREN nlc method_param_decl_list? RPAREN
 
 access_modifier <- (K_PRIVATE / K_PROTECTED / K_PUBLIC)
 
 mutability <- (K_VAL / K_VAR)
 
-method_param_decl_modifier <- access_modifier? mutability?
+method_param_decl_modifier <- access_modifier? nlc mutability?
 
 method_param_decl_ele <-
 	//NOTE: only last in list can have STAR (marks as varargs)
 	// AND (&) marks as function parameter
-	method_param_decl_modifier (AND / STAR)? IDENT method_param_decl_default?
+	method_param_decl_modifier (AND / STAR)? IDENT nlc method_param_decl_default?
 
-method_param_decl_default <- EQ expression
+method_param_decl_default <- EQ nlc expression
 
-method_param_decl_list <- method_param_decl_ele (COMMA method_param_decl_ele)*	
+method_param_decl_list <- method_param_decl_ele (COMMA nlc method_param_decl_ele)*	
 
-class_extends <- (K_EXTENDS IDENT)? (K_IMPLEMENTS IDENT (COMMA IDENT))?
+class_extends <- (K_EXTENDS nlc IDENT)? (K_IMPLEMENTS nlc IDENT nlc (COMMA nlc IDENT))?
 
-anonymous_function <- ARROW method_param_decl LCURLY method_body RCURLY
+anonymous_function <- ARROW nlc method_param_decl nlc LCURLY nlc method_body RCURLY
 
 method_declaration <-
 	access_modifier?
 	K_ABSTRACT?
-	K_DEF method_name method_param_decl?
-		(	LCURLY method_body RCURLY
-		/	SEMI //case of abstract
+	K_DEF nlc method_name nlc method_param_decl?
+		(	LCURLY nlc method_body RCURLY
+		/	nls //case of abstract
 		)
 	
 method_name <-
@@ -257,22 +258,22 @@ method_name_op <-
 method_body <- statement*
 	
 case_statement <-
-	K_CASE expression LCURLY
-		(K_WHEN expression (COMMA expression)* COLON statement)*
-		(K_ELSE statement)?
+	K_CASE nlc expression LCURLY nlc
+		(K_WHEN nlc expression (COMMA nlc expression)* COLON nlc statement)*
+		(K_ELSE nlc statement)?
 	RCURLY
 
 if_statement <-
-	(K_IF / K_UNLESS) expression statement
-		(K_ELSIF expression statement)*
-		(K_ELSE statement)?
+	(K_IF / K_UNLESS) nlc expression statement
+		(K_ELSIF nlc expression statement)*
+		(K_ELSE nlc statement)?
 
-while_statement <- K_WHILE expression statement
-until_statement <- K_UNTIL expression statement
+while_statement <- K_WHILE nlc expression statement
+until_statement <- K_UNTIL nlc expression statement
 
 enumerable_expression <- expression
 
-for_statement <- K_FOR for_variable_name K_IN enumerable_expression statement
+for_statement <- K_FOR nlc for_variable_name nlc K_IN nlc enumerable_expression statement
 ;
 
 // a bit more complicated, so customize
