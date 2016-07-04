@@ -23,24 +23,10 @@
  */
 package laol.parser;
 
-import org.junit.Test;
-import static org.junit.Assert.*;
+import apfe.runtime.Acceptor;
 
-/**
- *
- * @author gburdell
- */
-public class ParserTest {
-    
-    @Test
-    public void testParse() {
-        System.out.println("parse");
-        String[] fileNames = {
-            "test/data/collections.laol"
-        };
-        Parser instance = new Parser();
-        boolean expResult = true;
-        boolean result = instance.parse(fileNames);
-        assertEquals(expResult, result);
+public class Util {
+    public static String getIdent(final Acceptor seq, int pos) {
+        return apfe.runtime.Util.<IDENT>extractEle(seq, 1).getIdent();
     }
 }

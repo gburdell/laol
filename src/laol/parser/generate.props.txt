@@ -3,7 +3,7 @@
 genMaze: false
 
 #Set true when using jflex/tokens
-genTerminal: true
+genTerminal: false
 
 # Output directory for generated files.
 # Make sure to accomodate packageName.
@@ -43,5 +43,4 @@ genClsAsCamelCase: true
 clsNmPrefix:
 
 # Specify toplevel class name for all-in-one generation; else leave blank.
-#topLevelClsNm: LaolParser
 topLevelClsNm:
