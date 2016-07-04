@@ -32,7 +32,7 @@ public class GrammarTest {
     public void testAccepti() {
         final String fns[] = {
             "test/data/t1.txt",
-            "test/data/list.laol"
+            "test/data/collections.laol"
         };
         try {
             for (String fn : fns) {

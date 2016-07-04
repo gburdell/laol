@@ -1,8 +1,6 @@
 package laol.parser;
 
 import apfe.runtime.*;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 public class HereDoc extends Acceptor {
 

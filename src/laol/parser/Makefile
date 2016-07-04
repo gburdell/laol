@@ -12,5 +12,5 @@ generate.log: ${PEG}
 	tail generate.log
 
 clean:
-	-rm -rf src/${GRAMMAR}/apfe/generated
+	-rm -rf apfe
 	-rm -f generate.log
