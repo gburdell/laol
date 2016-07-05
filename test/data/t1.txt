@@ -1,10 +1,11 @@
 
-a,b,c = {a:1}, b[5:3]+1
+a,b,c = {a:1}, b[5:3]+1;
 foo(a[3],{b:2}).proc1({a:{b:[1,2]},c:nil})
 
-if b a = 7'b01
+if b a = 7'b01 
+else a = 4
 
-/*r =*/ case x {when 123,a+b: 456} unless foo.ok? if bar.nil?
+/*r =*/  case x {when 123,a+b: 456} unless foo.ok? if bar.nil?
 
 
 if we.all.ok?

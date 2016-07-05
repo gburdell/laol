@@ -31,7 +31,7 @@ public class GrammarTest {
     @Test
     public void testAccepti() {
         final String fns[] = {
-            //"test/data/t2.txt",
+            "test/data/t2.txt",
             "test/data/t1.txt",
             "test/data/collections.laol"
         };

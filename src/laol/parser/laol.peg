@@ -1,170 +1,166 @@
 # PEG grammar for laol
-# Ruby: http://ruby-doc.org/docs/ruby-doc-bundle/Manual/man-1.4/syntax.html
-
-Grammar <- (EOL / WS / Comment)* contents? EOF
-
-for_variable_name <- IDENT
+# Goal here is to eliminate semicolon, where possible
+#
+Grammar <- AllSpacing contents? EOF
 
 variable_name <-
-	IDENT (COLON2 IDENT)*
+    IDENT (COLON2 IDENT)*
 
 primary_expression <-
-	K_NIL QMARK?
-/	K_NEW
-/	K_FILE / K_TARGET
-/	K_TRUE / K_FALSE
-/	K_THIS / K_SUPER
-/	here_doc
-/ 	variable_name (QMARK / EXCL)?
-/	STRING
-/	SYMBOL
-/	Number
-/	hash_primary
-/	array_primary
-/	regexp_primary
+    K_NIL QMARK?
+/   K_NEW
+/   K_FILE / K_TARGET
+/   K_TRUE / K_FALSE
+/   K_THIS / K_SUPER
+/   here_doc
+/   variable_name (QMARK / EXCL)?
+/   STRING
+/   SYMBOL
+/   Number
+/   hash_primary
+/   array_primary
+/   regexp_primary
 
 regexp_primary <-
-	'/' !('/' / '*') ('\\' . / !'/' .)+ '/'
-/	"%r{" ('\\' . / !'}' .)+ '}'
+    '/' !('/' / '*') ('\\' . / !'/' .)+ '/'
+/   "%r{" ('\\' . / !'}' .)+ '}'
 
-hash_primary <- LCURLY nlc (hash_key_value (COMMA nlc hash_key_value)*)? RCURLY
+hash_primary <- LCURLY (hash_key_value (COMMA hash_key_value)*)? RCURLY
 
 hash_key <- STRING / IDENT
 
 hash_key_value <- hash_key COLON expression
 
 array_primary <-
-	LBRACK (expression (COMMA expression)*)? RBRACK
-	#array of words or symbols
-/	'%' [wi] '{' ('\\' . / !'}')* '}'
+    LBRACK (expression (COMMA expression)*)? RBRACK
+    #array of words or symbols
+/   '%' [wi] '{' ('\\' . / !'}')* '}'
 
 postfix_expression <-
-	postfix_expression LBRACK array_select_expression RBRACK block?
-/	postfix_expression LPAREN param_expression_list? RPAREN block?
-/	postfix_expression dot_suffix block?
-/	postfix_expression (PLUS2 / MINUS2) 
-/	primary_expression block?
+    postfix_expression LBRACK array_select_expression RBRACK block?
+/   postfix_expression LPAREN param_expression_list? RPAREN block?
+/   postfix_expression dot_suffix block?
+/   postfix_expression (PLUS2 / MINUS2) 
+/   primary_expression block?
 
 dot_suffix <-
-	DOT (	K_NIL QMARK?
-		/	K_NEW
-		/	METHOD_NAME_IDENT (EXCL / QMARK)?
-		)
+    DOT (   K_NIL QMARK?
+        	/   K_NEW
+        	/   METHOD_NAME_IDENT (EXCL / QMARK)?
+        	)
 
 block <- anonymous_function
 
-unnamed_param <- expression (COMMA nlc expression)*
+unnamed_param <- expression (COMMA expression)*
 
 named_param_ele <- IDENT COLON expression
 
 // last: can be vararg
-named_param <- named_param_ele (COMMA nlc named_param_ele)* (COMMA nlc expression)*
+named_param <- named_param_ele (COMMA named_param_ele)* (COMMA expression)*
 
 // Any named params are at the end
 param_expression_list <- unnamed_param? named_param?
 
 unary_expression <-
-	(PLUS2 / MINUS2 / AND / STAR) unary_expression
-/	unary_op unary_expression
-/	postfix_expression
+    (PLUS2 / MINUS2 / AND / STAR) unary_expression
+/   unary_op unary_expression
+/   postfix_expression
 
-unary_op <- TILDE /	EXCL / PLUS / MINUS	
+unary_op <- TILDE / EXCL / PLUS / MINUS 
 
 binary_expression <-
-	binary_expression binary_op unary_expression
-/	unary_expression
+    binary_expression binary_op unary_expression
+/   unary_expression
 
 binary_op <-
-	STAR / DIV / PCNT / PLUS / MINUS / LT2 / GT2
-/	LT / LTEQ / GT / GTEQ
-/	NEQ / EQ2
-/	AND / CARET / OR
-/	AND2 / OR2
+    STAR / DIV / PCNT / PLUS / MINUS / LT2 / GT2
+/   LT / LTEQ / GT / GTEQ
+/   NEQ / EQ2
+/   AND / CARET / OR
+/   AND2 / OR2
 
 expression <-
-	expression QMARK expression COLON expression
-/	LPAREN expression RPAREN
-/	binary_expression
+    expression QMARK expression COLON expression
+/   LPAREN expression RPAREN
+/   binary_expression
 
 array_select_expression <-
-	expression (DOT2 / COLON) expression
-/	expression (COMMA nlc expression)?
+    expression (DOT2 / COLON) expression
+/   expression (COMMA expression)?
 
-var_decl <- lhs_decl IDENT (COMMA nlc IDENT)*
+var_decl <- lhs_decl IDENT (COMMA IDENT)*
 
-assignment_lhs <- lhs_decl lhs_ref (COMMA nlc lhs_ref)*
+assignment_lhs <- lhs_decl lhs_ref (COMMA lhs_ref)*
 
 lhs_decl <- access_modifier? K_STATIC? mutability?
 
 lhs_ref <-
-	lhs_ref LBRACK array_select_expression RBRACK
-/	lhs_ref LPAREN param_expression_list? RPAREN
-/	lhs_ref DOT METHOD_NAME_IDENT (EXCL / QMARK)?
-/	lhs_ref (PLUS2 / MINUS2) 
-/	variable_name
+    lhs_ref LBRACK array_select_expression RBRACK
+/   lhs_ref LPAREN param_expression_list? RPAREN
+/   lhs_ref DOT METHOD_NAME_IDENT (EXCL / QMARK)?
+/   lhs_ref (PLUS2 / MINUS2) 
+/   variable_name
 
 assignment_op <-
-	EQ
-/	LT2_EQ
-/	GT2_EQ
-/	AND_EQ
-/	OR_EQ
-/	STAR_EQ
-/	MINUS_EQ
-/	PLUS_EQ
-/	DIV_EQ
-/	PCNT_EQ
-	
+    EQ
+/   LT2_EQ
+/   GT2_EQ
+/   AND_EQ
+/   OR_EQ
+/   STAR_EQ
+/   MINUS_EQ
+/   PLUS_EQ
+/   DIV_EQ
+/   PCNT_EQ
+    
 contents <-
-	require_statement* file_item+
+    require_statement* file_item+
 
 require_statement <- K_REQUIRE STRING s_tail
 
 file_item <-
-	module_declaration
-/	statement
+    module_declaration
+/   statement
 
 module_item <-
-	EOL Spacing
-/	var_decl s_tail
-/	assignment_lhs assignment_op assignment_rhs s_tail
-/	class_declaration s_tail
-/	method_declaration s_tail
-/	module_declaration s_tail
+    var_decl s_tail
+/   assignment_lhs assignment_op assignment_rhs s_tail
+/   class_declaration s_tail
+/   method_declaration s_tail
+/   module_declaration s_tail
 
 statement <- 
-	EOL Spacing
-/	var_decl s_tail
-/	assignment_lhs assignment_op assignment_rhs s_tail
-/	expression s_tail
-/	case_statement s_tail
-/	if_statement s_tail
-/	while_statement s_tail
-/	until_statement s_tail
-/	for_statement s_tail
-/	LCURLY statement* RCURLY s_tail
-/	K_BREAK s_tail
-/	K_NEXT s_tail
-/	K_ALIAS method_name method_name s_tail
-/	return_statement s_tail
-/	try_statement s_tail
-/	throw_statement s_tail
-/	class_declaration s_tail
-/	method_declaration s_tail
-/	mixin_statement s_tail
+    case_statement s_tail
+/   if_statement s_tail
+/   while_statement s_tail
+/   until_statement s_tail
+/   for_statement s_tail
+/   LCURLY statement* RCURLY s_tail
+/   K_BREAK s_tail
+/   K_NEXT s_tail
+/   K_ALIAS method_name method_name s_tail
+/   return_statement s_tail
+/   try_statement s_tail
+/   throw_statement s_tail
+/   class_declaration s_tail
+/   method_declaration s_tail
+/   mixin_statement s_tail
+/   assignment_lhs assignment_op assignment_rhs s_tail
+/   var_decl s_tail
+/   expression s_tail
 
 try_statement <-
-	K_TRY statement
-		catch_statement*
-		finally_statement?
+    K_TRY statement
+        catch_statement*
+        finally_statement?
 
 // NOTE: while ruby allows most statements as rhs; e.g.: "foo = if xxx; 12", 
 // we will not.  Use method to do so.
 assignment_rhs <-
-	expression (COMMA nlc expression)*
-/	anonymous_function
+    expression (COMMA expression)*
+/   anonymous_function
 
-return_statement <- K_RETURN expression?
+return_statement <- K_RETURN (expression)?
 
 throw_statement <- K_THROW expression
 
@@ -175,99 +171,99 @@ finally_statement <- K_FINALLY statement
 statement_modifier <- ((K_IF / K_UNLESS / K_WHILE / K_UNTIL) expression)+
 
 mixin_name <-
-	IDENT (COLON2 IDENT)*
+    IDENT (COLON2 IDENT)*
 
-mixin_statement <- K_MIXIN mixin_name (COMMA nlc mixin_name)*
-	
+mixin_statement <- K_MIXIN mixin_name (COMMA mixin_name)*
+    
 s_tail <-
-	statement_modifier nls
-/	nls
+    statement_modifier nls
+/   nls
 
 module_declaration <-
-	K_MODULE nlc IDENT nlc LCURLY
-		module_item*
-	RCURLY
+    K_MODULE IDENT LCURLY
+        module_item*
+    RCURLY
 
 class_declaration <-
-	// Scala style
-	access_modifier?
-	(K_ABSTRACT nlc)?
-	K_CLASS nlc IDENT nlc
-		(method_param_decl nlc)?
-		(class_extends nlc)?
-		LCURLY nlc
-			class_body
-		RCURLY
+    // Scala style
+    access_modifier?
+    (K_ABSTRACT )?
+    K_CLASS IDENT 
+        (method_param_decl )?
+        (class_extends )?
+        LCURLY 
+            class_body
+        RCURLY
 
 //1st statement is initializer
 class_body <- base_class_initializer? statement*
 
-base_class_initializer <- K_SUPER nlc method_param_decl nls
+base_class_initializer <- K_SUPER method_param_decl nls
 
-method_param_decl <- LPAREN nlc method_param_decl_list? RPAREN
+method_param_decl <- LPAREN method_param_decl_list? RPAREN
 
-access_modifier <- (K_PRIVATE / K_PROTECTED / K_PUBLIC) nlc
+access_modifier <- (K_PRIVATE / K_PROTECTED / K_PUBLIC) 
 
-mutability <- (K_VAL / K_VAR) nlc
+mutability <- (K_VAL / K_VAR) 
 
 method_param_decl_modifier <- access_modifier? mutability?
 
 method_param_decl_ele <-
-	//NOTE: only last in list can have STAR (marks as varargs)
-	// AND (&) marks as function parameter
-	method_param_decl_modifier (AND / STAR)? IDENT method_param_decl_default?
+    //NOTE: only last in list can have STAR (marks as varargs)
+    // AND (&) marks as function parameter
+    method_param_decl_modifier (AND / STAR)? IDENT (method_param_decl_default)?
 
 method_param_decl_default <- EQ expression
 
-method_param_decl_list <- method_param_decl_ele (COMMA nlc method_param_decl_ele)*	
+method_param_decl_list <- method_param_decl_ele (COMMA method_param_decl_ele)*  
 
-class_extends <- (K_EXTENDS nlc IDENT nlc)? (K_IMPLEMENTS nlc IDENT nlc (COMMA nlc IDENT))?
+class_extends <- (K_EXTENDS IDENT )? (K_IMPLEMENTS IDENT (COMMA IDENT))?
 
-anonymous_function <- ARROW nlc method_param_decl LCURLY method_body RCURLY
+anonymous_function <- ARROW method_param_decl LCURLY method_body RCURLY
 
 method_declaration <-
-	access_modifier?
-	(K_ABSTRACT nlc)?
-	K_DEF method_name method_param_decl?
-		(	LCURLY method_body RCURLY
-		/	nls //case of abstract
-		)
-	
+    access_modifier?
+    (K_ABSTRACT )?
+    K_DEF method_name (method_param_decl)?
+        (   LCURLY method_body RCURLY
+        /   nls //case of abstract
+        )
+    
 method_name <-
-	METHOD_NAME_IDENT? method_name_op
-/	METHOD_NAME_IDENT
+    METHOD_NAME_IDENT? method_name_op
+/   METHOD_NAME_IDENT
 
 method_name_op <-
-	LBRACK RBRACK EQ  // []=
-/	LBRACK RBRACK     // []
-/   LPAREN RPAREN	  // ()
-/	unary_op
-/	binary_op
-/	QMARK
-/	EXCL
-/	assignment_op
-/	PLUS2 / MINUS2	//postix operator
-/	"++_" / "--_"	//prefix operator
+    LBRACK RBRACK EQ  // []=
+/   LBRACK RBRACK     // []
+/   LPAREN RPAREN     // ()
+/   unary_op
+/   binary_op
+/   QMARK
+/   EXCL
+/   assignment_op
+/   PLUS2 / MINUS2  //postix operator
+/   "++_" / "--_"   //prefix operator
 
 method_body <- statement*
-	
+    
 case_statement <-
-	K_CASE expression nlc LCURLY nlc
-		(K_WHEN expression (COMMA nlc expression)* COLON nlc statement)*
-		(K_ELSE nlc statement)?
-	RCURLY
+    K_CASE expression LCURLY 
+        (K_WHEN expression (COMMA expression)* COLON statement)*
+        (K_ELSE statement)?
+    RCURLY
 
 if_statement <-
-	(K_IF / K_UNLESS) expression statement
-		(K_ELSIF expression statement)*
-		(K_ELSE statement)?
+    (K_IF / K_UNLESS) expression statement
+        (K_ELSIF expression statement)*
+        (K_ELSE statement)?
 
 while_statement <- K_WHILE expression statement
 until_statement <- K_UNTIL expression statement
 
 enumerable_expression <- expression
 
-for_statement <- K_FOR for_variable_name K_IN enumerable_expression statement
+for_statement <- K_FOR IDENT K_IN enumerable_expression statement
 ;
 
 // a bit more complicated, so customize
@@ -277,7 +273,7 @@ here_doc.
 #Lexical syntax
 COLON       <- ':' !':' Spacing
 COLON2      <- "::"
-SEMI	    <- ';' Spacing
+SEMI        <- ';' Spacing
 DOT         <- '.' !'.' Spacing
 DOT2        <- ".." Spacing
 COMMA       <- ',' Spacing
@@ -308,63 +304,63 @@ STAR_EQ     <- "*=" Spacing
 MINUS       <- '-' !('-' / '=' / '>') Spacing
 MINUS2      <- "--" Spacing
 MINUS_EQ    <- "-=" Spacing
-ARROW		<- "->" Spacing
-PLUS		<- '+' !('+' / '=') Spacing
-PLUS2		<- "++" Spacing
+ARROW       <- "->" Spacing
+PLUS        <- '+' !('+' / '=') Spacing
+PLUS2       <- "++" Spacing
 PLUS_EQ     <- "+=" Spacing
 QMARK       <- '?' Spacing
 DIV         <- '/' !'=' Spacing
-DIV_EQ		<- "/=" Spacing
+DIV_EQ      <- "/=" Spacing
 LCURLY      <- '{' Spacing
 RCURLY      <- '}' Spacing
 LPAREN      <- '(' Spacing
 RPAREN      <- ')' Spacing
 LBRACK      <- '[' Spacing
 RBRACK      <- ']' Spacing
-PCNT		<- '%' !'=' Spacing
-PCNT_EQ  	<- "%=" Spacing
+PCNT        <- '%' !'=' Spacing
+PCNT_EQ     <- "%=" Spacing
 
-K_ABSTRACT  <- "abstract"	K_tail
-K_ALIAS     <- "alias"	    K_tail
-K_BREAK		<- "break"		K_tail
-K_CASE      <- "case"  		K_tail
-K_CATCH     <- "catch"		K_tail
-K_CLASS     <- "class" 		K_tail
-K_DEF       <- "def"   		K_tail
-K_ELSE      <- "else"  		K_tail
-K_ELSIF     <- "elsif" 		K_tail
-K_EXTENDS	<- "extends"    K_tail
-K_FALSE		<- "false"		K_tail
-K_FINALLY	<- "finally"	K_tail
-K_FOR		<- "for"		K_tail
-K_IF	    <- "if"    		K_tail
+K_ABSTRACT  <- "abstract"   K_tail
+K_ALIAS     <- "alias"      K_tail
+K_BREAK     <- "break"      K_tail
+K_CASE      <- "case"       K_tail
+K_CATCH     <- "catch"      K_tail
+K_CLASS     <- "class"      K_tail
+K_DEF       <- "def"        K_tail
+K_ELSE      <- "else"       K_tail
+K_ELSIF     <- "elsif"      K_tail
+K_EXTENDS   <- "extends"    K_tail
+K_FALSE     <- "false"      K_tail
+K_FINALLY   <- "finally"    K_tail
+K_FOR       <- "for"        K_tail
+K_IF        <- "if"         K_tail
 K_IMPLEMENTS <- "implements" K_tail
-K_IN		<-	"in"		K_tail
-K_MIXIN     <-  "mixin"		K_tail
-K_MODULE    <- "module"		K_tail
-K_NEXT		<- "next"		K_tail
-K_NEW		<- "new"		K_tail
-K_NIL		<- "nil"        K_tail
-K_PRIVATE	<- "private"	K_tail
+K_IN        <-  "in"        K_tail
+K_MIXIN     <-  "mixin"     K_tail
+K_MODULE    <- "module"     K_tail
+K_NEXT      <- "next"       K_tail
+K_NEW       <- "new"        K_tail
+K_NIL       <- "nil"        K_tail
+K_PRIVATE   <- "private"    K_tail
 K_PROTECTED <- "protected"  K_tail
-K_PUBLIC    <- "public"		K_tail
-K_REQUIRE   <- "require"	K_tail
-K_RETURN    <- "return"		K_tail
-K_STATIC    <- "static"		K_tail
-K_SUPER     <- "super"		K_tail
-K_THIS      <- "this"		K_tail
-K_THROW		<- "throw"		K_tail
-K_TRUE      <- "true"		K_tail
-K_TRY		<- "try"		K_tail
-K_UNLESS    <- "unless"		K_tail
-K_UNTIL		<- "until"		K_tail
-K_VAL		<- "val"		K_tail
-K_VAR		<- "var"		K_tail
-K_WHEN	    <- "when"  		K_tail
-K_WHILE     <- "while"		K_tail
-K_FILE		<- "__FILE__"	K_tail
+K_PUBLIC    <- "public"     K_tail
+K_REQUIRE   <- "require"    K_tail
+K_RETURN    <- "return"     K_tail
+K_STATIC    <- "static"     K_tail
+K_SUPER     <- "super"      K_tail
+K_THIS      <- "this"       K_tail
+K_THROW     <- "throw"      K_tail
+K_TRUE      <- "true"       K_tail
+K_TRY       <- "try"        K_tail
+K_UNLESS    <- "unless"     K_tail
+K_UNTIL     <- "until"      K_tail
+K_VAL       <- "val"        K_tail
+K_VAR       <- "var"        K_tail
+K_WHEN      <- "when"       K_tail
+K_WHILE     <- "while"      K_tail
+K_FILE      <- "__FILE__"   K_tail
 //Specifies target language
-K_TARGET	<- "__TARGET__"	K_tail
+K_TARGET    <- "__TARGET__" K_tail
 
 K_tail <- !IdentCont Spacing
 IdentCont <- [a-zA-Z_0-9]
@@ -376,38 +372,45 @@ IDENT.
 
 // Allow class methods to include keywords too
 METHOD_NAME_IDENT <-
-	[a-zA-Z] IdentCont* Spacing
+    [a-zA-Z] IdentCont* Spacing
 
-Number <-	(	BasedNumber
-			/	Integer
-			/	Float
-			) Spacing
+Number <-   (   BasedNumber
+            /   Integer
+            /   Float
+            ) Spacing
 
 //{DO NOT USE THESE DIRECTLY: use Number above
 Integer <- Digits !('.' | [eE])
 Digits <- [0-9] [0-9_]* !'\''
 Float <- Digits ('.' Digits)? ([eE] ('-'|'+')? Digits)?
 BasedNumber <- ([0-9] [0-9_]*)? !STRING '\''
-               	( [bB] [01_]+
-			   	/ [dD] [0-9_]+
-			   	/ [hH] [a-fA-F0-9_]+
-			   	/ [oO] [0-7_]+
-			   	)
+                ( [bB] [01_]+
+                / [dD] [0-9_]+
+                / [hH] [a-fA-F0-9_]+
+                / [oO] [0-7_]+
+                )
 //}
 
 STRING <- 
-	'"' ('\\' . / !'"' .)* '"' Spacing
-/	'\'' ('\\' . / !'\'' .)? '\'' Spacing
+    '"' ('\\' . / !'"' .)* '"' Spacing
+/   '\'' ('\\' . / !'\'' .)? '\'' Spacing
 
 Spacing <- (WS / Comment)*
 Comment <- SL_COMMENT / ML_COMMENT;
-WS.	// ' '/'\t'
+WS. // ' '/'\t'
+AllSpacing <- (EOL / Comment / WS)*
 
 SL_COMMENT  <- "//" (!EOL .)* EOL
 
 ML_COMMENT <- "/*" (!"*/" .)* "*/"
 
-nlc  <- (EOL Spacing)?
-nls	 <- EOL Spacing / &(WS* '}') ATRUE / SEMI ;
+nlc  <- (EOL Spacing)*
 
-ATRUE.	//always true
+nls  <- 
+	(EOL Spacing)+ 
+/ 	&(WS* '}') ATRUE 
+/ 	SEMI nlc
+/	&EOF ATRUE
+;
+
+ATRUE.  //always true (but does not consume)
