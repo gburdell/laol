@@ -1,3 +1,4 @@
+# save state of laol.peg before redux w/ c-like grammar start
 # PEG grammar for laol
 # Goal here is to eliminate semicolon, where possible
 #
