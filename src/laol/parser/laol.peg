@@ -1,8 +1,4 @@
-# save state of laol.peg before redux w/ c-like grammar start
-# PEG grammar for laol
-# Goal here is to eliminate semicolon, where possible
-#
-Grammar <- AllSpacing contents? EOF
+Grammar <- Spacing contents? EOF
 
 variable_name <-
     IDENT (COLON2 IDENT)*
@@ -23,8 +19,7 @@ primary_expression <-
 /   regexp_primary
 
 regexp_primary <-
-    '/' !('/' / '*') ('\\' . / !'/' .)+ '/'
-/   "%r{" ('\\' . / !'}' .)+ '}'
+	"%r{" ('\\' . / !'}' .)+ '}'
 
 hash_primary <- LCURLY (hash_key_value (COMMA hash_key_value)*)? RCURLY
 
@@ -89,7 +84,7 @@ array_select_expression <-
     expression (DOT2 / COLON) expression
 /   expression (COMMA expression)?
 
-var_decl <- lhs_decl IDENT (COMMA IDENT)*
+var_decl <- lhs_decl IDENT (COMMA IDENT)* eos
 
 assignment_lhs <- lhs_decl lhs_ref (COMMA lhs_ref)*
 
@@ -117,38 +112,38 @@ assignment_op <-
 contents <-
     require_statement* file_item+
 
-require_statement <- K_REQUIRE STRING s_tail
+require_statement <- K_REQUIRE STRING SEMI
 
 file_item <-
     module_declaration
 /   statement
 
 module_item <-
-    var_decl s_tail
-/   assignment_lhs assignment_op assignment_rhs s_tail
-/   class_declaration s_tail
-/   method_declaration s_tail
-/   module_declaration s_tail
+    var_decl 
+/   assignment_lhs assignment_op assignment_rhs eos
+/   class_declaration 
+/   method_declaration
+/   module_declaration
 
 statement <- 
-    case_statement s_tail
-/   if_statement s_tail
-/   while_statement s_tail
-/   until_statement s_tail
-/   for_statement s_tail
-/   LCURLY statement* RCURLY s_tail
-/   K_BREAK s_tail
-/   K_NEXT s_tail
-/   K_ALIAS method_name method_name s_tail
-/   return_statement s_tail
-/   try_statement s_tail
-/   throw_statement s_tail
-/   class_declaration s_tail
-/   method_declaration s_tail
-/   mixin_statement s_tail
-/   assignment_lhs assignment_op assignment_rhs s_tail
-/   var_decl s_tail
-/   expression s_tail
+    case_statement
+/   if_statement
+/   while_statement
+/   until_statement
+/   for_statement
+/   LCURLY statement* RCURLY
+/   K_BREAK eos
+/   K_NEXT eos
+/   K_ALIAS method_name method_name eos
+/   return_statement 
+/   try_statement 
+/   throw_statement
+/   class_declaration
+/   method_declaration 
+/   mixin_statement
+/   assignment_lhs assignment_op assignment_rhs eos
+/   var_decl
+/   expression eos
 
 try_statement <-
     K_TRY statement
@@ -161,24 +156,24 @@ assignment_rhs <-
     expression (COMMA expression)*
 /   anonymous_function
 
-return_statement <- K_RETURN (expression)?
+return_statement <- K_RETURN (expression)? eos
 
-throw_statement <- K_THROW expression
+throw_statement <- K_THROW expression eos
 
 catch_statement <- K_CATCH expression statement
 
 finally_statement <- K_FINALLY statement
 
-statement_modifier <- ((K_IF / K_UNLESS / K_WHILE / K_UNTIL) expression)+
+statement_modifier <- ((K_IF / K_UNLESS / K_WHILE / K_UNTIL) expression)+ eos
 
 mixin_name <-
     IDENT (COLON2 IDENT)*
 
-mixin_statement <- K_MIXIN mixin_name (COMMA mixin_name)*
+mixin_statement <- K_MIXIN mixin_name (COMMA mixin_name)* eos
     
 s_tail <-
-    statement_modifier nls
-/   nls
+    statement_modifier SEMI
+/   SEMI
 
 module_declaration <-
     K_MODULE IDENT LCURLY
@@ -199,7 +194,7 @@ class_declaration <-
 //1st statement is initializer
 class_body <- base_class_initializer? statement*
 
-base_class_initializer <- K_SUPER method_param_decl nls
+base_class_initializer <- K_SUPER method_param_decl 
 
 method_param_decl <- LPAREN method_param_decl_list? RPAREN
 
@@ -227,7 +222,7 @@ method_declaration <-
     (K_ABSTRACT )?
     K_DEF method_name (method_param_decl)?
         (   LCURLY method_body RCURLY
-        /   nls //case of abstract
+        /   SEMI //case of abstract
         )
     
 method_name <-
@@ -396,22 +391,17 @@ STRING <-
     '"' ('\\' . / !'"' .)* '"' Spacing
 /   '\'' ('\\' . / !'\'' .)? '\'' Spacing
 
-Spacing <- (WS / Comment)*
+Spacing <- (WS / Comment / EOL)*
 Comment <- SL_COMMENT / ML_COMMENT;
 WS. // ' '/'\t'
-AllSpacing <- (EOL / Comment / WS)*
 
 SL_COMMENT  <- "//" (!EOL .)* EOL
 
 ML_COMMENT <- "/*" (!"*/" .)* "*/"
 
-nlc  <- (EOL Spacing)*
-
-nls  <- 
-	(EOL Spacing)+ 
-/ 	&(WS* '}') ATRUE 
-/ 	SEMI nlc
-/	&EOF ATRUE
+eos  <- 
+	SEMI
+/ 	&'}' ATRUE 
 ;
 
 ATRUE.  //always true (but does not consume)

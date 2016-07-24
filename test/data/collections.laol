@@ -2,63 +2,63 @@
 
 class List {
     def append(data) {
-        ele = Ele.new(data)
+        ele = Ele.new(data);
         if m_head.nil?
-            m_head, m_tail = ele, ele
+            m_head, m_tail = ele, ele;
         else {
-            m_tail.next = ele
-            m_tail = ele
+            m_tail.next = ele;
+            m_tail = ele;
         }
-        m_size++
-        return this
+        m_size++;
+        return this;
     }
 
     def prepend(data) {
-        ele = Ele.new(data)
+        ele = Ele.new(data);
         if m_head.nil?
-            m_head, m_tail = ele, ele
+            m_head, m_tail = ele, ele;
         else {
-            ele.next=(m_head)
-            m_head = ele
+            ele.next=(m_head);
+            m_head = ele;
         }
-        m_size++
-        return this
+        m_size++;
+        return this;
     }
 
     def length {
-        return m_size
+        return m_size;
     }
 
     def empty? {
-        return length == 0
+        return length == 0;
     }
 
     def contains?(ele) {
         each->(e) {
-            return true if ele == e
-        }
+            return true; //if ele == e
+        };
         return false
     }
 
-    alias << append
+    alias << append;
 
     def each(&f) {
-        p = m_head
+        p = m_head;
         until p.nil? {
-            f(p.m_data)
+            f(p.m_data);
             p = p.next
         }
     }
 
     //TODO: semantics not right here.  (see line 80 too!)
     def *(n) {
-        ar = []
-        n.times->(_) {ar << List.new}
+        ar = [];
+        n.times->(_) {ar << List.new};
         return ar
     }
 
-    private var m_head, m_tail = nil, nil
-    private var m_size = 0
+    private var m_head, m_tail = nil, nil;
+    private var m_size = 0;
 
     // The constructor initializers are instance variables: m_data and m_next
     private class Ele(m_data, private var m_next=nil) {
@@ -76,6 +76,6 @@ class Map {
     def []=(k,v) {
         slot = k.hashcode % NSLOTS
     }
-    private val NSLOTS = 13
+    private val NSLOTS = 13;
     private var m_slots = List.new * NSLOTS    //array [NSLOTS] of List
 }
