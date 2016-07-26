@@ -404,4 +404,6 @@ eos  <-
 / 	&'}' ATRUE 
 ;
 
-ATRUE.  //always true (but does not consume)
+ATRUE.  	//always true (but does not consume)
+SAW_SEMI.	//true if SpacingWithSemi ended w/ semi or nl
+SpacingWithSemi. // <- (SEMI / WS / Comment / EOL)*
