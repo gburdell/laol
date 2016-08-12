@@ -1,6 +1,7 @@
 package laol.parser;
 
 import apfe.runtime.*;
+import static gblib.Util.downCast;
 import laol.parser.apfe.Comment;
 import laol.parser.apfe.SEMI;
 
@@ -17,7 +18,16 @@ public class SpacingWithSemi extends Acceptor {
     }
     
     private static void setLastSeen(final Repetition rep) {
-        
+        if (0 < rep.sizeofAccepted()) {
+            boolean ok = false;
+            PrioritizedChoice pc;
+            for (Acceptor curr : rep.getAccepted()) {
+                pc = downCast(curr);
+                ok |= (pc.getAccepted() instanceof SEMI) 
+                        || (pc.getBaseAccepted() instanceof EOL);
+            }
+            stLastIsSemiOrEOL = ok;
+        }
     }
 
     @Override
@@ -45,7 +55,9 @@ public class SpacingWithSemi extends Acceptor {
         }), Repetition.ERepeat.eZeroOrMore);
         m_baseAccepted = match(matcher);
         boolean match = (null != m_baseAccepted);
-
+        if (match) {
+            setLastSeen(downCast(matcher));
+        }
         return match;
     }
 

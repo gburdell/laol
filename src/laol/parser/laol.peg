@@ -84,7 +84,7 @@ array_select_expression <-
     expression (DOT2 / COLON) expression
 /   expression (COMMA expression)?
 
-var_decl <- lhs_decl IDENT (COMMA IDENT)* eos
+var_decl <- lhs_decl IDENT (COMMA IDENT)* SemiOrEOL
 
 assignment_lhs <- lhs_decl lhs_ref (COMMA lhs_ref)*
 
@@ -120,7 +120,7 @@ file_item <-
 
 module_item <-
     var_decl 
-/   assignment_lhs assignment_op assignment_rhs eos
+/   assignment_lhs assignment_op assignment_rhs SemiOrEOL
 /   class_declaration 
 /   method_declaration
 /   module_declaration
@@ -132,18 +132,18 @@ statement <-
 /   until_statement
 /   for_statement
 /   LCURLY statement* RCURLY
-/   K_BREAK eos
-/   K_NEXT eos
-/   K_ALIAS method_name method_name eos
+/   K_BREAK SemiOrEOL
+/   K_NEXT SemiOrEOL
+/   K_ALIAS method_name method_name SemiOrEOL
 /   return_statement 
 /   try_statement 
 /   throw_statement
 /   class_declaration
 /   method_declaration 
 /   mixin_statement
-/   assignment_lhs assignment_op assignment_rhs eos
+/   assignment_lhs assignment_op assignment_rhs SemiOrEOL
 /   var_decl
-/   expression eos
+/   expression SemiOrEOL
 
 try_statement <-
     K_TRY statement
@@ -156,20 +156,20 @@ assignment_rhs <-
     expression (COMMA expression)*
 /   anonymous_function
 
-return_statement <- K_RETURN (expression)? eos
+return_statement <- K_RETURN (expression)? SemiOrEOL
 
-throw_statement <- K_THROW expression eos
+throw_statement <- K_THROW expression SemiOrEOL
 
 catch_statement <- K_CATCH expression statement
 
 finally_statement <- K_FINALLY statement
 
-statement_modifier <- ((K_IF / K_UNLESS / K_WHILE / K_UNTIL) expression)+ eos
+statement_modifier <- ((K_IF / K_UNLESS / K_WHILE / K_UNTIL) expression)+ SemiOrEOL
 
 mixin_name <-
     IDENT (COLON2 IDENT)*
 
-mixin_statement <- K_MIXIN mixin_name (COMMA mixin_name)* eos
+mixin_statement <- K_MIXIN mixin_name (COMMA mixin_name)* SemiOrEOL
     
 s_tail <-
     statement_modifier SEMI
@@ -398,12 +398,8 @@ WS. // ' '/'\t'
 SL_COMMENT  <- "//" (!EOL .)* EOL
 
 ML_COMMENT <- "/*" (!"*/" .)* "*/"
-
-eos  <- 
-	SEMI
-/ 	&'}' ATRUE 
 ;
 
-ATRUE.  	//always true (but does not consume)
-SAW_SEMI.	//true if SpacingWithSemi ended w/ semi or nl
+//ATRUE.  	//always true (but does not consume)
+SemiOrEOL.	//true if SpacingWithSemi ended w/ semi or nl
 SpacingWithSemi. // <- (SEMI / WS / Comment / EOL)*
