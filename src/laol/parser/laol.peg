@@ -29,8 +29,8 @@ hash_key_value <- hash_key COLON expression
 
 array_primary <-
     LBRACK (expression (COMMA expression)*)? RBRACK
-    #array of words or symbols
-/   '%' [wi] '{' ('\\' . / !'}')* '}'
+    #array of (w) words or (s) symbols
+/   '%' [ws] '{' ('\\' . / !'}')* '}'
 
 postfix_expression <-
     postfix_expression LBRACK array_select_expression RBRACK block?
@@ -84,7 +84,7 @@ array_select_expression <-
     expression (DOT2 / COLON) expression
 /   expression (COMMA expression)?
 
-var_decl <- lhs_decl IDENT (COMMA IDENT)* SemiOrEOL
+var_decl <- lhs_decl IDENT (COMMA IDENT)* eos
 
 assignment_lhs <- lhs_decl lhs_ref (COMMA lhs_ref)*
 
@@ -120,7 +120,7 @@ file_item <-
 
 module_item <-
     var_decl 
-/   assignment_lhs assignment_op assignment_rhs SemiOrEOL
+/   assignment_lhs assignment_op assignment_rhs eos
 /   class_declaration 
 /   method_declaration
 /   module_declaration
@@ -132,18 +132,18 @@ statement <-
 /   until_statement
 /   for_statement
 /   LCURLY statement* RCURLY
-/   K_BREAK SemiOrEOL
-/   K_NEXT SemiOrEOL
-/   K_ALIAS method_name method_name SemiOrEOL
+/   K_BREAK eos
+/   K_NEXT eos
+/   K_ALIAS method_name method_name eos
 /   return_statement 
 /   try_statement 
 /   throw_statement
 /   class_declaration
 /   method_declaration 
 /   mixin_statement
-/   assignment_lhs assignment_op assignment_rhs SemiOrEOL
+/   assignment_lhs assignment_op assignment_rhs eos
 /   var_decl
-/   expression SemiOrEOL
+/   expression eos
 
 try_statement <-
     K_TRY statement
@@ -156,20 +156,20 @@ assignment_rhs <-
     expression (COMMA expression)*
 /   anonymous_function
 
-return_statement <- K_RETURN (expression)? SemiOrEOL
+return_statement <- K_RETURN (expression)? eos
 
-throw_statement <- K_THROW expression SemiOrEOL
+throw_statement <- K_THROW expression eos
 
 catch_statement <- K_CATCH expression statement
 
 finally_statement <- K_FINALLY statement
 
-statement_modifier <- ((K_IF / K_UNLESS / K_WHILE / K_UNTIL) expression)+ SemiOrEOL
+statement_modifier <- ((K_IF / K_UNLESS / K_WHILE / K_UNTIL) expression)+ eos
 
 mixin_name <-
     IDENT (COLON2 IDENT)*
 
-mixin_statement <- K_MIXIN mixin_name (COMMA mixin_name)* SemiOrEOL
+mixin_statement <- K_MIXIN mixin_name (COMMA mixin_name)* eos
     
 s_tail <-
     statement_modifier SEMI
@@ -400,6 +400,10 @@ WS. // ' '/'\t'
 SL_COMMENT  <- "//" (!EOL .)* EOL
 
 ML_COMMENT <- "/*" (!"*/" .)* "*/"
+;
+
+eos <- SemiOrEOL 
+/      (WS / Comment)* &'}'
 ;
 
 //ATRUE.  	//always true (but does not consume)

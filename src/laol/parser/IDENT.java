@@ -27,11 +27,13 @@ public class IDENT extends Acceptor {
         boolean match = (null != m_baseAccepted);
         if (match) {
             m_ident = matcher.getTexts(0, 1);
-            match &= !KEYWORD_MAP.contains(m_ident);
+            match &= ALLOW_KEYWORDS || !KEYWORD_MAP.contains(m_ident);
         }
         return match;
     }
 
+    private static final boolean ALLOW_KEYWORDS = false;
+    
     private String m_ident;
 
     public String getIdent() {
