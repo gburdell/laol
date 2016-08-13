@@ -3,30 +3,55 @@ package laol.parser;
 import apfe.runtime.*;
 import static gblib.Util.downCast;
 import laol.parser.apfe.Comment;
+import laol.parser.apfe.MLCOMMENT;
 import laol.parser.apfe.SEMI;
+import laol.parser.apfe.SLCOMMENT;
 
 public class SpacingWithSemi extends Acceptor {
 
     private static boolean stLastIsSemiOrEOL;
-    
+
     public SpacingWithSemi() {
         stLastIsSemiOrEOL = false;
     }
-    
+
     public static boolean lastWasSemiOrEOL() {
         return stLastIsSemiOrEOL;
     }
-    
-    private static void setLastSeen(final Repetition rep) {
+
+    private static void XXsetLastSeen(final Repetition rep) {
         if (0 < rep.sizeofAccepted()) {
             boolean ok = false;
             PrioritizedChoice pc;
             for (Acceptor curr : rep.getAccepted()) {
                 pc = downCast(curr);
-                ok |= (pc.getAccepted() instanceof SEMI) 
+                ok |= (pc.getAccepted() instanceof SEMI)
                         || (pc.getBaseAccepted() instanceof EOL);
+                if (!ok && (pc.getAccepted() instanceof Comment)) {
+                    pc = downCast(pc.getAccepted());
+                    ok |= (pc.getAccepted() instanceof SLCOMMENT);
+                    if (!ok) {
+                        final MLCOMMENT mlc = downCast(pc.getAccepted());
+                        ok |= (0 <= mlc.toString().indexOf("\n"));
+                    }
+                }
+                if (ok) {
+                    break;
+                }
             }
             stLastIsSemiOrEOL = ok;
+        }
+    }
+
+    private static void setLastSeen(final Acceptor acc) {
+        final String s = acc.toString();
+        if (s != null) {
+            for (int i = 0; i < s.length(); i++) {
+                if ((s.charAt(i) == ';') || s.charAt(i) == '\n') {
+                    stLastIsSemiOrEOL = true;
+                    break;
+                }
+            }
         }
     }
 

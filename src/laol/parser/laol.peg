@@ -391,7 +391,9 @@ STRING <-
     '"' ('\\' . / !'"' .)* '"' Spacing
 /   '\'' ('\\' . / !'\'' .)? '\'' Spacing
 
-Spacing <- (WS / Comment / EOL)*
+//Spacing <- (WS / Comment / EOL)*
+Spacing <- SpacingWithSemi
+
 Comment <- SL_COMMENT / ML_COMMENT;
 WS. // ' '/'\t'
 

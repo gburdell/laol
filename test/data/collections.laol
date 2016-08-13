@@ -53,7 +53,7 @@ class List {
     //TODO: semantics not right here.  (see line 80 too!)
     def *(n) {
         ar = [];
-        n.times->(_) {ar << List.new};
+        n.times->(_) {ar << List.new;/*comment*/}
         return ar
     }
 

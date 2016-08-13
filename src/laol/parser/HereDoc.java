@@ -21,10 +21,10 @@ public class HereDoc extends Acceptor {
             String line;
             do {
                 matcher = new Sequence(
-                        new Repetition(new WS(), Repetition.ERepeat.eZeroOrMore),
+                        new SpacingWithSemi(),
                         new CharSeq(m_ident),
-                        new Repetition(new WS(), Repetition.ERepeat.eZeroOrMore),
-                        new AndPredicate(new Char(';')));
+                        new SpacingWithSemi()
+                );
                 match = (null != match(matcher));
                 if (match) {
                     break; //while
