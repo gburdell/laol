@@ -3,4 +3,6 @@ if b
 else 
     a = 4
 
+b = 6 unless a == b
+
 

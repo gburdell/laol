@@ -6,7 +6,7 @@ DEPS ?= base.java.tmpl dlrbase.java.tmpl generate.props.txt ${PEG}
 .PHONY: goal clean
 goal: generate.log
 
-generate.log: ${PEG}
+generate.log: ${PEG} generate.props.txt
 	${MAKE} clean
 	${TOOL} ${PEG} generate.props.txt > generate.log
 	tail generate.log

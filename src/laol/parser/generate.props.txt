@@ -31,8 +31,8 @@ dlrBaseJavaTemplate: dlrbase.java.tmpl
 genListeners: false
 
 # Generate memoize
-#genMemoize: true
-genMemoize: false
+#genMemoize: false
+genMemoize: true
 
 # Generated class names use CamelCase
 genClsAsCamelCase: true

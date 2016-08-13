@@ -19,30 +19,6 @@ public class SpacingWithSemi extends Acceptor {
         return stLastIsSemiOrEOL;
     }
 
-    private static void XXsetLastSeen(final Repetition rep) {
-        if (0 < rep.sizeofAccepted()) {
-            boolean ok = false;
-            PrioritizedChoice pc;
-            for (Acceptor curr : rep.getAccepted()) {
-                pc = downCast(curr);
-                ok |= (pc.getAccepted() instanceof SEMI)
-                        || (pc.getBaseAccepted() instanceof EOL);
-                if (!ok && (pc.getAccepted() instanceof Comment)) {
-                    pc = downCast(pc.getAccepted());
-                    ok |= (pc.getAccepted() instanceof SLCOMMENT);
-                    if (!ok) {
-                        final MLCOMMENT mlc = downCast(pc.getAccepted());
-                        ok |= (0 <= mlc.toString().indexOf("\n"));
-                    }
-                }
-                if (ok) {
-                    break;
-                }
-            }
-            stLastIsSemiOrEOL = ok;
-        }
-    }
-
     private static void setLastSeen(final Acceptor acc) {
         final String s = acc.toString();
         if (s != null) {

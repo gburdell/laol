@@ -119,7 +119,7 @@ file_item <-
 /   statement
 
 module_item <-
-    var_decl 
+    var_decl eos
 /   assignment_lhs assignment_op assignment_rhs eos
 /   class_declaration 
 /   method_declaration
@@ -142,13 +142,14 @@ statement <-
 /   method_declaration 
 /   mixin_statement
 /   assignment_lhs assignment_op assignment_rhs eos
-/   var_decl
+/   var_decl eos
 /   expression eos
 
 try_statement <-
     K_TRY statement
         catch_statement*
         finally_statement?
+		eos
 
 // NOTE: while ruby allows most statements as rhs; e.g.: "foo = if xxx; 12", 
 // we will not.  Use method to do so.
@@ -160,11 +161,9 @@ return_statement <- K_RETURN (expression)? eos
 
 throw_statement <- K_THROW expression eos
 
-catch_statement <- K_CATCH expression statement
+catch_statement <- K_CATCH expression statement eos
 
-finally_statement <- K_FINALLY statement
-
-statement_modifier <- ((K_IF / K_UNLESS / K_WHILE / K_UNTIL) expression)+ eos
+finally_statement <- K_FINALLY statement eos
 
 mixin_name <-
     IDENT (COLON2 IDENT)*
@@ -172,13 +171,13 @@ mixin_name <-
 mixin_statement <- K_MIXIN mixin_name (COMMA mixin_name)* eos
     
 s_tail <-
-    statement_modifier SEMI
-/   SEMI
+    statement_modifier eos
+/   eos
 
 module_declaration <-
     K_MODULE IDENT LCURLY
         module_item*
-    RCURLY
+    RCURLY eos
 
 class_declaration <-
     // Scala style
@@ -189,7 +188,7 @@ class_declaration <-
         (class_extends )?
         LCURLY 
             class_body
-        RCURLY
+        RCURLY eos
 
 //1st statement is initializer
 class_body <- base_class_initializer? statement*
@@ -221,9 +220,9 @@ method_declaration <-
     access_modifier?
     (K_ABSTRACT )?
     K_DEF method_name (method_param_decl)?
-        (   LCURLY method_body RCURLY
-        /   SEMI //case of abstract
-        )
+        (LCURLY method_body RCURLY)?
+        //NOTE: abstract declaration if empty
+		eos
     
 method_name <-
     METHOD_NAME_IDENT? method_name_op
@@ -247,19 +246,19 @@ case_statement <-
     K_CASE expression LCURLY 
         (K_WHEN expression (COMMA expression)* COLON statement)*
         (K_ELSE statement)?
-    RCURLY
+    RCURLY eos
 
 if_statement <-
     (K_IF / K_UNLESS) expression statement
         (K_ELSIF expression statement)*
         (K_ELSE statement)?
 
-while_statement <- K_WHILE expression statement
-until_statement <- K_UNTIL expression statement
+while_statement <- K_WHILE expression statement eos
+until_statement <- K_UNTIL expression statement eos
 
 enumerable_expression <- expression
 
-for_statement <- K_FOR IDENT K_IN enumerable_expression statement
+for_statement <- K_FOR IDENT K_IN enumerable_expression statement eos
 ;
 
 // a bit more complicated, so customize
@@ -404,6 +403,10 @@ ML_COMMENT <- "/*" (!"*/" .)* "*/"
 
 eos <- SemiOrEOL 
 /      (WS / Comment)* &'}'
+/	   WS* statement_modifier
+;
+
+statement_modifier <- (K_IF / K_UNLESS / K_WHILE / K_UNTIL) expression eos
 ;
 
 //ATRUE.  	//always true (but does not consume)
