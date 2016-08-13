@@ -16,6 +16,8 @@ defx = 14'b0001
 
 private var publicx = 5;
 
+a =5 unless y==4
+
 class Foo() {}
 
 /**/
