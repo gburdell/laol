@@ -1,0 +1,15 @@
+#!/bin/csh -f
+
+set dist=${HOME}/projects/laol/dist
+set jars="${dist}/laol.jar:${dist}/lib/apfe.jar:${dist}/lib/gblib.jar"
+
+exec java \
+	-Xms2G \
+	-ea \
+	-Dapfe.messages=${HOME}/projects/apfe/messages.txt \
+	-Dtool.root=${HOME}/projects/apfe \
+	-Dapfe.runtime.Acceptor.Debug=false \
+	-Dapfe.runtime.EnableMemoize=true \
+	-cp ${jars} \
+	laol.parser.Main \
+	${*}

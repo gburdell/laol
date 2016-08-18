@@ -1,3 +1,4 @@
+
 GRAMMAR ?= laol
 PEG  ?= ${GRAMMAR}.peg
 TOOL ?= ${HOME}/projects/apfe/bin/generate
