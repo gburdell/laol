@@ -9,17 +9,18 @@ primary_expression <-
 /   K_FILE / K_TARGET
 /   K_TRUE / K_FALSE
 /   K_THIS / K_SUPER
-/   here_doc
-/   variable_name (QMARK / EXCL)?
 /   STRING
 /   SYMBOL
+/   here_doc
+/   variable_name (QMARK / EXCL)?
 /   Number
 /   hash_primary
 /   array_primary
 /   regexp_primary
+/	html_primary
 
 regexp_primary <-
-	"%r{" ('\\' . / !'}' .)+ '}'
+	"%r{" sp ('\\' . / !'}' .)+ '}'
 
 hash_primary <- LCURLY (hash_key_value (COMMA hash_key_value)*)? RCURLY
 
@@ -27,10 +28,23 @@ hash_key <- STRING / IDENT
 
 hash_key_value <- hash_key COLON expression
 
+html_primary <-
+	"%h{" sp html_tag* RCURLY
+
+html_tag <-
+	IDENT  (LPAREN param_expression_list? RPAREN)? LCURLY
+		html_tag_contents*
+	RCURLY
+
+html_tag_contents <-
+	LCURLY2 expression RCURLY2
+/	html_tag
+/	!RCURLY .
+
 array_primary <-
     LBRACK (expression (COMMA expression)*)? RBRACK
     #array of (w) words or (s) symbols
-/   '%' [ws] '{' ('\\' . / !'}')* '}'
+/   '%' [ws] '{' sp ('\\' . / !'}')* '}'
 
 postfix_expression <-
     postfix_expression LBRACK array_select_expression RBRACK block?
@@ -57,8 +71,8 @@ named_param <- named_param_ele (COMMA named_param_ele)* (COMMA expression)*
 // Any named params are at the end
 param_expression_list <- 
 	unnamed_param named_param
-/	unnamed_param named_param?
 /	named_param
+/	unnamed_param
 
 unary_expression <-
     (PLUS2 / MINUS2 / AND / STAR) unary_expression
@@ -202,7 +216,7 @@ method_param_decl <- LPAREN method_param_decl_list? RPAREN
 
 access_modifier <- (K_PRIVATE / K_PROTECTED / K_PUBLIC) 
 
-mutability <- (K_VAL / K_VAR) 
+mutability <- (K_CONST / K_VAR) 
 
 method_param_decl_modifier <- access_modifier? mutability?
 
@@ -309,8 +323,10 @@ PLUS_EQ     <- "+=" Spacing
 QMARK       <- '?' Spacing
 DIV         <- '/' !'=' Spacing
 DIV_EQ      <- "/=" Spacing
-LCURLY      <- '{' Spacing
-RCURLY      <- '}' Spacing
+LCURLY      <- '{' !'{' Spacing
+LCURLY2     <- "{{"
+RCURLY      <- '}' !'}' Spacing
+RCURLY2     <- "}}"
 LPAREN      <- '(' Spacing
 RPAREN      <- ')' Spacing
 LBRACK      <- '[' Spacing
@@ -324,6 +340,7 @@ K_BREAK     <- "break"      K_tail
 K_CASE      <- "case"       K_tail
 K_CATCH     <- "catch"      K_tail
 K_CLASS     <- "class"      K_tail
+K_CONST     <- "const"      K_tail
 K_DEF       <- "def"        K_tail
 K_ELSE      <- "else"       K_tail
 K_ELSIF     <- "elsif"      K_tail
@@ -352,7 +369,6 @@ K_TRUE      <- "true"       K_tail
 K_TRY       <- "try"        K_tail
 K_UNLESS    <- "unless"     K_tail
 K_UNTIL     <- "until"      K_tail
-K_VAL       <- "val"        K_tail
 K_VAR       <- "var"        K_tail
 K_WHEN      <- "when"       K_tail
 K_WHILE     <- "while"      K_tail
@@ -415,3 +431,4 @@ statement_modifier <- (K_IF / K_UNLESS / K_WHILE / K_UNTIL) expression eos
 //ATRUE.  	//always true (but does not consume)
 SemiOrEOL.	//true if SpacingWithSemi ended w/ semi or nl
 SpacingWithSemi. // <- (SEMI / WS / Comment / EOL)*
+sp <- (SEMI / WS / Comment / EOL)*

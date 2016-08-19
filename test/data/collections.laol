@@ -76,6 +76,6 @@ class Map {
     def []=(k,v) {
         slot = k.hashcode % NSLOTS
     }
-    private val NSLOTS = 13;
+    private const NSLOTS = 13;
     private var m_slots = List.new * NSLOTS    //array [NSLOTS] of List
 }
