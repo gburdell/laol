@@ -55,7 +55,10 @@ named_param_ele <- IDENT COLON expression
 named_param <- named_param_ele (COMMA named_param_ele)* (COMMA expression)*
 
 // Any named params are at the end
-param_expression_list <- unnamed_param? named_param?
+param_expression_list <- 
+	unnamed_param named_param
+/	unnamed_param named_param?
+/	named_param
 
 unary_expression <-
     (PLUS2 / MINUS2 / AND / STAR) unary_expression
