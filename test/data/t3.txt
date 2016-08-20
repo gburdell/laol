@@ -1,5 +1,26 @@
-const header = %h{
+const header = %html{
 div(class: "c1", id:"id1") {
   the quick brown fox jumps {=over=} the lazy dog
+}
+}
+
+const body = %html{
+<title class="title" id="foobar">
+Here is the {=title=}
+</title>
+}
+
+const sass = %sass{
+$type: {=foo.bar.eval(a,b,c)=};
+p {
+  @if $type == ocean {
+    color: blue;
+  } @else if $type == matador {
+    color: red;
+  } @else if $type == monster {
+    color: green;
+  } @else {
+    color: black;
+  }
 }
 }

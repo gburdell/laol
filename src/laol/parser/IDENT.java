@@ -33,7 +33,7 @@ public class IDENT extends Acceptor {
     }
 
     private static final boolean ALLOW_KEYWORDS = true;
-    
+
     private String m_ident;
 
     public String getIdent() {
@@ -64,5 +64,23 @@ public class IDENT extends Acceptor {
                     "val", "var",
                     "when", "while"
             ));
-    
+
+    //NOTE: cannot memoize!
+    /**Begin memoize
+    @Override
+    protected void memoize(Marker mark, Marker endMark) {
+        stMemo.add(mark, this, endMark);
+    }
+
+    @Override
+    protected Memoize.Data hasMemoized(Marker mark) {
+        return stMemo.memoized(mark);
+    }
+    ///
+    // Memoize for all instances of IDENT.
+    //
+    private static final Memoize stMemo = new Memoize();
+    //End memoize
+    **/
+
 }

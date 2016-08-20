@@ -18,6 +18,7 @@ primary_expression <-
 /   array_primary
 /   regexp_primary
 /	html_primary
+/	sass_primary
 
 regexp_primary <-
 	"%r{" sp ('\\' . / !'}' .)+ '}'
@@ -29,17 +30,47 @@ hash_key <- STRING / IDENT
 hash_key_value <- hash_key COLON expression
 
 html_primary <-
-	"%h{" sp html_tag* RCURLY
+	"%html{" sp 
+		(	&IDENT html_code* 
+		/	&'<'   html_tag*
+		)
+		RCURLY
 
-html_tag <-
+html_code <-
 	IDENT  (LPAREN param_expression_list? RPAREN)? LCURLY
-		html_tag_contents*
+		html_code_content*
 	RCURLY
 
-html_tag_contents <-
-	LEVAL expression REVAL
+html_code_content <-
+	eval_expression
+/	html_code
+/	!RCURLY .
+
+html_tag <-
+	'<' [a-zA-Z_]+ sp html_attribute* '>'
+		html_tag_content*
+	("</" [a-zA-Z]+ '>')?
+
+html_tag_content <-
+	eval_expression
 /	html_tag
 /	!RCURLY .
+
+html_attribute <-
+	IDENT EQ STRING
+
+sass_primary <-
+	"%sass{" sp 
+		sass_content*
+	RCURLY
+
+sass_content <-
+	LCURLY (!RCURLY sass_content)* RCURLY
+/	eval_expression
+/	STRING
+/	!RCURLY .
+
+eval_expression <- LEVAL expression REVAL
 
 array_primary <-
     LBRACK (expression (COMMA expression)*)? RBRACK

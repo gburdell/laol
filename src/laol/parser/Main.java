@@ -28,6 +28,7 @@ import apfe.runtime.CharBufState;
 import apfe.runtime.CharBuffer;
 import apfe.runtime.InputStream;
 import apfe.runtime.ParseError;
+import apfe.runtime.State;
 import laol.parser.apfe.Grammar;
 
 /**
@@ -35,9 +36,9 @@ import laol.parser.apfe.Grammar;
  * @author kpfalzer
  */
 public class Main {
-    
+
     public static void main(String argv[]) {
-               try {
+        try {
             for (String fn : argv) {
                 InputStream fis = new InputStream(fn);
                 System.out.println("Info: " + fn);
@@ -58,6 +59,11 @@ public class Main {
         } catch (Exception ex) {
             gblib.Util.abnormalExit(ex);
         }
+        if (null != State.getTheOne()) {
+            final long stats[] = State.getTheOne().getMemoizeStats();
+            final double hitPcnt = (100.0 * stats[0]) / stats[1];
+            System.out.printf("Memoize hit rate: %.1f%%\n", hitPcnt);
+        }
     }
-    
+
 }

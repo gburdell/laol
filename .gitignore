@@ -1,3 +1,4 @@
-/build/
-/dist/
-/src/laol/parser/apfe
+build/
+dist/
+src/laol/parser/apfe
+nbproject/private
