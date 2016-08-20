@@ -37,7 +37,7 @@ html_tag <-
 	RCURLY
 
 html_tag_contents <-
-	LCURLY2 expression RCURLY2
+	LEVAL expression REVAL
 /	html_tag
 /	!RCURLY .
 
@@ -297,7 +297,8 @@ GT          <- '>' !('>' / '=') Spacing
 GTEQ        <- ">=" Spacing
 GT2         <- ">>" !'=' Spacing
 GT2_EQ      <- ">>=" Spacing
-EQ          <- '=' !'=' Spacing
+EQ          <- '=' !('=' / '}') Spacing
+REVAL       <- "=}" Spacing
 EQ2         <- "==" Spacing
 NEQ         <- "!=" Spacing
 EXCL        <- '!' !'=' Spacing
@@ -323,10 +324,9 @@ PLUS_EQ     <- "+=" Spacing
 QMARK       <- '?' Spacing
 DIV         <- '/' !'=' Spacing
 DIV_EQ      <- "/=" Spacing
-LCURLY      <- '{' !'{' Spacing
-LCURLY2     <- "{{"
-RCURLY      <- '}' !'}' Spacing
-RCURLY2     <- "}}"
+LCURLY      <- '{' !'=' Spacing
+LEVAL       <- "{="
+RCURLY      <- '}' Spacing
 LPAREN      <- '(' Spacing
 RPAREN      <- ')' Spacing
 LBRACK      <- '[' Spacing
