@@ -3,23 +3,6 @@ Grammar <- Spacing contents? EOF
 variable_name <-
     IDENT (COLON2 IDENT)*
 
-primary_expression <-
-    K_NIL QMARK?
-/   K_NEW
-/   K_FILE / K_TARGET
-/   K_TRUE / K_FALSE
-/   K_THIS / K_SUPER
-/   STRING
-/   SYMBOL
-/   here_doc
-/   variable_name (QMARK / EXCL)?
-/   Number
-/   hash_primary
-/   array_primary
-/   regexp_primary
-/	html_primary
-/	sass_primary
-
 regexp_primary <-
 	"%r{" sp ('\\' . / !'}' .)+ '}'
 
@@ -42,7 +25,7 @@ html_code <-
 	RCURLY
 
 html_code_content <-
-	eval_expression
+	inline_eval
 /	html_code
 /	!RCURLY .
 
@@ -52,7 +35,7 @@ html_tag <-
 	("</" [a-zA-Z]+ '>')?
 
 html_tag_content <-
-	eval_expression
+	inline_eval
 /	html_tag
 /	!RCURLY .
 
@@ -66,16 +49,35 @@ sass_primary <-
 
 sass_content <-
 	LCURLY (!RCURLY sass_content)* RCURLY
-/	eval_expression
+/	inline_eval
 /	STRING
 /	!RCURLY .
 
-eval_expression <- LEVAL expression REVAL
+inline_eval <- LEVAL expression REVAL
 
 array_primary <-
     LBRACK (expression (COMMA expression)*)? RBRACK
     #array of (w) words or (s) symbols
 /   '%' [ws] '{' sp ('\\' . / !'}')* '}'
+
+//{begin
+
+primary_expression <-
+    K_NIL QMARK?
+/   K_NEW
+/   K_FILE / K_TARGET
+/   K_TRUE / K_FALSE
+/   K_THIS / K_SUPER
+/   STRING
+/   SYMBOL
+/   here_doc
+/   variable_name (QMARK / EXCL)?
+/   Number
+/   hash_primary
+/   array_primary
+/   regexp_primary
+/	html_primary
+/	sass_primary
 
 postfix_expression <-
     postfix_expression LBRACK array_select_expression RBRACK block?
@@ -127,6 +129,8 @@ expression <-
     expression QMARK expression COLON expression
 /   LPAREN expression RPAREN
 /   binary_expression
+
+//end}
 
 array_select_expression <-
     expression (DOT2 / COLON) expression
