@@ -23,28 +23,35 @@
  */
 package laol.ast;
 
-import laol.parser.apfe.STRING;
-import static apfe.runtime.Util.bpsString;
+import apfe.runtime.Acceptor;
+import apfe.runtime.Marker;
+import apfe.runtime.Repetition;
+import apfe.runtime.Sequence;
+import apfe.runtime.Util;
+import java.util.LinkedList;
+import java.util.List;
 
 /**
  *
  * @author gburdell
  */
-public class MyString extends Node {
+public class VarDecl extends Item {
 
-    public MyString(final STRING id) {
-        super(id);
-        m_val = bpsString(id, 1);
+    public VarDecl(final laol.parser.apfe.VarDecl decl) {
+        m_loc = decl.getStartMark();
+        final Sequence items = asSequence(decl);
+        m_varNames.add(new Ident(Util.extractEle(items, 1)));
+        final Repetition vars = Util.extractEle(items, 2);
+        for (Acceptor var : vars.getAccepted()) {
+            m_varNames.add(new Ident(Util.extractEle(var, 1)));
+        }
     }
-
-    /**
-     * The string value without quotes.
-     */
-    final String m_val;
 
     @Override
-    public ENode getType() {
-        return ENode.eString;
+    public Marker getLocation() {
+        return m_loc;
     }
 
+    private final Marker m_loc;
+    private final List<Ident> m_varNames = new LinkedList<Ident>();
 }

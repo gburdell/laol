@@ -23,28 +23,22 @@
  */
 package laol.ast;
 
-import laol.parser.apfe.SYMBOL;
-import static apfe.runtime.Util.asString;
+import apfe.runtime.Marker;
 
 /**
  *
  * @author gburdell
  */
-public class Symbol extends Node {
+public class Statement extends Item {
 
-    public Symbol(final SYMBOL id) {
-        super(id);
-        m_val = asString(id, 1);
+    public Statement(final laol.parser.apfe.Statement decl) {
+        m_loc = decl.getStartMark();
     }
-
-    /**
-     * The string value of symbol (without colon).
-     */
-    final String m_val;
 
     @Override
-    public ENode getType() {
-        return ENode.eSymbol;
+    public Marker getLocation() {
+        return m_loc;
     }
 
+    private final Marker m_loc;
 }

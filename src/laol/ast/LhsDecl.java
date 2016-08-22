@@ -23,26 +23,40 @@
  */
 package laol.ast;
 
-import laol.parser.IDENT;
 import apfe.runtime.Marker;
+import apfe.runtime.Repetition;
+import apfe.runtime.Sequence;
+import apfe.runtime.Util;
 
 /**
  *
  * @author gburdell
  */
-public class Ident extends Item {
+public class LhsDecl extends Item {
 
-    public Ident(final IDENT id) {
-        m_id = id.getIdent();
-        m_loc = id.getStartMark();
+    public LhsDecl(final laol.parser.apfe.LhsDecl decl) {
+        m_loc = decl.getStartMark();
+        final Sequence items = asSequence(decl);
+        Repetition rep = Util.extractEle(items, 0);
+        if (1 == rep.sizeofAccepted()) {
+            m_access = new AccessModifier(rep.getOnlyAccepted());
+        }
+        if (1 == Util.<Repetition>extractEle(items, 1).sizeofAccepted()) {
+            m_isStatic = true;
+        }
+        rep = Util.extractEle(items, 2);
+        if (1 == rep.sizeofAccepted()) {
+            m_mutability = new Mutability(rep.getOnlyAccepted());
+        }
     }
 
-	@Override
-	public Marker getLocation() {
-		return m_loc;
-	}
+    @Override
+    public Marker getLocation() {
+        return m_loc;
+    }
 
-    private final String m_id;
     private final Marker m_loc;
-
+    private boolean m_isStatic = false;
+    private Mutability m_mutability = null;
+    private AccessModifier m_access = null;
 }

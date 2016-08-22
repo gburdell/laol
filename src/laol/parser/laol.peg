@@ -60,8 +60,6 @@ array_primary <-
     #array of (w) words or (s) symbols
 /   '%' [ws] '{' sp ('\\' . / !'}')* '}'
 
-//{begin
-
 primary_expression <-
     K_NIL QMARK?
 /   K_NEW
@@ -70,6 +68,7 @@ primary_expression <-
 /   K_THIS / K_SUPER
 /   STRING
 /   SYMBOL
+/	LPAREN expression RPAREN
 /   here_doc
 /   variable_name (QMARK / EXCL)?
 /   Number
@@ -85,6 +84,77 @@ postfix_expression <-
 /   postfix_expression dot_suffix block?
 /   postfix_expression (PLUS2 / MINUS2) 
 /   primary_expression block?
+
+unary_expression <-
+	unary_op unary_expression
+/   postfix_expression
+
+// STAR/STAR2 are splat operators (as in ruby)
+unary_op <- TILDE / EXCL / PLUS / MINUS / STAR / STAR2 / PLUS2 / MINUS2 / AND
+
+mult_expression <-
+	mult_expression mult_op unary_expression
+/	unary_expression
+	
+mult_op <- STAR / DIV / PCNT
+
+add_expression <-
+	add_expression add_op mult_expression
+/	mult_expression
+
+add_op <- PLUS / MINUS
+
+shift_expression <-
+	shift_expression shift_op add_expression
+/	add_expression
+
+shift_op <- LT2 / GT2
+
+rel_expression <-
+	rel_expression rel_op shift_expression
+/	shift_expression
+
+rel_op <- LT / LTEQ / GT / GTEQ
+
+cmp_expression <-
+	cmp_expression cmp_op rel_expression
+/	rel_expression
+
+cmp_op <- NEQ / EQ2
+
+and_expression <-
+	and_expression AND cmp_expression
+/	cmp_expression
+
+xor_expression <-
+	xor_expression CARET and_expression
+/	and_expression
+
+or_expression <-
+	or_expression OR xor_expression
+/	xor_expression
+
+land_expression <-
+	land_expression AND2 or_expression
+/	or_expression
+
+lor_expression <-
+	lor_expression OR2 land_expression
+/	land_expression
+
+conditional_expression <-
+    lor_expression QMARK expression COLON expression
+/	lor_expression
+
+expression <- conditional_expression
+
+binary_op <-
+	mult_op
+/	add_op
+/	shift_op
+/	rel_op
+/	cmp_op
+/	AND / OR / CARET / AND2 / OR2
 
 dot_suffix <-
     DOT (   K_NIL QMARK?
@@ -107,32 +177,8 @@ param_expression_list <-
 /	named_param
 /	unnamed_param
 
-unary_expression <-
-    (PLUS2 / MINUS2 / AND / STAR) unary_expression
-/   unary_op unary_expression
-/   postfix_expression
-
-unary_op <- TILDE / EXCL / PLUS / MINUS 
-
-binary_expression <-
-    binary_expression binary_op unary_expression
-/   unary_expression
-
-binary_op <-
-    STAR / DIV / PCNT / PLUS / MINUS / LT2 / GT2
-/   LT / LTEQ / GT / GTEQ
-/   NEQ / EQ2
-/   AND / CARET / OR
-/   AND2 / OR2
-
-expression <-
-    expression QMARK expression COLON expression
-/   LPAREN expression RPAREN
-/   binary_expression
-
-//end}
-
 array_select_expression <-
+	//TODO: ':' ambiguous w/ conditional_expr
     expression (DOT2 / COLON) expression
 /   expression (COMMA expression)?
 
@@ -347,7 +393,8 @@ AND_EQ      <- "&=" Spacing
 OR          <- '|' !('|' / '=') Spacing
 OR2         <- "||" Spacing
 OR_EQ       <- "|=" Spacing
-STAR        <- '*' !'=' Spacing
+STAR        <- '*' !('=' / '*') Spacing
+STAR2       <- "**"
 STAR_EQ     <- "*=" Spacing
 MINUS       <- '-' !('-' / '=' / '>') Spacing
 MINUS2      <- "--" Spacing

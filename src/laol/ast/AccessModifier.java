@@ -23,18 +23,32 @@
  */
 package laol.ast;
 
-import laol.parser.IDENT;
 import apfe.runtime.Marker;
+import laol.parser.apfe.KPRIVATE;
+import laol.parser.apfe.KPUBLIC;
 
 /**
  *
  * @author gburdell
  */
-public class Ident extends Item {
+public class AccessModifier extends Item {
 
-    public Ident(final IDENT id) {
-        m_id = id.getIdent();
-        m_loc = id.getStartMark();
+    public static enum EType {
+        ePrivate, eProtected, ePublic
+    }
+
+    public AccessModifier(final laol.parser.apfe.AccessModifier decl) {
+        m_loc = decl.getStartMark();
+        final Class choice = asPrioritizedChoice(decl)
+                .getAccepted()
+                .getClass();
+        if (KPRIVATE.class == choice) {
+            m_access = EType.ePrivate;
+        } else if (KPUBLIC.class == choice) {
+            m_access = EType.ePublic;
+        } else {
+            m_access = EType.eProtected;
+        }
     }
 
 	@Override
@@ -42,7 +56,6 @@ public class Ident extends Item {
 		return m_loc;
 	}
 
-    private final String m_id;
+    private final EType m_access;
     private final Marker m_loc;
-
 }

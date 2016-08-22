@@ -1,3 +1,12 @@
+#!/bin/csh -f
+
+foreach i ($*)
+	set outf=${i}.java
+	if (-f $outf) then
+		echo "Warning: ${outf}: file exists.  Will not overwrite."
+	else
+		echo "Info: ${outf}: creating ..."
+		cat <<L1 > ${outf}
 /*
  * The MIT License
  *
@@ -22,27 +31,24 @@
  * THE SOFTWARE.
  */
 package laol.ast;
-
-import laol.parser.IDENT;
 import apfe.runtime.Marker;
 
 /**
  *
  * @author gburdell
  */
-public class Ident extends Item {
-
-    public Ident(final IDENT id) {
-        m_id = id.getIdent();
-        m_loc = id.getStartMark();
+public class ${i} extends Item {
+    public ${i}(final laol.parser.apfe.${i} decl) {
+        m_loc = decl.getStartMark();
     }
-
+    
 	@Override
 	public Marker getLocation() {
 		return m_loc;
 	}
 
-    private final String m_id;
     private final Marker m_loc;
-
 }
+L1
+	endif
+end

@@ -23,19 +23,36 @@
  */
 package laol.ast;
 
+import apfe.runtime.Acceptor;
+import apfe.runtime.Repetition;
+import apfe.runtime.Sequence;
+import apfe.runtime.Util;
+import java.util.LinkedList;
+import java.util.List;
+import laol.parser.apfe.Contents;
+
 /**
  *
  * @author gburdell
  */
-public interface INodeType {
-
-    public static enum ENode {
-        eIdent,
-        eNumber,
-        ePrimaryExpression,
-        eString,
-        eSymbol
+public class Ast extends Item {
+    public Ast(final Contents contents) {
+        Sequence seq = asSequence(contents);
+        for (Acceptor stmt : Util.<Repetition>extractEle(seq, 0).getAccepted()) {
+            m_requireStmts.add(new RequireStatement(stmt));
+        }
+        for (Acceptor fileItem : Util.<Repetition>extractEle(seq, 1).getAccepted()) {
+            add(fileItem);
+        }
     }
-
-    public ENode getType();
+    
+    private void add(final Acceptor item) {
+        m_items.add(createItem(item));
+    }
+    
+    private final List<RequireStatement>    m_requireStmts = new LinkedList<>();
+    /**
+     * Collection of ModuleDeclaration and Statement.
+     */
+    private final List<Item>   m_items = new LinkedList<>();
 }

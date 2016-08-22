@@ -23,26 +23,26 @@
  */
 package laol.ast;
 
-import laol.parser.IDENT;
+import apfe.runtime.Acceptor;
 import apfe.runtime.Marker;
+import static apfe.runtime.Util.downcast;
 
 /**
  *
  * @author gburdell
  */
-public class Ident extends Item {
-
-    public Ident(final IDENT id) {
-        m_id = id.getIdent();
-        m_loc = id.getStartMark();
+public class ModuleDeclaration extends Item {
+    public ModuleDeclaration(final Acceptor acc) {
+        final laol.parser.apfe.ModuleDeclaration mdecl = downcast(acc);
+        m_name = getIdent(mdecl.getBaseAccepted(), 1);
+        m_loc = mdecl.getStartMark();
     }
-
+    
 	@Override
 	public Marker getLocation() {
 		return m_loc;
 	}
 
-    private final String m_id;
+    private final Ident m_name;
     private final Marker m_loc;
-
 }

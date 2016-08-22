@@ -22,31 +22,35 @@
  * THE SOFTWARE.
  */
 package laol.ast;
-
-import apfe.runtime.Acceptor;
+import apfe.runtime.Marker;
+import apfe.runtime.PrioritizedChoice;
+import laol.parser.apfe.KCONST;
 
 /**
  *
  * @author gburdell
  */
-public abstract class Node implements INodeType {
-
-    protected Node(final Acceptor acc) {
-        m_tok = acc;
+public class Mutability extends Item {
+    public static enum EType {
+        eConst, eVar
+    }
+    public Mutability(final laol.parser.apfe.Mutability decl) {
+        m_loc = decl.getStartMark();
+        final Class choice = asPrioritizedChoice(decl)
+                .getAccepted()
+                .getClass();
+        if (KCONST.class == choice) {
+            m_type = EType.eConst;
+        } else {
+            m_type = EType.eVar;
+        }
     }
 
-    protected Node() {
-    }
+	@Override
+	public Marker getLocation() {
+		return m_loc;
+	}
 
-    protected final void setToken(final Acceptor acc) {
-        assert (null == m_tok);
-        m_tok = acc;
-    }
-
-    @Override
-    public String toString() {
-        return m_tok.toString();
-    }
-
-    protected Acceptor m_tok;
+    private final EType m_type;
+    private final Marker m_loc;
 }
