@@ -30,10 +30,6 @@ import apfe.runtime.InputStream;
 import apfe.runtime.ParseError;
 import gblib.Util;
 import laol.parser.apfe.Grammar;
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
@@ -52,7 +48,7 @@ public class AstTest {
         final String fns[] = {
             //"test/data/t2.txt",
             //"test/data/t1.txt",
-            //"test/data/collections.laol",
+            "test/data/collections.laol",
             "test/data/t3.txt"
         };
         try {

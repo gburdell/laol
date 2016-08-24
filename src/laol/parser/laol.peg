@@ -217,8 +217,8 @@ file_item <-
 /   statement
 
 module_item <-
-    var_decl eos
-/   assignment_lhs assignment_op assignment_rhs eos
+    var_decl_statement
+/   assign_statement
 /   class_declaration 
 /   method_declaration
 /   module_declaration
@@ -229,19 +229,27 @@ statement <-
 /   while_statement
 /   until_statement
 /   for_statement
-/   LCURLY statement* RCURLY
-/   K_BREAK eos
-/   K_NEXT eos
-/   K_ALIAS method_name method_name eos
+/   block_statement
+/   break_statement
+/   next_statement
+/   alias_statement
 /   return_statement 
 /   try_statement 
 /   throw_statement
 /   class_declaration
 /   method_declaration 
 /   mixin_statement
-/   assignment_lhs assignment_op assignment_rhs eos
-/   var_decl eos
-/   expression eos
+/   assign_statement
+/   var_decl_statement
+/   expression_statement
+
+block_statement <- LCURLY statement* RCURLY  ;
+break_statement <- K_BREAK eos ;
+next_statement <-  K_NEXT eos ;
+alias_statement <- K_ALIAS method_name method_name eos ;
+assign_statement <- assignment_lhs assignment_op assignment_rhs eos ;
+var_decl_statement <- var_decl eos ;
+expression_statement <- expression eos ;
 
 try_statement <-
     K_TRY statement

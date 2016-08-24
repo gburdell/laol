@@ -65,16 +65,18 @@ public abstract class Item {
      * @param acc parser object
      * @return AST object created from parser object.
      */
-    protected <T extends Item, A extends Acceptor> T createItem(final A acc) {
+    final protected <T extends Item, A extends Acceptor> T createItem(final A acc) {
         T item = null;
         try {
             String accName = acc.getClass().getSimpleName();
             final String astClsName = getClass().getPackage().getName() + "." + accName;
-            Class astCls = Class.forName(astClsName);
+            final Class astCls = Class.forName(astClsName);
             Constructor astCons = astCls.getConstructor(acc.getClass());
             item = (T) astCons.newInstance(acc);
             return item;
-        } catch (ClassNotFoundException | NoSuchMethodException | SecurityException | InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException ex) {
+        } catch (ClassNotFoundException ex) {
+            Util.abnormalExit(ex);
+        } catch (NoSuchMethodException | SecurityException | InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException ex) {
             Util.abnormalExit(ex);
         }
         return item;

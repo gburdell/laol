@@ -22,31 +22,21 @@
  * THE SOFTWARE.
  */
 package laol.ast;
-
-import apfe.runtime.Acceptor;
 import apfe.runtime.Marker;
-import apfe.runtime.PrioritizedChoice;
-import apfe.runtime.Repetition;
-import apfe.runtime.Util;
-import static laol.ast.Item.asSequence;
 
 /**
  *
  * @author gburdell
  */
-public class Statement extends Item {
-
-    public Statement(final laol.parser.apfe.Statement decl) {
+public class ThrowStatement extends Item {
+    public ThrowStatement(final laol.parser.apfe.ThrowStatement decl) {
         m_loc = decl.getStartMark();
-        m_stmt = createItem(asPrioritizedChoice(decl).getAccepted());
-        boolean debug = true;
     }
     
-    @Override
-    public Marker getLocation() {
-        return m_loc;
-    }
+	@Override
+	public Marker getLocation() {
+		return m_loc;
+	}
 
     private final Marker m_loc;
-    private final Item  m_stmt;
 }
