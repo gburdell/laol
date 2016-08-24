@@ -23,12 +23,7 @@
  */
 package laol.ast;
 
-import apfe.runtime.Acceptor;
 import apfe.runtime.Marker;
-import apfe.runtime.PrioritizedChoice;
-import apfe.runtime.Repetition;
-import apfe.runtime.Util;
-import static laol.ast.Item.asSequence;
 
 /**
  *
