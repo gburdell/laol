@@ -496,7 +496,7 @@ BasedNumber <- ([0-9] [0-9_]*)? !STRING '\''
 //}
 
 STRING <- 
-    '"' ('\\' . / !'"' .)* '"' Spacing
+    '"'  ('\\' . / !'"'  .)* '"'  Spacing
 /   '\'' ('\\' . / !'\'' .)? '\'' Spacing
 
 //Spacing <- (WS / Comment / EOL)*

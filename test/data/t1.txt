@@ -12,9 +12,9 @@ if we.all.ok?
 abc = "def"
 else 
 //'def' is a keyword!
-defx = 14'b0001
+def = 14'b0001
 
-private var publicx = 5;
+private var public = 5;
 
 a =5 //NOT SUPPORTED: unless y==4
 
