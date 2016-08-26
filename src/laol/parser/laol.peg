@@ -274,24 +274,28 @@ finally_statement <- K_FINALLY statement eos
 mixin_name <-
     IDENT (COLON2 IDENT)*
 
-mixin_statement <- K_MIXIN mixin_name (COMMA mixin_name)* eos
+mixin_statement <- K_MIXIN module_name (COMMA module_name)* eos
     
 s_tail <-
     statement_modifier eos
 /   eos
 
+module_name <- IDENT
+
 module_declaration <-
-    K_MODULE IDENT LCURLY
+    K_MODULE module_name LCURLY
         module_item*
     RCURLY eos
+
+class_name <- IDENT
 
 class_declaration <-
     // Scala style
     access_modifier?
-    (K_ABSTRACT )?
-    K_CLASS IDENT 
-        (method_param_decl )?
-        (class_extends )?
+    K_ABSTRACT?
+    K_CLASS class_name
+        method_param_decl?
+        class_extends?
         LCURLY 
             class_body
         RCURLY eos
@@ -318,7 +322,8 @@ method_param_decl_default <- EQ expression
 
 method_param_decl_list <- method_param_decl_ele (COMMA method_param_decl_ele)*  
 
-class_extends <- (K_EXTENDS IDENT )? (K_IMPLEMENTS IDENT (COMMA IDENT))?
+class_extends <- 
+	(K_EXTENDS class_name)? (K_IMPLEMENTS class_name (COMMA class_name))?
 
 anonymous_function <- ARROW method_param_decl LCURLY method_body RCURLY
 
@@ -495,6 +500,9 @@ BasedNumber <- ([0-9] [0-9_]*)? !STRING '\''
                 )
 //}
 
+//NOTE: Double quoted string contains 0 or more chars.
+//      Single quoted string contains 0 or 1 char.
+//todo: If change single quoted to accept more, we get an infinite parser loop
 STRING <- 
     '"'  ('\\' . / !'"'  .)* '"'  Spacing
 /   '\'' ('\\' . / !'\'' .)? '\'' Spacing

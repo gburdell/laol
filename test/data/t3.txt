@@ -1,3 +1,7 @@
+module M1 {
+    const FOO = "bar"
+}
+
 const header = %html{
 div(class: "c1", id:"id1") {
   the quick brown fox jumps {=over=} the lazy dog

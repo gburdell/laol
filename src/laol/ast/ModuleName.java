@@ -23,27 +23,17 @@
  */
 package laol.ast;
 
-import apfe.runtime.Acceptor;
 import apfe.runtime.Marker;
-import apfe.runtime.Repetition;
-import apfe.runtime.Util;
-import static apfe.runtime.Util.downcast;
-import java.util.LinkedList;
-import java.util.List;
 
 /**
  *
  * @author gburdell
  */
-public class ModuleDeclaration extends Item {
+public class ModuleName extends Item {
 
-    public ModuleDeclaration(final laol.parser.apfe.ModuleDeclaration mdecl) {
-        m_loc = mdecl.getStartMark();
-        m_name = createItem(Util.extractEle(asSequence(mdecl), 1));
-        final Repetition items = Util.extractEle(asSequence(mdecl), 3);
-        for (Acceptor item : items.getAccepted()) {
-            m_items.add(createItem(asPrioritizedChoice(item).getAccepted()));
-        }
+    public ModuleName(final laol.parser.apfe.ModuleName decl) {
+        m_loc = decl.getStartMark();
+        m_name = new Ident(decl.getBaseAccepted());
     }
 
     @Override
@@ -51,7 +41,6 @@ public class ModuleDeclaration extends Item {
         return m_loc;
     }
 
-    private final ModuleName m_name;
     private final Marker m_loc;
-    private final List<Item>    m_items = new LinkedList<>();
+    private final Ident  m_name;
 }
