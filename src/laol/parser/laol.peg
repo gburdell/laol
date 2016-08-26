@@ -53,11 +53,11 @@ sass_content <-
 /	STRING
 /	!RCURLY .
 
-inline_eval <- LEVAL expression REVAL
+inline_eval <- "#{" sp expression RCURLY
 
 array_primary <-
     LBRACK (expression (COMMA expression)*)? RBRACK
-    #array of (w) words or (s) symbols
+    //array of (w) words or (s) symbols
 /   '%' [ws] '{' sp ('\\' . / !'}')* '}'
 
 primary_expression <-
@@ -375,8 +375,8 @@ for_statement <- K_FOR IDENT K_IN enumerable_expression statement eos
 // a bit more complicated, so customize
 here_doc.
 
-#
-#Lexical syntax
+//
+//Lexical syntax
 COLON       <- ':' !':' Spacing
 COLON2      <- "::"
 SEMI        <- ';' Spacing
@@ -391,8 +391,7 @@ GT          <- '>' !('>' / '=') Spacing
 GTEQ        <- ">=" Spacing
 GT2         <- ">>" !'=' Spacing
 GT2_EQ      <- ">>=" Spacing
-EQ          <- '=' !('=' / '}') Spacing
-REVAL       <- "=}" Spacing
+EQ          <- '=' !'=' Spacing
 EQ2         <- "==" Spacing
 NEQ         <- "!=" Spacing
 EXCL        <- '!' !'=' Spacing
@@ -419,8 +418,7 @@ PLUS_EQ     <- "+=" Spacing
 QMARK       <- '?' Spacing
 DIV         <- '/' !'=' Spacing
 DIV_EQ      <- "/=" Spacing
-LCURLY      <- '{' !'=' Spacing
-LEVAL       <- "{="
+LCURLY      <- '{' Spacing
 RCURLY      <- '}' Spacing
 LPAREN      <- '(' Spacing
 RPAREN      <- ')' Spacing

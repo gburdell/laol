@@ -4,18 +4,18 @@ module M1 {
 
 const header = %html{
 div(class: "c1", id:"id1") {
-  the quick brown fox jumps {=over=} the lazy dog
+  the quick brown fox jumps #{over} the lazy dog
 }
 }
 
 const body = %html{
 <title class="title" id="foobar">
-Here is the {=title=}
+Here is the #{title}
 </title>
 }
 
 const sass = %sass{
-$type: {=foo.bar.eval(a,b,c)=};
+$type: #{foo.bar.eval(a,b,c)};
 p {
   @if $type == ocean {
     color: blue;
