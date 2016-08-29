@@ -37,12 +37,13 @@ import laol.parser.apfe.Contents;
  */
 public class Ast extends Item {
     public Ast(final Acceptor grammar) {
-        Contents contents = Util.getOnlyElement(Util.<Repetition>extractEle(asSequence(grammar), 1));
+        super(grammar);
+        Contents contents = Util.getOnlyElement(Util.<Repetition>extractEle(asSequence(), 1));
         Sequence seq = asSequence(contents);
-        for (Acceptor stmt : Util.<Repetition>extractEle(seq, 0).getAccepted()) {
+        for (Acceptor stmt : asRepetition(seq, 0).getAccepted()) {
             m_requireStmts.add(new RequireStatement(stmt));
         }
-        for (Acceptor fileItem : Util.<Repetition>extractEle(seq, 1).getAccepted()) {
+        for (Acceptor fileItem : asRepetition(seq, 1).getAccepted()) {
             add(asPrioritizedChoice(fileItem).getAccepted());
         }
     }

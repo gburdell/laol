@@ -37,9 +37,18 @@ public class AccessModifier extends Item {
         ePrivate, eProtected, ePublic
     }
 
+    public AccessModifier(final Marker loc, final EType type) {
+        super(loc);
+        m_access = type;
+    }
+
+    public AccessModifier(final Marker loc) {
+        this(loc, EType.ePublic);
+    }
+
     public AccessModifier(final laol.parser.apfe.AccessModifier decl) {
-        m_loc = decl.getStartMark();
-        final Class choice = asPrioritizedChoice(decl)
+        super(decl);
+        final Class choice = asPrioritizedChoice()
                 .getAccepted()
                 .getClass();
         if (KPRIVATE.class == choice) {
@@ -51,11 +60,5 @@ public class AccessModifier extends Item {
         }
     }
 
-	@Override
-	public Marker getLocation() {
-		return m_loc;
-	}
-
     private final EType m_access;
-    private final Marker m_loc;
 }

@@ -22,6 +22,7 @@
  * THE SOFTWARE.
  */
 package laol.ast;
+
 import apfe.runtime.Marker;
 import apfe.runtime.PrioritizedChoice;
 import laol.parser.apfe.KCONST;
@@ -31,12 +32,14 @@ import laol.parser.apfe.KCONST;
  * @author gburdell
  */
 public class Mutability extends Item {
+
     public static enum EType {
         eConst, eVar
     }
+
     public Mutability(final laol.parser.apfe.Mutability decl) {
-        m_loc = decl.getStartMark();
-        final Class choice = asPrioritizedChoice(decl)
+        super(decl);
+        final Class choice = asPrioritizedChoice()
                 .getAccepted()
                 .getClass();
         if (KCONST.class == choice) {
@@ -46,11 +49,6 @@ public class Mutability extends Item {
         }
     }
 
-	@Override
-	public Marker getLocation() {
-		return m_loc;
-	}
-
     private final EType m_type;
-    private final Marker m_loc;
+
 }

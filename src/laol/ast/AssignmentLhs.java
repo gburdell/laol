@@ -22,15 +22,30 @@
  * THE SOFTWARE.
  */
 package laol.ast;
+
+import apfe.runtime.Acceptor;
 import apfe.runtime.Marker;
+import apfe.runtime.Repetition;
+import apfe.runtime.Sequence;
+import apfe.runtime.Util;
+import java.util.LinkedList;
+import java.util.List;
 
 /**
  *
  * @author gburdell
  */
-public class WhileStatement extends Item {
-    public WhileStatement(final laol.parser.apfe.WhileStatement decl) {
+public class AssignmentLhs extends Item {
+
+    public AssignmentLhs(final laol.parser.apfe.AssignmentLhs decl) {
         super(decl);
+        m_decl = createItem(0);
+        m_refs.add(createItem(1));
+        for (Acceptor ref : Util.extractList(Util.extractEle(asSequence(), 2), 1)) {
+            m_refs.add(createItem(ref));
+        }
     }
 
+    private final LhsDecl m_decl;
+    private final List<LhsRef> m_refs = new LinkedList<>();
 }

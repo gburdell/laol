@@ -30,13 +30,7 @@ import apfe.runtime.Marker;
  */
 public class ExpressionStatement extends Item {
     public ExpressionStatement(final laol.parser.apfe.ExpressionStatement decl) {
-        m_loc = decl.getStartMark();
+        super(decl);
     }
     
-	@Override
-	public Marker getLocation() {
-		return m_loc;
-	}
-
-    private final Marker m_loc;
 }

@@ -22,21 +22,48 @@
  * THE SOFTWARE.
  */
 package laol.ast;
+
+import apfe.runtime.Acceptor;
 import apfe.runtime.Marker;
+import apfe.runtime.Repetition;
+import apfe.runtime.Sequence;
+import gblib.Util;
+import java.util.LinkedList;
+import java.util.List;
+import static apfe.runtime.Util.extractEle;
 
 /**
  *
  * @author gburdell
  */
 public class CaseStatement extends Item {
+
     public CaseStatement(final laol.parser.apfe.CaseStatement decl) {
-        m_loc = decl.getStartMark();
+        super(decl);
+        m_expr = createItem(1);
+        Repetition rep = asRepetition(3);
+        for (Acceptor whens : rep.getAccepted()) {
+            addWhen(whens);
+        }
+        rep = asRepetition(4);
+        if (0 < rep.sizeofAccepted()) {
+            m_else = createItem(asSequence(rep.getOnlyAccepted()), 1);
+        }
+    }
+
+    private void addWhen(final Acceptor whenClause) {
+        final Sequence clause = apfe.runtime.Util.downcast(whenClause);
+        final ExpressionList exprs = createItem(clause, 1);
+        final Statement stmt = createItem(clause, 3);
+        m_alts.add(new WhenClause(exprs, stmt));
     }
     
-	@Override
-	public Marker getLocation() {
-		return m_loc;
-	}
-
-    private final Marker m_loc;
+     private final Expression    m_expr;
+    static final class WhenClause extends Util.Pair<ExpressionList, Statement> {
+        private WhenClause(final ExpressionList expr, final Statement stmt) {
+            super(expr, stmt);
+        }
+    }
+    private final List<WhenClause>  m_alts = new LinkedList<>();
+    private Statement m_else = null;
 }

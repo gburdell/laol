@@ -38,20 +38,11 @@ import java.util.List;
 public class ModuleDeclaration extends Item {
 
     public ModuleDeclaration(final laol.parser.apfe.ModuleDeclaration mdecl) {
-        m_loc = mdecl.getStartMark();
-        m_name = createItem(Util.extractEle(asSequence(mdecl), 1));
-        final Repetition items = Util.extractEle(asSequence(mdecl), 3);
-        for (Acceptor item : items.getAccepted()) {
-            m_items.add(createItem(asPrioritizedChoice(item).getAccepted()));
-        }
-    }
-
-    @Override
-    public Marker getLocation() {
-        return m_loc;
+        super(mdecl);
+        m_name = createItem(1);
+        m_items = zeroOrMore(3);
     }
 
     private final ModuleName m_name;
-    private final Marker m_loc;
-    private final List<Item>    m_items = new LinkedList<>();
+     private final List<Item>    m_items;
 }

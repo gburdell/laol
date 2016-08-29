@@ -22,15 +22,16 @@
  * THE SOFTWARE.
  */
 package laol.ast;
-import apfe.runtime.Marker;
 
 /**
  *
  * @author gburdell
  */
-public class WhileStatement extends Item {
-    public WhileStatement(final laol.parser.apfe.WhileStatement decl) {
-        super(decl);
+public class Expression extends Item {
+    public Expression(final laol.parser.apfe.Expression decl) {
+       super(decl);
+       m_expr = createItem(decl.getBaseAccepted());
     }
-
-}
+    
+    private final ConditionalExpression m_expr;
+ }

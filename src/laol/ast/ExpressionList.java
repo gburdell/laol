@@ -22,44 +22,20 @@
  * THE SOFTWARE.
  */
 package laol.ast;
-
 import apfe.runtime.Acceptor;
-import apfe.runtime.CharBufState;
-import apfe.runtime.CharBuffer;
-import static org.junit.Assert.assertNotNull;
-import org.junit.Test;
+import apfe.runtime.Marker;
+import apfe.runtime.Repetition;
+import apfe.runtime.Sequence;
+import apfe.runtime.Util;
+import java.util.LinkedList;
+import java.util.List;
 
 /**
+ *
  * @author gburdell
  */
-public class MyStringTest {
-
-    public MyStringTest() {
+public class ExpressionList extends Item {
+    public ExpressionList(final laol.parser.apfe.ExpressionList decl) {
+        super(decl);
     }
-
-    private static void runTest(final String s1) {
-        //
-        CharBuffer cbuf = new CharBuffer("<none>", s1);
-        CharBufState st = CharBufState.create(cbuf, true);
-        laol.parser.apfe.STRING gram = new laol.parser.apfe.STRING();
-        Acceptor acc = gram.accept();
-        assertNotNull(acc);
-        System.out.println(": parse OK");
-        MyString dut = new MyString(gram);
-        //String t1 = dut.toString();
-        //assertTrue(s1.equals(t1));
-        //System.out.println(": match OK");
-    }
-
-    @Test
-    public void testStringConstructor() {
-        String dat[] = new String[]{
-            "\"the quick brown fox jumps over the lazy dog\"",
-            "'x'"
-        };
-        for (String s : dat) {
-            System.out.print("Test: " + s);
-            runTest(s);
-        }
-    }
-}
+ }

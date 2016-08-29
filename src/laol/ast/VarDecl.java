@@ -38,20 +38,15 @@ import java.util.List;
 public class VarDecl extends Item {
 
     public VarDecl(final laol.parser.apfe.VarDecl decl) {
-        m_loc = decl.getStartMark();
-        final Sequence items = asSequence(decl);
-        m_varNames.add(new Ident(Util.extractEle(items, 1)));
-        final Repetition vars = Util.extractEle(items, 2);
+        super(decl);
+        m_lhsDecl = createItem(0);
+        m_varNames.add(getIdent(1));
+        final Repetition vars = asRepetition(2);
         for (Acceptor var : vars.getAccepted()) {
             m_varNames.add(new Ident(Util.extractEle(var, 1)));
         }
     }
 
-    @Override
-    public Marker getLocation() {
-        return m_loc;
-    }
-
-    private final Marker m_loc;
-    private final List<Ident> m_varNames = new LinkedList<Ident>();
+    private final LhsDecl m_lhsDecl;
+   private final List<Ident> m_varNames = new LinkedList<>();
 }

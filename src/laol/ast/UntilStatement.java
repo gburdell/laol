@@ -30,13 +30,7 @@ import apfe.runtime.Marker;
  */
 public class UntilStatement extends Item {
     public UntilStatement(final laol.parser.apfe.UntilStatement decl) {
-        m_loc = decl.getStartMark();
+        super(decl);
     }
-    
-	@Override
-	public Marker getLocation() {
-		return m_loc;
-	}
-
-    private final Marker m_loc;
+ 
 }

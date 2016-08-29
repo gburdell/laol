@@ -22,15 +22,19 @@
  * THE SOFTWARE.
  */
 package laol.ast;
+
 import apfe.runtime.Marker;
 
 /**
  *
  * @author gburdell
  */
-public class WhileStatement extends Item {
-    public WhileStatement(final laol.parser.apfe.WhileStatement decl) {
+public class AssignmentOp extends Item {
+
+    public AssignmentOp(final laol.parser.apfe.AssignmentOp decl) {
         super(decl);
+        m_op = asPrioritizedChoice().getAccepted().getClass();
     }
 
+    private final Class m_op;
 }

@@ -22,21 +22,24 @@
  * THE SOFTWARE.
  */
 package laol.ast;
+
 import apfe.runtime.Marker;
+import apfe.runtime.Sequence;
 
 /**
  *
  * @author gburdell
  */
 public class AssignStatement extends Item {
-    public AssignStatement(final laol.parser.apfe.AssignStatement decl) {
-        m_loc = decl.getStartMark();
-    }
-    
-	@Override
-	public Marker getLocation() {
-		return m_loc;
-	}
 
-    private final Marker m_loc;
+    public AssignStatement(final laol.parser.apfe.AssignStatement decl) {
+        super(decl);
+        m_lhs = createItem(0);
+        m_op = createItem(1);
+        m_rhs = createItem(2);
+    }
+
+    private final AssignmentLhs m_lhs;
+    private final AssignmentOp  m_op;
+    private final AssignmentRhs m_rhs;
 }

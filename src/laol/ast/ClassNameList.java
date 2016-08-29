@@ -22,15 +22,22 @@
  * THE SOFTWARE.
  */
 package laol.ast;
-import apfe.runtime.Marker;
+import apfe.runtime.Acceptor;
+import java.util.LinkedList;
+import java.util.List;
 
 /**
  *
  * @author gburdell
  */
-public class WhileStatement extends Item {
-    public WhileStatement(final laol.parser.apfe.WhileStatement decl) {
+public class ClassNameList extends Item {
+    public ClassNameList(final laol.parser.apfe.ClassNameList decl) {
         super(decl);
+        m_names.add(createItem(0));
+        for (Acceptor cls : asRepetition(1).getAccepted()) {
+            m_names.add(createItem(cls, 1));
+        }
     }
-
+    
+    private final List<ClassName>   m_names = new LinkedList<>();
 }

@@ -22,7 +22,6 @@
  * THE SOFTWARE.
  */
 package laol.ast;
-import apfe.runtime.Marker;
 
 /**
  *
@@ -30,13 +29,6 @@ import apfe.runtime.Marker;
  */
 public class IfStatement extends Item {
     public IfStatement(final laol.parser.apfe.IfStatement decl) {
-        m_loc = decl.getStartMark();
+        super(decl);
     }
-    
-	@Override
-	public Marker getLocation() {
-		return m_loc;
-	}
-
-    private final Marker m_loc;
 }

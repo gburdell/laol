@@ -1,12 +1,12 @@
 #!/bin/csh -f
 
 foreach i ($*)
-	set outf=${i}.java
-	if (-f $outf) then
-		echo "Warning: ${outf}: file exists.  Will not overwrite."
-	else
-		echo "Info: ${outf}: creating ..."
-		cat <<L1 > ${outf}
+    set outf=${i}.java
+    if (-f $outf) then
+        echo "Warning: ${outf}: file exists.  Will not overwrite."
+    else
+        echo "Info: ${outf}: creating ..."
+        cat <<L1 > ${outf}
 /*
  * The MIT License
  *
@@ -31,7 +31,13 @@ foreach i ($*)
  * THE SOFTWARE.
  */
 package laol.ast;
+import apfe.runtime.Acceptor;
 import apfe.runtime.Marker;
+import apfe.runtime.Repetition;
+import apfe.runtime.Sequence;
+import apfe.runtime.Util;
+import java.util.LinkedList;
+import java.util.List;
 
 /**
  *
@@ -39,16 +45,9 @@ import apfe.runtime.Marker;
  */
 public class ${i} extends Item {
     public ${i}(final laol.parser.apfe.${i} decl) {
-        m_loc = decl.getStartMark();
+        super(decl);
     }
-    
-	@Override
-	public Marker getLocation() {
-		return m_loc;
-	}
-
-    private final Marker m_loc;
 }
 L1
-	endif
+    endif
 end

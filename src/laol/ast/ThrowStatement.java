@@ -22,7 +22,6 @@
  * THE SOFTWARE.
  */
 package laol.ast;
-import apfe.runtime.Marker;
 
 /**
  *
@@ -30,13 +29,7 @@ import apfe.runtime.Marker;
  */
 public class ThrowStatement extends Item {
     public ThrowStatement(final laol.parser.apfe.ThrowStatement decl) {
-        m_loc = decl.getStartMark();
+        super(decl);
     }
-    
-	@Override
-	public Marker getLocation() {
-		return m_loc;
-	}
-
-    private final Marker m_loc;
+ 
 }

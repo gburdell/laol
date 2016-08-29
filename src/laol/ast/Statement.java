@@ -32,16 +32,9 @@ import apfe.runtime.Marker;
 public class Statement extends Item {
 
     public Statement(final laol.parser.apfe.Statement decl) {
-        m_loc = decl.getStartMark();
-        m_stmt = createItem(asPrioritizedChoice(decl).getAccepted());
-        boolean debug = true;
+        super(decl);
+        m_stmt = createItem(asPrioritizedChoice().getAccepted());
     }
     
-    @Override
-    public Marker getLocation() {
-        return m_loc;
-    }
-
-    private final Marker m_loc;
     private final Item  m_stmt;
 }

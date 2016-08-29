@@ -23,11 +23,6 @@
  */
 package laol.ast;
 
-import apfe.runtime.Marker;
-import apfe.runtime.Repetition;
-import apfe.runtime.Sequence;
-import apfe.runtime.Util;
-
 /**
  *
  * @author gburdell
@@ -35,28 +30,13 @@ import apfe.runtime.Util;
 public class LhsDecl extends Item {
 
     public LhsDecl(final laol.parser.apfe.LhsDecl decl) {
-        m_loc = decl.getStartMark();
-        final Sequence items = asSequence(decl);
-        Repetition rep = Util.extractEle(items, 0);
-        if (1 == rep.sizeofAccepted()) {
-            m_access = new AccessModifier(rep.getOnlyAccepted());
-        }
-        if (1 == Util.<Repetition>extractEle(items, 1).sizeofAccepted()) {
-            m_isStatic = true;
-        }
-        rep = Util.extractEle(items, 2);
-        if (1 == rep.sizeofAccepted()) {
-            m_mutability = new Mutability(rep.getOnlyAccepted());
-        }
+        super(decl);
+        m_access = oneOrNone(0);
+        m_isStatic = (0 < asRepetition(1).sizeofAccepted());
+        m_mutability = oneOrNone(2);
     }
 
-    @Override
-    public Marker getLocation() {
-        return m_loc;
-    }
-
-    private final Marker m_loc;
-    private boolean m_isStatic = false;
-    private Mutability m_mutability = null;
-    private AccessModifier m_access = null;
+    private final AccessModifier m_access;
+    private final boolean m_isStatic;
+    private final Mutability m_mutability;
 }

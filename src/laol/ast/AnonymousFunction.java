@@ -23,14 +23,19 @@
  */
 package laol.ast;
 import apfe.runtime.Marker;
+import apfe.runtime.Sequence;
 
 /**
  *
  * @author gburdell
  */
-public class WhileStatement extends Item {
-    public WhileStatement(final laol.parser.apfe.WhileStatement decl) {
-        super(decl);
+public class AnonymousFunction extends Item {
+    public AnonymousFunction(final laol.parser.apfe.AnonymousFunction decl) {
+		super(decl);
+        m_params = createItem(1);
+        m_body = createItem(3);
     }
-
+    
+    private final MethodParamDecl   m_params;
+    private final MethodBody    m_body;
 }

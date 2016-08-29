@@ -30,13 +30,7 @@ import apfe.runtime.Marker;
  */
 public class ReturnStatement extends Item {
     public ReturnStatement(final laol.parser.apfe.ReturnStatement decl) {
-        m_loc = decl.getStartMark();
+        super(decl);
     }
-    
-	@Override
-	public Marker getLocation() {
-		return m_loc;
-	}
-
-    private final Marker m_loc;
+ 
 }

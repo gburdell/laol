@@ -24,7 +24,6 @@
 package laol.ast;
 
 import laol.parser.IDENT;
-import apfe.runtime.Marker;
 
 /**
  *
@@ -33,16 +32,10 @@ import apfe.runtime.Marker;
 public class Ident extends Item {
 
     public Ident(final IDENT id) {
+        super(id);
         m_id = id.getIdent();
-        m_loc = id.getStartMark();
     }
 
-	@Override
-	public Marker getLocation() {
-		return m_loc;
-	}
-
     private final String m_id;
-    private final Marker m_loc;
 
 }

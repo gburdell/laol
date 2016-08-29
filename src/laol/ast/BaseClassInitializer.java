@@ -22,15 +22,22 @@
  * THE SOFTWARE.
  */
 package laol.ast;
+import apfe.runtime.Acceptor;
 import apfe.runtime.Marker;
+import apfe.runtime.Repetition;
+import apfe.runtime.Sequence;
+import apfe.runtime.Util;
+import java.util.LinkedList;
+import java.util.List;
 
 /**
  *
  * @author gburdell
  */
-public class WhileStatement extends Item {
-    public WhileStatement(final laol.parser.apfe.WhileStatement decl) {
+public class BaseClassInitializer extends Item {
+    public BaseClassInitializer(final laol.parser.apfe.BaseClassInitializer decl) {
         super(decl);
     }
+    
 
 }

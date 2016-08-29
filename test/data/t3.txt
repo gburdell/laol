@@ -1,5 +1,11 @@
 module M1 {
     const FOO = "bar"
+    {
+        foo = bar;
+    }
+    case e1 {
+        when a+5: b+5
+    }
 }
 
 const header = %html{
@@ -28,3 +34,5 @@ p {
   }
 }
 }
+
+class C extends D implements I, J, K {}

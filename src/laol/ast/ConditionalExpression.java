@@ -22,48 +22,26 @@
  * THE SOFTWARE.
  */
 package laol.ast;
-
 import apfe.runtime.Acceptor;
-import apfe.runtime.CharBufState;
-import apfe.runtime.CharBuffer;
-import org.junit.Test;
-import static org.junit.Assert.*;
 
 /**
  *
  * @author gburdell
  */
-public class PrimaryExpressionTest {
-
-    private static void runTest(final String s1) {
-        CharBuffer cbuf = new CharBuffer("<none>", s1);
-        CharBufState.create(cbuf, true);
-        laol.parser.apfe.PrimaryExpression gram = new laol.parser.apfe.PrimaryExpression();
-        Acceptor acc = gram.accept();
-        assertNotNull(acc);
-        System.out.print(": parse OK");
-        PrimaryExpression dut = new PrimaryExpression(gram);
-        /*
-        assertTrue(cls == dut.getVal().getClass());
-        System.out.print(": type OK");
-        String t1 = dut.toString();
-        assertTrue(s1.equals(t1));
-         */
-        System.out.println(": match TBD");
-    }
-
-    @Test
-    public void testPrimaryExpression() {
-        String dat[] = new String[]{
-            "'b0001_1",
-            "nil?",
-            "var_name?",
-            "_here_is_another___",
-            "a_bang !"
-        };
-        for (String s : dat) {
-            System.out.print("Test: " + s);
-            runTest(s);
+public class ConditionalExpression extends Item {
+    public ConditionalExpression(final laol.parser.apfe.ConditionalExpression decl) {
+        super(decl);
+        final Acceptor acc = asPrioritizedChoice().getAccepted();
+        if (acc.getClass() == laol.parser.apfe.LorExpression.class) {
+            m_expr = createItem(acc);
+            m_ifFalse = m_ifTrue = null;
+        } else {
+            m_expr = createItem(acc, 0);
+            m_ifTrue = createItem(acc, 2);
+            m_ifFalse = createItem(acc, 4);
         }
     }
+    
+    private final LorExpression m_expr;
+    private final Expression m_ifTrue, m_ifFalse;
 }

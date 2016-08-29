@@ -56,7 +56,7 @@ sass_content <-
 inline_eval <- "#{" sp expression RCURLY
 
 array_primary <-
-    LBRACK (expression (COMMA expression)*)? RBRACK
+    LBRACK (expression_list)? RBRACK
     //array of (w) words or (s) symbols
 /   '%' [ws] '{' sp ('\\' . / !'}')* '}'
 
@@ -164,7 +164,9 @@ dot_suffix <-
 
 block <- anonymous_function
 
-unnamed_param <- expression (COMMA expression)*
+expression_list <- expression (COMMA expression)*
+
+unnamed_param <- expression_list
 
 named_param_ele <- IDENT COLON expression
 
@@ -180,7 +182,7 @@ param_expression_list <-
 array_select_expression <-
 	//TODO: ':' ambiguous w/ conditional_expr
     expression (DOT2 / COLON) expression
-/   expression (COMMA expression)?
+/   expression_list
 
 var_decl <- lhs_decl IDENT (COMMA IDENT)* eos
 
@@ -260,7 +262,7 @@ try_statement <-
 // NOTE: while ruby allows most statements as rhs; e.g.: "foo = if xxx; 12", 
 // we will not.  Use method to do so.
 assignment_rhs <-
-    expression (COMMA expression)*
+    expression_list
 /   anonymous_function
 
 return_statement <- K_RETURN (expression)? eos
@@ -323,13 +325,16 @@ method_param_decl_default <- EQ expression
 method_param_decl_list <- method_param_decl_ele (COMMA method_param_decl_ele)*  
 
 class_extends <- 
-	(K_EXTENDS class_name)? (K_IMPLEMENTS class_name (COMMA class_name))?
+	K_EXTENDS class_name (K_IMPLEMENTS class_name_list)?
+/	K_IMPLEMENTS class_name_list
+
+class_name_list <- class_name (COMMA class_name)*
 
 anonymous_function <- ARROW method_param_decl LCURLY method_body RCURLY
 
 method_declaration <-
     access_modifier?
-    (K_ABSTRACT )?
+    (K_ABSTRACT | K_STATIC)?
     K_DEF method_name (method_param_decl)?
         (LCURLY method_body RCURLY)?
         //NOTE: abstract declaration if empty
@@ -355,7 +360,7 @@ method_body <- statement*
     
 case_statement <-
     K_CASE expression LCURLY 
-        (K_WHEN expression (COMMA expression)* COLON statement)*
+        (K_WHEN expression_list COLON statement)*
         (K_ELSE statement)?
     RCURLY eos
 
@@ -519,6 +524,7 @@ ML_COMMENT <- "/*" (!"*/" .)* "*/"
 eos <- SemiOrEOL 
 /      (WS / Comment)* &'}'
 /	   WS* statement_modifier
+/	   &EOF
 ;
 
 statement_modifier <- (K_IF / K_UNLESS / K_WHILE / K_UNTIL) expression eos

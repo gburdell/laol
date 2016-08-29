@@ -22,21 +22,25 @@
  * THE SOFTWARE.
  */
 package laol.ast;
+
+import apfe.runtime.Acceptor;
 import apfe.runtime.Marker;
+import apfe.runtime.Repetition;
+import apfe.runtime.Sequence;
+import apfe.runtime.Util;
+import java.util.LinkedList;
+import java.util.List;
 
 /**
  *
  * @author gburdell
  */
 public class BlockStatement extends Item {
-    public BlockStatement(final laol.parser.apfe.BlockStatement decl) {
-        m_loc = decl.getStartMark();
-    }
-    
-	@Override
-	public Marker getLocation() {
-		return m_loc;
-	}
 
-    private final Marker m_loc;
+    public BlockStatement(final laol.parser.apfe.BlockStatement decl) {
+        super(decl);
+        m_stmts = zeroOrMore(1);
+    }
+
+    private final List<Item> m_stmts;
 }

@@ -22,6 +22,7 @@
  * THE SOFTWARE.
  */
 package laol.ast;
+
 import apfe.runtime.Marker;
 
 /**
@@ -29,14 +30,8 @@ import apfe.runtime.Marker;
  * @author gburdell
  */
 public class BreakStatement extends Item {
-    public BreakStatement(final laol.parser.apfe.BreakStatement decl) {
-        m_loc = decl.getStartMark();
-    }
-    
-	@Override
-	public Marker getLocation() {
-		return m_loc;
-	}
 
-    private final Marker m_loc;
+    public BreakStatement(final laol.parser.apfe.BreakStatement decl) {
+        super(decl);
+    }
 }

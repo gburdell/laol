@@ -24,7 +24,6 @@
 package laol.ast;
 
 import apfe.runtime.Acceptor;
-import apfe.runtime.Marker;
 import apfe.runtime.Util;
 
 /**
@@ -33,16 +32,10 @@ import apfe.runtime.Util;
  */
 public class RequireStatement extends Item {
     public RequireStatement(final Acceptor acc) {
-        final laol.parser.apfe.RequireStatement stmt = Util.downcast(acc);
-        m_stmt = Util.asString(stmt, 1);
-        m_loc = stmt.getStartMark();
+        super(acc);
+        m_stmt = Util.asString(Util.downcast(acc), 1);
     }
 
-    @Override
-    public Marker getLocation() {
-        return m_loc;
-    }
-    
-    private final String m_stmt;
-    private final Marker m_loc;
+     private final String m_stmt;
+ 
 }

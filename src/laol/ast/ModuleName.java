@@ -32,15 +32,9 @@ import apfe.runtime.Marker;
 public class ModuleName extends Item {
 
     public ModuleName(final laol.parser.apfe.ModuleName decl) {
-        m_loc = decl.getStartMark();
+        super(decl);
         m_name = new Ident(decl.getBaseAccepted());
     }
 
-    @Override
-    public Marker getLocation() {
-        return m_loc;
-    }
-
-    private final Marker m_loc;
     private final Ident  m_name;
 }
