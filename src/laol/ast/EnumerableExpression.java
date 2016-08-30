@@ -23,6 +23,10 @@
  */
 package laol.ast;
 import apfe.runtime.Acceptor;
+import apfe.runtime.Marker;
+import apfe.runtime.Repetition;
+import apfe.runtime.Sequence;
+import apfe.runtime.Util;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -30,14 +34,8 @@ import java.util.List;
  *
  * @author gburdell
  */
-public class ExpressionList extends Item {
-    public ExpressionList(final laol.parser.apfe.ExpressionList decl) {
+public class EnumerableExpression extends Item {
+    public EnumerableExpression(final laol.parser.apfe.EnumerableExpression decl) {
         super(decl);
-        m_names.add(createItem(0));
-        for (Acceptor cls : asRepetition(1).getAccepted()) {
-            m_names.add(createItem(cls, 1));
-        }
     }
-    
-    private final List<Expression>   m_names = new LinkedList<>();
- }
+}

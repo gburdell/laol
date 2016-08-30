@@ -22,7 +22,6 @@
  * THE SOFTWARE.
  */
 package laol.ast;
-import apfe.runtime.Marker;
 
 /**
  *
@@ -31,6 +30,8 @@ import apfe.runtime.Marker;
 public class ExpressionStatement extends Item {
     public ExpressionStatement(final laol.parser.apfe.ExpressionStatement decl) {
         super(decl);
+        m_stmt = createItem(0);
     }
     
+    private final Expression   m_stmt;
 }
