@@ -23,12 +23,30 @@
  */
 package laol.ast;
 
+import gblib.Util;
+import java.util.LinkedList;
+import java.util.List;
+
 /**
  *
  * @author gburdell
  */
 public class IfStatement extends Item {
+
     public IfStatement(final laol.parser.apfe.IfStatement decl) {
         super(decl);
+        m_if = (asPrioritizedChoice(0).getAccepted().getClass() == laol.parser.apfe.KIF.class);
+        m_clauses.add(new ExprStmt(1));
     }
+    
+    public class ExprStmt extends Util.Pair<Expression, Statement> {
+        private ExprStmt(final int ix) {
+            super(createItem(ix), createItem(ix+1));
+        }
+    }
+    /**
+     * True on if-statement; false on unless-statement.
+     */
+    private final boolean m_if;
+    private List<ExprStmt>  m_clauses = new LinkedList<>();
 }

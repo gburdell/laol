@@ -22,13 +22,6 @@
  * THE SOFTWARE.
  */
 package laol.ast;
-import apfe.runtime.Acceptor;
-import apfe.runtime.Marker;
-import apfe.runtime.Repetition;
-import apfe.runtime.Sequence;
-import apfe.runtime.Util;
-import java.util.LinkedList;
-import java.util.List;
 
 /**
  *
@@ -37,5 +30,8 @@ import java.util.List;
 public class EnumerableExpression extends Item {
     public EnumerableExpression(final laol.parser.apfe.EnumerableExpression decl) {
         super(decl);
+        m_expr = createItem(m_parsed.getBaseAccepted());
     }
+    
+    private final Expression m_expr;
 }

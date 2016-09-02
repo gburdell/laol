@@ -120,6 +120,10 @@ public abstract class Item {
         return asPrioritizedChoice(m_parsed);
     }
 
+    final protected PrioritizedChoice asPrioritizedChoice(final int pos) {
+        return asPrioritizedChoice(apfe.runtime.Util.extractEle(asSequence(), pos));
+    }
+    
     public static PrioritizedChoice asPrioritizedChoice(final Acceptor acc) {
         return apfe.runtime.Util.asPrioritizedChoice(acc);
     }

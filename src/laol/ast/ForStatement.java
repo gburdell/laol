@@ -22,6 +22,7 @@
  * THE SOFTWARE.
  */
 package laol.ast;
+
 import apfe.runtime.Marker;
 
 /**
@@ -29,8 +30,15 @@ import apfe.runtime.Marker;
  * @author gburdell
  */
 public class ForStatement extends Item {
+
     public ForStatement(final laol.parser.apfe.ForStatement decl) {
         super(decl);
+        m_varNm = getIdent(1);
+        m_bounds = createItem(3);
+        m_stmt = createItem(4);
     }
 
+    private final Ident m_varNm;
+    private final EnumerableExpression  m_bounds;
+    private final Statement m_stmt;
 }
