@@ -23,6 +23,9 @@
  */
 package laol.ast;
 
+import apfe.runtime.Acceptor;
+import apfe.runtime.Repetition;
+import apfe.runtime.Sequence;
 import gblib.Util;
 import java.util.LinkedList;
 import java.util.List;
@@ -36,17 +39,30 @@ public class IfStatement extends Item {
     public IfStatement(final laol.parser.apfe.IfStatement decl) {
         super(decl);
         m_if = (asPrioritizedChoice(0).getAccepted().getClass() == laol.parser.apfe.KIF.class);
-        m_clauses.add(new ExprStmt(1));
+        add(asSequence(), 1);
+        for (Acceptor elseIfs : asRepetition(3).getAccepted()) {
+            add(asSequence(elseIfs), 1);
+        }
+        final Repetition els = asRepetition(4);
+        m_else = (0 < els.sizeofAccepted())
+                ? createItem(els.getOnlyAccepted(), 1)
+                : null;
     }
-    
+
+    private void add(final Sequence seq, final int ix) {
+        m_clauses.add(new ExprStmt(seq, 1));
+    }
+
     public class ExprStmt extends Util.Pair<Expression, Statement> {
-        private ExprStmt(final int ix) {
-            super(createItem(ix), createItem(ix+1));
+
+        private ExprStmt(final Sequence seq, final int ix) {
+            super(createItem(seq, ix), createItem(seq, ix + 1));
         }
     }
     /**
      * True on if-statement; false on unless-statement.
      */
     private final boolean m_if;
-    private List<ExprStmt>  m_clauses = new LinkedList<>();
+    private final List<ExprStmt> m_clauses = new LinkedList<>();
+    private final Statement m_else;
 }

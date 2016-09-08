@@ -23,15 +23,14 @@
  */
 package laol.ast;
 
+import apfe.runtime.Util;
+
 /**
  *
  * @author gburdell
  */
-public class ExpressionStatement extends Item {
+public class ExpressionStatement extends Expression {
     public ExpressionStatement(final laol.parser.apfe.ExpressionStatement decl) {
-        super(decl);
-        m_stmt = createItem(0);
+        super(Util.extractEle(decl.getBaseAccepted(), 0));
     }
-    
-    private final Expression   m_stmt;
 }

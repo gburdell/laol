@@ -22,7 +22,10 @@
  * THE SOFTWARE.
  */
 package laol.ast;
-import apfe.runtime.Marker;
+import apfe.runtime.Acceptor;
+import apfe.runtime.Util;
+import java.util.LinkedList;
+import java.util.List;
 
 /**
  *
@@ -31,5 +34,11 @@ import apfe.runtime.Marker;
 public class MixinStatement extends Item {
     public MixinStatement(final laol.parser.apfe.MixinStatement decl) {
         super(decl);
+        m_mixins.add(createItem(1));
+        for (Acceptor item : Util.extractList(asRepetition(2), 1)) {
+            m_mixins.add(createItem(item));
+        }
     }
+    
+    private List<ModuleName>    m_mixins = new LinkedList<>();
 }

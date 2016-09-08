@@ -22,8 +22,6 @@
  * THE SOFTWARE.
  */
 package laol.ast;
-import apfe.runtime.Marker;
-import apfe.runtime.Sequence;
 
 /**
  *

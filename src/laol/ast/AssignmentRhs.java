@@ -23,8 +23,6 @@
  */
 package laol.ast;
 
-import apfe.runtime.Marker;
-
 /**
  *
  * @author gburdell

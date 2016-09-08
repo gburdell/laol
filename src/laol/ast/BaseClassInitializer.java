@@ -22,13 +22,6 @@
  * THE SOFTWARE.
  */
 package laol.ast;
-import apfe.runtime.Acceptor;
-import apfe.runtime.Marker;
-import apfe.runtime.Repetition;
-import apfe.runtime.Sequence;
-import apfe.runtime.Util;
-import java.util.LinkedList;
-import java.util.List;
 
 /**
  *
@@ -37,7 +30,8 @@ import java.util.List;
 public class BaseClassInitializer extends Item {
     public BaseClassInitializer(final laol.parser.apfe.BaseClassInitializer decl) {
         super(decl);
+        m_super = createItem(1);
     }
     
-
+    private final MethodParamDecl   m_super;  
 }
