@@ -3,8 +3,9 @@ Grammar <- Spacing contents? EOF
 variable_name <-
     IDENT (COLON2 IDENT)*
 
+// optional modifier: a-z (overkill...)
 regexp_primary <-
-	"%r{" sp ('\\' . / !'}' .)+ '}'
+	"%r{" sp ('\\' . / !'}' .)+ '}'[a-z]* Spacing
 
 hash_primary <- LCURLY (hash_key_value (COMMA hash_key_value)*)? RCURLY
 
@@ -32,7 +33,7 @@ html_code_content <-
 html_tag <-
 	'<' [a-zA-Z_]+ sp html_attribute* '>'
 		html_tag_content*
-	("</" [a-zA-Z]+ '>')?
+	("</" [a-zA-Z]+ GT)?
 
 html_tag_content <-
 	inline_eval
@@ -58,7 +59,7 @@ inline_eval <- "#{" sp expression RCURLY
 array_primary <-
     LBRACK (expression_list)? RBRACK
     //array of (w) words or (s) symbols
-/   '%' [ws] '{' sp ('\\' . / !'}')* '}'
+/   '%' [ws] '{' sp ('\\' . / !'}')* RCURLY
 
 primary_expression <-
     K_NIL QMARK?
@@ -120,7 +121,7 @@ cmp_expression <-
 	cmp_expression cmp_op rel_expression
 /	rel_expression
 
-cmp_op <- NEQ / EQ2
+cmp_op <- NEQ / EQ2 / REXEQ / REXNEQ
 
 and_expression <-
 	and_expression AND cmp_expression
@@ -354,7 +355,7 @@ method_name_op <-
 /   EXCL
 /   assignment_op
 /   PLUS2 / MINUS2  //postix operator
-/   "++_" / "--_"   //prefix operator
+/   ("++_" / "--_") Spacing   //prefix operator
 
 method_body <- statement*
     
@@ -383,7 +384,7 @@ here_doc.
 //
 //Lexical syntax
 COLON       <- ':' !':' Spacing
-COLON2      <- "::"
+COLON2      <- "::" Spacing
 SEMI        <- ';' Spacing
 DOT         <- '.' !'.' Spacing
 DOT2        <- ".." Spacing
@@ -396,10 +397,12 @@ GT          <- '>' !('>' / '=') Spacing
 GTEQ        <- ">=" Spacing
 GT2         <- ">>" !'=' Spacing
 GT2_EQ      <- ">>=" Spacing
-EQ          <- '=' !'=' Spacing
+EQ          <- '=' !('=' / '~') Spacing
 EQ2         <- "==" Spacing
+REXEQ       <- "=~" Spacing
+EXCL        <- '!' !('=' / '~') Spacing
 NEQ         <- "!=" Spacing
-EXCL        <- '!' !'=' Spacing
+REXNEQ      <- "!~" Spacing
 //AT          <- '@' !'@' Spacing
 //AT2         <- "@@" Spacing
 TILDE       <- '~' Spacing
@@ -411,7 +414,7 @@ OR          <- '|' !('|' / '=') Spacing
 OR2         <- "||" Spacing
 OR_EQ       <- "|=" Spacing
 STAR        <- '*' !('=' / '*') Spacing
-STAR2       <- "**"
+STAR2       <- "**" Spacing
 STAR_EQ     <- "*=" Spacing
 MINUS       <- '-' !('-' / '=' / '>') Spacing
 MINUS2      <- "--" Spacing
