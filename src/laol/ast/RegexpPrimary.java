@@ -22,19 +22,17 @@
  * THE SOFTWARE.
  */
 package laol.ast;
-import java.util.List;
 
 /**
  *
  * @author gburdell
  */
-public class ClassBody extends Item {
-    public ClassBody(final laol.parser.apfe.ClassBody decl) {
+public class RegexpPrimary extends Item {
+    public RegexpPrimary(final laol.parser.apfe.RegexpPrimary decl) {
         super(decl);
-        m_base = oneOrNone(0);
-        m_stmts = zeroOrMore(1);
+        m_expr = asSequence().getText(2);
+        m_sfx = asSequence().getText(4);
     }
     
-    private final BaseClassInitializer m_base;
-    private final List<Statement>   m_stmts;
+    private final String  m_expr, m_sfx;
 }

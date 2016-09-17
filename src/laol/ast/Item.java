@@ -35,6 +35,7 @@ import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 import laol.parser.IDENT;
+import laol.parser.apfe.STRING;
 
 /**
  *
@@ -62,14 +63,22 @@ public abstract class Item {
     protected final Acceptor m_parsed;
     
     final protected Ident getIdent(final int ix) {
-        return new Ident(apfe.runtime.Util.<IDENT>extractEle(asSequence(), ix));
+        return getIdent(asSequence(), ix);
     }
 
     final protected Ident getIdent(final Acceptor seq, final int ix) {
         return new Ident(apfe.runtime.Util.<IDENT>extractEle(seq, ix));
     }
 
-    final protected Sequence asSequence() {
+        final protected AString getString(final int ix) {
+        return getString(asSequence(), ix);
+    }
+
+    final protected AString getString(final Acceptor seq, final int ix) {
+        return new AString(apfe.runtime.Util.<STRING>extractEle(seq, ix));
+    }
+
+final protected Sequence asSequence() {
         return asSequence(m_parsed);
     }
     

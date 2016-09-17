@@ -22,19 +22,18 @@
  * THE SOFTWARE.
  */
 package laol.ast;
-import java.util.List;
 
 /**
  *
  * @author gburdell
  */
-public class ClassBody extends Item {
-    public ClassBody(final laol.parser.apfe.ClassBody decl) {
+public class AString extends Item {
+    public AString(final laol.parser.apfe.STRING decl) {
         super(decl);
-        m_base = oneOrNone(0);
-        m_stmts = zeroOrMore(1);
+        final int n = m_parsed.toString().length();
+        m_val = (2 < n) ? m_parsed.toString().substring(1, n-1) : "";
     }
     
-    private final BaseClassInitializer m_base;
-    private final List<Statement>   m_stmts;
+    // string value without enclosing " nor '
+    private final String    m_val;
 }

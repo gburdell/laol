@@ -22,19 +22,16 @@
  * THE SOFTWARE.
  */
 package laol.ast;
-import java.util.List;
 
 /**
  *
  * @author gburdell
  */
-public class ClassBody extends Item {
-    public ClassBody(final laol.parser.apfe.ClassBody decl) {
+public class HashKey extends Item {
+    public HashKey(final laol.parser.apfe.HashKey decl) {
         super(decl);
-        m_base = oneOrNone(0);
-        m_stmts = zeroOrMore(1);
+        m_key = createItem(asPrioritizedChoice().getAccepted());
     }
     
-    private final BaseClassInitializer m_base;
-    private final List<Statement>   m_stmts;
+    private final Item  m_key;
 }

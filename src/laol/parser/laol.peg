@@ -5,7 +5,7 @@ variable_name <-
 
 // optional modifier: a-z (overkill...)
 regexp_primary <-
-	"%r{" sp ('\\' . / !'}' .)+ '}'[a-z]* Spacing
+	"%r{" sp ('\\' . / !'}' .)+ '}' [a-z]* sp
 
 hash_primary <- LCURLY (hash_key_value (COMMA hash_key_value)*)? RCURLY
 
@@ -31,9 +31,9 @@ html_code_content <-
 /	!RCURLY .
 
 html_tag <-
-	'<' [a-zA-Z_]+ sp html_attribute* '>'
+	'<' IDENT html_attribute* '>'
 		html_tag_content*
-	("</" [a-zA-Z]+ GT)?
+	("</" IDENT GT)?
 
 html_tag_content <-
 	inline_eval
@@ -355,7 +355,7 @@ method_name_op <-
 /   EXCL
 /   assignment_op
 /   PLUS2 / MINUS2  //postix operator
-/   ("++_" / "--_") Spacing   //prefix operator
+/   ("++_" / "--_") sp //prefix operator
 
 method_body <- statement*
     

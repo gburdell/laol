@@ -22,19 +22,18 @@
  * THE SOFTWARE.
  */
 package laol.ast;
-import java.util.List;
 
 /**
  *
  * @author gburdell
  */
-public class ClassBody extends Item {
-    public ClassBody(final laol.parser.apfe.ClassBody decl) {
+public class HtmlAttribute extends Item {
+    public HtmlAttribute(final laol.parser.apfe.HtmlAttribute decl) {
         super(decl);
-        m_base = oneOrNone(0);
-        m_stmts = zeroOrMore(1);
+        m_id = getIdent(0);
+        m_str = getString(2);
     }
     
-    private final BaseClassInitializer m_base;
-    private final List<Statement>   m_stmts;
+    private final Ident m_id;
+    private final AString   m_str;
 }

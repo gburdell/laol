@@ -22,19 +22,16 @@
  * THE SOFTWARE.
  */
 package laol.ast;
-import java.util.List;
+
+import apfe.runtime.Util;
 
 /**
  *
  * @author gburdell
  */
-public class ClassBody extends Item {
-    public ClassBody(final laol.parser.apfe.ClassBody decl) {
-        super(decl);
-        m_base = oneOrNone(0);
-        m_stmts = zeroOrMore(1);
+public class InlineEval extends Expression {
+
+    public InlineEval(final laol.parser.apfe.InlineEval decl) {
+        super(Util.<laol.parser.apfe.Expression>extractEle(asSequence(decl), 2));
     }
-    
-    private final BaseClassInitializer m_base;
-    private final List<Statement>   m_stmts;
 }

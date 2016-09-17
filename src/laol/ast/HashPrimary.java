@@ -22,19 +22,26 @@
  * THE SOFTWARE.
  */
 package laol.ast;
+import apfe.runtime.Acceptor;
+import apfe.runtime.Repetition;
+import apfe.runtime.Sequence;
+import java.util.LinkedList;
 import java.util.List;
 
 /**
  *
  * @author gburdell
  */
-public class ClassBody extends Item {
-    public ClassBody(final laol.parser.apfe.ClassBody decl) {
+public class HashPrimary extends Item {
+    public HashPrimary(final laol.parser.apfe.HashPrimary decl) {
         super(decl);
-        m_base = oneOrNone(0);
-        m_stmts = zeroOrMore(1);
+        Repetition rep = asRepetition(1);
+        if (0 < rep.sizeofAccepted()) {
+            Sequence seq = asSequence(rep.getOnlyAccepted());
+            m_vals.add(createItem(seq, 0));
+            m_vals.addAll(zeroOrMore(seq, 1));
+        }
     }
     
-    private final BaseClassInitializer m_base;
-    private final List<Statement>   m_stmts;
+    private final List<HashKeyValue>    m_vals = new LinkedList<>();
 }
