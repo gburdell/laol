@@ -42,26 +42,27 @@ import laol.parser.apfe.STRING;
  * @author gburdell
  */
 public abstract class Item {
+
     protected Item(final Marker loc) {
         this(loc, null);
     }
-    
+
     protected Item(final Acceptor parsed) {
         this(parsed.getStartMark(), parsed);
     }
-    
+
     private Item(final Marker loc, final Acceptor parsed) {
         m_loc = loc;
         m_parsed = parsed;
     }
-    
+
     public Marker getLocation() {
         return m_loc;
     }
 
-    private final Marker   m_loc;
+    private final Marker m_loc;
     protected final Acceptor m_parsed;
-    
+
     final protected Ident getIdent(final int ix) {
         return getIdent(asSequence(), ix);
     }
@@ -70,7 +71,7 @@ public abstract class Item {
         return new Ident(apfe.runtime.Util.<IDENT>extractEle(seq, ix));
     }
 
-        final protected AString getString(final int ix) {
+    final protected AString getString(final int ix) {
         return getString(asSequence(), ix);
     }
 
@@ -78,10 +79,18 @@ public abstract class Item {
         return new AString(apfe.runtime.Util.<STRING>extractEle(seq, ix));
     }
 
-final protected Sequence asSequence() {
+    final protected AChar getChar(final int ix) {
+        return getChar(asSequence(), ix);
+    }
+
+    final protected AChar getChar(final Acceptor seq, final int ix) {
+        return new AChar(apfe.runtime.Util.<apfe.runtime.CharClass>extractEle(seq, ix));
+    }
+
+    final protected Sequence asSequence() {
         return asSequence(m_parsed);
     }
-    
+
     public static Sequence asSequence(final Acceptor acc) {
         return apfe.runtime.Util.asSequence(acc);
     }
@@ -89,7 +98,7 @@ final protected Sequence asSequence() {
     final protected Repetition asRepetition(final int pos) {
         return asRepetition(asSequence(), pos);
     }
-    
+
     public static Repetition asRepetition(final Sequence seq, final int pos) {
         return apfe.runtime.Util.extractEle(seq, pos);
     }
@@ -97,7 +106,7 @@ final protected Sequence asSequence() {
     final protected <T extends Item> T oneOrNone(final int pos) {
         return oneOrNone(asSequence(), pos);
     }
-    
+
     final protected <T extends Item> T oneOrNone(final Sequence seq, final int pos) {
         final Repetition rep = asRepetition(seq, pos);
         T rval = null;
@@ -107,10 +116,19 @@ final protected Sequence asSequence() {
         return rval;
     }
 
+    final protected <T extends Item> List<T> zeroOrMore(final int posOfRep, final int posInSeq) {
+        Repetition rep = asRepetition(posOfRep);
+        List<T> rval = (0 < rep.sizeofAccepted()) ? new LinkedList<>() : Collections.EMPTY_LIST;
+        for (Acceptor acc : apfe.runtime.Util.extractList(rep, posInSeq)) {
+            rval.add(createItem(acc));
+        }
+        return rval;
+    }
+
     final protected <T extends Item> List<T> zeroOrMore(final int pos) {
         return zeroOrMore(asSequence(), pos);
     }
-    
+
     final protected <T extends Item> List<T> zeroOrMore(final Sequence seq, final int pos) {
         final Repetition rep = asRepetition(seq, pos);
         List<T> rval;
@@ -124,7 +142,7 @@ final protected Sequence asSequence() {
         }
         return rval;
     }
-    
+
     final protected PrioritizedChoice asPrioritizedChoice() {
         return asPrioritizedChoice(m_parsed);
     }
@@ -132,7 +150,7 @@ final protected Sequence asSequence() {
     final protected PrioritizedChoice asPrioritizedChoice(final int pos) {
         return asPrioritizedChoice(apfe.runtime.Util.extractEle(asSequence(), pos));
     }
-    
+
     public static PrioritizedChoice asPrioritizedChoice(final Acceptor acc) {
         return apfe.runtime.Util.asPrioritizedChoice(acc);
     }
@@ -167,7 +185,7 @@ final protected Sequence asSequence() {
     final protected <T extends Item> T createItem(final Sequence seq, final int pos) {
         return createItem(apfe.runtime.Util.extractEle(seq, pos));
     }
-    
+
     final protected <T extends Item> T createItem(final Acceptor seq, final int pos) {
         return createItem(apfe.runtime.Util.downcast(seq), pos);
     }

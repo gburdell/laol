@@ -181,8 +181,7 @@ param_expression_list <-
 /	unnamed_param
 
 array_select_expression <-
-	//TODO: ':' ambiguous w/ conditional_expr
-    expression (DOT2 / COLON) expression
+    expression DOT2 expression
 /   expression_list
 
 var_decl <- lhs_decl IDENT (COMMA IDENT)* eos
