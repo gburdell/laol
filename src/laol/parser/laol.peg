@@ -59,6 +59,7 @@ inline_eval <- "#{" sp expression RCURLY
 array_primary <-
     LBRACK (expression_list)? RBRACK
     //array of (w) words or (s) symbols
+//TODO: make more exact w/ IDENTS, etc...
 /   '%' [ws] '{' sp ('\\' . / !'}')* RCURLY
 
 primary_expression <-
