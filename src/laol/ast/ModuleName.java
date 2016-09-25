@@ -24,6 +24,7 @@
 package laol.ast;
 
 import apfe.runtime.Marker;
+import laol.parser.IDENT;
 
 /**
  *
@@ -33,7 +34,7 @@ public class ModuleName extends Item {
 
     public ModuleName(final laol.parser.apfe.ModuleName decl) {
         super(decl);
-        m_name = new Ident(decl.getBaseAccepted());
+        m_name = new Ident((IDENT)decl.getBaseAccepted());
     }
 
     private final Ident  m_name;

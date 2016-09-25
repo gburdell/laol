@@ -22,30 +22,20 @@
  * THE SOFTWARE.
  */
 package laol.ast;
-
 import apfe.runtime.Acceptor;
+import apfe.runtime.Marker;
 import apfe.runtime.Repetition;
+import apfe.runtime.Sequence;
 import apfe.runtime.Util;
 import java.util.LinkedList;
 import java.util.List;
-import laol.parser.IDENT;
 
 /**
  *
  * @author gburdell
  */
-public class VarDecl extends Item {
-
-    public VarDecl(final laol.parser.apfe.VarDecl decl) {
+public class ArraySelectExpression extends Item {
+    public ArraySelectExpression(final laol.parser.apfe.ArraySelectExpression decl) {
         super(decl);
-        m_lhsDecl = createItem(0);
-        m_varNames.add(getIdent(1));
-        final Repetition vars = asRepetition(2);
-        for (Acceptor var : vars.getAccepted()) {
-            m_varNames.add(new Ident(Util.<IDENT>extractEle(var, 1)));
-        }
     }
-
-    private final LhsDecl m_lhsDecl;
-   private final List<Ident> m_varNames = new LinkedList<>();
 }

@@ -22,30 +22,48 @@
  * THE SOFTWARE.
  */
 package laol.ast;
-
-import apfe.runtime.Acceptor;
 import apfe.runtime.Repetition;
+import apfe.runtime.Sequence;
 import apfe.runtime.Util;
 import java.util.LinkedList;
 import java.util.List;
 import laol.parser.IDENT;
+import laol.parser.apfe.LBRACK;
 
 /**
  *
  * @author gburdell
  */
-public class VarDecl extends Item {
-
-    public VarDecl(final laol.parser.apfe.VarDecl decl) {
+public class ArrayPrimary extends Item {
+    public ArrayPrimary(final laol.parser.apfe.ArrayPrimary decl) {
         super(decl);
-        m_lhsDecl = createItem(0);
-        m_varNames.add(getIdent(1));
-        final Repetition vars = asRepetition(2);
-        for (Acceptor var : vars.getAccepted()) {
-            m_varNames.add(new Ident(Util.<IDENT>extractEle(var, 1)));
+        final Sequence seq = asSequence(m_parsed.getBaseAccepted());
+        if (seq.getAccepted()[0] instanceof LBRACK) {
+            final Repetition items = asRepetition(seq, 1);
+            if (0 < items.sizeofAccepted()) {
+               m_ele = new ExpressionList(items.getOnlyAccepted());
+            } else {
+                m_ele = null;
+            }
+        } else {
+            m_ele = new WordsOrSymbols(seq);
         }
     }
-
-    private final LhsDecl m_lhsDecl;
-   private final List<Ident> m_varNames = new LinkedList<>();
+    
+    public static class WordsOrSymbols extends Item {
+        public static enum EType {eWords, eSymbols};
+        
+        public WordsOrSymbols(final Sequence items) {
+            super(items);
+            m_type = (asSequence().getText(1).charAt(0) == 'w') ? EType.eWords : EType.eSymbols;
+            for (IDENT item : Util.<IDENT>extractList(asRepetition(3), 0)) {
+                m_eles.add(new Ident(item));
+            }
+        }
+        
+        private final EType m_type;
+        private final List<Ident>   m_eles = new LinkedList<>();
+    }
+    
+    private final Item  m_ele;
 }

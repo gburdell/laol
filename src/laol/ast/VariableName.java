@@ -27,6 +27,7 @@ import apfe.runtime.Acceptor;
 import apfe.runtime.Util;
 import java.util.LinkedList;
 import java.util.List;
+import laol.parser.IDENT;
 
 /**
  *
@@ -38,7 +39,7 @@ public class VariableName extends Item {
         super(decl);
         m_names.add(getIdent(0));
         for (Acceptor var : asRepetition(1).getAccepted()) {
-            m_names.add(new Ident(Util.extractEle(var, 1)));
+            m_names.add(new Ident(Util.<IDENT>extractEle(var, 1)));
         }
 
     }

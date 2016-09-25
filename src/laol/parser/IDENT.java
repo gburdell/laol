@@ -12,7 +12,7 @@ public class IDENT extends Acceptor {
     }
 
     @Override
-    // [a-zA-Z_] [a-zA-Z0-9_]* Spacing
+    // [a-zA-Z_] [a-zA-Z0-9_]* '?'? Spacing
     protected boolean accepti() {
         Sequence matcher = new Sequence(
                 new CharClass(CharClass.matchRange('a', 'z'),
@@ -22,6 +22,7 @@ public class IDENT extends Acceptor {
                         CharClass.matchRange('A', 'Z'),
                         CharClass.matchOneOf('_'),
                         CharClass.matchRange('0', '9')), Repetition.ERepeat.eZeroOrMore),
+                new Repetition(new CharSeq('?'), Repetition.ERepeat.eOptional),
                 new Spacing());
         m_baseAccepted = match(matcher);
         boolean match = (null != m_baseAccepted);

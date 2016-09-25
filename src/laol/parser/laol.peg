@@ -59,11 +59,10 @@ inline_eval <- "#{" sp expression RCURLY
 array_primary <-
     LBRACK (expression_list)? RBRACK
     //array of (w) words or (s) symbols
-//TODO: make more exact w/ IDENTS, etc...
-/   '%' [ws] '{' sp ('\\' . / !'}')* RCURLY
+/   '%' [ws] LCURLY IDENT* RCURLY
 
 primary_expression <-
-    K_NIL QMARK?
+    K_NIL
 /   K_NEW
 /   K_FILE / K_TARGET
 /   K_TRUE / K_FALSE
@@ -72,7 +71,7 @@ primary_expression <-
 /   SYMBOL
 /	LPAREN expression RPAREN
 /   here_doc
-/   variable_name (QMARK / EXCL)?
+/   variable_name
 /   Number
 /   hash_primary
 /   array_primary
@@ -158,11 +157,7 @@ binary_op <-
 /	cmp_op
 /	AND / OR / CARET / AND2 / OR2
 
-dot_suffix <-
-    DOT (   K_NIL QMARK?
-        	/   K_NEW
-        	/   METHOD_NAME_IDENT (EXCL / QMARK)?
-        	)
+dot_suffix <- DOT (K_NIL / K_NEW / IDENT)
 
 block <- anonymous_function
 
@@ -194,7 +189,7 @@ lhs_decl <- access_modifier? K_STATIC? mutability?
 lhs_ref <-
     lhs_ref LBRACK array_select_expression RBRACK
 /   lhs_ref LPAREN param_expression_list? RPAREN
-/   lhs_ref DOT METHOD_NAME_IDENT (EXCL / QMARK)?
+/   lhs_ref DOT IDENT
 /   lhs_ref (PLUS2 / MINUS2) 
 /   variable_name
 
@@ -342,8 +337,8 @@ method_declaration <-
 		eos
     
 method_name <-
-    METHOD_NAME_IDENT? method_name_op
-/   METHOD_NAME_IDENT
+    IDENT? method_name_op
+/   IDENT
 
 method_name_op <-
     LBRACK RBRACK EQ  // []=
@@ -456,7 +451,7 @@ K_MIXIN     <-  "mixin"     K_tail
 K_MODULE    <- "module"     K_tail
 K_NEXT      <- "next"       K_tail
 K_NEW       <- "new"        K_tail
-K_NIL       <- "nil"        K_tail
+K_NIL       <- "nil" '?'?   K_tail
 K_PRIVATE   <- "private"    K_tail
 K_PROTECTED <- "protected"  K_tail
 K_PUBLIC    <- "public"     K_tail
@@ -477,17 +472,13 @@ K_FILE      <- "__FILE__"   K_tail
 //Specifies target language
 K_TARGET    <- "__TARGET__" K_tail
 
-K_tail <- !IdentCont Spacing
-IdentCont <- [a-zA-Z_0-9]
+K_tail <- ![_a-zA-Z0-9] Spacing
 
 SYMBOL  <- COLON IDENT Spacing
 ;
 
+// includes optional '?'
 IDENT.
-
-// Allow class methods to include keywords too
-METHOD_NAME_IDENT <-
-    [a-zA-Z] IdentCont* Spacing
 
 Number <-   (   BasedNumber
             /   Integer

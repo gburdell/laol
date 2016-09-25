@@ -23,6 +23,8 @@
  */
 package laol.ast;
 
+import laol.parser.IDENT;
+
 /**
  *
  * @author gburdell
@@ -30,7 +32,7 @@ package laol.ast;
 public class ClassName extends Item {
     public ClassName(final laol.parser.apfe.ClassName decl) {
         super(decl);
-        m_name = new Ident(decl.getBaseAccepted());
+        m_name = new Ident((IDENT)decl.getBaseAccepted());
     }
     
     private final Ident m_name;

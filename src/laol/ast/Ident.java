@@ -33,9 +33,17 @@ public class Ident extends Item {
 
     public Ident(final IDENT id) {
         super(id);
-        m_id = id.getIdent();
+        final String s = id.getIdent();
+        if (s.endsWith("?")) {
+            m_id = s.substring(0, s.length() - 1);
+            m_sfx = '?';
+        } else {
+            m_id = s;
+            m_sfx = null;
+        }
     }
 
     private final String m_id;
+    private final Character m_sfx;
 
 }
