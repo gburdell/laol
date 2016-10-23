@@ -1,1 +1,6 @@
-generate.log
+LaolBaseListener.java
+LaolLexer.java
+LaolLexer.tokens
+LaolListener.java
+LaolParser.java
+Laol.tokens

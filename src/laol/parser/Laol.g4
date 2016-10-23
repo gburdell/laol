@@ -351,8 +351,49 @@ hash_key_value: hash_key ':' expression ;
 regexp_primary: REGEXP ;
 
 here_doc: '%h{}' ;  //TODO
-html_primary: '%html{}' ; //TODO
-sass_primary:  '%sass{}' ;//TODO
+
+html_primary: '%html{' NL* (html_code* | html_tag*) '}' ;
+
+html_code:
+	IDENT ('(' param_expression_list? ')')? '{' NL*
+		html_code_content*
+	'}'
+;
+
+html_code_content
+:	inline_eval
+|	html_code
+|	~'}'
+;
+
+html_tag:
+	'<' IDENT html_attribute* '>'
+		html_tag_content*
+	('</' IDENT '>')?
+;
+
+html_tag_content
+:	inline_eval
+|	html_tag
+|	~'}'
+;
+
+html_attribute: IDENT '=' STRING ;
+
+sass_primary:
+	'%sass{' NL*
+		sass_content*
+	'}'
+;
+
+sass_content
+:	'{' (~'}' sass_content)* '}'
+|	inline_eval
+|	STRING
+|	~'}'
+;
+
+inline_eval: '#{' NL* expression '}' ;
 
 number
 :	INTEGER
