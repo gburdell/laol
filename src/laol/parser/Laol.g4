@@ -4,9 +4,9 @@ grammar Laol;
 	package laol.parser;
 }
 
-file: contents? EOF ;
+file: NL* contents NL* EOF ;
 
-contents: require_statement* file_item+ ;
+contents: require_statement* NL* file_item+ ;
 
 require_statement: 'require' STRING EOS ;
 
@@ -40,7 +40,7 @@ class_declaration:
     'class' class_name
         method_param_decl?
         class_extends?
-        '{' NL?
+        '{' NL+
             class_body
         '}' EOS
 ;
@@ -423,21 +423,17 @@ STRING
 |   '\'' ('\\'. | .)? '\''
 ;
 
-EOS: (';' NL*) | NL+ ;
-
-NL: '\r'? '\n' ;
-
-WS: [ \t]+ -> skip ;
-
 REGEXP
 :	'/' ('\\' . | ~'/')+ '/' [i]?
 |   '%r{' ('\\' . | ~'}')+ '}' [i]?
 ;
 
-COMMENT
-:   LINE_COMMENT
-|   BLOCK_COMMENT
-;
+WS: [ \t]+ -> skip ;
 
 LINE_COMMENT:   '//' ~[\r\n]* -> skip ;
 BLOCK_COMMENT:  '/*' .*? '*/' -> skip ;
+
+NL: '\r'? '\n' ;
+
+EOS: (';' NL*) | NL+ ;
+
