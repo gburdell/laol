@@ -1,5 +1,11 @@
 grammar Laol;
 
+/**
+ *	NOTES:
+ *	1) parameter lists 'm(a,b,...)' are specified when arguments are required.
+ *	   If no arguments required, then 'm' is allowed, not 'm()'.
+ */
+
 @header {
 	package laol.parser;
 }
@@ -50,7 +56,7 @@ class_body: base_class_initializer? statement* ;
 
 base_class_initializer: 'super' method_param_decl ; 
 
-method_param_decl: '(' method_param_decl_list? ')' ;
+method_param_decl: '(' method_param_decl_list ')' ;
 
 access_modifier: 'private' | 'protected' | 'public' ;
 
@@ -60,8 +66,12 @@ method_param_decl_modifier: access_modifier? mutability? ;
 
 method_param_decl_ele:
     //NOTE: only last in list can have STAR (marks as varargs)
-    // AND (&) marks as function parameter
-    method_param_decl_modifier ('&' | '*')? IDENT method_param_decl_default? ;
+    // AND (->) marks as function parameter
+    method_param_decl_modifier
+	(	'->' IDENT method_param_decl?
+	|	'*'? IDENT method_param_decl_default?
+	)
+;
 
 method_param_decl_default: '=' expression ;
 
@@ -86,8 +96,8 @@ method_declaration:
 ;
     
 method_name
-:   IDENT? method_name_op
-|   IDENT
+:   method_name_op
+|   identq
 ;
 
 method_name_op
@@ -96,7 +106,6 @@ method_name_op
 |   '()'
 |   unary_op
 |   binary_op
-|   '?'
 |   assignment_op
 |   '++' | '--'     //postfix operator
 |   '++()' | '--()' //prefix operator
@@ -180,7 +189,7 @@ primary_expression
 
 postfix_expression
 :   postfix_expression '[' array_select_expression ']' block?
-|   postfix_expression '(' param_expression_list? ')' block?
+|   postfix_expression '(' param_expression_list ')' block?
 |   postfix_expression '.' postfix_expression
 |   postfix_expression ('++' | '--') 
 |   primary_expression block?
@@ -324,13 +333,18 @@ lhs_decl: access_modifier? 'static'? mutability? ;
 
 lhs_ref
 :   lhs_ref '[' array_select_expression ']'
-|   lhs_ref '(' param_expression_list? ')'
+|   lhs_ref '(' param_expression_list ')'
 |   lhs_ref '.' lhs_ref
 |   lhs_ref ('++' | '--') 
 |   vm_name
 ;
 
-vm_name: IDENT ('::' IDENT)* ;
+vm_name
+:	(IDENT '::')* identq
+|	'::' identq
+;
+
+identq: IDENT | IDENTQ ;
 
 array_primary
 :   '[' (expression_list)? ']'
@@ -352,7 +366,7 @@ here_doc: '%h{}' ;  //TODO
 html_primary: '%html{' NL* (html_code* | html_tag*) '}' ;
 
 html_code:
-	IDENT ('(' param_expression_list? ')')? '{' NL*
+	IDENT ('(' param_expression_list ')')? '{' NL*
 		html_code_content*
 	'}'
 ;
@@ -408,7 +422,11 @@ eos
 
 SYMBOL: ':' IDENT ;
 
-IDENT:  [a-zA-Z_] [a-zA-Z0-9_]* ;
+fragment
+IDENT_CMN: [a-zA-Z_] [a-zA-Z0-9_]* ;
+
+IDENTQ: IDENT_CMN '?' ;
+IDENT:  IDENT_CMN ;
 
 fragment
 DIGITS: [0-9] [0-9_]* ;
