@@ -97,7 +97,6 @@ method_name_op
 |   unary_op
 |   binary_op
 |   '?'
-|   '!'
 |   assignment_op
 |   '++' | '--'     //postfix operator
 |   '++()' | '--()' //prefix operator
@@ -170,7 +169,7 @@ primary_expression
 |   SYMBOL
 |	'(' expression ')'
 |   here_doc
-|   variable_name
+|   vm_name	//variable or method name
 |   number
 |   hash_primary
 |   array_primary
@@ -326,12 +325,12 @@ lhs_decl: access_modifier? 'static'? mutability? ;
 lhs_ref
 :   lhs_ref '[' array_select_expression ']'
 |   lhs_ref '(' param_expression_list? ')'
-|   lhs_ref '.' IDENT
+|   lhs_ref '.' lhs_ref
 |   lhs_ref ('++' | '--') 
-|   variable_name
+|   vm_name
 ;
 
-variable_name: IDENT ('::' IDENT)* ;
+vm_name: IDENT ('::' IDENT)* ;
 
 array_primary
 :   '[' (expression_list)? ']'
