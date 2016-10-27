@@ -20,9 +20,9 @@ public class LaolParserTest {
 
     private static final String PATH = "/home/gburdell/projects/laol/test/data/";
     
-    private static String FILES[] = {
+    private static final String FILES[] = {
         PATH + "t1.txt",
-        PATH + "collections.laol"
+        //PATH + "collections.laol"
     };
     
     @Test

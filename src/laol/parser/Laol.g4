@@ -8,7 +8,7 @@ file: NL* contents NL* EOF ;
 
 contents: require_statement* NL* file_item+ ;
 
-require_statement: 'require' STRING EOS ;
+require_statement: 'require' STRING eos ;
 
 file_item
 :   module_declaration
@@ -28,7 +28,7 @@ module_name: IDENT ;
 module_declaration:
     'module' module_name '{' NL?
         module_item*
-    '}' EOS
+    '}' eos
 ;
 
 class_name: IDENT ;
@@ -42,7 +42,7 @@ class_declaration:
         class_extends?
         '{' NL+
             class_body
-        '}' EOS
+        '}' eos
 ;
 
 //1st statement is initializer
@@ -74,7 +74,7 @@ class_extends
 
 class_name_list: class_name (',' class_name)* ;
 
-anonymous_function: '->' method_param_decl '{' method_body '}' ;
+anonymous_function: '->' method_param_decl '{' method_body? '}' ;
 
 method_declaration:
     access_modifier?
@@ -82,7 +82,7 @@ method_declaration:
     'def' method_name (method_param_decl)?
         ('{' method_body '}')?
         //NOTE: abstract declaration if empty
-		EOS
+		eos
 ;
     
 method_name
@@ -128,13 +128,13 @@ statement
 
 mixin_name: IDENT ('::' IDENT)* ;
 
-mixin_statement: 'mixin' module_name (',' module_name)* EOS ;
+mixin_statement: 'mixin' module_name (',' module_name)* eos ;
 
 case_statement:
     'case' expression '{' NL?
         ('when' expression_list ':' NL? statement)*
         ('else' NL? statement)?
-    '}' EOS
+    '}' eos
 ;
 
 if_statement:
@@ -143,22 +143,22 @@ if_statement:
         ('else' NL? statement)?
 ;
 
-while_statement: 'while' expression NL? statement EOS ;
-until_statement: 'until' expression NL? statement EOS ;
-for_statement: 'for' IDENT 'in' enumerable_expression NL? statement EOS ;
+while_statement: 'while' expression NL? statement eos ;
+until_statement: 'until' expression NL? statement eos ;
+for_statement: 'for' IDENT 'in' enumerable_expression NL? statement eos ;
 block_statement: '{' NL* statement* NL* '}' ;
-break_statement: 'break' EOS ;
-next_statement:  'next' EOS ;
-alias_statement: 'alias' method_name method_name EOS ;
-return_statement: 'return' expression? EOS ;
-throw_statement: 'throw' expression EOS ;
-try_statement: 'try' NL? statement (NL? catch_statement)* (NL? finally_statement)? EOS ;
-catch_statement: 'catch' expression NL? statement EOS ;
-finally_statement: 'finally' NL? statement EOS ;
+break_statement: 'break' eos ;
+next_statement:  'next' eos ;
+alias_statement: 'alias' method_name method_name eos ;
+return_statement: 'return' expression? eos ;
+throw_statement: 'throw' expression eos ;
+try_statement: 'try' NL? statement (NL? catch_statement)* (NL? finally_statement)? eos ;
+catch_statement: 'catch' expression NL? statement eos ;
+finally_statement: 'finally' NL? statement eos ;
 
-assign_statement: assignment_lhs assignment_op assignment_rhs EOS ;
-var_decl_statement: var_decl EOS ;
-expression_statement: expression EOS ;
+assign_statement: assignment_lhs assignment_op assignment_rhs eos ;
+var_decl_statement: var_decl eos ;
+expression_statement: expression eos ;
 
 primary_expression
 :   'nil'
@@ -182,7 +182,7 @@ primary_expression
 postfix_expression
 :   postfix_expression '[' array_select_expression ']' block?
 |   postfix_expression '(' param_expression_list? ')' block?
-|   postfix_expression dot_suffix block?
+|   postfix_expression '.' postfix_expression
 |   postfix_expression ('++' | '--') 
 |   primary_expression block?
 ;
@@ -294,11 +294,11 @@ unnamed_param: expression_list ;
 named_param_ele: IDENT ':' expression ;
 
 // last: can be vararg
-named_param: named_param_ele (',' named_param_ele)* (',' expression)* ;
+named_param: named_param_ele (',' named_param_ele)* (',' expression)? ;
 
 // Any named params are at the end
 param_expression_list
-:   unnamed_param named_param
+:   unnamed_param ',' named_param
 |	named_param
 |	unnamed_param
 ;
@@ -310,7 +310,7 @@ array_select_expression
 
 enumerable_expression: expression ;
 
-var_decl: lhs_decl IDENT (',' IDENT)* EOS ;
+var_decl: lhs_decl IDENT (',' IDENT)* eos ;
 
 assignment_lhs: lhs_decl lhs_ref (',' lhs_ref)* ;
 
@@ -332,8 +332,6 @@ lhs_ref
 ;
 
 variable_name: IDENT ('::' IDENT)* ;
-
-dot_suffix: '.' ('nil' | 'new' | IDENT) ;
 
 array_primary
 :   '[' (expression_list)? ']'
@@ -400,6 +398,11 @@ number
 |	FLOAT
 ;
 
+eos
+:	';' NL*
+|	NL
+;
+
 //
 // Begin lexer
 // (Note: 1st match wins)
@@ -434,6 +437,4 @@ LINE_COMMENT:   '//' ~[\r\n]* -> skip ;
 BLOCK_COMMENT:  '/*' .*? '*/' -> skip ;
 
 NL: '\r'? '\n' ;
-
-EOS: (';' NL*) | NL+ ;
 
