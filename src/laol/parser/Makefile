@@ -1,5 +1,5 @@
 ANTLR := antlr4
-ANTLR_OPTS :=
+ANTLR_OPTS := -no-listener -visitor
 
 .PHONY: goal clean
 
@@ -9,4 +9,4 @@ LaolParser.java: Laol.g4
 	${ANTLR} ${ANTLR_OPTS} $<
 
 clean:
-	rm -f Laol{BaseListener,Lexer,Listener,Parser,}.{java,tokens}
+	rm -f Laol{*Listener,*Visitor,Lexer,Parser,}.{java,tokens}

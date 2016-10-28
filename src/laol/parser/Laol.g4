@@ -10,9 +10,9 @@ grammar Laol;
 	package laol.parser;
 }
 
-file: NL* contents NL* EOF ;
+file: NL* contents EOF ;
 
-contents: require_statement* NL* file_item+ ;
+contents: require_statement* NL* (file_item NL*)+ ;
 
 require_statement: 'require' STRING eos ;
 

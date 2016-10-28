@@ -5,7 +5,6 @@ import org.antlr.v4.runtime.ANTLRFileStream;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.junit.Test;
-import static org.junit.Assert.*;
 
 /**
  *
@@ -17,7 +16,7 @@ public class LaolParserTest {
     
     private static final String FILES[] = {
         PATH + "t1.txt",
-        PATH + "Map.laol"
+        PATH + "Collection.laol"
         //PATH + "collections.laol"
     };
     
