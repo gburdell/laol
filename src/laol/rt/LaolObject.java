@@ -28,5 +28,9 @@ public abstract class LaolObject {
         mutableCheck(true);
     }
 
+    public boolean isNull() {
+        return false;
+    }
+    
     private boolean m_mutable = false;
 }

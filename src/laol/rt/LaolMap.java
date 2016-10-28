@@ -13,12 +13,30 @@ public final class LaolMap extends LaolObject {
     public LaolMap() {
     }
     
-    public LaolObject add(final LaolObject key, final LaolObject val) {
-        mutableCheck(true);
+    //operator []=
+    public LaolObject set(final LaolObject key, final LaolObject val) {
+        mutableCheck();
         m_map.put(key, val);
-        return this;
+        return val;
     }
     
+    //operator []
+    public LaolObject get(final LaolObject key) {
+        LaolObject val = m_map.get(key);
+        if (null == val) {
+            val = Null.getNull();
+        }
+        return val;
+    }
+    
+    //empty?
+    public LaolBoolean isEmpty() {
+        return new LaolBoolean(m_map.isEmpty());
+    }
+    
+    public LaolInteger size() {
+        return new LaolInteger(m_map.size());
+    }
     
     private final Map<LaolObject, LaolObject> m_map = new LinkedHashMap<>();
 }
