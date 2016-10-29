@@ -56,26 +56,40 @@ class_body: base_class_initializer? statement* ;
 
 base_class_initializer: 'super' method_param_decl ; 
 
-method_param_decl: '(' method_param_decl_list ')' ;
-
 access_modifier: 'private' | 'protected' | 'public' ;
 
 mutability: 'const' | 'var' ; 
 
-method_param_decl_modifier: access_modifier? mutability? ;
+method_param_decl: '(' method_param_decl_list ')' ;
+
+method_param_decl_list: method_param_decl_ele (',' method_param_decl_ele)* ; 
 
 method_param_decl_ele:
     //NOTE: only last in list can have STAR (marks as varargs)
     // AND (->) marks as function parameter
     method_param_decl_modifier
-	(	'->' IDENT method_param_decl?
-	|	'*'? IDENT method_param_decl_default?
-	)
+	(	anonymous_function_decl
+	|	'*'? type_name? param_name method_param_decl_default?
+	) NL*
 ;
 
-method_param_decl_default: '=' expression ;
+type_name
+:	builtin_type_name
+|	IDENT 
+;
 
-method_param_decl_list: method_param_decl_ele (',' method_param_decl_ele)* ; 
+builtin_type_name
+:	'int' 
+| 	'bool' 
+| 	'string' 
+| 	'{' '}' 
+| 	'[' ']' 
+| 	'?'
+;
+
+method_param_decl_modifier: access_modifier? mutability? ;
+
+method_param_decl_default: '=' expression ;
 
 class_extends
 :   'extends' class_name ('implements' class_name_list)?
@@ -84,12 +98,27 @@ class_extends
 
 class_name_list: class_name (',' class_name)* ;
 
-anonymous_function: '->' method_param_decl '{' method_body? '}' ;
+anonymous_function_decl
+:	'->' param_name method_param_decl? method_return_decl? 
+;
+
+method_return_decl
+:	'=>' type_name
+|	'=>' '(' method_return_ele (',' method_return_ele)* ')'
+;
+
+method_return_ele
+:	type_name param_name?
+;
+
+anonymous_function_defn
+:	'->' method_param_decl method_return_decl? '{' method_body? '}' 
+;
 
 method_declaration:
     access_modifier?
     ('abstract' | 'static')?
-    'def' method_name (method_param_decl)?
+    'def' method_name method_param_decl? method_return_decl?
         ('{' method_body '}')?
         //NOTE: abstract declaration if empty
 		eos
@@ -128,15 +157,16 @@ statement
 |   throw_statement
 |   class_declaration
 |   method_declaration 
-|   mixin_statement
+//See note: |   mixin_statement
 |   assign_statement
 |   var_decl_statement
 |   expression_statement
 ;
 
+/** NOTE: drop mixin to discourage monkey-patching
 mixin_name: IDENT ('::' IDENT)* ;
-
-mixin_statement: 'mixin' module_name (',' module_name)* eos ;
+mixin_statement: 'mixin' mixin_name (',' mixin_name)* eos ;
+**/
 
 case_statement:
     'case' expression '{' NL?
@@ -153,7 +183,8 @@ if_statement:
 
 while_statement: 'while' expression NL? statement eos ;
 until_statement: 'until' expression NL? statement eos ;
-for_statement: 'for' IDENT 'in' enumerable_expression NL? statement eos ;
+for_varname: IDENT ;
+for_statement: 'for' for_varname 'in' enumerable_expression NL? statement eos ;
 block_statement: '{' NL* statement* NL* '}' ;
 break_statement: 'break' eos ;
 next_statement:  'next' eos ;
@@ -190,6 +221,8 @@ primary_expression
 postfix_expression
 :   postfix_expression '[' array_select_expression ']' block?
 |   postfix_expression '(' param_expression_list ')' block?
+// NOTE: allow w/o '()' to be more DSL like
+|   postfix_expression     param_expression_list     block?
 |   postfix_expression '.' postfix_expression
 |   postfix_expression ('++' | '--') 
 |   primary_expression block?
@@ -293,13 +326,15 @@ assignment_op
 |   '%='
 ;
 
-block: anonymous_function ;
+block: anonymous_function_defn ;
 
 expression_list: expression (',' expression)* ;
 
 unnamed_param: expression_list ;
 
-named_param_ele: IDENT ':' expression ;
+named_param_ele: param_name ':' expression ;
+
+param_name: IDENT ;
 
 // last: can be vararg
 named_param: named_param_ele (',' named_param_ele)* (',' expression)? ;
@@ -318,7 +353,9 @@ array_select_expression
 
 enumerable_expression: expression ;
 
-var_decl: lhs_decl IDENT (',' IDENT)* eos ;
+var_decl: lhs_decl var_name (',' var_name)* eos ;
+
+var_name: IDENT ;
 
 assignment_lhs: lhs_decl lhs_ref (',' lhs_ref)* ;
 
@@ -326,7 +363,7 @@ assignment_lhs: lhs_decl lhs_ref (',' lhs_ref)* ;
 // we will not.  Use method to do so.
 assignment_rhs
 :   expression_list
-|   anonymous_function
+|   anonymous_function_defn
 ;
 
 lhs_decl: access_modifier? 'static'? mutability? ;
@@ -349,8 +386,10 @@ identq: IDENT | IDENTQ ;
 array_primary
 :   '[' (expression_list)? ']'
     //array of (w) words or (s) symbols
-|   ('%w{'|'%s{') IDENT* '}'
+|   ('%w{'|'%s{') array_ele_name* '}'
 ;
+
+array_ele_name: IDENT ;
 
 hash_primary: '{' (hash_key_value (',' hash_key_value)* )? '}' ;
 
@@ -366,10 +405,12 @@ here_doc: '%h{}' ;  //TODO
 html_primary: '%html{' NL* (html_code* | html_tag*) '}' ;
 
 html_code:
-	IDENT ('(' param_expression_list ')')? '{' NL*
+	html_tagname ('(' param_expression_list ')')? '{' NL*
 		html_code_content*
 	'}'
 ;
+
+html_tagname: IDENT ;
 
 html_code_content
 :	inline_eval
@@ -378,9 +419,9 @@ html_code_content
 ;
 
 html_tag:
-	'<' IDENT html_attribute* '>'
+	'<' html_tagname html_attribute* '>'
 		html_tag_content*
-	('</' IDENT '>')?
+	('</' html_tagname '>')?
 ;
 
 html_tag_content
@@ -389,7 +430,9 @@ html_tag_content
 |	~'}'
 ;
 
-html_attribute: IDENT '=' STRING ;
+html_attribute_name: IDENT ;
+
+html_attribute: html_attribute_name '=' STRING ;
 
 sass_primary:
 	'%sass{' NL*

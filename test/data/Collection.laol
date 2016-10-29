@@ -1,7 +1,7 @@
 // All objects are immutable (val) by default
 
 class Array {
-    public abstract def size
+    public abstract def size =>int
     public abstract def empty?
     public abstract def each(->kv(ix, value))
     public abstract def [](ix)
@@ -10,7 +10,7 @@ class Array {
 }
 
 class Map {
-    public abstract def size
+    public abstract def size =>int
     public abstract def empty?
     public abstract def keys
     public abstract def values
