@@ -10,17 +10,17 @@ public abstract class LaolObject {
     protected LaolObject() {
     }
 
-    protected final void setMutability() {
+    public final void setMutable() {
         m_mutable = true;
     }
 
-    protected final boolean isMutable() {
+    public final boolean isMutable() {
         return m_mutable;
     }
 
     protected void mutableCheck(final boolean enable) {
         if (enable && !m_mutable) {
-            throw new RuntimeException("cannot change immutable object");
+            throw new LaolException.Immutable();
         }
     }
 
@@ -31,6 +31,12 @@ public abstract class LaolObject {
     public boolean isNull() {
         return false;
     }
+
+    @Override
+    public abstract boolean equals(Object obj);
+
+    @Override
+    public abstract int hashCode();
     
     private boolean m_mutable = false;
 }

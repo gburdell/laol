@@ -2,6 +2,7 @@ package laol.rt;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Objects;
 
 /**
  * Array/List implementation.
@@ -62,12 +63,32 @@ public final class LaolArray extends LaolObject {
         return (0 <= i) && (m_eles.size() > i);
     }
     
-    public class IndexException extends LaolException {
+    public static class IndexException extends LaolException {
         
         public IndexException(final LaolInteger ix) {
             super("Invalid index: " + ix.get());
         }
         
+    }
+
+    @Override
+    public int hashCode() {
+        return m_eles.hashCode();
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final LaolArray other = (LaolArray) obj;
+        return Objects.equals(this.m_eles, other.m_eles);
     }
     
     private final ArrayList<LaolObject> m_eles;
