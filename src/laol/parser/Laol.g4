@@ -130,9 +130,9 @@ method_name
 ;
 
 method_name_op
-:   '[]='
-|   '[]'
-|   '()'
+:   '[' ']' '='
+|   '[' ']'
+|   '(' ')'
 |   unary_op
 |   binary_op
 |   assignment_op
