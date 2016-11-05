@@ -29,6 +29,8 @@ public class LaolParserTest {
             CommonTokenStream tokens = new CommonTokenStream(lexer);
             LaolParser parser = new LaolParser(tokens);
             ParseTree tree = parser.file();
+            Analyzer analyzer = new Analyzer();
+            analyzer.visit(tree);
             System.out.println(tree.toStringTree(parser));
         }
     } 
