@@ -21,38 +21,42 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
+package laol.parser;
 
-package laol.rt;
+import gblib.File;
+import java.util.LinkedList;
+import java.util.List;
 
 /**
- *
+ * Manage require statements.
  * @author gburdell
  */
-public class Null extends LaolObject {
-
-    @Override
-    public boolean isNull() {
-        return true;
-    }
-
-    @Override
-    public int hashCode() {
-        return HASHCODE;
-    }
-    
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj) {
-            return true;
+public class Require {
+    public static void addSearchPath(String... paths) {
+        for (String path : paths) {
+            stSearchPaths.add(File.getCanonicalPath(path));
         }
-        return getClass() == obj.getClass();
-    }
-
-    private static final Null THE_ONE = new Null();
-    private static final int HASHCODE = 0xdeadbeef;
-    
-    public static Null getNull() {
-        return THE_ONE;
     }
     
+    public File search(final String fileName) {
+        for (String dir : stSearchPaths) {
+            File fullPath = new File(dir, fileName);
+            if (fullPath.exists()) {
+                return fullPath;
+            }
+        }
+        return null;
+    }
+    
+    private static final List<String> stSearchPaths = new LinkedList<>();
+    
+    static {
+        //add from env
+        final String paths = System.getenv("LAOL_LIBPATH");
+        if (null != paths) {
+            addSearchPath(paths.split(":"));
+        }
+        //add our cwd
+        addSearchPath(".");
+    }
 }

@@ -23,10 +23,12 @@
  */
 package laol.parser;
 
+import gblib.Util;
+import static gblib.Util.invariant;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.util.HashMap;
+import java.util.Map;
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.tree.AbstractParseTreeVisitor;
 import org.antlr.v4.runtime.tree.ParseTree;
@@ -57,23 +59,30 @@ public class Analyzer extends AbstractParseTreeVisitor<Void> implements LaolVisi
     private Void _visitAlternative(final ParserRuleContext ctx) {
         final int n = ctx.getChildCount();
         if (0 < n) {
-            assert (1 == n);
+            invariant (1 == n);
             String name = ctx.getChild(0).getClass().getSimpleName();
-            int i = name.indexOf("Context");
-            String visitMethodName = "visit" + name.substring(0, i);
-            String parmTypeName = this.getClass().getPackage().getName()
-                    + ".LaolParser$" //inner class
-                    + name;
             try {
-                Class parmType = Class.forName(parmTypeName);
-                Method visitMethod = this.getClass().getMethod(visitMethodName, parmType);
+                if (!stVisitMethodByCtx.containsKey(name)) {
+                    int i = name.indexOf("Context");
+                    String visitMethodName = "visit" + name.substring(0, i);
+                    String parmTypeName = this.getClass().getPackage().getName()
+                            + ".LaolParser$" //inner class
+                            + name;
+                    Class parmType = Class.forName(parmTypeName);
+                    stVisitMethodByCtx.put(
+                            name, 
+                            this.getClass().getMethod(visitMethodName, parmType));
+                }
+                Method visitMethod = stVisitMethodByCtx.get(name);
                 visitMethod.invoke(this, ctx.getChild(0));
             } catch (ClassNotFoundException | NoSuchMethodException | SecurityException | IllegalAccessException | IllegalArgumentException | InvocationTargetException ex) {
-                Logger.getLogger(Analyzer.class.getName()).log(Level.SEVERE, null, ex);
+                Util.abnormalExit(ex);
             }
         }
         return null;
     }
+
+    private static final Map<String, Method> stVisitMethodByCtx = new HashMap<>();
 
     @Override
     public Void visitFile(LaolParser.FileContext ctx) {

@@ -24,6 +24,7 @@
 
 package laol.rt;
 
+import gblib.Util;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -39,19 +40,16 @@ public final class LaolMap extends LaolObject {
     }
     
     //operator []=
-    public LaolObject set(final LaolObject key, final LaolObject val) {
+    public <T extends LaolObject> T set(final LaolObject key, final T val) {
         mutableCheck();
         m_map.put(key, val);
         return val;
     }
     
     //operator []
-    public LaolObject get(final LaolObject key) {
+    public <T extends LaolObject> T get(final LaolObject key) {
         LaolObject val = m_map.get(key);
-        if (null == val) {
-            val = Null.getNull();
-        }
-        return val;
+        return Util.downCast(val);
     }
     
     //empty?

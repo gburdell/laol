@@ -24,6 +24,7 @@
 
 package laol.rt;
 
+import gblib.Util;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Objects;
@@ -44,14 +45,14 @@ public final class LaolArray extends LaolObject {
     }
 
     //operator <<
-    public LaolArray add(final LaolObject val) {
+    public <T extends LaolObject> LaolArray add(final T val) {
         mutableCheck();
         m_eles.add(val);
         return this;
     }
 
     //operator []=
-    public LaolObject set(final LaolInteger ix, final LaolObject val) {
+    public <T extends LaolObject> T set(final LaolInteger ix, final T val) {
         mutableCheck();
         final int i = realIndex(ix);
         if (isValidIndex(i)) {
@@ -62,10 +63,10 @@ public final class LaolArray extends LaolObject {
     }
 
     //operator []
-    public LaolObject get(final LaolInteger ix) {
+    public <T extends LaolObject> T get(final LaolInteger ix) {
         final int i = realIndex(ix);
-        final LaolObject val = isValidIndex(i) ? m_eles.get(i) : Null.getNull();
-        return val;
+        final LaolObject val = isValidIndex(i) ? m_eles.get(i) : null;
+        return Util.downCast(val);
     }
 
     //empty?

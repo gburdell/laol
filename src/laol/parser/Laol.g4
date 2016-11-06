@@ -334,6 +334,7 @@ binary_op :
 |	rel_op
 |	cmp_op
 |	'&' | '|' | '^' | '&&' | '||'
+|   'or' | 'and'
 ;
 
 assignment_op
@@ -348,6 +349,7 @@ assignment_op
 |   '+='
 |   '/='
 |   '%='
+|   '||='
 ;
 
 block: anonymous_function_defn ;

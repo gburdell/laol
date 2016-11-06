@@ -28,5 +28,6 @@ package laol.rt;
  * @author gburdell
  */
 public class NewClass {
-    
+    public static class C1 {}
+    public static class C2 {}
 }
