@@ -24,6 +24,13 @@
 
 package laol.rt;
 
+import gblib.Util;
+import java.lang.reflect.Method;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 /**
  *
  * @author kpfalzer
@@ -54,5 +61,16 @@ public class LaolInteger extends LaolPrimitive<Integer> {
         final LaolInteger rval = new LaolInteger(get());
         set(get() - 1);
         return rval;
+    }
+    
+    private static final Map<String, Method> METHODS = new HashMap<>();
+
+    @Override
+    protected Method getMethod(String name) {
+        return METHODS.get(name);                    
+    }
+    
+    static {
+        addMethods(METHODS, laol.rt.LaolInteger.class);
     }
 }

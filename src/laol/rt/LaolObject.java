@@ -25,6 +25,11 @@
 package laol.rt;
 
 import gblib.Util;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Base class of all objects.
@@ -47,6 +52,34 @@ public abstract class LaolObject {
 
     public boolean isNull() {
         return false;
+    }
+    
+    private static final Class VOID = java.lang.Void.class;
+    
+    public LaolObject callPublicMethod(final String name, LaolObject... args) {
+        Method method = getMethod(name);
+        LaolObject rval = NULL;
+        try {
+            if (method.getReturnType().equals(VOID)) {
+                method.invoke(this, (Object[])args);
+            } else {
+                rval = Util.downCast(method.invoke(this, (Object[])args));
+            }
+        } catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException ex) {
+            Util.abnormalExit(ex);
+        }
+        return rval;
+    }
+    
+    protected Method getMethod(final String name) {
+        return null;
+    }
+    
+    protected static void addMethods(Map<String, Method> to, final Class cls) {
+        Method[] methods = cls.getMethods();
+        for (Method m : methods) {
+            Util.invariant(null == to.put(m.getName(), m));
+        }        
     }
     
     protected void mutableCheck(final boolean enable) {

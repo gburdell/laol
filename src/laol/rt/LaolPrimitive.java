@@ -32,7 +32,7 @@ import java.util.Objects;
  * @author kpfalzer
  * @param <T> type to box.
  */
-public class LaolPrimitive<T> extends LaolObject {
+public abstract class LaolPrimitive<T> extends LaolObject {
     public LaolPrimitive(final T val) {
         m_val = val;
     }
