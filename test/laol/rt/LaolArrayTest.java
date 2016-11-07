@@ -21,54 +21,57 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-
 package laol.rt;
 
 import gblib.Util;
+import org.junit.Test;
+import static org.junit.Assert.*;
 
 /**
- * Base class of all objects.
  *
- * @author kpfalzer
+ * @author gburdell
  */
-public abstract class LaolObject {
-
-    protected LaolObject() {
+public class LaolArrayTest {
+    
+    @Test
+    public void testAdd() {
+        final LaolArray dut = (new LaolArray()).setMutable();
+        dut.add(new LaolInteger(1234)).add(new LaolInteger(5678));
+        assertEquals(new LaolInteger(2), dut.size());
     }
 
-    public final <T extends LaolObject> T setMutable() {
-        m_mutable = true;
-        return Util.downCast(this);
+    @Test
+    public void testSet() {
     }
 
-    public final boolean isMutable() {
-        return m_mutable;
+    @Test
+    public void testGet() {
+        final LaolArray dut = (new LaolArray()).setMutable();
+        final LaolInteger vals[] = {
+            new LaolInteger(1234),
+            new LaolInteger(5678)
+        };
+        dut.add(vals[0]).add(vals[1]);
+        LaolObject asObj = dut.get(0);
+        assertEquals(vals[0], asObj);
+        LaolInteger asInt = Util.downCast(dut.get(1));
+        assertEquals(vals[1], asInt);
     }
 
-    public boolean isNull() {
-        return false;
+    @Test
+    public void testIsEmpty() {
+    }
+
+    @Test
+    public void testSize() {
+    }
+
+    @Test
+    public void testHashCode() {
+    }
+
+    @Test
+    public void testEquals() {
     }
     
-    protected void mutableCheck(final boolean enable) {
-        if (enable && !m_mutable) {
-            throw new LaolException.Immutable();
-        }
-    }
-
-    protected void mutableCheck() {
-        mutableCheck(true);
-    }
-       
-    public static class Null extends LaolObject {
-
-        @Override
-        public boolean isNull() {
-            return true;
-        }
-        
-    }
-    
-    public static final Null NULL = new Null();
-    
-    private boolean m_mutable = false;
 }

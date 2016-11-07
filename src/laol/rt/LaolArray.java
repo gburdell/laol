@@ -21,7 +21,6 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-
 package laol.rt;
 
 import gblib.Util;
@@ -52,7 +51,7 @@ public final class LaolArray extends LaolObject {
     }
 
     //operator []=
-    public <T extends LaolObject> T set(final LaolInteger ix, final T val) {
+    public <T extends LaolObject> LaolObject set(final LaolInteger ix, final T val) {
         mutableCheck();
         final int i = realIndex(ix);
         if (isValidIndex(i)) {
@@ -62,8 +61,12 @@ public final class LaolArray extends LaolObject {
         throw new IndexException(ix);
     }
 
+    public LaolObject get(final LaolInteger ix) {
+        return get(ix.get());
+    }
+
     //operator []
-    public <T extends LaolObject> T get(final LaolInteger ix) {
+    public LaolObject get(final int ix) {
         final int i = realIndex(ix);
         final LaolObject val = isValidIndex(i) ? m_eles.get(i) : null;
         return Util.downCast(val);
@@ -78,22 +81,25 @@ public final class LaolArray extends LaolObject {
         return new LaolInteger(m_eles.size());
     }
 
-    private int realIndex(final LaolInteger ix) {
-        int i = ix.get();
+    private int realIndex(int i) {
         i = (0 > i) ? (m_eles.size() + i) : i;
         return i;
+    }
+
+    private int realIndex(final LaolInteger ix) {
+        return realIndex(ix.get());
     }
 
     private boolean isValidIndex(int i) {
         return (0 <= i) && (m_eles.size() > i);
     }
-    
+
     public static class IndexException extends LaolException {
-        
+
         public IndexException(final LaolInteger ix) {
             super("Invalid index: " + ix.get());
         }
-        
+
     }
 
     @Override
@@ -115,6 +121,6 @@ public final class LaolArray extends LaolObject {
         final LaolArray other = (LaolArray) obj;
         return Objects.equals(this.m_eles, other.m_eles);
     }
-    
+
     private final ArrayList<LaolObject> m_eles;
 }

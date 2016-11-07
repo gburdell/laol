@@ -21,54 +21,55 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-
 package laol.rt;
 
-import gblib.Util;
+import org.junit.Test;
+import static org.junit.Assert.*;
 
 /**
- * Base class of all objects.
  *
- * @author kpfalzer
+ * @author gburdell
  */
-public abstract class LaolObject {
-
-    protected LaolObject() {
-    }
-
-    public final <T extends LaolObject> T setMutable() {
-        m_mutable = true;
-        return Util.downCast(this);
-    }
-
-    public final boolean isMutable() {
-        return m_mutable;
-    }
-
-    public boolean isNull() {
-        return false;
-    }
+public class LaolMapTest {
     
-    protected void mutableCheck(final boolean enable) {
-        if (enable && !m_mutable) {
-            throw new LaolException.Immutable();
+    @Test
+    public void testSet() {
+        LaolMap dut = (new LaolMap()).setMutable();
+        LaolString key = new LaolString("foo");
+        LaolInteger val = new LaolInteger(1234);
+        dut.set(key, val);
+        LaolObject from = dut.get(key);
+        assertEquals(val, from);
+        key = new LaolString("bar");
+        from = dut.get(key);
+        assertTrue(from.isNull());
+        {
+            LaolDouble key2 = new LaolDouble(1.234);
+            LaolString val2 = new LaolString("5.678");
+            dut.set(key2, val2);
+            LaolObject from2 = dut.get(key2);
+            assertEquals(from2, val2);
         }
     }
 
-    protected void mutableCheck() {
-        mutableCheck(true);
+    @Test
+    public void testGet() {
     }
-       
-    public static class Null extends LaolObject {
 
-        @Override
-        public boolean isNull() {
-            return true;
-        }
-        
+    @Test
+    public void testIsEmpty() {
+    }
+
+    @Test
+    public void testSize() {
+    }
+
+    @Test
+    public void testHashCode() {
+    }
+
+    @Test
+    public void testEquals() {
     }
     
-    public static final Null NULL = new Null();
-    
-    private boolean m_mutable = false;
 }
