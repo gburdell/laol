@@ -21,7 +21,6 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-
 package laol.rt;
 
 import gblib.Util;
@@ -53,35 +52,39 @@ public abstract class LaolObject {
     public boolean isNull() {
         return false;
     }
-    
+
     private static final Class VOID = java.lang.Void.class;
-    
+
     public LaolObject callPublicMethod(final String name, LaolObject... args) {
         Method method = getMethod(name);
         LaolObject rval = NULL;
         try {
             if (method.getReturnType().equals(VOID)) {
-                method.invoke(this, (Object[])args);
+                method.invoke(this, (Object[]) args);
             } else {
-                rval = Util.downCast(method.invoke(this, (Object[])args));
+                rval = Util.downCast(method.invoke(this, (Object[]) args));
             }
         } catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException ex) {
             Util.abnormalExit(ex);
         }
         return rval;
     }
-    
+
     protected Method getMethod(final String name) {
         return null;
     }
-    
+
     protected static void addMethods(Map<String, Method> to, final Class cls) {
         Method[] methods = cls.getMethods();
         for (Method m : methods) {
-            Util.invariant(null == to.put(m.getName(), m));
-        }        
+            if (!java.lang.Object.class.equals(cls)) {  //not for any lowest-level
+                if (!to.containsKey(m.getName())) { //only 1st time
+                    to.put(m.getName(), m);
+                }
+            }
+        }
     }
-    
+
     protected void mutableCheck(final boolean enable) {
         if (enable && !m_mutable) {
             throw new LaolException.Immutable();
@@ -91,17 +94,17 @@ public abstract class LaolObject {
     protected void mutableCheck() {
         mutableCheck(true);
     }
-       
+
     public static class Null extends LaolObject {
 
         @Override
         public boolean isNull() {
             return true;
         }
-        
+
     }
-    
+
     public static final Null NULL = new Null();
-    
+
     private boolean m_mutable = false;
 }

@@ -24,12 +24,9 @@
 
 package laol.rt;
 
-import gblib.Util;
 import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  *
@@ -51,7 +48,7 @@ public class LaolInteger extends LaolPrimitive<Integer> {
         set(get() + 1);
         return rval;
     }
-
+    
     public LaolInteger preDecrOp() {
         set(get() - 1);
         return this;

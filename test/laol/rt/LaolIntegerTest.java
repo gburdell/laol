@@ -39,7 +39,7 @@ public class LaolIntegerTest {
         assertEquals(expResult, instance);
     }
 
-     @Test
+    @Test
     public void testPreDecrOp() {
         System.out.println("preDecrOp");
         int ival = 1;
@@ -61,5 +61,18 @@ public class LaolIntegerTest {
         assertEquals(expResult, result);
         expResult = new LaolInteger(ival - 1);
         assertEquals(expResult, instance);
+    }
+
+    @Test
+    public void testCallPublicMethod() {
+        System.out.println("callPublicMethod");
+        int ival = 1234;
+        LaolInteger instance = (new LaolInteger(ival)).setMutable();
+        LaolObject rval = instance.callPublicMethod("preDecrOp");
+        LaolInteger expect = new LaolInteger(--ival);
+        assertEquals(expect, rval);
+        rval = rval.callPublicMethod("preDecrOp");
+        expect = new LaolInteger(--ival);
+        assertEquals(expect, rval);
     }
 }
