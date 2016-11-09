@@ -1,35 +1,13 @@
+//line comment
+a =5;
+a = {a:6}
+foo(bar, b)
+foo(bar, b: 34)
+a.method(4).m2.m1(3,4, c: 12)[3..4].bar ->(a){}.m2
 
-a,b,c = {a:1}, b[5..3]+1
-foo(a[3],{b:2}).proc1({a:{b:[1,2]},c:nil})
+here_is a: :bar, b: foo, c: "dog"
 
-if b a = 7'b01 
-else a = 4 if true
-
-/*r =*/  case x {when 123,a+b: 456} unless foo.ok? if bar.nil?
-
-
-if we.all.ok?
-abc = "def"
-else 
-//'def' is a keyword!
-def = 14'b0001
-
-private var public = 5;
-
-a =5 //NOT SUPPORTED: unless y==4
-
-class Foo() {}
-
-/**/
-abc =<<HERE 
-we are 
-HERE
-
-<<THERE
-all
-this todo
-THERE
-/**/
-
-b = a.f + 5
-a = v.a % 12
+/* a longer
+ * comment
+ */
+dsl_like a, b, d: 456
