@@ -32,8 +32,8 @@ import laol.parser.IDENT;
 public class ClassName extends Item {
     public ClassName(final laol.parser.apfe.ClassName decl) {
         super(decl);
-        m_name = new Ident((IDENT)decl.getBaseAccepted());
+        m_name = null; //TODO new Ident((IDENT)decl.getBaseAccepted());
     }
     
-    private final Ident m_name;
+    private final ScopedName m_name;
 }

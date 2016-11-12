@@ -84,7 +84,6 @@ array_primary <-
 
 primary_expression <-
     K_NIL
-/   K_NEW
 /   K_FILE / K_TARGET
 /   K_TRUE / K_FALSE
 /   K_THIS / K_SUPER
@@ -92,7 +91,7 @@ primary_expression <-
 /   SYMBOL
 /	LPAREN expression RPAREN
 /   here_doc
-/   vm_name
+/   scoped_name
 /   Number
 /   hash_primary
 /   array_primary
@@ -100,7 +99,7 @@ primary_expression <-
 /	html_primary
 /	sass_primary
 
-vm_name <- 
+scoped_name <- 
 	COLON2 IDENT
 /	(IDENT COLON2)* IDENT
 
@@ -216,7 +215,7 @@ lhs_ref <-
 /   lhs_ref LPAREN param_expression_list? RPAREN
 /   lhs_ref DOT IDENT
 /   lhs_ref (PLUS2 / MINUS2) 
-/   vm_name
+/   scoped_name
 
 assignment_op <-
     EQ
@@ -294,8 +293,7 @@ catch_statement <- K_CATCH expression statement eos
 
 finally_statement <- K_FINALLY statement eos
 
-mixin_name <-
-    IDENT (COLON2 IDENT)*
+mixin_name <- scoped_name
 
 mixin_statement <- K_MIXIN module_name (COMMA module_name)* eos
     
@@ -303,19 +301,17 @@ s_tail <-
     statement_modifier eos
 /   eos
 
-module_name <- IDENT
+module_name <- scoped_name
 
 module_declaration <-
     K_MODULE module_name LCURLY
         module_item*
     RCURLY eos
 
-class_name <- IDENT
+class_name <- scoped_name
 
 class_declaration <-
-    // Scala style
     access_modifier?
-    K_ABSTRACT?
     K_CLASS class_name
         method_param_decl?
         class_extends?
@@ -347,7 +343,8 @@ method_param_decl_ele <-
 	/	STAR? param_name method_param_decl_default?
 	)
 
-param_name <- IDENT
+// @foo declares foo as a member
+param_name <- AT? IDENT
 
 type_name <- builtin_type_name / IDENT 
 
@@ -378,7 +375,7 @@ anonymous_function_defn <-
 
 method_declaration <-
     access_modifier?
-    (K_ABSTRACT | K_STATIC)?
+    K_STATIC?
     K_DEF method_name method_param_decl? method_return_decl?
         //NOTE: abstract declaration if empty
         (LCURLY method_body RCURLY)?
@@ -386,7 +383,7 @@ method_declaration <-
     
 method_name <-
     method_name_op
-/   IDENT
+/   scoped_name
 
 method_name_op <-
     LBRACK RBRACK EQ  // []=
@@ -447,7 +444,7 @@ REXEQ       <- "=~" Spacing
 EXCL        <- '!' !('=' / '~') Spacing
 NEQ         <- "!=" Spacing
 REXNEQ      <- "!~" Spacing
-//AT          <- '@' !'@' Spacing
+AT          <- '@' !'@' Spacing
 //AT2         <- "@@" Spacing
 TILDE       <- '~' Spacing
 CARET       <- '^' Spacing
@@ -479,7 +476,6 @@ RBRACK      <- ']' Spacing
 PCNT        <- '%' !'=' Spacing
 PCNT_EQ     <- "%=" Spacing
 
-K_ABSTRACT  <- "abstract"   K_tail
 K_ALIAS     <- "alias"      K_tail
 K_BREAK     <- "break"      K_tail
 K_BOOL      <- "bool"       K_tail

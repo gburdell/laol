@@ -48,8 +48,8 @@ public class AstTest {
         final String fns[] = {
             //"test/data/t2.txt",
             //"test/data/t1.txt",
-            "test/data/collections.laol",
-            "test/data/t3.txt"
+            "test/data/collection.laol",
+            //"test/data/t3.txt"
         };
         try {
             for (String fn : fns) {

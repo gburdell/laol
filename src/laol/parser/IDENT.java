@@ -48,7 +48,7 @@ public class IDENT extends Acceptor {
 
     private static final Set<String> KEYWORD_MAP = new HashSet<>(
             Arrays.asList(
-                    "abstract", "alias",
+                    "alias",
                     "bool", "break",
                     "case", "catch", "class",
                     "def", "double",

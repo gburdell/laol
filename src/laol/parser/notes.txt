@@ -1,0 +1,42 @@
+Class
+-----
+A class declaration is similar to Scala and Ruby.
+Example:
+
+class C {}
+		defines C with no members.
+
+class D(a, b) {}
+	defines D with 2 immutable members (public visible).	
+			
+class E {val A = 1; var b}
+	defines E with immutable member A and mutable member b.			
+	Member are visible by other methods defined later.
+
+class F(a,b) {var c; def F {c = a + b}}
+		defines F with 2 immutable members: a and b.
+	Another member c is also declared.	
+	The F method is the initializer called after creation of F.
+	Since class is defined as 'F(a,b)', it would be an error to
+	define 'F' with any arguments.
+
+class G {var c; def G(@a, @b) {c = a + b}}
+	defines G exactly as F, above.
+	The @ prefix declares argument to be a new member.
+
+class H {
+	var c;
+	def H(@a, @b) {c = a + b}
+	def H(a, @b, c) {...} //error since a and c conflict w/ members a, c.	
+}
+	defines H with 2 possible constructors/initializers.
+	a and b are declared as members.
+
+The member set is the union of all @v (v is any name) in declared initializers.
+
+If 'class X(a,b)' declared; then it is error to later define other constructors
+with any parameters; i.e., only the initializer 'def X {}' allowed.
+
+You must use 'class X {def X(a,b){}; def X(a,b,c){}} to define different
+constructors.
+-------------------------------------------------------------------------------

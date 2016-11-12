@@ -22,27 +22,20 @@
  * THE SOFTWARE.
  */
 package laol.ast;
-
 import apfe.runtime.Acceptor;
+import apfe.runtime.Marker;
+import apfe.runtime.Repetition;
+import apfe.runtime.Sequence;
 import apfe.runtime.Util;
 import java.util.LinkedList;
 import java.util.List;
-import laol.parser.IDENT;
 
 /**
  *
  * @author gburdell
  */
-public class VariableName extends Item {
-
-    public VariableName(final laol.parser.apfe.VariableName decl) {
+public class ScopedName extends Item {
+    public ScopedName(final laol.parser.apfe.ScopedName decl) {
         super(decl);
-        m_names.add(getIdent(0));
-        for (Acceptor var : asRepetition(1).getAccepted()) {
-            m_names.add(new Ident(Util.<IDENT>extractEle(var, 1)));
-        }
-
     }
-
-    private final List<Ident> m_names = new LinkedList<>();
 }

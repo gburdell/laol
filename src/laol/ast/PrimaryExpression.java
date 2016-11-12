@@ -56,7 +56,6 @@ public class PrimaryExpression extends Item {
     
     static {
         final Class classes[] = {
-            laol.parser.apfe.KNEW.class,
             laol.parser.apfe.KNIL.class,
             laol.parser.apfe.KFILE.class,
             laol.parser.apfe.KTARGET.class,

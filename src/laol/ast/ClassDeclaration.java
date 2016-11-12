@@ -32,15 +32,14 @@ public class ClassDeclaration extends Item {
     public ClassDeclaration(final laol.parser.apfe.ClassDeclaration decl) {
         super(decl);
         m_access = oneOrNone(0);
-        m_isAbstract = (0 < asRepetition(1).sizeofAccepted());
-        m_name = createItem(3);
-        m_parms = oneOrNone(4);
-        m_extends = oneOrNone(5);
-        m_body = createItem(7);
+        m_name = createItem(2);
+        m_parms = oneOrNone(3);
+        m_extends = oneOrNone(4);
+        m_body = createItem(6);
     }
 
     private final AccessModifier  m_access;
-    private final boolean m_isAbstract;
+    //TODO private final boolean m_isAbstract;
     private final ClassName m_name;
     private final MethodParamDecl   m_parms;
     private final ClassExtends  m_extends;
