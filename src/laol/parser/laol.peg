@@ -204,11 +204,20 @@ array_select_expression <-
     expression DOT2 expression
 /   expression_list
 
-var_decl <- lhs_decl IDENT (COMMA IDENT)* eos
+/*TODO: need to add predicate to distinguish between
+ *		type_decl scoped_name
+ *		scoped_name
+ * when LA==IDENT...
+ */
+var_decl_statement <- 
+	type_decl? scoped_name (COMMA scoped_name)* 
+		(assignment_op assignment_rhs)? eos
 
-assignment_lhs <- lhs_decl lhs_ref (COMMA lhs_ref)*
+assign_statement <- assignment_lhs assignment_op assignment_rhs eos
 
-lhs_decl <- access_modifier? K_STATIC? mutability?
+assignment_lhs <- type_decl? lhs_ref (COMMA lhs_ref)*
+
+type_decl <- access_modifier? K_STATIC? mutability? type_name
 
 lhs_ref <-
     lhs_ref LBRACK array_select_expression RBRACK
@@ -269,8 +278,6 @@ block_statement <- LCURLY statement* RCURLY  ;
 break_statement <- K_BREAK eos ;
 next_statement <-  K_NEXT eos ;
 alias_statement <- K_ALIAS method_name method_name eos ;
-assign_statement <- assignment_lhs assignment_op assignment_rhs eos ;
-var_decl_statement <- var_decl eos ;
 expression_statement <- expression eos ;
 
 try_statement <-
@@ -289,7 +296,7 @@ return_statement <- K_RETURN (expression)? eos
 
 throw_statement <- K_THROW expression eos
 
-catch_statement <- K_CATCH expression statement eos
+catch_statement <- K_CATCH expression eos statement eos
 
 finally_statement <- K_FINALLY statement eos
 
@@ -346,7 +353,9 @@ method_param_decl_ele <-
 // @foo declares foo as a member
 param_name <- AT? IDENT
 
-type_name <- builtin_type_name / IDENT 
+type_name <- 
+	builtin_type_name 
+/ 	scoped_name
 
 builtin_type_name <-
 	K_INT / K_DOUBLE / K_BOOL / K_STRING
@@ -362,7 +371,8 @@ class_extends <-
 
 class_name_list <- class_name (COMMA class_name)*
 
-anonymous_function_decl <- ARROW param_name method_param_decl? method_return_decl?
+anonymous_function_decl <- 
+	ARROW param_name method_param_decl? method_return_decl?
 
 method_return_decl <-
 	EQGT type_name
@@ -406,16 +416,16 @@ case_statement <-
     RCURLY eos
 
 if_statement <-
-    (K_IF / K_UNLESS) expression statement
-        (K_ELSIF expression statement)*
-        (K_ELSE statement)?
+    (K_IF / K_UNLESS) expression eos statement eos
+        (K_ELSIF expression eos statement eos)*
+        (K_ELSE statement eos)?
 
-while_statement <- K_WHILE expression statement eos
-until_statement <- K_UNTIL expression statement eos
+while_statement <- K_WHILE expression eos statement eos
+until_statement <- K_UNTIL expression eos statement eos
 
 enumerable_expression <- expression
 
-for_statement <- K_FOR IDENT K_IN enumerable_expression statement eos
+for_statement <- K_FOR IDENT K_IN enumerable_expression eos statement eos
 ;
 
 // a bit more complicated, so customize

@@ -33,7 +33,7 @@ public class IDENT extends Acceptor {
         return match;
     }
 
-    private static final boolean ALLOW_KEYWORDS = true;
+    private static final boolean ALLOW_KEYWORDS = false;
 
     private String m_ident;
 

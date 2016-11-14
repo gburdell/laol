@@ -2,9 +2,10 @@ if b
     a = 7'b01
 else 
     a = 4
-
+/**
 b = 6 unless a == b
 
 int b = 7
+**/
 
 
