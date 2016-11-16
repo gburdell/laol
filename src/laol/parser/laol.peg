@@ -145,7 +145,7 @@ cmp_expression <-
 	cmp_expression cmp_op rel_expression
 /	rel_expression
 
-cmp_op <- NEQ / EQ2 / REXEQ / REXNEQ
+cmp_op <- CMP / NEQ / EQ2 / REXEQ / REXNEQ
 
 and_expression <-
 	and_expression AND cmp_expression
@@ -440,7 +440,8 @@ DOT         <- '.' !'.' Spacing
 DOT2        <- ".." Spacing
 COMMA       <- ',' Spacing
 LT          <- '<' !('<' / '=') Spacing
-LTEQ        <- "<=" Spacing
+CMP         <- "<=>" Spacing
+LTEQ        <- "<=" !'>' Spacing
 LT2         <- "<<" !('=' / [a-zA-Z_]) Spacing
 LT2_EQ      <- "<<=" Spacing
 GT          <- '>' !('>' / '=') Spacing
