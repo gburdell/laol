@@ -23,7 +23,6 @@
  */
 package laol.rt;
 
-import gblib.Util;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
@@ -52,10 +51,10 @@ public class LaolArrayTest {
             new LaolInteger(5678)
         };
         dut.add(vals[0]).add(vals[1]);
-        LaolInteger v1 = dut.get(LaolInteger.class, new LaolInteger(0));
+        LaolInteger v1 = dut.get(new LaolInteger(0));
         assertEquals(vals[0], v1);
         assertTrue(!v1.isMutable());
-        LaolInteger v2 = dut.get(LaolInteger.class, new LaolInteger(1));
+        LaolInteger v2 = dut.get(new LaolInteger(1));
         assertEquals(vals[1], v2);
     }
 

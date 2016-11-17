@@ -29,9 +29,6 @@ package laol.rt;
  */
 public class LaolString extends LaolBox<String> {
 
-    public LaolString() {
-    }
-
     public LaolString(final String val) {
         super(val);
     }
@@ -39,19 +36,5 @@ public class LaolString extends LaolBox<String> {
     public LaolString plusEqOp(final LaolString a) {
         set(get() + a.get());
         return this;
-    }
-
-    @Override
-    public LaolString getNull() {
-        return new LaolString.Null();
-    }
-
-    public static class Null extends LaolString {
-
-        @Override
-        public boolean isNull() {
-            return true;
-        }
-
     }
 }

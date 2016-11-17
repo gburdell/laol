@@ -48,8 +48,8 @@ public class LaolMap extends LaolObject {
 
     //operator []
     public <K extends LaolObject, V extends LaolObject>
-            V get(final Class<V> valCls, final K key) {
-        return valOrNull(valCls, m_map.get(key));
+            V get(final K key) {
+        return valOrNull(m_map.get(key));
     }
 
     //empty?
@@ -79,19 +79,6 @@ public class LaolMap extends LaolObject {
         }
         final LaolMap other = (LaolMap) obj;
         return Objects.equals(this.m_map, other.m_map);
-    }
-
-    @Override
-    public LaolMap.Null getNull() {
-        return new LaolMap.Null();
-    }
-
-    public static class Null extends LaolMap {
-
-        @Override
-        public boolean isNull() {
-            return false;
-        }
     }
 
     private final Map<LaolObject, LaolObject> m_map = new LinkedHashMap<>();

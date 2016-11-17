@@ -23,7 +23,6 @@
  */
 package laol.rt;
 
-import gblib.Util;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Objects;
@@ -62,8 +61,8 @@ public class LaolArray extends LaolObject {
     }
 
     //operator []
-    public <T extends LaolObject> T get(final Class<T> valCls, final LaolInteger ix) {
-        return valOrNull(valCls, get(ix.get()));
+    public <T extends LaolObject> T get(final LaolInteger ix) {
+        return valOrNull(get(ix.get()));
     }
 
     private LaolObject get(final int ix) {
@@ -120,20 +119,6 @@ public class LaolArray extends LaolObject {
         }
         final LaolArray other = (LaolArray) obj;
         return Objects.equals(this.m_eles, other.m_eles);
-    }
-
-    @Override
-    public LaolArray.Null getNull() {
-        return new LaolArray.Null();
-    }
-
-    public static class Null extends LaolArray {
-
-        @Override
-        public boolean isNull() {
-            return true;
-        }
-    
     }
 
     private final ArrayList<LaolObject> m_eles;

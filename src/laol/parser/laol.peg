@@ -26,7 +26,7 @@ Grammar <- Spacing contents? EOF
 
 // optional modifier: a-z (overkill...)
 regexp_primary <-
-	"%r{" sp ('\\' . / !'}' .)+ '}' [a-z]* sp
+	"%r{" sp ('\\' . / !'}' .)+ '}' [i]? sp
 
 hash_primary <- LCURLY (hash_key_value (COMMA hash_key_value)*)? RCURLY
 

@@ -33,10 +33,6 @@ import java.util.Objects;
  */
 public abstract class LaolBox<T> extends LaolObject {
 
-    protected LaolBox() {
-        this(null);
-    }
-
     public LaolBox(final T val) {
         m_val = val;
     }
@@ -48,10 +44,7 @@ public abstract class LaolBox<T> extends LaolObject {
     }
 
     public final T get() {
-        if (isNull()) {
-            throw new LaolException.NullObject();
-        }
-        return m_val;
+        return m_val;  //could be null
     }
 
     @Override

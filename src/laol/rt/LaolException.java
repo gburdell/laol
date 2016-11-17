@@ -54,15 +54,4 @@ public class LaolException extends RuntimeException {
             this("invalid type");
         }
     }
-
-    public static class NullObject extends LaolException {
-
-        public NullObject(final String detail) {
-            super(detail);
-        }
-
-        public NullObject() {
-            this("null object");
-        }
-    }
 }

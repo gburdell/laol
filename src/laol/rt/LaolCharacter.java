@@ -29,24 +29,8 @@ package laol.rt;
  */
 public class LaolCharacter extends LaolBox<Character> {
 
-    public LaolCharacter() {
-    }
-
     public LaolCharacter(final Character val) {
         super(val);
     }
     
-    @Override
-    public LaolCharacter getNull() {
-        return new LaolCharacter.Null();
-    }
-
-    public static class Null extends LaolCharacter {
-
-        @Override
-        public boolean isNull() {
-            return true;
-        }
-
-    }
-}
+ }

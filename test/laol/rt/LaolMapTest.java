@@ -25,6 +25,7 @@ package laol.rt;
 
 import org.junit.Test;
 import static org.junit.Assert.*;
+import static laol.rt.LaolObject.isNull;
 
 /**
  *
@@ -38,16 +39,16 @@ public class LaolMapTest {
         LaolString key = new LaolString("foo");
         LaolInteger val = new LaolInteger(1234);
         dut.set(key, val);
-        LaolInteger from = dut.get(LaolInteger.class, key);
+        LaolInteger from = dut.get(key);
         assertEquals(val, from);
         key = new LaolString("bar");
-        from = dut.get(LaolInteger.class, key);
-        assertTrue(from.isNull());
+        from = dut.get(key);
+        assertTrue(isNull(from));
         {
             LaolDouble key2 = new LaolDouble(1.234);
             LaolString val2 = new LaolString("5.678");
             dut.set(key2, val2);
-            LaolString from2 = dut.get(LaolString.class, key2);
+            LaolString from2 = dut.get(key2);
             assertEquals(from2, val2);
         }
     }

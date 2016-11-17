@@ -29,24 +29,7 @@ package laol.rt;
  */
 public class LaolDouble extends LaolBox<Double> {
 
-    public LaolDouble() {
-    }
-
     public LaolDouble(final Double val) {
         super(val);
-    }
-
-    @Override
-    public LaolDouble getNull() {
-        return new LaolDouble.Null();
-    }
-
-    public static class Null extends LaolDouble {
-
-        @Override
-        public boolean isNull() {
-            return true;
-        }
-
     }
 }

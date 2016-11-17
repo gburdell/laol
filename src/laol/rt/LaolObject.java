@@ -24,9 +24,6 @@
 package laol.rt;
 
 import gblib.Util;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.util.Map;
 
 /**
  * Base class of all objects.
@@ -48,10 +45,6 @@ public abstract class LaolObject {
         return m_mutable;
     }
 
-    public boolean isNull() {
-        return false;
-    }
-
     protected void mutableCheck(final boolean enable) {
         if (enable && !m_mutable) {
             throw new LaolException.Immutable();
@@ -62,30 +55,13 @@ public abstract class LaolObject {
         mutableCheck(true);
     }
 
-    public static <T extends LaolObject> T getNull(final Class<T> cls) {
-        try {
-            return cls.newInstance().getNull();
-        } catch (InstantiationException | IllegalAccessException ex) {
-            throw new LaolException(ex.getMessage());
-        }
+    public static <T extends LaolObject> T valOrNull(final LaolObject val) {
+        return (null != val) ? Util.downCast(val) : null;
     }
 
-    public static <T extends LaolObject> T valOrNull(final Class<T> valCls, final LaolObject val) {
-        return (null != val) ? Util.downCast(val) : getNull(valCls);
+    public static <T extends LaolObject> boolean isNull(final T obj) {
+        return (null == obj);
     }
-
-    public <T extends LaolObject> T getNull() {
-        return Util.downCast(new LaolObject.Null());
-    }
-
-    public static class Null extends LaolObject {
-
-        @Override
-        public boolean isNull() {
-            return true;
-        }
-
-    }
-
+    
     private boolean m_mutable = false;
 }

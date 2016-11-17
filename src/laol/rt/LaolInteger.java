@@ -28,8 +28,6 @@ package laol.rt;
  * @author kpfalzer
  */
 public class LaolInteger extends LaolBox<Integer> {
-    public LaolInteger() {}
-    
     public LaolInteger(final Integer val) {
         super(val);
     }
@@ -54,19 +52,5 @@ public class LaolInteger extends LaolBox<Integer> {
         final LaolInteger rval = new LaolInteger(get());
         set(get() - 1);
         return rval;
-    }
-    
-    @Override
-    public LaolInteger getNull() {
-        return new LaolInteger.Null();
-    }
-
-    public static class Null extends LaolInteger {
-
-        @Override
-        public boolean isNull() {
-            return true;
-        }
-
     }
 }
