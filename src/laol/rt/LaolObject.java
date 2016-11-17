@@ -52,38 +52,6 @@ public abstract class LaolObject {
         return false;
     }
 
-    private static final Class VOID = java.lang.Void.class;
-
-    public LaolObject callPublicMethod(final String name, LaolObject... args) {
-        Method method = getMethod(name);
-        LaolObject rval = getNull();
-        try {
-            if (method.getReturnType().equals(VOID)) {
-                method.invoke(this, (Object[]) args);
-            } else {
-                rval = Util.downCast(method.invoke(this, (Object[]) args));
-            }
-        } catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException ex) {
-            Util.abnormalExit(ex);
-        }
-        return rval;
-    }
-
-    protected Method getMethod(final String name) {
-        return null;
-    }
-
-    protected static void addMethods(Map<String, Method> to, final Class cls) {
-        Method[] methods = cls.getMethods();
-        for (Method m : methods) {
-            if (!java.lang.Object.class.equals(cls)) {  //not for any lowest-level
-                if (!to.containsKey(m.getName())) { //only 1st time
-                    to.put(m.getName(), m);
-                }
-            }
-        }
-    }
-
     protected void mutableCheck(final boolean enable) {
         if (enable && !m_mutable) {
             throw new LaolException.Immutable();
@@ -92,6 +60,18 @@ public abstract class LaolObject {
 
     protected void mutableCheck() {
         mutableCheck(true);
+    }
+
+    public static <T extends LaolObject> T getNull(final Class<T> cls) {
+        try {
+            return cls.newInstance().getNull();
+        } catch (InstantiationException | IllegalAccessException ex) {
+            throw new LaolException(ex.getMessage());
+        }
+    }
+
+    public static <T extends LaolObject> T valOrNull(final Class<T> valCls, final LaolObject val) {
+        return (null != val) ? Util.downCast(val) : getNull(valCls);
     }
 
     public <T extends LaolObject> T getNull() {

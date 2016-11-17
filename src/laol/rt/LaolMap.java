@@ -23,7 +23,6 @@
  */
 package laol.rt;
 
-import gblib.Util;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -34,7 +33,7 @@ import java.util.Objects;
  *
  * @author kpfalzer
  */
-public final class LaolMap extends LaolObject {
+public class LaolMap extends LaolObject {
 
     public LaolMap() {
     }
@@ -49,9 +48,8 @@ public final class LaolMap extends LaolObject {
 
     //operator []
     public <K extends LaolObject, V extends LaolObject>
-            get(final K key) {
-        LaolObject val = m_map.get(key);
-        return (null != val) ? val : NULL;
+            V get(final Class<V> valCls, final K key) {
+        return valOrNull(valCls, m_map.get(key));
     }
 
     //empty?
@@ -84,17 +82,16 @@ public final class LaolMap extends LaolObject {
     }
 
     @Override
-    public <T extends LaolObject> T getNull() {
-        return Util.downCast(new LaolMap.Null());
+    public LaolMap.Null getNull() {
+        return new LaolMap.Null();
     }
 
-    public static class Null extends LaolObject {
+    public static class Null extends LaolMap {
 
         @Override
         public boolean isNull() {
-            return true;
+            return false;
         }
-
     }
 
     private final Map<LaolObject, LaolObject> m_map = new LinkedHashMap<>();

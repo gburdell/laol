@@ -23,32 +23,34 @@
  */
 package laol.rt;
 
-import gblib.Util;
 import java.util.Objects;
 
 /**
- * Box primitive types.
+ * Box types.
  *
  * @author kpfalzer
  * @param <T> type to box.
  */
-public abstract class LaolPrimitive<T> extends LaolObject {
+public abstract class LaolBox<T> extends LaolObject {
 
-    private LaolPrimitive() {
+    protected LaolBox() {
         this(null);
     }
 
-    public LaolPrimitive(final T val) {
+    public LaolBox(final T val) {
         m_val = val;
     }
 
-    public final LaolPrimitive<T> set(final T val) {
+    public final LaolBox<T> set(final T val) {
         mutableCheck();
         m_val = val;
         return this;
     }
 
     public final T get() {
+        if (isNull()) {
+            throw new LaolException.NullObject();
+        }
         return m_val;
     }
 
@@ -68,24 +70,10 @@ public abstract class LaolPrimitive<T> extends LaolObject {
         if (getClass() != obj.getClass()) {
             return false;
         }
-        final LaolPrimitive<?> other = (LaolPrimitive<?>) obj;
+        final LaolBox<?> other = (LaolBox<?>) obj;
         return Objects.equals(this.m_val, other.m_val);
     }
 
-    @Override
-    public <T extends LaolObject> T getNull() {
-        return Util.downCast(new LaolPrimitive.Null<>());
-    }
-
-    public static class Null<T> extends LaolPrimitive<T> {
-
-        @Override
-        public boolean isNull() {
-            return true;
-        }
-
-    }
-    
     private T m_val;
 
 }

@@ -21,20 +21,37 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-
 package laol.rt;
 
 /**
  *
  * @author kpfalzer
  */
-public class LaolString extends LaolPrimitive<String> {
+public class LaolString extends LaolBox<String> {
+
+    public LaolString() {
+    }
+
     public LaolString(final String val) {
         super(val);
     }
-    
+
     public LaolString plusEqOp(final LaolString a) {
         set(get() + a.get());
         return this;
+    }
+
+    @Override
+    public LaolString getNull() {
+        return new LaolString.Null();
+    }
+
+    public static class Null extends LaolString {
+
+        @Override
+        public boolean isNull() {
+            return true;
+        }
+
     }
 }

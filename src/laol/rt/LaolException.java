@@ -21,7 +21,6 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-
 package laol.rt;
 
 /**
@@ -53,6 +52,17 @@ public class LaolException extends RuntimeException {
 
         public InvalidType() {
             this("invalid type");
+        }
+    }
+
+    public static class NullObject extends LaolException {
+
+        public NullObject(final String detail) {
+            super(detail);
+        }
+
+        public NullObject() {
+            this("null object");
         }
     }
 }

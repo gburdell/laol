@@ -33,7 +33,7 @@ import java.util.Objects;
  *
  * @author kpfalzer
  */
-public final class LaolArray extends LaolObject {
+public class LaolArray extends LaolObject {
 
     public LaolArray() {
         m_eles = new ArrayList();
@@ -51,7 +51,7 @@ public final class LaolArray extends LaolObject {
     }
 
     //operator []=
-    public <T extends LaolObject> LaolObject set(final LaolInteger ix, final T val) {
+    public <T extends LaolObject> T set(final LaolInteger ix, final T val) {
         mutableCheck();
         final int i = realIndex(ix);
         if (isValidIndex(i)) {
@@ -61,15 +61,15 @@ public final class LaolArray extends LaolObject {
         throw new IndexException(ix);
     }
 
-    public LaolObject get(final LaolInteger ix) {
-        return get(ix.get());
+    //operator []
+    public <T extends LaolObject> T get(final Class<T> valCls, final LaolInteger ix) {
+        return valOrNull(valCls, get(ix.get()));
     }
 
-    //operator []
-    public LaolObject get(final int ix) {
+    private LaolObject get(final int ix) {
         final int i = realIndex(ix);
         final LaolObject val = isValidIndex(i) ? m_eles.get(i) : null;
-        return Util.downCast(val);
+        return val;
     }
 
     //empty?
@@ -120,6 +120,20 @@ public final class LaolArray extends LaolObject {
         }
         final LaolArray other = (LaolArray) obj;
         return Objects.equals(this.m_eles, other.m_eles);
+    }
+
+    @Override
+    public LaolArray.Null getNull() {
+        return new LaolArray.Null();
+    }
+
+    public static class Null extends LaolArray {
+
+        @Override
+        public boolean isNull() {
+            return true;
+        }
+    
     }
 
     private final ArrayList<LaolObject> m_eles;

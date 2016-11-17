@@ -23,50 +23,56 @@
  */
 package laol.rt;
 
+import gblib.Util;
+import org.junit.Test;
+import static org.junit.Assert.*;
+
 /**
  *
- * @author kpfalzer
+ * @author gburdell
  */
-public class LaolInteger extends LaolBox<Integer> {
-    public LaolInteger() {}
+public class LaolArrayTest {
     
-    public LaolInteger(final Integer val) {
-        super(val);
+    @Test
+    public void testAdd() {
+        final LaolArray dut = (new LaolArray()).setMutable();
+        dut.add(new LaolInteger(1234)).add(new LaolInteger(5678));
+        assertEquals(new LaolInteger(2), dut.size());
     }
 
-    public LaolInteger preIncrOp() {
-        set(get() + 1);
-        return this;
+    @Test
+    public void testSet() {
     }
 
-    public LaolInteger postIncrOp() {
-        final LaolInteger rval = new LaolInteger(get());
-        set(get() + 1);
-        return rval;
+    @Test
+    public void testGet() {
+        final LaolArray dut = (new LaolArray()).setMutable();
+        final LaolInteger vals[] = {
+            new LaolInteger(1234),
+            new LaolInteger(5678)
+        };
+        dut.add(vals[0]).add(vals[1]);
+        LaolInteger v1 = dut.get(LaolInteger.class, new LaolInteger(0));
+        assertEquals(vals[0], v1);
+        assertTrue(!v1.isMutable());
+        LaolInteger v2 = dut.get(LaolInteger.class, new LaolInteger(1));
+        assertEquals(vals[1], v2);
     }
 
-    public LaolInteger preDecrOp() {
-        set(get() - 1);
-        return this;
+    @Test
+    public void testIsEmpty() {
     }
 
-    public LaolInteger postDecrOp() {
-        final LaolInteger rval = new LaolInteger(get());
-        set(get() - 1);
-        return rval;
+    @Test
+    public void testSize() {
+    }
+
+    @Test
+    public void testHashCode() {
+    }
+
+    @Test
+    public void testEquals() {
     }
     
-    @Override
-    public LaolInteger getNull() {
-        return new LaolInteger.Null();
-    }
-
-    public static class Null extends LaolInteger {
-
-        @Override
-        public boolean isNull() {
-            return true;
-        }
-
-    }
 }

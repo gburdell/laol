@@ -23,11 +23,53 @@
  */
 package laol.rt;
 
+import org.junit.Test;
+import static org.junit.Assert.*;
+
 /**
  *
  * @author gburdell
  */
-public class NewClass {
-    public static class C1 {}
-    public static class C2 {}
+public class LaolMapTest {
+    
+    @Test
+    public void testSet() {
+        LaolMap dut = (new LaolMap()).setMutable();
+        LaolString key = new LaolString("foo");
+        LaolInteger val = new LaolInteger(1234);
+        dut.set(key, val);
+        LaolInteger from = dut.get(LaolInteger.class, key);
+        assertEquals(val, from);
+        key = new LaolString("bar");
+        from = dut.get(LaolInteger.class, key);
+        assertTrue(from.isNull());
+        {
+            LaolDouble key2 = new LaolDouble(1.234);
+            LaolString val2 = new LaolString("5.678");
+            dut.set(key2, val2);
+            LaolString from2 = dut.get(LaolString.class, key2);
+            assertEquals(from2, val2);
+        }
+    }
+
+    @Test
+    public void testGet() {
+    }
+
+    @Test
+    public void testIsEmpty() {
+    }
+
+    @Test
+    public void testSize() {
+    }
+
+    @Test
+    public void testHashCode() {
+    }
+
+    @Test
+    public void testEquals() {
+    }
+    
 }
