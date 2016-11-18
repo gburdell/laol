@@ -100,8 +100,7 @@ primary_expression <-
 /	sass_primary
 
 scoped_name <- 
-	COLON2 IDENT
-/	(IDENT COLON2)* IDENT
+	COLON2? IDENT (COLON2 IDENT)*
 
 postfix_expression <-
     postfix_expression LBRACK array_select_expression RBRACK block?

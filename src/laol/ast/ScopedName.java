@@ -22,20 +22,40 @@
  * THE SOFTWARE.
  */
 package laol.ast;
+
 import apfe.runtime.Acceptor;
-import apfe.runtime.Marker;
 import apfe.runtime.Repetition;
 import apfe.runtime.Sequence;
-import apfe.runtime.Util;
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
+import laol.parser.IDENT;
+import laol.parser.apfe.COLON2;
 
 /**
  *
  * @author gburdell
  */
 public class ScopedName extends Item {
+
     public ScopedName(final laol.parser.apfe.ScopedName decl) {
         super(decl);
+        Repetition rep = asRepetition(0);
+        m_isRooted = rep.sizeofAccepted() > 0;
+        m_path.add(getIdent(1));
+        m_path.addAll(zeroOrMoreIdent(2, 1));        
     }
+
+    public List<Ident>  getIdents() {
+        return Collections.unmodifiableList(m_path);
+    }
+    
+    public boolean isRooted() {
+        return m_isRooted;
+    }
+    /**
+     * Scoped name started with '::'.
+     */
+    private final boolean m_isRooted;
+    private final List<Ident> m_path = new LinkedList<>();
 }
