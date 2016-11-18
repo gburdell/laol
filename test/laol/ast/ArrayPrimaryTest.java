@@ -27,7 +27,7 @@ import apfe.runtime.Acceptor;
 import apfe.runtime.CharBufState;
 import apfe.runtime.CharBuffer;
 import apfe.runtime.ParseError;
-import laol.parser.apfe.ScopedName;
+import java.util.List;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
@@ -35,30 +35,26 @@ import static org.junit.Assert.*;
  *
  * @author kpfalzer
  */
-public class ScopedNameTest {
-
+public class ArrayPrimaryTest {
+    
     private final String TESTS[] = {
-        //1st 2 chars: T/F for rooted (True); n is number of names
-        "F1name1",
-        "T2::name2::name3",
-        "T1::name4",
-        "F3name5::name6::name7"
+        "3[1,2,3]",
+        "4%w{abc def ghi jkl}"
     };
 
     //static so we can easily inspect
-    private static laol.ast.ScopedName dut = null;
+    private static laol.ast.ArrayPrimary dut = null;
 
     @Test
-    public void testScopedName() {
+    public void testArrayPrimary() {
         int passCnt = 0;
         for (String test : TESTS) {
-            final boolean expectRoot = test.charAt(0) == 'T';
-            final int expectCnt = Integer.parseInt(test.substring(1, 2));
-            test = test.substring(2);
+            final int expectCnt = Integer.parseInt(test.substring(0, 1));
+            test = test.substring(1);
             System.out.println("Info: " + test);
             CharBuffer cbuf = new CharBuffer("<stdin>", test);
             CharBufState.create(cbuf, true);
-            ScopedName gram = new ScopedName();
+            laol.parser.apfe.ArrayPrimary gram = new laol.parser.apfe.ArrayPrimary();
             Acceptor acc = gram.accept();
             if (null != acc) {
                 String ss = acc.toString();
@@ -70,12 +66,12 @@ public class ScopedNameTest {
             } else {
                 assertTrue(result);
                 passCnt++;
-                dut = new laol.ast.ScopedName((ScopedName) acc);
-                assertTrue(expectRoot == dut.isRooted());
-                assertTrue(expectCnt == dut.getIdents().size());
+                dut = new laol.ast.ArrayPrimary((laol.parser.apfe.ArrayPrimary) acc);
+                ArrayPrimary.EType type = dut.getType();
+                List<Item> eles = dut.getElements();
+                assertTrue(expectCnt == eles.size());
             }
         }
         assertTrue(TESTS.length == passCnt);
     }
-
 }

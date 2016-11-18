@@ -23,6 +23,7 @@
  */
 package laol.ast;
 import apfe.runtime.Acceptor;
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -37,6 +38,10 @@ public class ExpressionList extends Item {
         for (Acceptor cls : asRepetition(1).getAccepted()) {
             m_names.add(createItem(cls, 1));
         }
+    }
+    
+    public List<Expression> getExpressions() {
+        return Collections.unmodifiableList(m_names);
     }
     
     private final List<Expression>   m_names = new LinkedList<>();

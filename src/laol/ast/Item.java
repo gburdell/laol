@@ -124,8 +124,8 @@ public abstract class Item {
         }
         return rval;
     }
-    
-        final protected List<Ident> zeroOrMoreIdent(final int posOfRep, final int posInSeq) {
+
+    final protected List<Ident> zeroOrMoreIdent(final int posOfRep, final int posInSeq) {
         Repetition rep = asRepetition(posOfRep);
         List<Ident> rval = (0 < rep.sizeofAccepted()) ? new LinkedList<>() : Collections.EMPTY_LIST;
         for (Acceptor acc : apfe.runtime.Util.extractList(rep, posInSeq)) {
@@ -133,7 +133,14 @@ public abstract class Item {
         }
         return rval;
     }
-
+    
+        final protected List<Ident> zeroOrMoreIdent(final Repetition rep) {
+        List<Ident> rval = (0 < rep.sizeofAccepted()) ? new LinkedList<>() : Collections.EMPTY_LIST;
+        for (Acceptor acc : rep.getAccepted()) {
+            rval.add(new Ident((IDENT) acc));
+        }
+        return rval;
+    }
 
 
     final protected <T extends Item> List<T> zeroOrMore(final int pos) {
