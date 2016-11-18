@@ -24,10 +24,7 @@
 package laol.ast;
 
 import apfe.runtime.Acceptor;
-import apfe.runtime.CharBufState;
-import apfe.runtime.CharBuffer;
-import apfe.runtime.ParseError;
-import java.util.List;
+import laol.test.TestRunner;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
@@ -35,43 +32,35 @@ import static org.junit.Assert.*;
  *
  * @author kpfalzer
  */
-public class ArrayPrimaryTest {
-    
+public class ArrayPrimaryTest extends TestRunner {
+
     private final String TESTS[] = {
         "3[1,2,3]",
         "4%w{abc def ghi jkl}"
     };
 
-    //static so we can easily inspect
-    private static laol.ast.ArrayPrimary dut = null;
+    @Override
+    public Acceptor getGrammar() {
+        return new laol.parser.apfe.ArrayPrimary();
+    }
+
+    @Override
+    public String getTest(String test) {
+        m_expectCnt = Integer.parseInt(test.substring(0, 1));
+        return test.substring(1);
+    }
+
+    @Override
+    public void generateAndTestAst(Acceptor parsed) {
+        laol.ast.ArrayPrimary dut = new laol.ast.ArrayPrimary((laol.parser.apfe.ArrayPrimary) parsed);
+        assertTrue(m_expectCnt == dut.getElements().size());
+    }
+
+    private int m_expectCnt = Integer.MAX_VALUE;
 
     @Test
     public void testArrayPrimary() {
-        int passCnt = 0;
-        for (String test : TESTS) {
-            final int expectCnt = Integer.parseInt(test.substring(0, 1));
-            test = test.substring(1);
-            System.out.println("Info: " + test);
-            CharBuffer cbuf = new CharBuffer("<stdin>", test);
-            CharBufState.create(cbuf, true);
-            laol.parser.apfe.ArrayPrimary gram = new laol.parser.apfe.ArrayPrimary();
-            Acceptor acc = gram.accept();
-            if (null != acc) {
-                String ss = acc.toString();
-                System.out.println("parse returns: " + ss);
-            }
-            boolean result = (null != acc) && CharBufState.getTheOne().isEOF();
-            if (!result) {
-                ParseError.printTopMessage();
-            } else {
-                assertTrue(result);
-                passCnt++;
-                dut = new laol.ast.ArrayPrimary((laol.parser.apfe.ArrayPrimary) acc);
-                ArrayPrimary.EType type = dut.getType();
-                List<Item> eles = dut.getElements();
-                assertTrue(expectCnt == eles.size());
-            }
-        }
-        assertTrue(TESTS.length == passCnt);
+        TestRunner runner = new ArrayPrimaryTest();
+        runner.runTests(TESTS);
     }
 }

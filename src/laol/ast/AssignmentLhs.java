@@ -43,6 +43,6 @@ public class AssignmentLhs extends Item {
         }
     }
 
-    private final LhsDecl m_decl;
+    private final TypeDecl m_decl;
     private final List<LhsRef> m_refs = new LinkedList<>();
 }

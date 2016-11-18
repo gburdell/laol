@@ -24,10 +24,8 @@
 package laol.ast;
 
 import apfe.runtime.Acceptor;
-import apfe.runtime.CharBufState;
-import apfe.runtime.CharBuffer;
-import apfe.runtime.ParseError;
 import laol.parser.apfe.ScopedName;
+import laol.test.TestRunner;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
@@ -35,7 +33,7 @@ import static org.junit.Assert.*;
  *
  * @author kpfalzer
  */
-public class ScopedNameTest {
+public class ScopedNameTest extends TestRunner {
 
     private final String TESTS[] = {
         //1st 2 chars: T/F for rooted (True); n is number of names
@@ -45,37 +43,32 @@ public class ScopedNameTest {
         "F3name5::name6::name7"
     };
 
-    //static so we can easily inspect
-    private static laol.ast.ScopedName dut = null;
+    @Override
+    public Acceptor getGrammar() {
+        return new ScopedName();
+    }
+
+    @Override
+    public String getTest(String test) {
+        m_expectRoot = test.charAt(0) == 'T';
+        m_expectCnt = Integer.parseInt(test.substring(1, 2));
+        return test.substring(2);
+    }
+
+    @Override
+    public void generateAndTestAst(Acceptor parsed) {
+        laol.ast.ScopedName dut = new laol.ast.ScopedName((ScopedName) parsed);
+        assertTrue(m_expectRoot == dut.isRooted());
+        assertTrue(m_expectCnt == dut.getIdents().size());
+    }
+
+    private boolean m_expectRoot = false;
+    private int m_expectCnt = Integer.MAX_VALUE;
 
     @Test
     public void testScopedName() {
-        int passCnt = 0;
-        for (String test : TESTS) {
-            final boolean expectRoot = test.charAt(0) == 'T';
-            final int expectCnt = Integer.parseInt(test.substring(1, 2));
-            test = test.substring(2);
-            System.out.println("Info: " + test);
-            CharBuffer cbuf = new CharBuffer("<stdin>", test);
-            CharBufState.create(cbuf, true);
-            ScopedName gram = new ScopedName();
-            Acceptor acc = gram.accept();
-            if (null != acc) {
-                String ss = acc.toString();
-                System.out.println("parse returns: " + ss);
-            }
-            boolean result = (null != acc) && CharBufState.getTheOne().isEOF();
-            if (!result) {
-                ParseError.printTopMessage();
-            } else {
-                assertTrue(result);
-                passCnt++;
-                dut = new laol.ast.ScopedName((ScopedName) acc);
-                assertTrue(expectRoot == dut.isRooted());
-                assertTrue(expectCnt == dut.getIdents().size());
-            }
-        }
-        assertTrue(TESTS.length == passCnt);
+        TestRunner runner = new ScopedNameTest();
+        runner.runTests(TESTS);
     }
 
 }

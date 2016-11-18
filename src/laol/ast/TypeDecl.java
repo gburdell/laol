@@ -27,9 +27,10 @@ package laol.ast;
  *
  * @author gburdell
  */
-public class LhsDecl extends Item {
+public class TypeDecl extends Item {
 
-    public LhsDecl(final laol.parser.apfe.LhsDecl decl) {
+    //TODO: just cut-n-paste from obsolete LhsDecl
+    public TypeDecl(final laol.parser.apfe.TypeDecl decl) {
         super(decl);
         m_access = oneOrNone(0);
         m_isStatic = (0 < asRepetition(1).sizeofAccepted());
