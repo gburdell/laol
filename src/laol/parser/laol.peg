@@ -24,7 +24,6 @@
 
 Grammar <- Spacing contents? EOF
 
-// optional modifier: a-z (overkill...)
 regexp_primary <-
 	"%r{" sp ('\\' . / !'}' .)+ '}' [i]? sp
 
@@ -100,7 +99,7 @@ primary_expression <-
 /	sass_primary
 
 scoped_name <- 
-	COLON2? IDENT (COLON2 IDENT)*
+	COLON2? IDENTNK (COLON2 IDENTNK)*
 
 postfix_expression <-
     postfix_expression LBRACK array_select_expression RBRACK block?
@@ -113,7 +112,6 @@ unary_expression <-
 	unary_op unary_expression
 /   postfix_expression
 
-// STAR/STAR2 are splat operators (as in ruby)
 unary_op <- TILDE / EXCL / PLUS / MINUS / STAR / STAR2 / PLUS2 / MINUS2 / AND
 
 mult_expression <-
@@ -180,7 +178,7 @@ binary_op <-
 /	cmp_op
 /	AND / OR / CARET / AND2 / OR2
 
-dot_suffix <- DOT (K_NIL / K_NEW / IDENT)
+dot_suffix <- DOT (K_NIL / K_NEW / IDENTNK)
 
 block <- anonymous_function_defn
 
@@ -203,14 +201,12 @@ array_select_expression <-
     expression DOT2 expression
 /   expression_list
 
-/*TODO: need to add predicate to distinguish between
- *		type_decl scoped_name
- *		scoped_name
- * when LA==IDENT...
- */
 var_decl_statement <- 
-	type_decl? scoped_name (COMMA scoped_name)* 
-		(assignment_op assignment_rhs)? eos
+	(	type_decl scoped_name 
+	/	scoped_name
+	)
+	(COMMA scoped_name)* 
+	(assignment_op assignment_rhs)? eos
 
 assign_statement <- assignment_lhs assignment_op assignment_rhs eos
 
@@ -221,7 +217,7 @@ type_decl <- access_modifier? K_STATIC? mutability? type_name
 lhs_ref <-
     lhs_ref LBRACK array_select_expression RBRACK
 /   lhs_ref LPAREN param_expression_list? RPAREN
-/   lhs_ref DOT IDENT
+/   lhs_ref DOT IDENTNK
 /   lhs_ref (PLUS2 / MINUS2) 
 /   scoped_name
 
@@ -250,6 +246,7 @@ module_item <-
     var_decl_statement
 /   assign_statement
 /   class_declaration 
+/   interface_declaration 
 /   method_declaration
 /   module_declaration
 
@@ -267,6 +264,7 @@ statement <-
 /   try_statement 
 /   throw_statement
 /   class_declaration
+/   interface_declaration 
 /   method_declaration 
 /   mixin_statement
 /   assign_statement
@@ -303,10 +301,6 @@ mixin_name <- scoped_name
 
 mixin_statement <- K_MIXIN module_name (COMMA module_name)* eos
     
-s_tail <-
-    statement_modifier eos
-/   eos
-
 module_name <- scoped_name
 
 module_declaration <-
@@ -321,6 +315,14 @@ class_declaration <-
     K_CLASS class_name
         method_param_decl?
         class_extends?
+        LCURLY 
+            class_body
+        RCURLY eos
+
+interface_declaration <-
+    access_modifier?
+    K_INTERFACE class_name
+		(K_IMPLEMENTS class_name_list)?
         LCURLY 
             class_body
         RCURLY eos
@@ -350,7 +352,7 @@ method_param_decl_ele <-
 	)
 
 // @foo declares foo as a member
-param_name <- AT? IDENT
+param_name <- AT? IDENTNK
 
 type_name <- 
 	builtin_type_name 
@@ -424,7 +426,7 @@ until_statement <- K_UNTIL expression eos statement eos
 
 enumerable_expression <- expression
 
-for_statement <- K_FOR IDENT K_IN enumerable_expression eos statement eos
+for_statement <- K_FOR IDENTNK K_IN enumerable_expression eos statement eos
 ;
 
 // a bit more complicated, so customize
@@ -505,6 +507,7 @@ K_IF        <- "if"         K_tail
 K_IMPLEMENTS <- "implements" K_tail
 K_INT		<-  "int"       K_tail
 K_IN        <-  "in"        K_tail
+K_INTERFACE <-  "interface" K_tail
 K_MIXIN     <-  "mixin"     K_tail
 K_MODULE    <- "module"     K_tail
 K_NEXT      <- "next"       K_tail
@@ -533,11 +536,14 @@ K_TARGET    <- "__TARGET__" K_tail
 
 K_tail <- ![_a-zA-Z0-9] Spacing
 
-SYMBOL  <- COLON IDENT Spacing
+SYMBOL  <- ':' IDENTNK Spacing
 ;
 
 // includes optional '?'
 IDENT.
+
+//same as IDENT by No Keywords allowed
+IDENTNK.
 
 Number <-   (   BasedNumber
             /   Integer

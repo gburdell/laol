@@ -24,8 +24,6 @@
 package laol.ast;
 
 import apfe.runtime.Acceptor;
-import apfe.runtime.Marker;
-import apfe.runtime.Repetition;
 import apfe.runtime.Sequence;
 import apfe.runtime.Util;
 import java.util.LinkedList;
@@ -53,7 +51,7 @@ public class MultExpression extends Item {
 
     }
 
-    private static class MultOpExpr extends Item {
+    public static class MultOpExpr extends Item {
 
         public MultOpExpr(Acceptor parsed) {
             super(parsed);

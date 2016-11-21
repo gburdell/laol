@@ -8,7 +8,12 @@ import java.util.Set;
 
 public class IDENT extends Acceptor {
 
+    protected IDENT(boolean allowKwrd) {
+        ALLOW_KEYWORDS = allowKwrd;
+    }
+    
     public IDENT() {
+        this(true);
     }
 
     @Override
@@ -33,7 +38,7 @@ public class IDENT extends Acceptor {
         return match;
     }
 
-    private static final boolean ALLOW_KEYWORDS = true;
+    private final boolean ALLOW_KEYWORDS;
 
     private String m_ident;
 
@@ -55,7 +60,7 @@ public class IDENT extends Acceptor {
                     "else", "elsif",
                     "extends",
                     "false", "finally", "for",
-                    "if", "implements", "in", "int",
+                    "if", "implements", "in", "int", "interface",
                     "mixin", "module", "next", "new", "nil",
                     "private", "protected", "public",
                     "require", "return",
