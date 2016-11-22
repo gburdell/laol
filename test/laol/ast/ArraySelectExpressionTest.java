@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2016 gburdell.
+ * Copyright 2016 kpfalzer.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -22,33 +22,36 @@
  * THE SOFTWARE.
  */
 package laol.ast;
+
 import apfe.runtime.Acceptor;
+import laol.test.TestRunner;
+import org.junit.Test;
 
 /**
  *
- * @author gburdell
+ * @author kpfalzer
  */
-public class ArraySelectExpression extends Item {
-    public ArraySelectExpression(final laol.parser.apfe.ArraySelectExpression decl) {
-        super(decl);
-        final Acceptor acc = asPrioritizedChoice().getAccepted();
-        if (acc instanceof laol.parser.apfe.ExpressionList) {
-            m_item = createItem(acc);
-        } else {
-            m_item = new InclusiveRange(acc);
-        }
-    }
-    
-    public static class InclusiveRange extends Item {
+public class ArraySelectExpressionTest extends TestRunner {
 
-        public InclusiveRange(final Acceptor exprs) {
-            super(exprs);
-            m_left = createItem(0);
-            m_right = createItem(2);
-        }
-        
-        private final Expression m_left, m_right;
+    private final String TESTS[] = {
+        "123",
+        "456..789"
+    };
+
+    @Override
+    public Acceptor getGrammar() {
+        return new laol.parser.apfe.ArraySelectExpression();
     }
-    
-    private final Item m_item;
+
+    @Override
+    public void generateAndTestAst(Acceptor parsed) {
+        laol.ast.ArraySelectExpression dut = new laol.ast.ArraySelectExpression((laol.parser.apfe.ArraySelectExpression) parsed);
+    }
+
+    @Test
+    public void testArraySelectExpression() {
+        TestRunner runner = new ArraySelectExpressionTest();
+        runner.runTests(TESTS);
+    }
+
 }

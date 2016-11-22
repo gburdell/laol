@@ -23,13 +23,66 @@
  */
 package laol.ast;
 
+import apfe.runtime.Acceptor;
+import apfe.runtime.Sequence;
+import com.sun.xml.internal.messaging.saaj.packaging.mime.internet.ParameterList;
+import java.util.LinkedList;
+import java.util.List;
+
 /**
  *
  * @author gburdell
  */
 public class LhsRef extends Item {
+
     public LhsRef(final laol.parser.apfe.LhsRef decl) {
         super(decl);
+        for (Acceptor acc : decl.getItems()) {
+            if (acc instanceof laol.parser.apfe.ScopedName) {
+                m_items.add(createItem(acc));
+            } else {
+                final Sequence seq = asSequence(acc);
+                final Acceptor accs[] = seq.getAccepted();
+                final Class cls = accs[1].getClass();
+                if (cls == laol.parser.apfe.ArraySelectExpression.class) {
+                    m_items.add(new Index(accs[2]));
+                } else if (cls == laol.parser.apfe.LPAREN.class) {
+                   m_items.add(new Params(seq));
+                } else if (cls == apfe.runtime.PrioritizedChoice.class) {
+                   m_items.add(new PostOp(asPrioritizedChoice(accs[1]).getAccepted()));
+                }
+            }
+        }
     }
     
+    public static class Params extends Item {
+        private Params(final Acceptor acc) {
+            super(acc);
+            m_parms = oneOrNone(2);
+        }
+        private final ParamExpressionList m_parms;
+    }
+    
+    public static class Index extends ArraySelectExpression {
+        private Index(final Acceptor expr) {
+            super((laol.parser.apfe.ArraySelectExpression)expr);
+        }
+    }
+    
+    public static class DotIdent extends Ident {
+        private DotIdent(final Acceptor ident) {
+            super((laol.parser.IDENT) ident);
+        }
+    }
+
+    public static class PostOp extends Item {
+        public static enum EType {eIncr, eDecr};
+        public final EType m_type;
+        private PostOp(final Acceptor op) {
+            super(op);
+            m_type = (op.getClass() == laol.parser.apfe.PLUS2.class) ? EType.eIncr : EType.eDecr;
+        }
+    }
+    
+    private final List<Item> m_items = new LinkedList<>();
 }
