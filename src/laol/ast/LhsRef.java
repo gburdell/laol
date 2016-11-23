@@ -25,7 +25,7 @@ package laol.ast;
 
 import apfe.runtime.Acceptor;
 import apfe.runtime.Sequence;
-import com.sun.xml.internal.messaging.saaj.packaging.mime.internet.ParameterList;
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -43,13 +43,15 @@ public class LhsRef extends Item {
             } else {
                 final Sequence seq = asSequence(acc);
                 final Acceptor accs[] = seq.getAccepted();
-                final Class cls = accs[1].getClass();
-                if (cls == laol.parser.apfe.ArraySelectExpression.class) {
-                    m_items.add(new Index(accs[2]));
+                final Class cls = accs[0].getClass();
+                if (cls == laol.parser.apfe.LBRACK.class) {
+                    m_items.add(new Index(accs[1]));
                 } else if (cls == laol.parser.apfe.LPAREN.class) {
                    m_items.add(new Params(seq));
                 } else if (cls == apfe.runtime.PrioritizedChoice.class) {
-                   m_items.add(new PostOp(asPrioritizedChoice(accs[1]).getAccepted()));
+                   m_items.add(new PostOp(asPrioritizedChoice(accs[0]).getAccepted()));
+                } else {
+                    m_items.add(new DotIdent(accs[1]));
                 }
             }
         }
@@ -82,6 +84,10 @@ public class LhsRef extends Item {
             super(op);
             m_type = (op.getClass() == laol.parser.apfe.PLUS2.class) ? EType.eIncr : EType.eDecr;
         }
+    }
+    
+    public List<Item> getItems() {
+        return Collections.unmodifiableList(m_items);
     }
     
     private final List<Item> m_items = new LinkedList<>();
