@@ -55,15 +55,22 @@ public class LhsRefTest extends TestRunner {
     }
 
     @Override
+    public String getString(final Acceptor acc) {
+        final laol.parser.apfe.LhsRef lhs = (laol.parser.apfe.LhsRef)acc;
+        return lhs.getItems().get(0).toString();
+    }
+
+    @Override
     public void generateAndTestAst(Acceptor parsed) {
         laol.ast.LhsRef dut = new laol.ast.LhsRef((laol.parser.apfe.LhsRef) parsed);
         assertTrue(m_expectCnt == dut.getItems().size());
+        assertTrue(m_test.equals(m_accepted));
     }
 
     private int m_expectCnt = Integer.MAX_VALUE;
 
     @Test
-    public void testArrayPrimary() {
+    public void testLhsRef() {
         TestRunner runner = new LhsRefTest();
         runner.runTests(TESTS);
     }

@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2016 gburdell.
+ * Copyright 2016 kpfalzer.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -23,39 +23,39 @@
  */
 package laol.ast;
 
-import apfe.runtime.PrioritizedChoice;
-import apfe.runtime.Sequence;
+import apfe.runtime.Acceptor;
+import laol.test.TestRunner;
+import org.junit.Test;
+import static org.junit.Assert.*;
 
 /**
  *
- * @author gburdell
+ * @author kpfalzer
  */
-public class RegexpPrimary extends Item {
+public class RegexpPrimaryTest extends TestRunner {
+    private final String TESTS[] = {
+        "%r{abc+def}",
+        "/xxx\\d+/i"
+    };
 
-    public RegexpPrimary(final laol.parser.apfe.RegexpPrimary decl) {
-        super(decl);
-        final PrioritizedChoice pc = asPrioritizedChoice();
-        final Sequence acc = pc.getAccepted();
-        if (0 == pc.whichAccepted()) {
-            m_expr = acc.getText(2);
-            m_sfx = acc.getText(4);
-        } else {
-            m_expr = acc.getText(1);
-            m_sfx = acc.getText(3);
-        }
+    @Override
+    public Acceptor getGrammar() {
+        return new laol.parser.apfe.RegexpPrimary();
     }
 
-    public String getExpr() {
-        return m_expr;
+    @Override
+    public void generateAndTestAst(Acceptor parsed) {
+        laol.ast.RegexpPrimary dut = new laol.ast.RegexpPrimary((laol.parser.apfe.RegexpPrimary) parsed);
+        final String expr = dut.getExpr(), sfx = dut.getSuffix();
+        boolean debug = true;
     }
-    
-    public boolean hasSuffix() {
-        return !getSuffix().isEmpty();
+
+    private int m_expectCnt = Integer.MAX_VALUE;
+
+    @Test
+    public void testRegexpPrimary() {
+        TestRunner runner = new RegexpPrimaryTest();
+        runner.runTests(TESTS);
     }
-    
-    public String getSuffix() {
-        return m_sfx;
-    }
-    
-    private final String m_expr, m_sfx;
 }
+

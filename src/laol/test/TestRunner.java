@@ -48,17 +48,22 @@ public abstract class TestRunner {
     
     public abstract void generateAndTestAst(final Acceptor parsed);
     
+    public String getString(final Acceptor acc) {
+        String ss = acc.toString();
+        return ss;
+    }
+    
     public void runTests(final String tests[]) {
         for (String test : tests) {
-            test = getTest(test);
-            System.out.println("Info: " + test);
-            CharBuffer cbuf = new CharBuffer("<stdin>", test);
+            m_test = getTest(test);
+            System.out.println("Info: " + m_test);
+            CharBuffer cbuf = new CharBuffer("<stdin>", m_test);
             CharBufState.create(cbuf, true);
             Acceptor gram = getGrammar();
             Acceptor acc = gram.accept();
             if (null != acc) {
-                String ss = acc.toString();
-                System.out.println("parse returns: " + ss);
+                m_accepted = getString(acc);
+                System.out.println("parse returns: " + m_accepted);
             }
             boolean result = (null != acc) && CharBufState.getTheOne().isEOF();
             if (!result) {
@@ -73,4 +78,5 @@ public abstract class TestRunner {
     }
     
     protected int m_passCnt = 0;
+    protected String m_test, m_accepted;
 }
