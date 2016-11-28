@@ -24,48 +24,24 @@
 package laol.ast;
 
 import apfe.runtime.Acceptor;
+import java.util.LinkedList;
 import java.util.List;
-import laol.test.TestRunner;
-import org.junit.Test;
-import static org.junit.Assert.*;
 
 /**
  *
  * @author kpfalzer
  */
-public class RegexpPrimaryTest extends TestRunner {
-
-    private final String TESTS[] = {
-        "1%r{abc+def}",
-        "1/xxx\\d+/i",
-        "2/foo#{bar+dog[7]}/"
-    };
-
-    @Override
-    public String getTest(String test) {
-        m_expectCnt = Integer.parseInt(test.substring(0, 1));
-        return test.substring(1);
+public class StringItem extends Item {
+    
+     public StringItem(final laol.parser.apfe.StringItem str) {
+        super(str);
+        final Acceptor acc = asPrioritizedChoice().getAccepted();
+        if (acc.getClass() == laol.parser.apfe.InlineEval.class) {
+            m_items.add(createItem(acc));
+        } else {
+            m_items.add(new AString.S(acc));
+        }
     }
-
-    @Override
-    public Acceptor getGrammar() {
-        return new laol.parser.apfe.RegexpPrimary();
-    }
-
-    @Override
-    public void generateAndTestAst(Acceptor parsed) {
-        laol.ast.RegexpPrimary dut = new laol.ast.RegexpPrimary((laol.parser.apfe.RegexpPrimary) parsed);
-        final String sfx = dut.getSuffix();
-        final List<RegexpItem> expr = dut.getExpr();
-        assertTrue(expr.size() == m_expectCnt);
-        assertTrue(m_test.equals(m_accepted));
-    }
-
-    private int m_expectCnt = Integer.MAX_VALUE;
-
-    @Test
-    public void testRegexpPrimary() {
-        TestRunner runner = new RegexpPrimaryTest();
-        runner.runTests(TESTS);
-    }
+    
+    protected final List<Item>  m_items = new LinkedList<>();   
 }

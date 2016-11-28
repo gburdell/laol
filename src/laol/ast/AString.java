@@ -24,22 +24,69 @@
 package laol.ast;
 
 import apfe.runtime.Acceptor;
+import apfe.runtime.PrioritizedChoice;
+import apfe.runtime.Sequence;
+import gblib.Util;
+import java.util.Collections;
+import java.util.LinkedList;
+import java.util.List;
 
 /**
  *
  * @author gburdell
  */
 public class AString extends Item {
+
+    /**
+     * A simple string.
+     */
+    public static class S extends Item {
+
+        public S(final Acceptor parsed) {
+            this(parsed, parsed.toString());
+        }
+
+        public S(final Acceptor parsed, final String str) {
+            super(parsed);
+            m_val = str;
+        }
+
+        private final String m_val;
+    }
+
     public AString(final Acceptor acc) {
         super(acc);
-        m_val = acc.toString();
+        m_items.add(new S(acc));
     }
+
     public AString(final laol.parser.apfe.STRING decl) {
         super(decl);
-        final int n = m_parsed.toString().length();
-        m_val = (2 < n) ? m_parsed.toString().substring(1, n-1) : "";
+        final PrioritizedChoice pc = asPrioritizedChoice();
+        final Sequence items = pc.getAccepted();
+        switch (pc.whichAccepted()) {
+            case 0:
+                // StringItem*
+                m_items.addAll(zeroOrMore(items, 1));
+                break;
+            case 1:
+                final int n = m_parsed.toString().length();
+                if (2 < n) {
+                    final String s = m_parsed.toString().substring(1, n - 1);
+                    m_items.add(new S(decl, s));
+                }
+                break;
+            default:
+                Util.invariant(false);
+        }
+    }
+
+    public List<Item> getItems() {
+        return Collections.unmodifiableList(m_items);
     }
     
-    // string value without enclosing " nor '
-    private final String    m_val;
+    public boolean isEmpty() {
+        return getItems().isEmpty();
+    }
+    
+    private final List<Item> m_items = new LinkedList<>();
 }

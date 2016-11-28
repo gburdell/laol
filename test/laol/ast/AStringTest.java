@@ -33,12 +33,13 @@ import static org.junit.Assert.*;
  *
  * @author kpfalzer
  */
-public class RegexpPrimaryTest extends TestRunner {
+public class AStringTest extends TestRunner {
 
     private final String TESTS[] = {
-        "1%r{abc+def}",
-        "1/xxx\\d+/i",
-        "2/foo#{bar+dog[7]}/"
+        "1'a'",
+        "3\"foo#{bar+dog[7]}cat\"",
+        "3\"foobar_dog#{x\"",
+        "0''"
     };
 
     @Override
@@ -49,23 +50,28 @@ public class RegexpPrimaryTest extends TestRunner {
 
     @Override
     public Acceptor getGrammar() {
-        return new laol.parser.apfe.RegexpPrimary();
+        return new laol.parser.apfe.STRING();
     }
 
     @Override
     public void generateAndTestAst(Acceptor parsed) {
-        laol.ast.RegexpPrimary dut = new laol.ast.RegexpPrimary((laol.parser.apfe.RegexpPrimary) parsed);
-        final String sfx = dut.getSuffix();
-        final List<RegexpItem> expr = dut.getExpr();
-        assertTrue(expr.size() == m_expectCnt);
-        assertTrue(m_test.equals(m_accepted));
+        laol.ast.AString dut = new laol.ast.AString((laol.parser.apfe.STRING) parsed);
+//        final String sfx = dut.getSuffix();
+        final List<Item> items = dut.getItems();
+        assertTrue(items.size() == m_expectCnt);
+        if (0 < m_expectCnt) {
+            assertFalse(dut.isEmpty());
+        } else {
+            assertTrue(dut.isEmpty());
+        }
+//        assertTrue(m_test.equals(m_accepted));
     }
 
     private int m_expectCnt = Integer.MAX_VALUE;
 
     @Test
-    public void testRegexpPrimary() {
-        TestRunner runner = new RegexpPrimaryTest();
+    public void testAString() {
+        TestRunner runner = new AStringTest();
         runner.runTests(TESTS);
     }
 }

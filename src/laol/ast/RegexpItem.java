@@ -38,7 +38,7 @@ public class RegexpItem extends Item {
         if (acc.getClass() == laol.parser.apfe.InlineEval.class) {
             m_items.add(createItem(acc));
         } else {
-            m_items.add(new AString(acc));
+            m_items.add(new AString.S(acc));
         }
     }
     

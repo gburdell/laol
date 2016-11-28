@@ -25,6 +25,9 @@ package laol.ast;
 
 import apfe.runtime.PrioritizedChoice;
 import apfe.runtime.Sequence;
+import com.sun.java.swing.plaf.windows.WindowsTreeUI;
+import java.util.Collections;
+import java.util.List;
 
 /**
  *
@@ -37,16 +40,16 @@ public class RegexpPrimary extends Item {
         final PrioritizedChoice pc = asPrioritizedChoice();
         final Sequence acc = pc.getAccepted();
         if (0 == pc.whichAccepted()) {
-            m_expr = acc.getText(2);
+            m_expr = zeroOrMore(acc, 2);
             m_sfx = acc.getText(4);
         } else {
-            m_expr = acc.getText(1);
+            m_expr = zeroOrMore(acc, 1);
             m_sfx = acc.getText(3);
         }
     }
 
-    public String getExpr() {
-        return m_expr;
+    public List<RegexpItem> getExpr() {
+        return Collections.unmodifiableList(m_expr);
     }
     
     public boolean hasSuffix() {
@@ -57,5 +60,6 @@ public class RegexpPrimary extends Item {
         return m_sfx;
     }
     
-    private final String m_expr, m_sfx;
+    private final List<RegexpItem> m_expr;
+    private final String m_sfx;
 }
