@@ -23,11 +23,17 @@
  */
 package laol.ast;
 
+import apfe.runtime.Acceptor;
+
 /**
  *
  * @author gburdell
  */
 public class AString extends Item {
+    public AString(final Acceptor acc) {
+        super(acc);
+        m_val = acc.toString();
+    }
     public AString(final laol.parser.apfe.STRING decl) {
         super(decl);
         final int n = m_parsed.toString().length();

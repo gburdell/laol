@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2016 kpfalzer.
+ * Copyright 2016 gburdell.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -23,40 +23,12 @@
  */
 package laol.ast;
 
-import apfe.runtime.Acceptor;
-import laol.test.TestRunner;
-import org.junit.Test;
-import static org.junit.Assert.*;
-
 /**
  *
- * @author kpfalzer
+ * @author gburdell
  */
-public class RegexpPrimaryTest extends TestRunner {
-    private final String TESTS[] = {
-        "%r{abc+def}",
-        "/xxx\\d+/i",
-        "/foo#{bar+dog[7]}/"
-    };
-
-    @Override
-    public Acceptor getGrammar() {
-        return new laol.parser.apfe.RegexpPrimary();
-    }
-
-    @Override
-    public void generateAndTestAst(Acceptor parsed) {
-//        laol.ast.RegexpPrimary dut = new laol.ast.RegexpPrimary((laol.parser.apfe.RegexpPrimary) parsed);
-//        final String expr = dut.getExpr(), sfx = dut.getSuffix();
-//        boolean debug = true;
-    }
-
-    private int m_expectCnt = Integer.MAX_VALUE;
-
-    @Test
-    public void testRegexpPrimary() {
-        TestRunner runner = new RegexpPrimaryTest();
-        runner.runTests(TESTS);
+public class RegexpItem2 extends RegexpItem {
+    public RegexpItem2(final laol.parser.apfe.RegexpItem2 decl) {
+        super(decl);
     }
 }
-
