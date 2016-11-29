@@ -23,46 +23,32 @@
  */
 package laol.ast;
 
-import apfe.runtime.Marker;
-import laol.parser.apfe.KPRIVATE;
-import laol.parser.apfe.KPUBLIC;
-
 /**
  *
  * @author gburdell
  */
-public class AccessModifier extends Item {
+public class AFloat extends Item {
 
-    public static enum EType {
-        ePrivate, eProtected, ePublic
-    }
-
-    public AccessModifier(final Marker loc, final EType type) {
-        super(loc);
-        m_access = type;
-    }
-
-    public AccessModifier(final Marker loc) {
-        this(loc, EType.ePublic);
-    }
-
-    public AccessModifier(final laol.parser.apfe.AccessModifier decl) {
+    public AFloat(final laol.parser.apfe.Float decl) {
         super(decl);
-        final Class choice = asPrioritizedChoice()
-                .getAccepted()
-                .getClass();
-        if (KPRIVATE.class == choice) {
-            m_access = EType.ePrivate;
-        } else if (KPUBLIC.class == choice) {
-            m_access = EType.ePublic;
-        } else {
-            m_access = EType.eProtected;
+        m_isValid = check();
+    }
+
+    private boolean check() {
+        try {
+            final String str = m_parsed.toString();
+            final double val = Double.parseDouble(str);
+            //TODO: check range w/in double
+            //i.e., a small number '1.23e-4444444' becomes 0 here
+            return true;
+        } catch (NumberFormatException ex) {
+            return false;
         }
     }
-
-    public EType getType() {
-        return m_access;
+    
+    public boolean isValid() {
+        return m_isValid;
     }
     
-    private final EType m_access;
+    private final boolean m_isValid;
 }

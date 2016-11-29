@@ -22,47 +22,20 @@
  * THE SOFTWARE.
  */
 package laol.ast;
-
+import apfe.runtime.Acceptor;
 import apfe.runtime.Marker;
-import laol.parser.apfe.KPRIVATE;
-import laol.parser.apfe.KPUBLIC;
+import apfe.runtime.Repetition;
+import apfe.runtime.Sequence;
+import apfe.runtime.Util;
+import java.util.LinkedList;
+import java.util.List;
 
 /**
  *
  * @author gburdell
  */
-public class AccessModifier extends Item {
-
-    public static enum EType {
-        ePrivate, eProtected, ePublic
-    }
-
-    public AccessModifier(final Marker loc, final EType type) {
-        super(loc);
-        m_access = type;
-    }
-
-    public AccessModifier(final Marker loc) {
-        this(loc, EType.ePublic);
-    }
-
-    public AccessModifier(final laol.parser.apfe.AccessModifier decl) {
+public class MethodReturnEle extends Item {
+    public MethodReturnEle(final laol.parser.apfe.MethodReturnEle decl) {
         super(decl);
-        final Class choice = asPrioritizedChoice()
-                .getAccepted()
-                .getClass();
-        if (KPRIVATE.class == choice) {
-            m_access = EType.ePrivate;
-        } else if (KPUBLIC.class == choice) {
-            m_access = EType.ePublic;
-        } else {
-            m_access = EType.eProtected;
-        }
     }
-
-    public EType getType() {
-        return m_access;
-    }
-    
-    private final EType m_access;
 }

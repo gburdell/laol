@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2016 gburdell.
+ * Copyright 2016 kpfalzer.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -23,46 +23,49 @@
  */
 package laol.ast;
 
-import apfe.runtime.Marker;
-import laol.parser.apfe.KPRIVATE;
-import laol.parser.apfe.KPUBLIC;
+import apfe.runtime.Acceptor;
+import java.util.List;
+import laol.test.TestRunner;
+import org.junit.Test;
+import static org.junit.Assert.*;
 
 /**
  *
- * @author gburdell
+ * @author kpfalzer
  */
-public class AccessModifier extends Item {
+public class AFloatTest extends TestRunner {
 
-    public static enum EType {
-        ePrivate, eProtected, ePublic
+    private final String TESTS[] = {
+        "123",
+        "123.456",
+        "123e05",
+        "0",
+        "1.234e-009912345",
+        "1.23e-4444444"
+    };
+
+    @Override
+    public String getTest(String test) {
+        m_expectValid = ('x' != test.charAt(0));
+        return test.substring(m_expectValid ? 0 : 1);
     }
 
-    public AccessModifier(final Marker loc, final EType type) {
-        super(loc);
-        m_access = type;
+    @Override
+    public Acceptor getGrammar() {
+        return new laol.parser.apfe.Float();
     }
 
-    public AccessModifier(final Marker loc) {
-        this(loc, EType.ePublic);
+    @Override
+    public void generateAndTestAst(Acceptor parsed) {
+        laol.ast.AFloat dut = new laol.ast.AFloat((laol.parser.apfe.Float) parsed);
+        assertTrue(dut.isValid() == m_expectValid);
     }
 
-    public AccessModifier(final laol.parser.apfe.AccessModifier decl) {
-        super(decl);
-        final Class choice = asPrioritizedChoice()
-                .getAccepted()
-                .getClass();
-        if (KPRIVATE.class == choice) {
-            m_access = EType.ePrivate;
-        } else if (KPUBLIC.class == choice) {
-            m_access = EType.ePublic;
-        } else {
-            m_access = EType.eProtected;
-        }
-    }
+    private boolean m_expectValid = false;
 
-    public EType getType() {
-        return m_access;
+    @Test
+    public void testAFloat() {
+        TestRunner runner = new AFloatTest();
+        runner.runTests(TESTS);
     }
-    
-    private final EType m_access;
 }
