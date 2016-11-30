@@ -24,6 +24,9 @@
 package laol.ast;
 
 import apfe.runtime.Acceptor;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import laol.test.TestRunner;
 import org.junit.Test;
 import static org.junit.Assert.*;
@@ -32,40 +35,44 @@ import static org.junit.Assert.*;
  *
  * @author kpfalzer
  */
-public class AFloatTest extends TestRunner {
+public class AccessModifierTest extends TestRunner {
 
     private final String TESTS[] = {
-        "123",
-        "123.456",
-        "123e05",
-        "0",
-        "1.234e-009912345",
-        "1.23e-4444444"
+        "private", "public", "protected"
     };
+
+    private static final Map<String, AccessModifier.EType> TYPE_BY_KWRD = new HashMap<>();
+
+    static {
+        TYPE_BY_KWRD.put("public", AccessModifier.EType.ePublic);
+        TYPE_BY_KWRD.put("private", AccessModifier.EType.ePrivate);
+        TYPE_BY_KWRD.put("protected", AccessModifier.EType.eProtected);
+    }
 
     @Override
     public String getTest(String test) {
-        m_expectValid = ('x' != test.charAt(0));
-        return test.substring(m_expectValid ? 0 : 1);
+        m_expect = TYPE_BY_KWRD.get(test);
+        return test;
     }
 
     @Override
     public Acceptor getGrammar() {
-        return new laol.parser.apfe.Float();
+        return new laol.parser.apfe.AccessModifier();
     }
 
     @Override
     public void generateAndTestAst(Acceptor parsed) {
-        laol.ast.AFloat dut = new laol.ast.AFloat((laol.parser.apfe.Float) parsed);
-        assertTrue(dut.isValid() == m_expectValid);
+        laol.ast.AccessModifier dut = new laol.ast.AccessModifier((laol.parser.apfe.AccessModifier) parsed);
+        assertTrue(m_expect == dut.getType());
         assertTrue(m_test.equals(m_accepted));
     }
 
-    private boolean m_expectValid = false;
+    private AccessModifier.EType m_expect;
 
     @Test
-    public void testAFloat() {
-        TestRunner runner = new AFloatTest();
+    public void testAccessModifier() {
+        TestRunner runner = new AccessModifierTest();
         runner.runTests(TESTS);
     }
+
 }

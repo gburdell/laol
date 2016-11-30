@@ -22,13 +22,6 @@
  * THE SOFTWARE.
  */
 package laol.ast;
-import apfe.runtime.Acceptor;
-import apfe.runtime.Marker;
-import apfe.runtime.Repetition;
-import apfe.runtime.Sequence;
-import apfe.runtime.Util;
-import java.util.LinkedList;
-import java.util.List;
 
 /**
  *
@@ -37,5 +30,23 @@ import java.util.List;
 public class AInteger extends Item {
     public AInteger(final laol.parser.apfe.Integer decl) {
         super(decl);
+        m_isValid = check();
     }
+
+    private boolean check() {
+        try {
+            final String str = getParsed().toString();
+            final int val = Integer.parseInt(str);
+            //TODO: check range w/in int
+            return true;
+        } catch (NumberFormatException ex) {
+            return false;
+        }
+    }
+    
+    public boolean isValid() {
+        return m_isValid;
+    }
+    
+    private final boolean m_isValid;
 }

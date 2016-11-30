@@ -30,7 +30,7 @@ package laol.ast;
 public class EnumerableExpression extends Item {
     public EnumerableExpression(final laol.parser.apfe.EnumerableExpression decl) {
         super(decl);
-        m_expr = createItem(m_parsed.getBaseAccepted());
+        m_expr = createItem(getParsed().getBaseAccepted());
     }
     
     private final Expression m_expr;

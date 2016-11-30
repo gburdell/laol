@@ -36,7 +36,7 @@ public class AFloat extends Item {
 
     private boolean check() {
         try {
-            final String str = m_parsed.toString();
+            final String str = getParsed().toString();
             final double val = Double.parseDouble(str);
             //TODO: check range w/in double
             //i.e., a small number '1.23e-4444444' becomes 0 here

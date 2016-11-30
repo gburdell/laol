@@ -22,20 +22,26 @@
  * THE SOFTWARE.
  */
 package laol.ast;
-import apfe.runtime.Acceptor;
-import apfe.runtime.Marker;
-import apfe.runtime.Repetition;
-import apfe.runtime.Sequence;
-import apfe.runtime.Util;
-import java.util.LinkedList;
-import java.util.List;
 
 /**
  *
  * @author gburdell
  */
 public class AddOp extends Item {
+    public static enum EType {
+        ePlus, eMinus
+    }
+    
     public AddOp(final laol.parser.apfe.AddOp decl) {
         super(decl);
+        m_type = (asPrioritizedChoice().getAccepted().getClass() == laol.parser.apfe.PLUS.class)
+                ? EType.ePlus
+                : EType.eMinus;
     }
+    
+    public EType getType() {
+        return m_type;
+    }
+    
+    private final EType m_type;
 }

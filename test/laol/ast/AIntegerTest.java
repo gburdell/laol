@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2016 gburdell.
+ * Copyright 2016 kpfalzer.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -23,13 +23,47 @@
  */
 package laol.ast;
 
+import apfe.runtime.Acceptor;
+import java.util.List;
+import laol.test.TestRunner;
+import org.junit.Test;
+import static org.junit.Assert.*;
+
 /**
  *
- * @author gburdell
+ * @author kpfalzer
  */
-public class MultExpression extends BinaryOp.LRExpr<laol.parser.apfe.MultExpression> {
+public class AIntegerTest extends TestRunner {
 
-    public MultExpression(final laol.parser.apfe.MultExpression decl) {
-        super(decl);
+    private final String TESTS[] = {
+        "123",
+        "456",
+        "0"
+    };
+
+    @Override
+    public String getTest(String test) {
+        m_expectValid = ('x' != test.charAt(0));
+        return test.substring(m_expectValid ? 0 : 1);
+    }
+
+    @Override
+    public Acceptor getGrammar() {
+        return new laol.parser.apfe.Integer();
+    }
+
+    @Override
+    public void generateAndTestAst(Acceptor parsed) {
+        laol.ast.AInteger dut = new laol.ast.AInteger((laol.parser.apfe.Integer) parsed);
+        assertTrue(dut.isValid() == m_expectValid);
+        assertTrue(m_test.equals(m_accepted));
+    }
+
+    private boolean m_expectValid = false;
+
+    @Test
+    public void testAInteger() {
+        TestRunner runner = new AIntegerTest();
+        runner.runTests(TESTS);
     }
 }

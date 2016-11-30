@@ -69,9 +69,9 @@ public class AString extends Item {
                 m_items.addAll(zeroOrMore(items, 1));
                 break;
             case 1:
-                final int n = m_parsed.toString().length();
+                final int n = getParsed().toString().length();
                 if (2 < n) {
-                    final String s = m_parsed.toString().substring(1, n - 1);
+                    final String s = getParsed().toString().substring(1, n - 1);
                     m_items.add(new S(decl, s));
                 }
                 break;

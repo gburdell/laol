@@ -22,11 +22,14 @@
  * THE SOFTWARE.
  */
 package laol.ast;
+
 import apfe.runtime.Acceptor;
+import apfe.runtime.LeftRecursiveAcceptor;
 import apfe.runtime.Marker;
 import apfe.runtime.Repetition;
 import apfe.runtime.Sequence;
 import apfe.runtime.Util;
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -35,7 +38,34 @@ import java.util.List;
  * @author gburdell
  */
 public class BinaryOp extends Item {
+
     public BinaryOp(final laol.parser.apfe.BinaryOp decl) {
         super(decl);
+    }
+
+    /**
+     * Helper class.
+     * @param <T> a left recursive nonterminal.
+     */
+    public static class LRExpr<T extends LeftRecursiveAcceptor> extends Item {
+
+        protected LRExpr(final T decl) {
+            super(decl);
+            for (Acceptor ele : decl.getItems()) {
+                if (ele instanceof Sequence) {
+                    m_items.add(createItem(ele, 0));
+                    m_items.add(createItem(ele, 1));
+                } else {
+                    m_items.add(createItem(ele));
+                }
+            }
+
+        }
+
+        public List<Item> getItems() {
+            return Collections.unmodifiableList(m_items);
+        }
+
+        private final List<Item> m_items = new LinkedList<>();
     }
 }

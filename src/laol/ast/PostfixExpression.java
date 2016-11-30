@@ -102,7 +102,7 @@ public class PostfixExpression extends Item {
 
         public IncDec(Acceptor parsed) {
             super(parsed);
-            m_op = m_parsed.getBaseAccepted().getClass();
+            m_op = getParsed().getBaseAccepted().getClass();
         }
         
         private final Class m_op;

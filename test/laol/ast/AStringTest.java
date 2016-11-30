@@ -64,7 +64,7 @@ public class AStringTest extends TestRunner {
         } else {
             assertTrue(dut.isEmpty());
         }
-//        assertTrue(m_test.equals(m_accepted));
+        assertTrue(m_test.equals(m_accepted));
     }
 
     private int m_expectCnt = Integer.MAX_VALUE;

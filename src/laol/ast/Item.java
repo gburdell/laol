@@ -56,12 +56,16 @@ public abstract class Item {
         m_parsed = parsed;
     }
 
-    public Marker getLocation() {
+    public final Marker getLocation() {
         return m_loc;
     }
 
+    public final Acceptor getParsed() {
+        return m_parsed;
+    }
+    
     private final Marker m_loc;
-    protected final Acceptor m_parsed;
+    private final Acceptor m_parsed;
 
     final protected Ident getIdent(final int ix) {
         return getIdent(asSequence(), ix);

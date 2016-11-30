@@ -25,11 +25,9 @@ package laol.ast;
 
 import apfe.runtime.Repetition;
 import apfe.runtime.Sequence;
-import apfe.runtime.Util;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
-import laol.parser.IDENT;
 import laol.parser.apfe.LBRACK;
 
 /**
