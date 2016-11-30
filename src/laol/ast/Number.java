@@ -30,7 +30,7 @@ package laol.ast;
 public class Number extends Item {
     public Number(final laol.parser.apfe.Number decl) {
         super(decl);
-        m_type = asPrioritizedChoice().getBaseAccepted().getClass();
+        m_type = asPrioritizedChoice(0).getAccepted().getClass();
     }
     
     /**

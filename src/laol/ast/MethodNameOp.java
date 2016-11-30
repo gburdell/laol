@@ -22,13 +22,6 @@
  * THE SOFTWARE.
  */
 package laol.ast;
-import apfe.runtime.Acceptor;
-import apfe.runtime.Marker;
-import apfe.runtime.Repetition;
-import apfe.runtime.Sequence;
-import apfe.runtime.Util;
-import java.util.LinkedList;
-import java.util.List;
 
 /**
  *
@@ -37,5 +30,12 @@ import java.util.List;
 public class MethodNameOp extends Item {
     public MethodNameOp(final laol.parser.apfe.MethodNameOp decl) {
         super(decl);
+        m_opName = new AString.S(asPrioritizedChoice().getAccepted());
     }
+    
+    public String getOpName() {
+        return m_opName.toString();
+    }
+    
+    private final AString.S m_opName;
 }

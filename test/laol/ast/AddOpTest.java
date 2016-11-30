@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2016 gburdell.
+ * Copyright 2016 kpfalzer.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -23,33 +23,45 @@
  */
 package laol.ast;
 
+import apfe.runtime.Acceptor;
+import laol.test.TestRunner;
+import org.junit.Test;
+import static org.junit.Assert.*;
+
 /**
  *
- * @author gburdell
+ * @author kpfalzer
  */
-public class AnonymousFunctionDecl extends Item {
-    public AnonymousFunctionDecl(final laol.parser.apfe.AnonymousFunctionDecl decl) {
-        super(decl);
-        m_parmName = createItem(1);
-        m_methodParmDecl = oneOrNone(2);
-        m_methodReturnDecl = oneOrNone(3);
+public class AddOpTest  extends TestRunner {
+
+    private final String TESTS[] = {
+        "+", "-"
+    };
+
+    private AddOp.EType m_expect;
+    
+    @Override
+    public String getTest(String test) {
+        m_expect = (test.equals("+")) ? AddOp.EType.ePlus : AddOp.EType.eMinus;
+        return test;
     }
 
-    public MethodParamDecl getMethodParmDecl() {
-        return m_methodParmDecl;
+    @Override
+    public Acceptor getGrammar() {
+        return new laol.parser.apfe.AddOp();
     }
 
-    public MethodReturnDecl getMethodReturnDecl() {
-        return m_methodReturnDecl;
+    @Override
+    public void generateAndTestAst(Acceptor parsed) {
+        laol.ast.AddOp dut = new laol.ast.AddOp((laol.parser.apfe.AddOp) parsed);
+        assertTrue(m_test.equals(m_accepted));
+        assertTrue(dut.getType() == m_expect);
     }
 
-    public ParamName getParmName() {
-        return m_parmName;
+    @Test
+    public void testAddOp() {
+        TestRunner runner = new AddOpTest();
+        runner.runTests(TESTS);
     }
-    
-    private final ParamName m_parmName;
-    private final MethodParamDecl m_methodParmDecl;
-    private final MethodReturnDecl m_methodReturnDecl;
-    
-    
+
 }

@@ -22,19 +22,12 @@
  * THE SOFTWARE.
  */
 package laol.ast;
-import apfe.runtime.Acceptor;
-import apfe.runtime.Marker;
-import apfe.runtime.Repetition;
-import apfe.runtime.Sequence;
-import apfe.runtime.Util;
-import java.util.LinkedList;
-import java.util.List;
 
 /**
  *
  * @author gburdell
  */
-public class AndExpression extends Item {
+public class AndExpression  extends BinaryOp.LRExpr<laol.parser.apfe.AndExpression> {
     public AndExpression(final laol.parser.apfe.AndExpression decl) {
         super(decl);
     }

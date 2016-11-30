@@ -22,34 +22,20 @@
  * THE SOFTWARE.
  */
 package laol.ast;
+import apfe.runtime.Acceptor;
+import apfe.runtime.Marker;
+import apfe.runtime.Repetition;
+import apfe.runtime.Sequence;
+import apfe.runtime.Util;
+import java.util.LinkedList;
+import java.util.List;
 
 /**
  *
  * @author gburdell
  */
-public class AnonymousFunctionDecl extends Item {
-    public AnonymousFunctionDecl(final laol.parser.apfe.AnonymousFunctionDecl decl) {
+public class AND extends Item {
+    public AND(final laol.parser.apfe.AND decl) {
         super(decl);
-        m_parmName = createItem(1);
-        m_methodParmDecl = oneOrNone(2);
-        m_methodReturnDecl = oneOrNone(3);
     }
-
-    public MethodParamDecl getMethodParmDecl() {
-        return m_methodParmDecl;
-    }
-
-    public MethodReturnDecl getMethodReturnDecl() {
-        return m_methodReturnDecl;
-    }
-
-    public ParamName getParmName() {
-        return m_parmName;
-    }
-    
-    private final ParamName m_parmName;
-    private final MethodParamDecl m_methodParmDecl;
-    private final MethodReturnDecl m_methodReturnDecl;
-    
-    
 }

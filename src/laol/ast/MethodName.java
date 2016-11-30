@@ -22,7 +22,6 @@
  * THE SOFTWARE.
  */
 package laol.ast;
-import apfe.runtime.Marker;
 
 /**
  *
@@ -31,7 +30,12 @@ import apfe.runtime.Marker;
 public class MethodName extends Item {
     public MethodName(final laol.parser.apfe.MethodName decl) {
         super(decl);
+        m_name = createItem(asPrioritizedChoice().getAccepted());
     }
     
-
+    public Item getName() {
+        return m_name;
+    }
+    
+    private final Item m_name;
 }

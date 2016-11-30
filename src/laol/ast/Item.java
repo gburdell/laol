@@ -196,9 +196,7 @@ public abstract class Item {
             Constructor astCons = astCls.getConstructor(acc.getClass());
             item = (T) astCons.newInstance(acc);
             return item;
-        } catch (ClassNotFoundException ex) {
-            Util.abnormalExit(ex);
-        } catch (NoSuchMethodException | SecurityException | InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException ex) {
+        } catch (ClassNotFoundException | NoSuchMethodException | SecurityException | InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException ex) {
             Util.abnormalExit(ex);
         }
         return item;

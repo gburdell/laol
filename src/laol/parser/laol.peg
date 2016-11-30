@@ -160,7 +160,7 @@ and_expression <-
 /	cmp_expression
 
 xor_expression <-
-	xor_expression CARET and_expression
+	xor_expression XOR and_expression
 /	and_expression
 
 or_expression <-
@@ -187,7 +187,7 @@ binary_op <-
 /	shift_op
 /	rel_op
 /	cmp_op
-/	AND / OR / CARET / AND2 / OR2
+/	AND / OR / XOR / AND2 / OR2
 
 dot_suffix <- DOT (K_NIL / K_NEW / IDENTNK)
 
@@ -470,7 +470,7 @@ REXNEQ      <- "!~" Spacing
 AT          <- '@' !'@' Spacing
 //AT2         <- "@@" Spacing
 TILDE       <- '~' Spacing
-CARET       <- '^' Spacing
+XOR         <- '^' Spacing
 AND         <- '&' !('&' / '=') Spacing
 AND2        <- "&&" Spacing
 AND_EQ      <- "&=" Spacing

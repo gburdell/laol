@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2016 gburdell.
+ * Copyright 2016 kpfalzer.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -23,33 +23,38 @@
  */
 package laol.ast;
 
+import apfe.runtime.Acceptor;
+import laol.test.TestRunner;
+import org.junit.Test;
+import static org.junit.Assert.*;
+
 /**
  *
- * @author gburdell
+ * @author kpfalzer
  */
-public class AnonymousFunctionDecl extends Item {
-    public AnonymousFunctionDecl(final laol.parser.apfe.AnonymousFunctionDecl decl) {
-        super(decl);
-        m_parmName = createItem(1);
-        m_methodParmDecl = oneOrNone(2);
-        m_methodReturnDecl = oneOrNone(3);
+public class OrExpressionTest extends TestRunner {
+
+    private final String TESTS[] = {
+        "1+2|3-4"
+    };
+
+    @Override
+    public Acceptor getGrammar() {
+        return new laol.parser.apfe.OrExpression();
     }
 
-    public MethodParamDecl getMethodParmDecl() {
-        return m_methodParmDecl;
+    @Override
+    public void generateAndTestAst(Acceptor parsed) {
+        laol.ast.OrExpression dut = new laol.ast.OrExpression((laol.parser.apfe.OrExpression) parsed);
+        assertTrue(m_test.equals(m_accepted));
     }
 
-    public MethodReturnDecl getMethodReturnDecl() {
-        return m_methodReturnDecl;
+    @Test
+    public void testAccessModifier() {
+        TestRunner runner = new OrExpressionTest();
+        runner.runTests(TESTS);
     }
 
-    public ParamName getParmName() {
-        return m_parmName;
-    }
-    
-    private final ParamName m_parmName;
-    private final MethodParamDecl m_methodParmDecl;
-    private final MethodReturnDecl m_methodReturnDecl;
-    
-    
 }
+
+

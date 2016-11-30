@@ -33,7 +33,7 @@ public abstract class Op extends Item {
 
     protected Op(final Acceptor decl) {
         super(decl);
-        m_op = asPrioritizedChoice().getBaseAccepted().getClass();
+        m_op = asPrioritizedChoice().getAccepted().getClass();
     }
 
     protected final Class m_op;

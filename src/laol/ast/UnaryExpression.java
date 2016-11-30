@@ -39,7 +39,7 @@ public class UnaryExpression extends Item {
 
     public UnaryExpression(final laol.parser.apfe.UnaryExpression decl) {
         super(decl);
-        final Acceptor first = asPrioritizedChoice().getBaseAccepted();
+        final Acceptor first = asPrioritizedChoice().getAccepted();
         Item item;
         if (first instanceof Sequence) {
             item = new UnaryOpExpr(first);

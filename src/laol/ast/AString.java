@@ -51,6 +51,11 @@ public class AString extends Item {
             m_val = str;
         }
 
+        @Override
+        public String toString() {
+            return m_val;
+        }
+        
         private final String m_val;
     }
 

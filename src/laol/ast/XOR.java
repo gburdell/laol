@@ -27,29 +27,8 @@ package laol.ast;
  *
  * @author gburdell
  */
-public class AnonymousFunctionDecl extends Item {
-    public AnonymousFunctionDecl(final laol.parser.apfe.AnonymousFunctionDecl decl) {
+public class XOR extends Item {
+    public XOR(final laol.parser.apfe.XOR decl) {
         super(decl);
-        m_parmName = createItem(1);
-        m_methodParmDecl = oneOrNone(2);
-        m_methodReturnDecl = oneOrNone(3);
     }
-
-    public MethodParamDecl getMethodParmDecl() {
-        return m_methodParmDecl;
-    }
-
-    public MethodReturnDecl getMethodReturnDecl() {
-        return m_methodReturnDecl;
-    }
-
-    public ParamName getParmName() {
-        return m_parmName;
-    }
-    
-    private final ParamName m_parmName;
-    private final MethodParamDecl m_methodParmDecl;
-    private final MethodReturnDecl m_methodReturnDecl;
-    
-    
 }

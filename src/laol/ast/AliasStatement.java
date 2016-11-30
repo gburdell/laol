@@ -23,10 +23,6 @@
  */
 package laol.ast;
 
-import apfe.runtime.Marker;
-import apfe.runtime.Sequence;
-import apfe.runtime.Util;
-
 /**
  *
  * @author gburdell
@@ -34,10 +30,18 @@ import apfe.runtime.Util;
 public class AliasStatement extends Item {
 
     public AliasStatement(final laol.parser.apfe.AliasStatement decl) {
-		super(decl);
+        super(decl);
         m_alias = createItem(1);
         m_orig = createItem(2);
     }
 
-    private final MethodName    m_orig, m_alias;
+    public MethodName getOriginal() {
+        return m_orig;
+    }
+
+    public MethodName getAlias() {
+        return m_alias;
+    }
+    
+    private final MethodName m_orig, m_alias;
 }

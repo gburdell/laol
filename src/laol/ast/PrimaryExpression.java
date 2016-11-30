@@ -35,7 +35,7 @@ import java.util.Set;
 public class PrimaryExpression extends Item {
     public PrimaryExpression(final laol.parser.apfe.PrimaryExpression decl) {
         super(decl);
-        final Acceptor acc = asPrioritizedChoice().getBaseAccepted();
+        final Acceptor acc = asPrioritizedChoice().getAccepted();
         final Class cls = acc.getClass();
         if (KWRDS.contains(cls)) {
             m_expr = new Keyword(acc);
