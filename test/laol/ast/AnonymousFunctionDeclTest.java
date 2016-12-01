@@ -39,8 +39,7 @@ public class AnonymousFunctionDeclTest extends TestRunner {
         "->  fn2 ()",
         "->fn3 => int",
         "->func_name( c, private b)",
-        //TODO: types allowed?
-        "->func_name(val int c, private b)"
+        "->func_name(var int c, private const T @b)"
     };
 
     @Override
