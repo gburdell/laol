@@ -22,27 +22,26 @@
  * THE SOFTWARE.
  */
 package laol.ast;
-
-import apfe.runtime.Sequence;
-import gblib.Util;
+import apfe.runtime.PrioritizedChoice;
 
 /**
  *
  * @author gburdell
  */
-public class AssignStatement extends Item {
-
-    public AssignStatement(final laol.parser.apfe.AssignStatement decl) {
+public class Eos extends Item {
+    public Eos(final laol.parser.apfe.Eos decl) {
         super(decl);
-        final Sequence seq = asSequence();
-        m_lhs = createItem(seq, 0);
-        m_op = createItem(seq, 1);
-        m_rhs = createItem(seq, 2);
-        m_stmtModifier = Util.<Eos>downCast(createItem(seq, 3)).getStmtModifier();
+        final PrioritizedChoice pc = asPrioritizedChoice();
+        if (2 == pc.whichAccepted()) {
+            m_stmtModifier = createItem(pc.getAccepted(), 1);
+        } else {
+            m_stmtModifier = null;
+        }
     }
-
-    private final AssignmentLhs m_lhs;
-    private final AssignmentOp  m_op;
-    private final AssignmentRhs m_rhs;
+    
+    public StatementModifier getStmtModifier() {
+        return m_stmtModifier;
+    }
+    
     private final StatementModifier m_stmtModifier;
 }

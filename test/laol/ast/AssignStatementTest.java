@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2016 gburdell.
+ * Copyright 2016 kpfalzer.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -23,26 +23,36 @@
  */
 package laol.ast;
 
-import apfe.runtime.Sequence;
-import gblib.Util;
+import apfe.runtime.Acceptor;
+import laol.test.TestRunner;
+import org.junit.Test;
+import static org.junit.Assert.*;
 
 /**
  *
- * @author gburdell
+ * @author kpfalzer
  */
-public class AssignStatement extends Item {
+public class AssignStatementTest extends TestRunner {
 
-    public AssignStatement(final laol.parser.apfe.AssignStatement decl) {
-        super(decl);
-        final Sequence seq = asSequence();
-        m_lhs = createItem(seq, 0);
-        m_op = createItem(seq, 1);
-        m_rhs = createItem(seq, 2);
-        m_stmtModifier = Util.<Eos>downCast(createItem(seq, 3)).getStmtModifier();
+    private final String TESTS[] = {
+        "a = a + 5"
+    };
+
+    @Override
+    public Acceptor getGrammar() {
+        return new laol.parser.apfe.AssignStatement();
     }
 
-    private final AssignmentLhs m_lhs;
-    private final AssignmentOp  m_op;
-    private final AssignmentRhs m_rhs;
-    private final StatementModifier m_stmtModifier;
+    @Override
+    public void generateAndTestAst(Acceptor parsed) {
+        laol.ast.AssignStatement dut = new laol.ast.AssignStatement((laol.parser.apfe.AssignStatement) parsed);
+        assertTrue(m_test.equals(m_accepted));
+    }
+
+    @Test
+    public void testAccessModifier() {
+        TestRunner runner = new AssignStatementTest();
+        runner.runTests(TESTS);
+    }
+
 }
