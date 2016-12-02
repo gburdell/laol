@@ -22,11 +22,8 @@
  * THE SOFTWARE.
  */
 package laol.ast;
-import apfe.runtime.Acceptor;
-import apfe.runtime.Marker;
-import apfe.runtime.Repetition;
 import apfe.runtime.Sequence;
-import apfe.runtime.Util;
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -37,5 +34,14 @@ import java.util.List;
 public class MethodParamDeclList extends Item {
     public MethodParamDeclList(final laol.parser.apfe.MethodParamDeclList decl) {
         super(decl);
+        final Sequence seq = asSequence();
+        m_parms.add(createItem(seq, 0));
+        m_parms.addAll(zeroOrMore(asRepetition(seq, 1), 1));
     }
+    
+    public List<MethodParamDeclEle> getParms() {
+        return Collections.unmodifiableList(m_parms);
+    }
+    
+    private final List<MethodParamDeclEle> m_parms = new LinkedList<>();
 }

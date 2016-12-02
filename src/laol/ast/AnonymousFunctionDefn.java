@@ -22,13 +22,7 @@
  * THE SOFTWARE.
  */
 package laol.ast;
-import apfe.runtime.Acceptor;
-import apfe.runtime.Marker;
-import apfe.runtime.Repetition;
 import apfe.runtime.Sequence;
-import apfe.runtime.Util;
-import java.util.LinkedList;
-import java.util.List;
 
 /**
  *
@@ -37,5 +31,31 @@ import java.util.List;
 public class AnonymousFunctionDefn extends Item {
     public AnonymousFunctionDefn(final laol.parser.apfe.AnonymousFunctionDefn decl) {
         super(decl);
+        final Sequence seq = asSequence(asPrioritizedChoice().getAccepted());
+        final boolean isAnon = (seq.itemAt(0).getClass() == laol.parser.apfe.ARROW.class);
+        if (isAnon) {
+            m_parms = gblib.Util.<MethodParamDecl>downCast(createItem(seq, 1)).getDecl();
+        } else {
+            m_parms = createItem(seq, 2);
+        }
+        m_return = oneOrNone(seq, isAnon ? 2 : 4);
+        m_body = oneOrNone(seq, isAnon ? 4 : 5);
     }
+
+    public MethodBody getBody() {
+        return m_body;
+    }
+
+    public MethodParamDeclList getParms() {
+        return m_parms;
+    }
+
+    public MethodReturnDecl getReturn() {
+        return m_return;
+    }
+    
+    private final MethodParamDeclList   m_parms;
+    private final MethodReturnDecl      m_return;
+    private final MethodBody            m_body;
+    
 }

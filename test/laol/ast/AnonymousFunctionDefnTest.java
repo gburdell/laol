@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2016 gburdell.
+ * Copyright 2016 kpfalzer.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -23,36 +23,43 @@
  */
 package laol.ast;
 
-import apfe.runtime.Sequence;
+import apfe.runtime.Acceptor;
+import laol.test.TestRunner;
+import org.junit.Test;
+import static org.junit.Assert.*;
 
 /**
  *
- * @author gburdell
+ * @author kpfalzer
  */
-public class AnonymousFunctionDecl extends Item {
-    public AnonymousFunctionDecl(final laol.parser.apfe.AnonymousFunctionDecl decl) {
-        super(decl);
-        final Sequence seq = asSequence();
-        m_parmName = createItem(seq, 1);
-        m_parms = oneOrNone(seq, 2);
-        m_return = oneOrNone(seq, 3);
+public class AnonymousFunctionDefnTest extends TestRunner {
+
+    private final String TESTS[] = {
+        "->(){}",
+        "->  (){}",
+        "->() => int {}",
+        "->( c, private b){}",
+        "->(var int c, private const T @b){}",
+        "{|a,b| a + b}"
+    };
+
+    @Override
+    public Acceptor getGrammar() {
+        return new laol.parser.apfe.AnonymousFunctionDefn();
     }
 
-    public MethodParamDecl getParms() {
-        return m_parms;
+    @Override
+    public void generateAndTestAst(Acceptor parsed) {
+        laol.ast.AnonymousFunctionDefn dut = new laol.ast.AnonymousFunctionDefn((laol.parser.apfe.AnonymousFunctionDefn) parsed);
+        assertTrue(m_test.equals(m_accepted));
     }
 
-    public MethodReturnDecl getReturn() {
-        return m_return;
+    @Test
+    public void testAccessModifier() {
+        TestRunner runner = new AnonymousFunctionDefnTest();
+        runner.runTests(TESTS);
     }
 
-    public ParamName getParmName() {
-        return m_parmName;
-    }
-    
-    private final ParamName m_parmName;
-    private final MethodParamDecl m_parms;
-    private final MethodReturnDecl m_return;
-    
-    
 }
+
+

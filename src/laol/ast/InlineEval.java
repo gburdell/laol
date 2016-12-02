@@ -32,6 +32,6 @@ import apfe.runtime.Util;
 public class InlineEval extends Expression {
 
     public InlineEval(final laol.parser.apfe.InlineEval decl) {
-        super(Util.<laol.parser.apfe.Expression>extractEle(asSequence(decl), 2));
+        super(Util.<laol.parser.apfe.Expression>extractEle(asSequence(decl), 1));
     }
 }

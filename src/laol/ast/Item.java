@@ -31,6 +31,7 @@ import apfe.runtime.Sequence;
 import gblib.Util;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
@@ -63,7 +64,7 @@ public abstract class Item {
     public final Acceptor getParsed() {
         return m_parsed;
     }
-    
+
     private final Marker m_loc;
     private final Acceptor m_parsed;
 
@@ -91,12 +92,41 @@ public abstract class Item {
         return new AChar(apfe.runtime.Util.<apfe.runtime.CharClass>extractEle(seq, ix));
     }
 
+    public static class PrunedSequence extends Sequence {
+
+        private PrunedSequence(final ArrayList<Acceptor> accs) {
+            super(accs.toArray(new Acceptor[0]));
+        }
+    }
+
+    /**
+     * We'll prune out 'Sp' (at least). By doing so, we can setup Ast selections
+     * without worrying about in-between spacing.
+     *
+     * @param seq original Sequence.
+     * @return seq with 'Sp' removed.
+     */
+    protected static Sequence prune(final Sequence seq) {
+        final int n = seq.getAccepted().length;
+        final ArrayList<Acceptor> accs = new ArrayList<>(n);
+        for (Acceptor acc : seq.getAccepted()) {
+            if (acc.getClass() != laol.parser.apfe.Sp.class) {
+                accs.add(acc);
+            }
+        }
+        if (accs.size() == n) {
+            return seq;
+        } else {
+            return new PrunedSequence(accs);
+        }
+    }
+
     final protected Sequence asSequence() {
         return asSequence(m_parsed);
     }
 
     public static Sequence asSequence(final Acceptor acc) {
-        return apfe.runtime.Util.asSequence(acc);
+        return prune(apfe.runtime.Util.asSequence(acc));
     }
 
     final protected Repetition asRepetition(final int pos) {
@@ -120,15 +150,6 @@ public abstract class Item {
         return rval;
     }
 
-    final protected <T extends Item> List<T> zeroOrMore(final int posOfRep, final int posInSeq) {
-        Repetition rep = asRepetition(posOfRep);
-        List<T> rval = (0 < rep.sizeofAccepted()) ? new LinkedList<>() : Collections.EMPTY_LIST;
-        for (Acceptor acc : apfe.runtime.Util.extractList(rep, posInSeq)) {
-            rval.add(createItem(acc));
-        }
-        return rval;
-    }
-
     final protected List<Ident> zeroOrMoreIdent(final int posOfRep, final int posInSeq) {
         Repetition rep = asRepetition(posOfRep);
         List<Ident> rval = (0 < rep.sizeofAccepted()) ? new LinkedList<>() : Collections.EMPTY_LIST;
@@ -137,8 +158,8 @@ public abstract class Item {
         }
         return rval;
     }
-    
-        final protected List<Ident> zeroOrMoreIdent(final Repetition rep) {
+
+    final protected List<Ident> zeroOrMoreIdent(final Repetition rep) {
         List<Ident> rval = (0 < rep.sizeofAccepted()) ? new LinkedList<>() : Collections.EMPTY_LIST;
         for (Acceptor acc : rep.getAccepted()) {
             rval.add(new Ident((IDENT) acc));
@@ -146,6 +167,31 @@ public abstract class Item {
         return rval;
     }
 
+    /**
+     * Extract item* from a Repetition of Sequence.
+     * @param <T> item is a subclass of Item.
+     * @param rep Repetition of Sequence.
+     * @param posInSeq position of item in Sequence.
+     * @return extracted item(s).
+     */
+    final protected <T extends Item> List<T> zeroOrMore(final Repetition rep, final int posInSeq) {
+        List<T> rval = (0 < rep.sizeofAccepted()) ? new LinkedList<>() : Collections.EMPTY_LIST;
+        for (Acceptor acc : apfe.runtime.Util.extractList(rep, posInSeq)) {
+            rval.add(createItem(acc));
+        }
+        return rval;
+    }
+
+    /**
+     * Extract item* from a Sequence containing a Repetition of Sequence.
+     * @param <T> item is subclass of Item.
+     * @param posOfRep position of Repetition in parsed Sequence.
+     * @param posInSeq position of item in Sequence in Repetition.
+     * @return extrcated item(s).
+     */
+    final protected <T extends Item> List<T> zeroOrMore(final int posOfRep, final int posInSeq) {
+        return zeroOrMore(asRepetition(posOfRep), posInSeq);
+    }
 
     final protected <T extends Item> List<T> zeroOrMore(final int pos) {
         return zeroOrMore(asSequence(), pos);
