@@ -40,7 +40,7 @@ regexp_item2 <-
 
 hash_primary <- LCURLY (hash_key_value (COMMA hash_key_value)*)? RCURLY
 
-hash_key <- STRING / IDENT
+hash_key <- expression
 
 hash_key_value <- hash_key COLON expression
 
@@ -221,7 +221,9 @@ var_decl_statement <-
 
 assign_statement <- assignment_lhs assignment_op assignment_rhs eos
 
-assignment_lhs <- type_decl? lhs_ref (COMMA lhs_ref)*
+assignment_lhs <- 
+	type_decl lhs_ref (COMMA lhs_ref)*
+/	lhs_ref (COMMA lhs_ref)*
 
 type_decl <- access_modifier? K_STATIC? mutability? type_name
 

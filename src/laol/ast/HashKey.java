@@ -27,11 +27,8 @@ package laol.ast;
  *
  * @author gburdell
  */
-public class HashKey extends Item {
+public class HashKey extends Expression {
     public HashKey(final laol.parser.apfe.HashKey decl) {
-        super(decl);
-        m_key = createItem(asPrioritizedChoice().getAccepted());
+        super(decl.getBaseAccepted());
     }
-    
-    private final Item  m_key;
 }

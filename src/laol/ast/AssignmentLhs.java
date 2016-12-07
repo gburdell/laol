@@ -23,8 +23,7 @@
  */
 package laol.ast;
 
-import apfe.runtime.Acceptor;
-import apfe.runtime.Util;
+import apfe.runtime.Sequence;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -36,11 +35,16 @@ public class AssignmentLhs extends Item {
 
     public AssignmentLhs(final laol.parser.apfe.AssignmentLhs decl) {
         super(decl);
-        m_decl = createItem(0);
-        m_refs.add(createItem(1));
-        for (Acceptor ref : Util.extractList(Util.extractEle(asSequence(), 2), 1)) {
-            m_refs.add(createItem(ref));
+        final Sequence seq = asPrioritizedChoice().getAccepted();
+        int firstPos = 0;
+        if (seq.itemAt(0).getClass() == laol.parser.apfe.TypeDecl.class) {
+            m_decl = createItem(seq, 0);
+            firstPos++;
+        } else {
+            m_decl = null;
         }
+        m_refs.add(createItem(seq, firstPos++));
+        m_refs.addAll(zeroOrMore(asRepetition(seq, firstPos), 1));
     }
 
     private final TypeDecl m_decl;
