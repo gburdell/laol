@@ -24,6 +24,7 @@
 package laol.ast;
 
 import apfe.runtime.Sequence;
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -47,6 +48,14 @@ public class AssignmentLhs extends Item {
         m_refs.addAll(zeroOrMore(asRepetition(seq, firstPos), 1));
     }
 
+    public TypeDecl getDecl() {
+        return m_decl;
+    }
+
+    public List<LhsRef> getRefs() {
+        return Collections.unmodifiableList(m_refs);
+    }
+    
     private final TypeDecl m_decl;
     private final List<LhsRef> m_refs = new LinkedList<>();
 }

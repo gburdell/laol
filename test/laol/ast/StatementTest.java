@@ -35,6 +35,8 @@ import static org.junit.Assert.*;
 public class StatementTest extends TestRunner {
 
     private final String TESTS[] = {
+        "foo.bar;",
+        "a=b",
         "1+2^3-4",
         "total = by_sys.values.map{|h| h.values}.flatten.reduce(0){|m,o| m += o[:resource]}"
     };

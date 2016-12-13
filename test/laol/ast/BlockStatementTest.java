@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2016 gburdell.
+ * Copyright 2016 kpfalzer.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -23,14 +23,40 @@
  */
 package laol.ast;
 
-import apfe.runtime.Util;
+import apfe.runtime.Acceptor;
+import laol.test.TestRunner;
+import org.junit.Test;
+import static org.junit.Assert.*;
 
 /**
  *
- * @author gburdell
+ * @author kpfalzer
  */
-public class BaseClassInitializer extends MethodParamDecl {
-    public BaseClassInitializer(final laol.parser.apfe.BaseClassInitializer decl) {
-        super(Util.downcast(asSequence(decl).itemAt(1)));
-    }    
+public class BlockStatementTest extends TestRunner {
+
+    private final String TESTS[] = {
+        "{a=b}",
+        "{\nc=d\nc=foo?.bar}",
+        "{foo.ba;dog.cat}"
+    };
+
+    @Override
+    public Acceptor getGrammar() {
+        return new laol.parser.apfe.BlockStatement();
+    }
+
+    @Override
+    public void generateAndTestAst(Acceptor parsed) {
+        laol.ast.BlockStatement dut = new laol.ast.BlockStatement((laol.parser.apfe.BlockStatement) parsed);
+        assertTrue(m_test.equals(m_accepted));
+    }
+
+    @Test
+    public void testAccessModifier() {
+        TestRunner runner = new BlockStatementTest();
+        runner.runTests(TESTS);
+    }
+
 }
+
+

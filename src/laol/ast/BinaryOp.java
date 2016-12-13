@@ -41,8 +41,23 @@ public class BinaryOp extends Item {
 
     public BinaryOp(final laol.parser.apfe.BinaryOp decl) {
         super(decl);
+        Acceptor acc = asPrioritizedChoice().getAccepted();
+        Class clz = acc.getClass();
+        if (!gblib.Util.isUpperCase(clz.getSimpleName())) {
+            //assume leaf op based on all-caps naming convention
+            acc = asPrioritizedChoice(acc).getAccepted();
+            clz = acc.getClass();
+            assert(gblib.Util.isUpperCase(clz.getSimpleName()));
+        }
+        m_op = clz;
     }
 
+    public Class getOp() {
+        return m_op;
+    }
+    
+    private final Class m_op;
+    
     /**
      * Helper class.
      * @param <T> a left recursive nonterminal.

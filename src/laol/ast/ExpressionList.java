@@ -34,15 +34,15 @@ import java.util.List;
 public class ExpressionList extends Item {
     public ExpressionList(final laol.parser.apfe.ExpressionList decl) {
         super(decl);
-        m_names.add(createItem(0));
+        m_exprs.add(createItem(0));
         for (Acceptor cls : asRepetition(1).getAccepted()) {
-            m_names.add(createItem(cls, 1));
+            m_exprs.add(createItem(cls, 1));
         }
     }
     
     public List<Expression> getExpressions() {
-        return Collections.unmodifiableList(m_names);
+        return Collections.unmodifiableList(m_exprs);
     }
     
-    private final List<Expression>   m_names = new LinkedList<>();
+    private final List<Expression>   m_exprs = new LinkedList<>();
  }

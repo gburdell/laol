@@ -34,5 +34,9 @@ public class AssignmentRhs extends Item {
         m_rhs = createItem(asPrioritizedChoice().getAccepted());
     }
 
+    public Item getRhs() {
+        return m_rhs;
+    }
+    
     private final Item  m_rhs;
 }

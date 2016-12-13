@@ -23,12 +23,7 @@
  */
 package laol.ast;
 
-import apfe.runtime.Acceptor;
-import apfe.runtime.Marker;
-import apfe.runtime.Repetition;
-import apfe.runtime.Sequence;
-import apfe.runtime.Util;
-import java.util.LinkedList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -42,5 +37,9 @@ public class BlockStatement extends Item {
         m_stmts = zeroOrMore(1);
     }
 
+    public List<Item> getStatements() {
+        return Collections.unmodifiableList(m_stmts);
+    }
+    
     private final List<Item> m_stmts;
 }

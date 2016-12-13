@@ -23,8 +23,6 @@
  */
 package laol.ast;
 
-import apfe.runtime.Marker;
-
 /**
  *
  * @author gburdell
@@ -36,5 +34,9 @@ public class AssignmentOp extends Item {
         m_op = asPrioritizedChoice().getAccepted().getClass();
     }
 
+    public Class getOp() {
+        return m_op;
+    }
+    
     private final Class m_op;
 }

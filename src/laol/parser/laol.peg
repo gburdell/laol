@@ -281,10 +281,10 @@ statement <-
 /   method_declaration 
 /   mixin_statement
 /   assign_statement
-/   var_decl_statement
 /   expression_statement
+/   var_decl_statement
 
-block_statement <- LCURLY statement* RCURLY  ;
+block_statement <- LCURLY sp statement* RCURLY eos ;
 break_statement <- K_BREAK eos ;
 next_statement <-  K_NEXT eos ;
 alias_statement <- K_ALIAS method_name method_name eos ;

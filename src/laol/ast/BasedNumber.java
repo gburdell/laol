@@ -37,5 +37,35 @@ import java.util.List;
 public class BasedNumber extends Item {
     public BasedNumber(final laol.parser.apfe.BasedNumber decl) {
         super(decl);
+        Sequence seq = asSequence();
+        Repetition rep = asRepetition(seq, 0);
+        if (0 < rep.sizeofAccepted()) {
+            m_size = Integer.parseInt(rep.toString().replace("_", ""));
+        } else {
+            m_size = -1;
+        }
+        seq = asPrioritizedChoice(seq.itemAt(3)).getAccepted();
+        m_base = Character.toUpperCase(seq.itemAt(0).toString().charAt(0));
+        m_val = seq.itemAt(1).toString();
     }
+    
+    public boolean hasSize() {
+        return m_size >= 0;
+    }
+    
+    public int getSize() {
+        return m_size;
+    }
+
+    public char getBase() {
+        return m_base;
+    }
+
+    public String getVal() {
+        return m_val;
+    }
+       
+    private final int   m_size;
+    private final char  m_base;
+    private final String    m_val;
 }
