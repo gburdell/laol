@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2016 gburdell.
+ * Copyright 2016 kpfalzer.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -23,16 +23,39 @@
  */
 package laol.ast;
 
+import apfe.runtime.Acceptor;
+import laol.test.TestRunner;
+import org.junit.Test;
+import static org.junit.Assert.*;
+
 /**
  *
- * @author gburdell
+ * @author kpfalzer
  */
-public class BreakStatement extends Item {
+public class BreakStatementTest extends TestRunner {
 
-    public BreakStatement(final laol.parser.apfe.BreakStatement decl) {
-        super(decl);
-        m_stmtModifier = getStatementModifier(asSequence(), 1);
+    private final String TESTS[] = {
+        "break",
+        "break if a==b unless a.nil?"
+    };
+
+    @Override
+    public Acceptor getGrammar() {
+        return new laol.parser.apfe.BreakStatement();
     }
 
-    private final StatementModifier m_stmtModifier;
+    @Override
+    public void generateAndTestAst(Acceptor parsed) {
+        laol.ast.BreakStatement dut = new laol.ast.BreakStatement((laol.parser.apfe.BreakStatement) parsed);
+        assertTrue(m_test.equals(m_accepted));
+    }
+
+    @Test
+    public void testAccessModifier() {
+        TestRunner runner = new BreakStatementTest();
+        runner.runTests(TESTS);
+    }
+
 }
+
+

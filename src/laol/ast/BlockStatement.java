@@ -23,6 +23,7 @@
  */
 package laol.ast;
 
+import apfe.runtime.Sequence;
 import java.util.Collections;
 import java.util.List;
 
@@ -34,12 +35,19 @@ public class BlockStatement extends Item {
 
     public BlockStatement(final laol.parser.apfe.BlockStatement decl) {
         super(decl);
-        m_stmts = zeroOrMore(1);
+        final Sequence seq = asSequence();
+        m_stmts = zeroOrMore(seq, 1);
+        m_stmtModifier = getStatementModifier(seq, 3);
     }
 
     public List<Item> getStatements() {
         return Collections.unmodifiableList(m_stmts);
     }
+
+    public StatementModifier getStmtModifier() {
+        return m_stmtModifier;
+    }
     
     private final List<Item> m_stmts;
+    private final StatementModifier m_stmtModifier;
 }

@@ -35,7 +35,8 @@ import static org.junit.Assert.*;
 public class AssignStatementTest extends TestRunner {
 
     private final String TESTS[] = {
-        "a = a + 5"
+        "a = a + 5",
+        "a = b[345] * c[:foo] unless a==b"
     };
 
     @Override

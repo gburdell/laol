@@ -24,7 +24,6 @@
 package laol.ast;
 
 import apfe.runtime.Sequence;
-import gblib.Util;
 
 /**
  *
@@ -38,9 +37,25 @@ public class AssignStatement extends Item {
         m_lhs = createItem(seq, 0);
         m_op = createItem(seq, 1);
         m_rhs = createItem(seq, 2);
-        m_stmtModifier = Util.<Eos>downCast(createItem(seq, 3)).getStmtModifier();
+        m_stmtModifier = getStatementModifier(seq, 3);
     }
 
+    public AssignmentLhs geLhs() {
+        return m_lhs;
+    }
+
+    public AssignmentOp getOp() {
+        return m_op;
+    }
+
+    public AssignmentRhs getRhs() {
+        return m_rhs;
+    }
+
+    public StatementModifier getStmtModifier() {
+        return m_stmtModifier;
+    }
+    
     private final AssignmentLhs m_lhs;
     private final AssignmentOp  m_op;
     private final AssignmentRhs m_rhs;

@@ -260,4 +260,7 @@ public abstract class Item {
         return createItem(asSequence(), pos);
     }
 
+    final protected StatementModifier getStatementModifier(final Sequence seq, final int pos) {
+        return Util.<Eos>downCast(createItem(seq, pos)).getStmtModifier();
+    }
 }
