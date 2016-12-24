@@ -23,12 +23,15 @@
  */
 package laol.rt;
 
+import gblib.Util;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Objects;
 
 /**
  * Array/List implementation.
+ * Unlike Ruby array, LaolArray only grows linearly in size:
+ * i.e., cannot: a = []; a << 4; a[34] = 7;
  *
  * @author kpfalzer
  */
@@ -50,22 +53,23 @@ public class LaolArray extends LaolObject {
     }
 
     //operator []=
-    public <T extends LaolObject> T set(final LaolInteger ix, final T val) {
+    public <T extends LaolObject> T set(final LaolObject ix, final T val) {
         mutableCheck();
-        final int i = realIndex(ix);
+        final LaolNumber ix2 = Util.downCast(ix);
+        final int i = realIndex(ix2);
         if (isValidIndex(i)) {
             m_eles.set(i, val);
             return val;
         }
-        throw new IndexException(ix);
+        throw new IndexException(ix2);
     }
 
     //operator []
-    public <T extends LaolObject> T get(final LaolInteger ix) {
-        return valOrNull(get(ix.get()));
+    public <T extends LaolObject> T get(final LaolObject ix) {
+        return valOrNull(get(Util.<LaolNumber>downCast(ix)));
     }
 
-    private LaolObject get(final int ix) {
+    private LaolObject get(final LaolNumber ix) {
         final int i = realIndex(ix);
         final LaolObject val = isValidIndex(i) ? m_eles.get(i) : null;
         return val;
@@ -85,8 +89,8 @@ public class LaolArray extends LaolObject {
         return i;
     }
 
-    private int realIndex(final LaolInteger ix) {
-        return realIndex(ix.get());
+    private int realIndex(final LaolNumber ix) {
+        return realIndex(ix.toInteger().get());
     }
 
     private boolean isValidIndex(int i) {
@@ -95,8 +99,8 @@ public class LaolArray extends LaolObject {
 
     public static class IndexException extends LaolException {
 
-        public IndexException(final LaolInteger ix) {
-            super("Invalid index: " + ix.get());
+        public IndexException(final LaolNumber ix) {
+            super("Invalid index: " + ix.toInteger());
         }
 
     }

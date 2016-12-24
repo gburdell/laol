@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2016 gburdell.
+ * Copyright 2016 kpfalzer.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -23,56 +23,11 @@
  */
 package laol.rt;
 
-import org.junit.Test;
-import static org.junit.Assert.*;
-
 /**
  *
- * @author gburdell
+ * @author kpfalzer
  */
-public class LaolArrayTest {
-    
-    @Test
-    public void testAdd() {
-        final LaolArray dut = (new LaolArray()).setMutable();
-        dut.add(new LaolInteger(1234)).add(new LaolInteger(5678));
-        assertEquals(new LaolInteger(2), dut.size());
-    }
-
-    @Test
-    public void testSet() {
-    }
-
-    @Test
-    public void testGet() {
-        final LaolArray dut = (new LaolArray()).setMutable();
-        final LaolInteger vals[] = {
-            new LaolInteger(1234),
-            new LaolInteger(5678)
-        };
-        dut.add(vals[0]).add(vals[1]);
-        LaolObject ix = new LaolInteger(0);
-        LaolInteger v1 = dut.get(ix);
-        assertEquals(vals[0], v1);
-        assertTrue(!v1.isMutable());
-        LaolInteger v2 = dut.get(new LaolInteger(1));
-        assertEquals(vals[1], v2);
-    }
-
-    @Test
-    public void testIsEmpty() {
-    }
-
-    @Test
-    public void testSize() {
-    }
-
-    @Test
-    public void testHashCode() {
-    }
-
-    @Test
-    public void testEquals() {
-    }
-    
+public interface LaolNumber {
+    public LaolInteger toInteger();
+    public LaolDouble  toDouble();
 }

@@ -550,7 +550,9 @@ K_TARGET    <- "__TARGET__" K_tail
 
 K_tail <- ![_a-zA-Z0-9] Spacing
 
-SYMBOL  <- ':' IDENTNK Spacing
+SYMBOL <- 
+	':' IDENTNK Spacing
+/	':' (binary_op / unary_op)
 ;
 
 // includes optional '?'

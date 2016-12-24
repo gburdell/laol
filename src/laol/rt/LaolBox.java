@@ -53,6 +53,11 @@ public abstract class LaolBox<T> extends LaolObject {
     }
 
     @Override
+    public LaolString toS() {
+        return new LaolString(m_val.toString());
+    }
+
+    @Override
     public boolean equals(Object obj) {
         if (this == obj) {
             return true;

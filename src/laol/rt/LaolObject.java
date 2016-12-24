@@ -56,11 +56,15 @@ public abstract class LaolObject {
     }
 
     public static <T extends LaolObject> T valOrNull(final LaolObject val) {
-        return (null != val) ? Util.downCast(val) : null;
+        return Util.downCast(val);
     }
 
-    public static <T extends LaolObject> boolean isNull(final T obj) {
+    public static boolean isNull(final LaolObject obj) {
         return (null == obj);
+    }
+    
+    public LaolString toS() {
+        return new LaolString(super.toString());
     }
     
     private boolean m_mutable = false;

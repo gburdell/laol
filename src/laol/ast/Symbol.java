@@ -31,6 +31,7 @@ public class Symbol extends Item {
     public Symbol(final laol.parser.apfe.SYMBOL decl) {
         super(decl);
         m_sym = getIdent(1);
+        //TODO: could be ident or operator
     }
     
     private final Ident m_sym;

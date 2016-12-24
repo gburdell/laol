@@ -27,7 +27,7 @@ package laol.rt;
  *
  * @author kpfalzer
  */
-public class LaolInteger extends LaolBox<Integer> {
+public class LaolInteger extends LaolBox<Integer> implements LaolNumber {
     public LaolInteger(final Integer val) {
         super(val);
     }
@@ -53,4 +53,15 @@ public class LaolInteger extends LaolBox<Integer> {
         set(get() - 1);
         return rval;
     }
+
+    @Override
+    public LaolDouble toDouble() {
+        return new LaolDouble(get().doubleValue());
+    }
+
+    @Override
+    public LaolInteger toInteger() {
+        return this;
+    }
+    
 }
