@@ -33,6 +33,14 @@ public class LaolException extends RuntimeException {
         super(detail);
     }
 
+    public LaolException(final Throwable thrown) {
+        super(thrown.getMessage());
+    }
+    
+    public LaolException(final Exception thrown) {
+        super(thrown.getMessage());
+    }
+    
     public static class Immutable extends LaolException {
 
         public Immutable(final String detail) {

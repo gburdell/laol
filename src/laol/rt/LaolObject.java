@@ -24,6 +24,11 @@
 package laol.rt;
 
 import gblib.Util;
+import java.lang.invoke.MethodHandle;
+import static java.lang.invoke.MethodHandles.publicLookup;
+import java.lang.invoke.MethodType;
+import static java.lang.invoke.MethodType.methodType;
+import java.util.Arrays;
 
 /**
  * Base class of all objects.
@@ -62,10 +67,34 @@ public abstract class LaolObject {
     public static boolean isNull(final LaolObject obj) {
         return (null == obj);
     }
-    
+
     public LaolString toS() {
         return new LaolString(super.toString());
     }
-    
+
+    public LaolObject callPublic(final String method, LaolObject... argv) {
+        LaolObject rval = null;
+        try {
+            final Class<LaolObject> rtypes[] = new Class[argv.length];
+            Arrays.fill(rtypes, LaolObject.class);
+            MethodHandle handle = publicLookup()
+                    .findVirtual(
+                            this.getClass(),
+                            method,
+                            methodType(
+                                    LaolObject.class, //return types
+                                    rtypes  //arg types
+                            ));
+            //arguments to method are p1,...,p2 (spread: not array)
+            handle = handle.asSpreader(LaolObject[].class, argv.length);
+            rval = (LaolObject) handle.invoke(this, argv);
+        } catch (Exception ex) {
+            throw new LaolException(ex);
+        } catch (Throwable ex) {
+            throw new LaolException(ex);
+        }
+        return rval;
+    }
+
     private boolean m_mutable = false;
 }

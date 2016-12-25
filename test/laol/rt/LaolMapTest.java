@@ -32,7 +32,7 @@ import static laol.rt.LaolObject.isNull;
  * @author gburdell
  */
 public class LaolMapTest {
-    
+
     @Test
     public void testSet() {
         LaolMap dut = (new LaolMap()).setMutable();
@@ -50,6 +50,18 @@ public class LaolMapTest {
             dut.set(key2, val2);
             LaolString from2 = dut.get(key2);
             assertEquals(from2, val2);
+        }
+        {
+            LaolObject dutObj = dut;
+            LaolObject key2 = new LaolString("key2");
+            double d = 9876.4321;
+            LaolObject val2 = new LaolDouble(d);
+            LaolObject rval = dutObj.callPublic("set", key2, val2);
+            assertEquals(val2, rval);
+            rval = dutObj.callPublic("get", key2);
+            assertEquals(val2, rval);
+            String s = val2.toS().get();
+            assertEquals(Double.toString(d), s);
         }
     }
 
@@ -72,5 +84,5 @@ public class LaolMapTest {
     @Test
     public void testEquals() {
     }
-    
+
 }
