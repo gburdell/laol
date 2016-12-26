@@ -24,11 +24,15 @@
 package laol.rt;
 
 import gblib.Util;
+import gblib.Util.Pair;
+import gblib.Util.Triplet;
 import java.lang.invoke.MethodHandle;
 import static java.lang.invoke.MethodHandles.publicLookup;
 import java.lang.invoke.MethodType;
 import static java.lang.invoke.MethodType.methodType;
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Base class of all objects.
@@ -83,7 +87,7 @@ public abstract class LaolObject {
                             method,
                             methodType(
                                     LaolObject.class, //return types
-                                    rtypes  //arg types
+                                    rtypes //arg types
                             ));
             //arguments to method are p1,...,p2 (spread: not array)
             handle = handle.asSpreader(LaolObject[].class, argv.length);
@@ -97,4 +101,4 @@ public abstract class LaolObject {
     }
 
     private boolean m_mutable = false;
-}
+    }
