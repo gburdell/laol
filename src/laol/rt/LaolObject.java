@@ -79,19 +79,8 @@ public abstract class LaolObject {
     public LaolObject callPublic(final String method, LaolObject... argv) {
         LaolObject rval = null;
         try {
-            final Class<LaolObject> rtypes[] = new Class[argv.length];
-            Arrays.fill(rtypes, LaolObject.class);
-            MethodHandle handle = publicLookup()
-                    .findVirtual(
-                            this.getClass(),
-                            method,
-                            methodType(
-                                    LaolObject.class, //return types
-                                    rtypes //arg types
-                            ));
-            //arguments to method are p1,...,p2 (spread: not array)
-            handle = handle.asSpreader(LaolObject[].class, argv.length);
-            rval = (LaolObject) handle.invoke(this, argv);
+            rval = (LaolObject) getHandle(this.getClass(), method, argv.length)
+                    .invoke(this, argv);
         } catch (Exception ex) {
             throw new LaolException(ex);
         } catch (Throwable ex) {
@@ -101,4 +90,27 @@ public abstract class LaolObject {
     }
 
     private boolean m_mutable = false;
+    
+    private static final Map<String, MethodHandle> HANDLE_BY_NAME = new HashMap<>();
+    
+    private MethodHandle getHandle(Class clz, String name, int arity) throws NoSuchMethodException, IllegalAccessException {
+        final String key = clz.getName() + "/" + name + "#" + arity;
+        MethodHandle handle = HANDLE_BY_NAME.get(key);
+        if (null == handle) {
+            final Class<LaolObject> rtypes[] = new Class[arity];
+            Arrays.fill(rtypes, LaolObject.class);
+                    handle = publicLookup()
+                    .findVirtual(
+                            clz,
+                            name,
+                            methodType(
+                                    LaolObject.class, //return types
+                                    rtypes //arg types
+                            ));
+            //arguments to method are p1,...,p2 (spread: not array)
+            handle = handle.asSpreader(LaolObject[].class, arity);
+            HANDLE_BY_NAME.put(key, handle);
+        }
+        return handle;
     }
+}
