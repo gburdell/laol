@@ -64,13 +64,14 @@ public class LaolMapTest {
             assertEquals(Double.toString(d), s);
         }
         {
-            final int N = 1000000;
+            final int N = 20000000;
             LaolMap map = new LaolMap().setMutable();
             LaolObject key3, val3;
             for (int i = 0; i < N; i++) {
                 key3 = new LaolInteger(i);
                 val3 = new LaolString(key3.toS());
                 map.callPublic("set", key3, val3);
+                assertEquals(val3, map.callPublic("get", key3));
             }
         }
     }

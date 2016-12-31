@@ -22,20 +22,27 @@
  * THE SOFTWARE.
  */
 package laol.ast;
-import apfe.runtime.Acceptor;
-import apfe.runtime.Marker;
-import apfe.runtime.Repetition;
-import apfe.runtime.Sequence;
-import apfe.runtime.Util;
-import java.util.LinkedList;
-import java.util.List;
 
 /**
  *
  * @author gburdell
  */
 public class BuiltinTypeName extends Item {
+
     public BuiltinTypeName(final laol.parser.apfe.BuiltinTypeName decl) {
         super(decl);
+        //Keep in order as parser
+        final int choice = asPrioritizedChoice().whichAccepted();
+        m_type = EType.values()[choice];
     }
+
+    public static enum EType {
+        eInt, eDouble, eBool, eString, eMap, eArray, eUnknown
+    };
+    
+    public EType getType() {
+        return m_type;
+    }
+
+    private final EType m_type;
 }

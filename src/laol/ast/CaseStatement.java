@@ -24,13 +24,12 @@
 package laol.ast;
 
 import apfe.runtime.Acceptor;
-import apfe.runtime.Marker;
 import apfe.runtime.Repetition;
 import apfe.runtime.Sequence;
 import gblib.Util;
 import java.util.LinkedList;
 import java.util.List;
-import static apfe.runtime.Util.extractEle;
+import java.util.Collections;
 
 /**
  *
@@ -48,7 +47,22 @@ public class CaseStatement extends Item {
         rep = asRepetition(4);
         if (0 < rep.sizeofAccepted()) {
             m_else = createItem(asSequence(rep.getOnlyAccepted()), 1);
+        } else {
+            m_else = null;
         }
+        m_stmtModifier = getStatementModifier(asSequence(), 6);
+    }
+
+    public Expression getExpr() {
+        return m_expr;
+    }
+
+    public List<WhenClause> getWhenClauses() {
+        return Collections.unmodifiableList(m_alts);
+    }
+
+    public Statement getElse() {
+        return m_else;
     }
 
     private void addWhen(final Acceptor whenClause) {
@@ -57,13 +71,21 @@ public class CaseStatement extends Item {
         final Statement stmt = createItem(clause, 3);
         m_alts.add(new WhenClause(exprs, stmt));
     }
-    
-     private final Expression    m_expr;
-    static final class WhenClause extends Util.Pair<ExpressionList, Statement> {
+
+    public static final class WhenClause extends Util.Pair<ExpressionList, Statement> {
+
         private WhenClause(final ExpressionList expr, final Statement stmt) {
             super(expr, stmt);
         }
     }
-    private final List<WhenClause>  m_alts = new LinkedList<>();
-    private Statement m_else = null;
+
+    public StatementModifier getStmtModifier() {
+        return m_stmtModifier;
+    }
+
+    private final StatementModifier m_stmtModifier;
+
+    private final Expression m_expr;
+    private final List<WhenClause> m_alts = new LinkedList<>();
+    private final Statement m_else;
 }

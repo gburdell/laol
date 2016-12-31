@@ -306,9 +306,9 @@ return_statement <- K_RETURN (expression)? eos
 
 throw_statement <- K_THROW expression eos
 
-catch_statement <- K_CATCH expression sp statement eos
+catch_statement <- K_CATCH expression sp statement_clause
 
-finally_statement <- K_FINALLY statement eos
+finally_statement <- K_FINALLY statement_clause
 
 mixin_name <- scoped_name
 
@@ -437,12 +437,16 @@ if_statement <-
         (K_ELSIF expression sp statement sp)*
         (K_ELSE statement sp)?
 
-while_statement <- K_WHILE expression sp statement eos
-until_statement <- K_UNTIL expression sp statement eos
+statement_clause <-
+	LCURLY statement RCURLY eos
+/	statement
+
+while_statement <- K_WHILE expression sp statement_clause
+until_statement <- K_UNTIL expression sp statement_clause
 
 enumerable_expression <- expression
 
-for_statement <- K_FOR IDENTNK K_IN enumerable_expression sp statement eos
+for_statement <- K_FOR IDENTNK K_IN enumerable_expression sp statement_clause
 ;
 
 // a bit more complicated, so customize

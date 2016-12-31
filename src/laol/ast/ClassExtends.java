@@ -44,6 +44,22 @@ public class ClassExtends extends Item {
         }
         m_implements = (null != cls) ? createItem(cls, 1) : null;
     }
+
+    public boolean hasExtends() {
+        return (null != m_extends);
+    }
+    
+    public ClassName getExtends() {
+        return m_extends;
+    }
+
+    public boolean hasImplements() {
+        return (null != m_implements);
+    }
+    
+    public ClassNameList getImplements() {
+        return m_implements;
+    }
     
     private final ClassName m_extends;
     private final ClassNameList   m_implements;

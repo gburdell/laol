@@ -34,5 +34,9 @@ public class BreakStatement extends Item {
         m_stmtModifier = getStatementModifier(asSequence(), 1);
     }
 
+    public StatementModifier getStmtModifier() {
+        return m_stmtModifier;
+    }
+
     private final StatementModifier m_stmtModifier;
 }

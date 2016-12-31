@@ -1,5 +1,5 @@
 Class
------
+=====
 A class declaration is similar to Scala and Ruby.
 Example:
 
@@ -40,3 +40,31 @@ with any parameters; i.e., only the initializer 'def X {}' allowed.
 You must use 'class X {def X(a,b){}; def X(a,b,c){}} to define different
 constructors.
 -------------------------------------------------------------------------------
+
+Ambiguity of statement modifier suffix
+======================================
+Realize issue with 'statement eos' as part of other clause,
+since eos is ambiguous, as in:
+
+	while cond stmt if cond2
+
+where does 'cond2' bind?
+Lets be explicit:
+
+	while cond {stmt} if cond2
+
+will bind cond2 to while.
+Otherwise need
+
+	while cond {stmt if cond2}
+
+and possibly
+
+	while cond {{stmt1;stmt2} if cond1} if cond3
+
+which binds cond1 to stmt... and cond3 to while.
+Back to:
+
+	while cond stmt if cond2
+
+cond2 binds to stmt

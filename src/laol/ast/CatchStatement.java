@@ -22,20 +22,30 @@
  * THE SOFTWARE.
  */
 package laol.ast;
-import apfe.runtime.Acceptor;
-import apfe.runtime.Marker;
-import apfe.runtime.Repetition;
+
 import apfe.runtime.Sequence;
-import apfe.runtime.Util;
-import java.util.LinkedList;
-import java.util.List;
 
 /**
  *
  * @author gburdell
  */
 public class CatchStatement extends Item {
+
     public CatchStatement(final laol.parser.apfe.CatchStatement decl) {
         super(decl);
+        final Sequence seq = asSequence();
+        m_expr = createItem(seq, 1);
+        m_stmt = createItem(seq, 2);
     }
+
+    public Expression getExpr() {
+        return m_expr;
+    }
+
+    public StatementClause getStmt() {
+        return m_stmt;
+    }
+
+    private final Expression m_expr;
+    private final StatementClause m_stmt;
 }

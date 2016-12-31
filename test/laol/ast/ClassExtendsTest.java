@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2016 gburdell.
+ * Copyright 2016 kpfalzer.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -23,36 +23,41 @@
  */
 package laol.ast;
 
-import apfe.runtime.Repetition;
-import java.util.Collections;
-import java.util.LinkedList;
-import java.util.List;
+import apfe.runtime.Acceptor;
+import laol.test.TestRunner;
+import org.junit.Test;
+import static org.junit.Assert.*;
 
 /**
  *
- * @author gburdell
+ * @author kpfalzer
  */
-public class ScopedName extends Item {
+public class ClassExtendsTest extends TestRunner {
 
-    public ScopedName(final laol.parser.apfe.ScopedName decl) {
-        super(decl);
-        Repetition rep = asRepetition(0);
-        m_isRooted = rep.sizeofAccepted() > 0;
-        m_path.add(getIdent(1));
-        m_path.addAll(zeroOrMoreIdent(2, 1));        
+    private final String TESTS[] = {
+        "extends Foo",
+        "implements Bar",
+        "extends Dog implements Bar",
+        "extends Cat implements Im1, Jk3"
+    };
+
+    @Override
+    public Acceptor getGrammar() {
+        return new laol.parser.apfe.ClassExtends();
     }
 
-    public List<Ident>  getIdents() {
-        return Collections.unmodifiableList(m_path);
+    @Override
+    public void generateAndTestAst(Acceptor parsed) {
+        laol.ast.ClassExtends dut = new laol.ast.ClassExtends((laol.parser.apfe.ClassExtends) parsed);
+        assertTrue(m_test.equals(m_accepted));
     }
-    
-    public boolean isRooted() {
-        return m_isRooted;
+
+    @Test
+    public void testAccessModifier() {
+        TestRunner runner = new ClassExtendsTest();
+        runner.runTests(TESTS);
     }
-    
-    /**
-     * Scoped name started with '::'.
-     */
-    private final boolean m_isRooted;
-    private final List<Ident> m_path = new LinkedList<>();
+
 }
+
+

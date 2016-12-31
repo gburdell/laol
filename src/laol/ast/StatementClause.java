@@ -22,37 +22,36 @@
  * THE SOFTWARE.
  */
 package laol.ast;
-
-import apfe.runtime.Repetition;
-import java.util.Collections;
-import java.util.LinkedList;
-import java.util.List;
+import apfe.runtime.Acceptor;
+import apfe.runtime.Sequence;
+import apfe.runtime.Util;
 
 /**
  *
  * @author gburdell
  */
-public class ScopedName extends Item {
-
-    public ScopedName(final laol.parser.apfe.ScopedName decl) {
+public class StatementClause extends Item {
+    public StatementClause(final laol.parser.apfe.StatementClause decl) {
         super(decl);
-        Repetition rep = asRepetition(0);
-        m_isRooted = rep.sizeofAccepted() > 0;
-        m_path.add(getIdent(1));
-        m_path.addAll(zeroOrMoreIdent(2, 1));        
+        final Acceptor acc = asPrioritizedChoice().getAccepted();
+        if (acc instanceof Sequence) {
+            final Sequence seq = Util.downcast(acc);
+            m_stmt = createItem(seq, 1);
+            m_stmtModifier = getStatementModifier(seq, 3);
+        } else {
+            m_stmt = createItem(acc);
+            m_stmtModifier = null;  
+        }
     }
 
-    public List<Ident>  getIdents() {
-        return Collections.unmodifiableList(m_path);
+    public Statement getStmtClause() {
+        return m_stmt;
+    }
+
+    public StatementModifier getStmtModifier() {
+        return m_stmtModifier;
     }
     
-    public boolean isRooted() {
-        return m_isRooted;
-    }
-    
-    /**
-     * Scoped name started with '::'.
-     */
-    private final boolean m_isRooted;
-    private final List<Ident> m_path = new LinkedList<>();
+    private final Statement m_stmt;
+    private final StatementModifier m_stmtModifier;
 }

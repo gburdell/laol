@@ -24,11 +24,8 @@
 package laol.rt;
 
 import gblib.Util;
-import gblib.Util.Pair;
-import gblib.Util.Triplet;
 import java.lang.invoke.MethodHandle;
 import static java.lang.invoke.MethodHandles.publicLookup;
-import java.lang.invoke.MethodType;
 import static java.lang.invoke.MethodType.methodType;
 import java.util.Arrays;
 import java.util.HashMap;
