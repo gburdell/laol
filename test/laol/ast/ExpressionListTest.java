@@ -32,28 +32,26 @@ import static org.junit.Assert.*;
  *
  * @author kpfalzer
  */
-public class ExpressionStatementTest extends TestRunner {
+public class ExpressionListTest extends TestRunner {
 
     private final String TESTS[] = {
-        "foo.bar++ unless f==bar;",
-        "bar[:foo][7].goop({a:5}) + 1",
-        "fn(a:4,f:5,g[:bar]) << 45"
+        "foo.bar + 45 - 66,\na + 5;"
     };
 
     @Override
     public Acceptor getGrammar() {
-        return new laol.parser.apfe.ExpressionStatement();
+        return new laol.parser.apfe.ExpressionList();
     }
 
     @Override
     public void generateAndTestAst(Acceptor parsed) {
-        laol.ast.ExpressionStatement dut = new laol.ast.ExpressionStatement((laol.parser.apfe.ExpressionStatement) parsed);
+        laol.ast.ExpressionList dut = new laol.ast.ExpressionList((laol.parser.apfe.ExpressionList) parsed);
         assertTrue(m_test.equals(m_accepted));
     }
 
     @Test
     public void testAccessModifier() {
-        TestRunner runner = new ExpressionStatementTest();
+        TestRunner runner = new ExpressionListTest();
         runner.runTests(TESTS);
     }
 

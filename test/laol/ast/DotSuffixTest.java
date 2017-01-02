@@ -32,28 +32,29 @@ import static org.junit.Assert.*;
  *
  * @author kpfalzer
  */
-public class ExpressionStatementTest extends TestRunner {
+public class DotSuffixTest extends TestRunner {
 
     private final String TESTS[] = {
-        "foo.bar++ unless f==bar;",
-        "bar[:foo][7].goop({a:5}) + 1",
-        "fn(a:4,f:5,g[:bar]) << 45"
+        ".foobar",
+        ".new",
+        ".nil",
+        ".nil?  "
     };
 
     @Override
     public Acceptor getGrammar() {
-        return new laol.parser.apfe.ExpressionStatement();
+        return new laol.parser.apfe.DotSuffix();
     }
 
     @Override
     public void generateAndTestAst(Acceptor parsed) {
-        laol.ast.ExpressionStatement dut = new laol.ast.ExpressionStatement((laol.parser.apfe.ExpressionStatement) parsed);
+        laol.ast.DotSuffix dut = new laol.ast.DotSuffix((laol.parser.apfe.DotSuffix) parsed);
         assertTrue(m_test.equals(m_accepted));
     }
 
     @Test
     public void testAccessModifier() {
-        TestRunner runner = new ExpressionStatementTest();
+        TestRunner runner = new DotSuffixTest();
         runner.runTests(TESTS);
     }
 

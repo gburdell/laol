@@ -22,20 +22,21 @@
  * THE SOFTWARE.
  */
 package laol.ast;
-
-import apfe.runtime.Acceptor;
-import apfe.runtime.Util;
+import apfe.runtime.Sequence;
 
 /**
  *
  * @author gburdell
  */
 public class RequireStatement extends Item {
-    public RequireStatement(final Acceptor acc) {
-        super(acc);
-        m_stmt = Util.asString(Util.downcast(acc), 1);
+    public RequireStatement(final laol.parser.apfe.RequireStatement decl) {
+        super(decl);
+        final Sequence seq = asSequence();
+        m_require = getString(seq, 1);
+        m_stmtModifier = getStatementModifier(seq, 2);
     }
-
-     private final String m_stmt;
- 
+    
+    private final AString   m_require;
+    private final StatementModifier m_stmtModifier;
+    
 }

@@ -23,6 +23,8 @@
  */
 package laol.ast;
 
+import apfe.runtime.Sequence;
+
 /**
  *
  * @author gburdell
@@ -31,12 +33,25 @@ public class ForStatement extends Item {
 
     public ForStatement(final laol.parser.apfe.ForStatement decl) {
         super(decl);
-        m_varNm = getIdent(1);
-        m_bounds = createItem(3);
-        m_stmt = createItem(4);
+        final Sequence seq = asSequence();
+        m_varNm = getIdent(seq, 1);
+        m_bounds = createItem(seq, 3);
+        m_stmtClause = createItem(seq, 4);
+    }
+
+    public EnumerableExpression getBounds() {
+        return m_bounds;
+    }
+
+    public StatementClause getStmtClause() {
+        return m_stmtClause;
+    }
+
+    public Ident getVarNm() {
+        return m_varNm;
     }
 
     private final Ident m_varNm;
     private final EnumerableExpression  m_bounds;
-    private final Statement m_stmt;
+    private final StatementClause m_stmtClause;
 }

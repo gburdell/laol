@@ -600,7 +600,7 @@ Spacing <- SpacingWithSemi
 Comment <- SL_COMMENT / ML_COMMENT;
 WS. // ' '/'\t'
 
-SL_COMMENT  <- "//" (!EOL .)* EOL
+SL_COMMENT  <- "//" (!(EOL / EOF) .)* (EOL / &EOF)
 
 ML_COMMENT <- "/*" (!"*/" .)* "*/"
 ;

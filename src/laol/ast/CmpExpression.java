@@ -22,19 +22,12 @@
  * THE SOFTWARE.
  */
 package laol.ast;
-import apfe.runtime.Acceptor;
-import apfe.runtime.Marker;
-import apfe.runtime.Repetition;
-import apfe.runtime.Sequence;
-import apfe.runtime.Util;
-import java.util.LinkedList;
-import java.util.List;
 
 /**
  *
  * @author gburdell
  */
-public class CmpExpression extends Item {
+public class CmpExpression extends BinaryOp.LRExpr<laol.parser.apfe.CmpExpression> {
     public CmpExpression(final laol.parser.apfe.CmpExpression decl) {
         super(decl);
     }

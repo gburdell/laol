@@ -22,13 +22,6 @@
  * THE SOFTWARE.
  */
 package laol.ast;
-import apfe.runtime.Acceptor;
-import apfe.runtime.Marker;
-import apfe.runtime.Repetition;
-import apfe.runtime.Sequence;
-import apfe.runtime.Util;
-import java.util.LinkedList;
-import java.util.List;
 
 /**
  *
@@ -37,5 +30,12 @@ import java.util.List;
 public class FinallyStatement extends Item {
     public FinallyStatement(final laol.parser.apfe.FinallyStatement decl) {
         super(decl);
+        m_stmtClause = createItem(1);
     }
+
+    public StatementClause getStmtClause() {
+        return m_stmtClause;
+    }
+    
+    private final StatementClause m_stmtClause;
 }

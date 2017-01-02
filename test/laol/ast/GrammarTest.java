@@ -29,7 +29,6 @@ import apfe.runtime.CharBuffer;
 import apfe.runtime.InputStream;
 import apfe.runtime.ParseError;
 import gblib.Util;
-import laol.parser.apfe.Grammar;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
@@ -37,7 +36,7 @@ import static org.junit.Assert.*;
  *
  * @author gburdell
  */
-public class AstTest {
+public class GrammarTest {
     static {
         //dont clutter message with these
         ParseError.setSkipErrorHints("' '", "'\\t'", "'//'", "'/*'");
@@ -57,7 +56,7 @@ public class AstTest {
                 System.out.println("Info: " + fn);
                 CharBuffer cbuf = fis.newCharBuffer();
                 CharBufState.create(cbuf, true);
-                Grammar gram = new Grammar();
+                laol.parser.apfe.Grammar gram = new laol.parser.apfe.Grammar();
                 Acceptor acc = gram.accept();
                 if (null != acc) {
                     String ss = acc.toString();
@@ -68,7 +67,7 @@ public class AstTest {
                     ParseError.printTopMessage();
                 }
                 assertTrue(result);
-                Ast ast = new Ast(acc);
+                Grammar ast = new Grammar(gram);
             }
         } catch (Exception ex) {
             Util.abnormalExit(ex);

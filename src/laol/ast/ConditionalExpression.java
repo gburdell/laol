@@ -41,7 +41,19 @@ public class ConditionalExpression extends Item {
             m_ifFalse = createItem(acc, 4);
         }
     }
-    
+
+    public LorExpression getCondExpr() {
+        return m_expr;
+    }
+
+    public Expression getIfFalse() {
+        return m_ifFalse;
+    }
+
+    public Expression getIfTrue() {
+        return m_ifTrue;
+    }
+              
     private final LorExpression m_expr;
     private final Expression m_ifTrue, m_ifFalse;
 }

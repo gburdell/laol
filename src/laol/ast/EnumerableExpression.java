@@ -27,11 +27,8 @@ package laol.ast;
  *
  * @author gburdell
  */
-public class EnumerableExpression extends Item {
+public class EnumerableExpression extends Expression {
     public EnumerableExpression(final laol.parser.apfe.EnumerableExpression decl) {
-        super(decl);
-        m_expr = createItem(getParsed().getBaseAccepted());
+        super(decl.getBaseAccepted());
     }
-    
-    private final Expression m_expr;
 }

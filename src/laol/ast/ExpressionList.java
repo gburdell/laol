@@ -23,6 +23,7 @@
  */
 package laol.ast;
 import apfe.runtime.Acceptor;
+import apfe.runtime.Sequence;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
@@ -34,10 +35,9 @@ import java.util.List;
 public class ExpressionList extends Item {
     public ExpressionList(final laol.parser.apfe.ExpressionList decl) {
         super(decl);
-        m_exprs.add(createItem(0));
-        for (Acceptor cls : asRepetition(1).getAccepted()) {
-            m_exprs.add(createItem(cls, 1));
-        }
+        final Sequence seq = asSequence();
+        m_exprs.add(createItem(seq, 0));
+        m_exprs.addAll(zeroOrMore(asRepetition(seq, 1), 1));
     }
     
     public List<Expression> getExpressions() {

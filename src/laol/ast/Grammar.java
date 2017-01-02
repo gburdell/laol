@@ -22,12 +22,7 @@
  * THE SOFTWARE.
  */
 package laol.ast;
-import apfe.runtime.Acceptor;
-import apfe.runtime.Marker;
-import apfe.runtime.Repetition;
-import apfe.runtime.Sequence;
-import apfe.runtime.Util;
-import java.util.LinkedList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -37,5 +32,12 @@ import java.util.List;
 public class Grammar extends Item {
     public Grammar(final laol.parser.apfe.Grammar decl) {
         super(decl);
+        m_contents = zeroOrMore(1);
     }
+    
+    public List<Contents> getContents() {
+        return Collections.unmodifiableList(m_contents);
+    }
+    
+    private final List<Contents>    m_contents;
 }

@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2016 gburdell.
+ * Copyright 2016 kpfalzer.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -24,37 +24,36 @@
 package laol.ast;
 
 import apfe.runtime.Acceptor;
-import apfe.runtime.Repetition;
-import apfe.runtime.Sequence;
-import apfe.runtime.Util;
-import java.util.LinkedList;
-import java.util.List;
-import laol.parser.apfe.Contents;
+import laol.test.TestRunner;
+import org.junit.Test;
+import static org.junit.Assert.*;
 
 /**
  *
- * @author gburdell
+ * @author kpfalzer
  */
-public class Ast extends Item {
-    public Ast(final Acceptor grammar) {
-        super(grammar);
-        Contents contents = Util.getOnlyElement(Util.<Repetition>extractEle(asSequence(), 1));
-        Sequence seq = asSequence(contents);
-        for (Acceptor stmt : asRepetition(seq, 0).getAccepted()) {
-            m_requireStmts.add(new RequireStatement(stmt));
-        }
-        for (Acceptor fileItem : asRepetition(seq, 1).getAccepted()) {
-            add(asPrioritizedChoice(fileItem).getAccepted());
-        }
+public class ContentsTest extends TestRunner {
+
+    private final String TESTS[] = {
+        "a = b",
+        "require \"xyz\";require \"abc\";a=b"
+    };
+
+    @Override
+    public Acceptor getGrammar() {
+        return new laol.parser.apfe.Contents();
     }
-    
-    private void add(final Acceptor item) {
-        m_items.add(createItem(item));
+
+    @Override
+    public void generateAndTestAst(Acceptor parsed) {
+        laol.ast.Contents dut = new laol.ast.Contents((laol.parser.apfe.Contents) parsed);
+        assertTrue(m_test.equals(m_accepted));
     }
-    
-    private final List<RequireStatement>    m_requireStmts = new LinkedList<>();
-    /**
-     * Collection of ModuleDeclaration and Statement.
-     */
-    private final List<Item>   m_items = new LinkedList<>();
+
+    @Test
+    public void testAccessModifier() {
+        TestRunner runner = new ContentsTest();
+        runner.runTests(TESTS);
+    }
+
 }

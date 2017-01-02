@@ -22,12 +22,8 @@
  * THE SOFTWARE.
  */
 package laol.ast;
-import apfe.runtime.Acceptor;
-import apfe.runtime.Marker;
-import apfe.runtime.Repetition;
 import apfe.runtime.Sequence;
-import apfe.runtime.Util;
-import java.util.LinkedList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -37,5 +33,20 @@ import java.util.List;
 public class Contents extends Item {
     public Contents(final laol.parser.apfe.Contents decl) {
         super(decl);
+        final Sequence seq = asSequence();
+        m_requires = zeroOrMore(seq, 0);
+        m_fileItems = zeroOrMore(seq, 1);
     }
+
+    public List<FileItem> getFileItems() {
+        return Collections.unmodifiableList(m_fileItems);
+    }
+
+    public List<RequireStatement> getRequires() {
+        return Collections.unmodifiableList(m_requires);
+    }
+    
+    
+    private final List<RequireStatement> m_requires;
+    private final List<FileItem>    m_fileItems;
 }

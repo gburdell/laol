@@ -32,28 +32,28 @@ import static org.junit.Assert.*;
  *
  * @author kpfalzer
  */
-public class ExpressionStatementTest extends TestRunner {
+public class CommentTest extends TestRunner {
 
     private final String TESTS[] = {
-        "foo.bar++ unless f==bar;",
-        "bar[:foo][7].goop({a:5}) + 1",
-        "fn(a:4,f:5,g[:bar]) << 45"
+        "//comment",
+        "//line comment/*\n",
+        "/* block\n**coment\nend here*/"
     };
 
     @Override
     public Acceptor getGrammar() {
-        return new laol.parser.apfe.ExpressionStatement();
+        return new laol.parser.apfe.Comment();
     }
 
     @Override
     public void generateAndTestAst(Acceptor parsed) {
-        laol.ast.ExpressionStatement dut = new laol.ast.ExpressionStatement((laol.parser.apfe.ExpressionStatement) parsed);
+        laol.ast.Comment dut = new laol.ast.Comment((laol.parser.apfe.Comment) parsed);
         assertTrue(m_test.equals(m_accepted));
     }
 
     @Test
     public void testAccessModifier() {
-        TestRunner runner = new ExpressionStatementTest();
+        TestRunner runner = new CommentTest();
         runner.runTests(TESTS);
     }
 

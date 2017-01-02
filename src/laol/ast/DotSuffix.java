@@ -22,13 +22,6 @@
  * THE SOFTWARE.
  */
 package laol.ast;
-import apfe.runtime.Acceptor;
-import apfe.runtime.Marker;
-import apfe.runtime.Repetition;
-import apfe.runtime.Sequence;
-import apfe.runtime.Util;
-import java.util.LinkedList;
-import java.util.List;
 
 /**
  *
@@ -37,5 +30,17 @@ import java.util.List;
 public class DotSuffix extends Item {
     public DotSuffix(final laol.parser.apfe.DotSuffix decl) {
         super(decl);
+        m_suffix = asPrioritizedChoice(1).getAccepted().getClass();
     }
+
+    public Class getSuffix() {
+        return m_suffix;
+    }
+    
+    public boolean endsWithQmark() {
+        String s = getParsed().toString().trim();
+        return ('?' == s.charAt(s.length() - 1));
+    }
+    
+    private final Class m_suffix;
 }

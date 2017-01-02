@@ -24,6 +24,8 @@
 package laol.ast;
 
 import apfe.runtime.Acceptor;
+import java.util.HashMap;
+import java.util.Map;
 import laol.test.TestRunner;
 import org.junit.Test;
 import static org.junit.Assert.*;
@@ -32,29 +34,29 @@ import static org.junit.Assert.*;
  *
  * @author kpfalzer
  */
-public class ExpressionStatementTest extends TestRunner {
+public class CmpExpressionTest extends TestRunner {
 
     private final String TESTS[] = {
-        "foo.bar++ unless f==bar;",
-        "bar[:foo][7].goop({a:5}) + 1",
-        "fn(a:4,f:5,g[:bar]) << 45"
+        "(a+b) <=> e[4..5]",
+		"\"foobar\" =~ /dogbar/"
     };
 
     @Override
     public Acceptor getGrammar() {
-        return new laol.parser.apfe.ExpressionStatement();
+        return new laol.parser.apfe.CmpExpression();
     }
 
     @Override
     public void generateAndTestAst(Acceptor parsed) {
-        laol.ast.ExpressionStatement dut = new laol.ast.ExpressionStatement((laol.parser.apfe.ExpressionStatement) parsed);
+        laol.ast.CmpExpression dut = new laol.ast.CmpExpression((laol.parser.apfe.CmpExpression) parsed);
         assertTrue(m_test.equals(m_accepted));
     }
 
     @Test
     public void testAccessModifier() {
-        TestRunner runner = new ExpressionStatementTest();
+        TestRunner runner = new CmpExpressionTest();
         runner.runTests(TESTS);
     }
 
 }
+

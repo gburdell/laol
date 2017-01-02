@@ -22,13 +22,6 @@
  * THE SOFTWARE.
  */
 package laol.ast;
-import apfe.runtime.Acceptor;
-import apfe.runtime.Marker;
-import apfe.runtime.Repetition;
-import apfe.runtime.Sequence;
-import apfe.runtime.Util;
-import java.util.LinkedList;
-import java.util.List;
 
 /**
  *
@@ -37,5 +30,12 @@ import java.util.List;
 public class CmpOp extends Item {
     public CmpOp(final laol.parser.apfe.CmpOp decl) {
         super(decl);
+        m_op = asPrioritizedChoice().getAccepted().getClass();
     }
+    
+    public Class getOp() {
+        return m_op;
+    }
+    
+    private final Class m_op;
 }

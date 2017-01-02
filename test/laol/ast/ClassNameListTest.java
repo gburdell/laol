@@ -24,6 +24,7 @@
 package laol.ast;
 
 import apfe.runtime.Acceptor;
+import laol.parser.apfe.ClassNameList;
 import laol.test.TestRunner;
 import org.junit.Test;
 import static org.junit.Assert.*;
@@ -32,28 +33,37 @@ import static org.junit.Assert.*;
  *
  * @author kpfalzer
  */
-public class ExpressionStatementTest extends TestRunner {
+public class ClassNameListTest extends TestRunner {
 
     private final String TESTS[] = {
-        "foo.bar++ unless f==bar;",
-        "bar[:foo][7].goop({a:5}) + 1",
-        "fn(a:4,f:5,g[:bar]) << 45"
+        //1st char: n is number of names
+        "1name1",
+        "2name1, name2",
+        "3name5,name6,name7"
     };
 
     @Override
     public Acceptor getGrammar() {
-        return new laol.parser.apfe.ExpressionStatement();
+        return new ClassNameList();
+    }
+
+    @Override
+    public String getTest(String test) {
+        m_expectCnt = Integer.parseInt(test.substring(0, 1));
+        return test.substring(1);
     }
 
     @Override
     public void generateAndTestAst(Acceptor parsed) {
-        laol.ast.ExpressionStatement dut = new laol.ast.ExpressionStatement((laol.parser.apfe.ExpressionStatement) parsed);
-        assertTrue(m_test.equals(m_accepted));
+        laol.ast.ClassNameList dut = new laol.ast.ClassNameList((ClassNameList) parsed);
+        assertTrue(m_expectCnt == dut.getNames().size());
     }
 
+    private int m_expectCnt = Integer.MAX_VALUE;
+
     @Test
-    public void testAccessModifier() {
-        TestRunner runner = new ExpressionStatementTest();
+    public void testClassNameList() {
+        TestRunner runner = new ClassNameListTest();
         runner.runTests(TESTS);
     }
 

@@ -22,7 +22,8 @@
  * THE SOFTWARE.
  */
 package laol.ast;
-import apfe.runtime.Acceptor;
+import apfe.runtime.Sequence;
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -33,10 +34,13 @@ import java.util.List;
 public class ClassNameList extends Item {
     public ClassNameList(final laol.parser.apfe.ClassNameList decl) {
         super(decl);
-        m_names.add(createItem(0));
-        for (Acceptor cls : asRepetition(1).getAccepted()) {
-            m_names.add(createItem(cls, 1));
-        }
+        final Sequence seq = asSequence();
+        m_names.add(createItem(seq, 0));
+        m_names.addAll(zeroOrMore(asRepetition(seq, 1), 1));
+    }
+    
+    public List<ClassName> getNames() {
+        return Collections.unmodifiableList(m_names);
     }
     
     private final List<ClassName>   m_names = new LinkedList<>();

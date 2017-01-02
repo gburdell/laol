@@ -27,11 +27,8 @@ package laol.ast;
  *
  * @author gburdell
  */
-public class Expression extends Item {
+public class Expression extends ConditionalExpression {
     public Expression(final laol.parser.apfe.Expression decl) {
-       super(decl);
-       m_expr = createItem(decl.getBaseAccepted());
+       super(decl.getBaseAccepted());
     }
-    
-    private final ConditionalExpression m_expr;
  }
