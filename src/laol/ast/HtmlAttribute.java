@@ -33,6 +33,14 @@ public class HtmlAttribute extends Item {
         m_id = getIdent(0);
         m_str = getString(2);
     }
+
+    public Ident getId() {
+        return m_id;
+    }
+
+    public AString getStr() {
+        return m_str;
+    }
     
     private final Ident m_id;
     private final AString   m_str;

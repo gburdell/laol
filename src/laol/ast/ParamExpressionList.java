@@ -22,6 +22,7 @@
  * THE SOFTWARE.
  */
 package laol.ast;
+
 import apfe.runtime.Acceptor;
 import apfe.runtime.Sequence;
 
@@ -30,9 +31,10 @@ import apfe.runtime.Sequence;
  * @author gburdell
  */
 public class ParamExpressionList extends Item {
+
     public ParamExpressionList(final laol.parser.apfe.ParamExpressionList decl) {
         super(decl);
-        final Acceptor choice = asPrioritizedChoice().getBaseAccepted();
+        final Acceptor choice = asPrioritizedChoice().getAccepted();
         if (choice instanceof Sequence) {
             m_unnamed = createItem(choice, 0);
             m_named = createItem(choice, 1);
@@ -43,8 +45,16 @@ public class ParamExpressionList extends Item {
             m_named = createItem(choice);
             m_unnamed = null;
         }
-     }
-    
-    private final UnnamedParam  m_unnamed;
+    }
+
+    public NamedParam getNamed() {
+        return m_named;
+    }
+
+    public UnnamedParam getUnnamed() {
+        return m_unnamed;
+    }
+
+    private final UnnamedParam m_unnamed;
     private final NamedParam m_named;
 }

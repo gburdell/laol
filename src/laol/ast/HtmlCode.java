@@ -23,6 +23,8 @@
  */
 package laol.ast;
 import apfe.runtime.Repetition;
+import apfe.runtime.Sequence;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -32,8 +34,9 @@ import java.util.List;
 public class HtmlCode extends Item {
     public HtmlCode(final laol.parser.apfe.HtmlCode decl) {
         super(decl);
-        m_tagName = createItem(0);
-        Repetition rep = asRepetition(1);
+        final Sequence seq = asSequence();
+        m_tagName = getIdent(seq, 0);
+        Repetition rep = asRepetition(seq, 1);
         if (0 < rep.sizeofAccepted()) {
             rep = asRepetition(asSequence(rep.getOnlyAccepted()), 1);
             if (0 < rep.sizeofAccepted()) {
@@ -44,8 +47,21 @@ public class HtmlCode extends Item {
         } else {
             m_parms = null;
         }
-        m_content = zeroOrMore(3, 0);
+        m_content = zeroOrMore(seq, 3);
     }
+
+    public List<HtmlCodeContent> getContent() {
+        return Collections.unmodifiableList(m_content);
+    }
+
+    public ParamExpressionList getParms() {
+        return m_parms;
+    }
+
+    public Ident getTagName() {
+        return m_tagName;
+    }
+    
     
     private final Ident m_tagName;
     private final ParamExpressionList   m_parms;

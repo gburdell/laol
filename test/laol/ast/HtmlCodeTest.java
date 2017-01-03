@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2016 gburdell.
+ * Copyright 2016 kpfalzer.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -22,38 +22,36 @@
  * THE SOFTWARE.
  */
 package laol.ast;
+
 import apfe.runtime.Acceptor;
+import laol.test.TestRunner;
+import org.junit.Test;
+import static org.junit.Assert.*;
 
 /**
  *
- * @author gburdell
+ * @author kpfalzer
  */
-public class ConditionalExpression extends Item {
-    public ConditionalExpression(final laol.parser.apfe.ConditionalExpression decl) {
-        super(decl);
-        final Acceptor acc = asPrioritizedChoice().getAccepted();
-        if (acc.getClass() == laol.parser.apfe.RangeExpression.class) {
-            m_expr = createItem(acc);
-            m_ifFalse = m_ifTrue = null;
-        } else {
-            m_expr = createItem(acc, 0);
-            m_ifTrue = createItem(acc, 2);
-            m_ifFalse = createItem(acc, 4);
-        }
+public class HtmlCodeTest extends TestRunner {
+
+    private final String TESTS[] = {
+		"div(id:\"div23\"){here we are}"
+    };
+
+    @Override
+    public Acceptor getGrammar() {
+        return new laol.parser.apfe.HtmlCode();
     }
 
-    public RangeExpression getCondExpr() {
-        return m_expr;
+    @Override
+    public void generateAndTestAst(Acceptor parsed) {
+        laol.ast.HtmlCode dut = new laol.ast.HtmlCode((laol.parser.apfe.HtmlCode) parsed);
+        assertTrue(m_test.equals(m_accepted));
     }
 
-    public Expression getIfFalse() {
-        return m_ifFalse;
+    @Test
+    public void testHtmlCode() {
+        TestRunner runner = new HtmlCodeTest();
+        runner.runTests(TESTS);
     }
-
-    public Expression getIfTrue() {
-        return m_ifTrue;
-    }
-              
-    private final RangeExpression m_expr;
-    private final Expression m_ifTrue, m_ifFalse;
 }

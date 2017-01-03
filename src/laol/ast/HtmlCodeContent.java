@@ -32,12 +32,16 @@ import apfe.runtime.Sequence;
 public class HtmlCodeContent extends Item {
     public HtmlCodeContent(final laol.parser.apfe.HtmlCodeContent decl) {
         super(decl);
-        final Acceptor acc = asPrioritizedChoice().getBaseAccepted();
+        final Acceptor acc = asPrioritizedChoice().getAccepted();
         if (acc instanceof Sequence) {
             m_item = getChar(acc, 1);
         } else {
             m_item = createItem(acc);
         }
+    }
+
+    public Item getItem() {
+        return m_item;
     }
     
     private final Item  m_item;

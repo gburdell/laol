@@ -22,38 +22,13 @@
  * THE SOFTWARE.
  */
 package laol.ast;
-import apfe.runtime.Acceptor;
 
 /**
  *
  * @author gburdell
  */
-public class ConditionalExpression extends Item {
-    public ConditionalExpression(final laol.parser.apfe.ConditionalExpression decl) {
+public class DOT2 extends Item {
+    public DOT2(final laol.parser.apfe.DOT2 decl) {
         super(decl);
-        final Acceptor acc = asPrioritizedChoice().getAccepted();
-        if (acc.getClass() == laol.parser.apfe.RangeExpression.class) {
-            m_expr = createItem(acc);
-            m_ifFalse = m_ifTrue = null;
-        } else {
-            m_expr = createItem(acc, 0);
-            m_ifTrue = createItem(acc, 2);
-            m_ifFalse = createItem(acc, 4);
-        }
     }
-
-    public RangeExpression getCondExpr() {
-        return m_expr;
-    }
-
-    public Expression getIfFalse() {
-        return m_ifFalse;
-    }
-
-    public Expression getIfTrue() {
-        return m_ifTrue;
-    }
-              
-    private final RangeExpression m_expr;
-    private final Expression m_ifTrue, m_ifFalse;
 }

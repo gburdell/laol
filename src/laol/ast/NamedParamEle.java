@@ -33,7 +33,15 @@ public class NamedParamEle extends Item {
         m_name = createItem(0);
         m_expr = createItem(2);
     }
+
+    public Expression getExpr() {
+        return m_expr;
+    }
+
+    public ParamName getName() {
+        return m_name;
+    }
     
-    private final Ident m_name;
+    private final ParamName m_name;
     private final Expression    m_expr;
 }

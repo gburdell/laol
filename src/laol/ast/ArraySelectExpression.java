@@ -22,33 +22,14 @@
  * THE SOFTWARE.
  */
 package laol.ast;
-import apfe.runtime.Acceptor;
 
 /**
  *
  * @author gburdell
  */
-public class ArraySelectExpression extends Item {
+public class ArraySelectExpression extends ExpressionList {
     public ArraySelectExpression(final laol.parser.apfe.ArraySelectExpression decl) {
-        super(decl);
-        final Acceptor acc = asPrioritizedChoice().getAccepted();
-        if (acc instanceof laol.parser.apfe.ExpressionList) {
-            m_item = createItem(acc);
-        } else {
-            m_item = new InclusiveRange(acc);
-        }
+        super(decl.getBaseAccepted());
     }
     
-    public static class InclusiveRange extends Item {
-
-        public InclusiveRange(final Acceptor exprs) {
-            super(exprs);
-            m_left = createItem(0);
-            m_right = createItem(2);
-        }
-        
-        private final Expression m_left, m_right;
-    }
-    
-    private final Item m_item;
 }

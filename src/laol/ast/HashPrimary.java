@@ -22,9 +22,9 @@
  * THE SOFTWARE.
  */
 package laol.ast;
-import apfe.runtime.Acceptor;
 import apfe.runtime.Repetition;
 import apfe.runtime.Sequence;
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -39,8 +39,12 @@ public class HashPrimary extends Item {
         if (0 < rep.sizeofAccepted()) {
             Sequence seq = asSequence(rep.getOnlyAccepted());
             m_vals.add(createItem(seq, 0));
-            m_vals.addAll(zeroOrMore(seq, 1));
+            m_vals.addAll(zeroOrMore(asRepetition(seq, 1), 1));
         }
+    }
+
+    public List<HashKeyValue> getVals() {
+        return Collections.unmodifiableList(m_vals);
     }
     
     private final List<HashKeyValue>    m_vals = new LinkedList<>();

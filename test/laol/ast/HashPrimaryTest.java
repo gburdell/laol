@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2016 gburdell.
+ * Copyright 2016 kpfalzer.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -22,38 +22,45 @@
  * THE SOFTWARE.
  */
 package laol.ast;
+
 import apfe.runtime.Acceptor;
+import laol.test.TestRunner;
+import org.junit.Test;
+import static org.junit.Assert.*;
 
 /**
  *
- * @author gburdell
+ * @author kpfalzer
  */
-public class ConditionalExpression extends Item {
-    public ConditionalExpression(final laol.parser.apfe.ConditionalExpression decl) {
-        super(decl);
-        final Acceptor acc = asPrioritizedChoice().getAccepted();
-        if (acc.getClass() == laol.parser.apfe.RangeExpression.class) {
-            m_expr = createItem(acc);
-            m_ifFalse = m_ifTrue = null;
-        } else {
-            m_expr = createItem(acc, 0);
-            m_ifTrue = createItem(acc, 2);
-            m_ifFalse = createItem(acc, 4);
-        }
+public class HashPrimaryTest extends TestRunner {
+
+    private final String TESTS[] = {
+        "2{foo: \"bar\", dog: :cat}",
+        "3{\"abc\": 45..63, a:7.89e123, xyz: false?abc:defx}"
+    };
+
+    @Override
+    public Acceptor getGrammar() {
+        return new laol.parser.apfe.HashPrimary();
     }
 
-    public RangeExpression getCondExpr() {
-        return m_expr;
+    @Override
+    public String getTest(String test) {
+        m_expectCnt = Integer.parseInt(test.substring(0, 1));
+        return test.substring(1);
     }
 
-    public Expression getIfFalse() {
-        return m_ifFalse;
+    @Override
+    public void generateAndTestAst(Acceptor parsed) {
+        laol.ast.HashPrimary dut = new laol.ast.HashPrimary((laol.parser.apfe.HashPrimary) parsed);
+        assertTrue(m_expectCnt == dut.getVals().size());
     }
 
-    public Expression getIfTrue() {
-        return m_ifTrue;
+    private int m_expectCnt = Integer.MAX_VALUE;
+
+    @Test
+    public void testHashPrimary() {
+        TestRunner runner = new HashPrimaryTest();
+        runner.runTests(TESTS);
     }
-              
-    private final RangeExpression m_expr;
-    private final Expression m_ifTrue, m_ifFalse;
 }

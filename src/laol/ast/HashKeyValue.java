@@ -23,6 +23,8 @@
  */
 package laol.ast;
 
+import apfe.runtime.Sequence;
+
 /**
  *
  * @author gburdell
@@ -30,8 +32,17 @@ package laol.ast;
 public class HashKeyValue extends Item {
     public HashKeyValue(final laol.parser.apfe.HashKeyValue decl) {
         super(decl);
-        m_key = createItem(0);
-        m_value = createItem(2);
+        final Sequence seq = asSequence();
+        m_key = createItem(seq, 0);
+        m_value = createItem(seq, 2);
+    }
+
+    public HashKey getKey() {
+        return m_key;
+    }
+
+    public Expression getValue() {
+        return m_value;
     }
     
     private final HashKey   m_key;

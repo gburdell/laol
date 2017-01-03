@@ -40,6 +40,7 @@ regexp_item2 <-
 
 hash_primary <- LCURLY (hash_key_value (COMMA hash_key_value)*)? RCURLY
 
+//NOTE: rather wide latitude here with key!
 hash_key <- expression
 
 hash_key_value <- hash_key COLON expression
@@ -129,7 +130,7 @@ mult_expression <-
 	mult_expression mult_op unary_expression
 /	unary_expression
 	
-mult_op <- STAR / DIV / PCNT
+mult_op <- STAR / DIV / PCNT / STAR2
 
 add_expression <-
 	add_expression add_op mult_expression
@@ -175,9 +176,13 @@ lor_expression <-
 	lor_expression OR2 land_expression
 /	land_expression
 
-conditional_expression <-
-    lor_expression QMARK expression COLON expression
+range_expression <- 
+	range_expression DOT2 lor_expression
 /	lor_expression
+
+conditional_expression <-
+    range_expression QMARK expression COLON expression
+/	range_expression
 
 expression <- conditional_expression
 
@@ -208,9 +213,7 @@ param_expression_list <-
 /	named_param
 /	unnamed_param
 
-array_select_expression <-
-    expression DOT2 expression
-/   expression_list
+array_select_expression <- expression_list
 
 var_decl_statement <- 
 	(	type_decl scoped_name 
