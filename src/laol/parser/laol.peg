@@ -45,12 +45,17 @@ hash_key <- expression
 
 hash_key_value <- hash_key COLON expression
 
+// Use html comment syntax so we can use html editor directly
+html_begin <- "<!--%html{-->" sp
+html_end   <- "<!--%html}-->" sp
+
 html_primary <-
-	"%html{" sp 
-		(	&IDENT html_code* 
-		/	&'<'   html_tag*
-		)
-		RCURLY
+	html_begin
+		(	&IDENT html_code
+		/	&"<!--" html_comment
+		/	&'<'   html_tag
+		)*
+		html_end
 
 html_code <-
 	IDENT  (LPAREN param_expression_list? RPAREN)? LCURLY
@@ -60,17 +65,20 @@ html_code <-
 html_code_content <-
 	inline_eval
 /	html_code
-/	!RCURLY .
+/	!html_end .
+
+html_comment <- !(html_begin / html_end) "<!--" (!"-->" .)* "-->" sp
 
 html_tag <-
-	'<' IDENT html_attribute* '>'
+	'<' IDENT html_attribute* '>' sp
 		html_tag_content*
 	("</" IDENT GT)?
 
 html_tag_content <-
 	inline_eval
+/	html_comment
 /	html_tag
-/	!RCURLY .
+/	!(html_end / "</") .
 
 html_attribute <-
 	IDENT EQ STRING

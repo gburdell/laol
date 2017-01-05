@@ -24,6 +24,8 @@
 package laol.ast;
 
 import apfe.runtime.Repetition;
+import apfe.runtime.Sequence;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -34,13 +36,30 @@ public class HtmlTag extends Item {
 
     public HtmlTag(final laol.parser.apfe.HtmlTag decl) {
         super(decl);
-        m_tagOpen = createItem(1);
-        m_attrs = zeroOrMore(2);
-        m_content = zeroOrMore(4);
-        final Repetition rep = asRepetition(5);
+        final Sequence seq = asSequence();
+        m_tagOpen = getIdent(seq, 1);
+        m_attrs = zeroOrMore(seq, 2);
+        m_content = zeroOrMore(seq, 4);
+        final Repetition rep = asRepetition(seq, 5);
         m_tagClose = (0 < rep.sizeofAccepted())
                 ? getIdent(rep.getOnlyAccepted(), 1)
                 : null;
+    }
+
+    public List<HtmlAttribute> getAttrs() {
+        return Collections.unmodifiableList(m_attrs);
+    }
+
+    public List<HtmlTagContent> getContent() {
+        return Collections.unmodifiableList(m_content);
+    }
+
+    public Ident getTagClose() {
+        return m_tagClose;
+    }
+
+    public Ident getTagOpen() {
+        return m_tagOpen;
     }
 
     private final Ident m_tagOpen, m_tagClose;

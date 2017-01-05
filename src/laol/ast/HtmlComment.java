@@ -22,27 +22,17 @@
  * THE SOFTWARE.
  */
 package laol.ast;
-import apfe.runtime.Acceptor;
-import apfe.runtime.Sequence;
 
 /**
  *
  * @author gburdell
  */
-public class HtmlTagContent extends Item {
-    public HtmlTagContent(final laol.parser.apfe.HtmlTagContent decl) {
+public class HtmlComment extends Item {
+    public HtmlComment(final laol.parser.apfe.HtmlComment decl) {
         super(decl);
-        final Acceptor acc = asPrioritizedChoice().getAccepted();
-        if (acc instanceof Sequence) {
-            m_item = getChar(acc, 1);
-        } else {
-            m_item = createItem(acc);
-        }
-    }
-
-    public Item getItem() {
-        return m_item;
     }
     
-    private final Item  m_item;
+    public String getComment() {
+        return super.toString();
+    }
 }

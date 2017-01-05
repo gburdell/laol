@@ -53,6 +53,7 @@ public class HashPrimaryTest extends TestRunner {
     @Override
     public void generateAndTestAst(Acceptor parsed) {
         laol.ast.HashPrimary dut = new laol.ast.HashPrimary((laol.parser.apfe.HashPrimary) parsed);
+        assertTrue(m_test.equals(m_accepted));
         assertTrue(m_expectCnt == dut.getVals().size());
     }
 

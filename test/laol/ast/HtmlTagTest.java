@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2016 gburdell.
+ * Copyright 2016 kpfalzer.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -22,27 +22,48 @@
  * THE SOFTWARE.
  */
 package laol.ast;
+
 import apfe.runtime.Acceptor;
-import apfe.runtime.Sequence;
+import laol.test.TestRunner;
+import org.junit.Test;
+import static org.junit.Assert.*;
 
 /**
  *
- * @author gburdell
+ * @author kpfalzer
  */
-public class HtmlTagContent extends Item {
-    public HtmlTagContent(final laol.parser.apfe.HtmlTagContent decl) {
-        super(decl);
-        final Acceptor acc = asPrioritizedChoice().getAccepted();
-        if (acc instanceof Sequence) {
-            m_item = getChar(acc, 1);
-        } else {
-            m_item = createItem(acc);
-        }
+public class HtmlTagTest extends TestRunner {
+
+    private final String TESTS[] = {
+        //here: we have some open-only
+        "<html>\n"
+        + "    <head>\n"
+        + "        <title>TODO supply a title</title>\n"
+        + "        <meta charset=\"UTF-8\">\n"
+        + "        <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n"
+        + "    </head>\n"
+        + "    <body>\n"
+        + "        <div>TODO write content</div>\n"
+        + "    </body>\n"
+        + "</html>",
+        "<html>foobar</html>",
+        "<html>foobar<tag1>contents</tag1></html>"
+    };
+
+    @Override
+    public Acceptor getGrammar() {
+        return new laol.parser.apfe.HtmlTag();
     }
 
-    public Item getItem() {
-        return m_item;
+    @Override
+    public void generateAndTestAst(Acceptor parsed) {
+        laol.ast.HtmlTag dut = new laol.ast.HtmlTag((laol.parser.apfe.HtmlTag) parsed);
+        assertTrue(m_test.equals(m_accepted));
     }
-    
-    private final Item  m_item;
+
+    @Test
+    public void testHtmlTag() {
+        TestRunner runner = new HtmlTagTest();
+        runner.runTests(TESTS);
+    }
 }
