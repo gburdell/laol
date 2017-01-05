@@ -54,7 +54,7 @@ public abstract class TestRunner {
     }
     
     public void runTests(final String tests[]) {
-        for (String test : tests) {
+            for (String test : tests) {
             m_test = getTest(test);
             System.out.println("Info: " + m_test);
             CharBuffer cbuf = new CharBuffer("<stdin>", m_test);

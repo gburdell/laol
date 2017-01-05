@@ -24,6 +24,7 @@
 package laol.ast;
 
 import apfe.runtime.Acceptor;
+import apfe.runtime.CharClass;
 import apfe.runtime.Marker;
 import apfe.runtime.PrioritizedChoice;
 import apfe.runtime.Repetition;
@@ -89,7 +90,13 @@ public abstract class Item {
     }
 
     final protected AChar getChar(final Acceptor seq, final int ix) {
-        return new AChar(apfe.runtime.Util.<apfe.runtime.CharClass>extractEle(seq, ix));
+        final Acceptor item = asSequence(seq).itemAt(ix);
+        if (item instanceof CharClass) {
+            return new AChar(Util.<CharClass>downCast(item));
+        } else {
+            assert (item instanceof laol.parser.apfe.AnyNotEof);
+            return getChar(item, 1);
+        }
     }
 
     public static class PrunedSequence extends Sequence {
@@ -169,6 +176,7 @@ public abstract class Item {
 
     /**
      * Extract item* from a Repetition of Sequence.
+     *
      * @param <T> item is a subclass of Item.
      * @param rep Repetition of Sequence.
      * @param posInSeq position of item in Sequence.
@@ -184,6 +192,7 @@ public abstract class Item {
 
     /**
      * Extract item* from a Sequence containing a Repetition of Sequence.
+     *
      * @param <T> item is subclass of Item.
      * @param posOfRep position of Repetition in parsed Sequence.
      * @param posInSeq position of item in Sequence in Repetition.

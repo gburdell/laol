@@ -35,7 +35,7 @@ import static org.junit.Assert.*;
 public class HtmlCodeTest extends TestRunner {
 
     private final String TESTS[] = {
-		"div(id:\"div23\"){here we are}"
+        "div(id:\"div23\"){here we are}"
     };
 
     @Override

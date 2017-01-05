@@ -28,15 +28,17 @@ regexp_primary <-
 	"%r{" sp regexp_item2+ '}' [i]? sp
 /	'/' regexp_item1+ '/' [i]? sp
 
+any_not_eof <- !EOF .
+
 regexp_item1 <-
 	inline_eval
 /	"#{"
-/	('\\' . / !"#{" !'/' .)+
+/	('\\' any_not_eof / !"#{" !'/' any_not_eof)+
 
 regexp_item2 <-
 	inline_eval
 /	"#{"
-/	('\\' . / !"#{" !'}' .)+
+/	('\\' any_not_eof / !"#{" !'}' any_not_eof)+
 
 hash_primary <- LCURLY (hash_key_value (COMMA hash_key_value)*)? RCURLY
 
@@ -65,9 +67,9 @@ html_code <-
 html_code_content <-
 	inline_eval
 /	html_code
-/	!html_end .
+/	!RCURLY any_not_eof
 
-html_comment <- !(html_begin / html_end) "<!--" (!"-->" .)* "-->" sp
+html_comment <- !(html_begin / html_end) "<!--" (!"-->" any_not_eof)* "-->" sp
 
 html_tag <-
 	'<' IDENT html_attribute* '>' sp
@@ -78,7 +80,7 @@ html_tag_content <-
 	inline_eval
 /	html_comment
 /	html_tag
-/	!(html_end / "</") .
+/	!(html_end / "</") any_not_eof
 
 html_attribute <-
 	IDENT EQ STRING
@@ -92,7 +94,7 @@ sass_content <-
 	LCURLY (!RCURLY sass_content)* RCURLY
 /	inline_eval
 /	STRING
-/	!RCURLY .
+/	!RCURLY any_not_eof
 
 inline_eval <- "#{" sp expression RCURLY
 
@@ -598,12 +600,12 @@ BasedNumber <- ([0-9] [0-9_]*)? !STRING '\''
 //todo: If change single quoted to accept more, we get an infinite parser loop
 STRING <- 
     '"'  string_item* '"'  Spacing
-/   '\'' ('\\' . / !'\'' .)? '\'' Spacing
+/   '\'' ('\\' any_not_eof / !'\'' any_not_eof)? '\'' Spacing
 
 string_item <-
 	inline_eval
 /	"#{"
-/	('\\' . / !"#{" !'"' .)+
+/	('\\' any_not_eof / !"#{" !'"' any_not_eof)+
 
 //Spacing <- (WS / Comment / EOL)*
 Spacing <- SpacingWithSemi
@@ -613,7 +615,7 @@ WS. // ' '/'\t'
 
 SL_COMMENT  <- "//" (!(EOL / EOF) .)* (EOL / &EOF)
 
-ML_COMMENT <- "/*" (!"*/" .)* "*/"
+ML_COMMENT <- "/*" (!"*/" any_not_eof)* "*/"
 ;
 
 eos <- SemiOrEOL 
