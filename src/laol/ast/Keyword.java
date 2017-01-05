@@ -25,7 +25,10 @@ package laol.ast;
 import apfe.runtime.Acceptor;
 
 /**
- *
+ * Convenience class for wrapping a primitive or keyword.
+ * Use this instead of Class alias, since we can then add convenience methods
+ * here.
+ * 
  * @author gburdell
  */
 public class Keyword extends Item {

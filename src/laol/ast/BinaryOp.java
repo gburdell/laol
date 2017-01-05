@@ -39,21 +39,14 @@ public class BinaryOp extends Item {
     public BinaryOp(final laol.parser.apfe.BinaryOp decl) {
         super(decl);
         Acceptor acc = asPrioritizedChoice().getAccepted();
-        Class clz = acc.getClass();
-        if (!gblib.Util.isUpperCase(clz.getSimpleName())) {
-            //assume leaf op based on all-caps naming convention
-            acc = asPrioritizedChoice(acc).getAccepted();
-            clz = acc.getClass();
-            assert(gblib.Util.isUpperCase(clz.getSimpleName()));
-        }
-        m_op = clz;
+        m_op = new Keyword(acc);
     }
 
-    public Class getOp() {
+    public Keyword getOp() {
         return m_op;
     }
     
-    private final Class m_op;
+    private final Keyword m_op;
     
     /**
      * Helper class.
@@ -65,7 +58,8 @@ public class BinaryOp extends Item {
             super(decl);
             for (Acceptor ele : decl.getItems()) {
                 if (ele instanceof Sequence) {
-                    m_items.add(createItem(ele, 0));
+                    final Sequence seq = asSequence(ele);
+                    m_items.add(new Keyword(seq.itemAt(0)));
                     m_items.add(createItem(ele, 1));
                 } else {
                     m_items.add(createItem(ele));

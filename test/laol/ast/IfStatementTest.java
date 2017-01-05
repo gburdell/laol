@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2016 gburdell.
+ * Copyright 2016 kpfalzer.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -23,12 +23,36 @@
  */
 package laol.ast;
 
+import apfe.runtime.Acceptor;
+import laol.test.TestRunner;
+import org.junit.Test;
+import static org.junit.Assert.*;
+
 /**
  *
- * @author gburdell
+ * @author kpfalzer
  */
-public class DOT2 extends Item {
-    public DOT2(final laol.parser.apfe.DOT2 decl) {
-        super(decl);
+public class IfStatementTest extends TestRunner {
+
+    private final String TESTS[] = {
+        "if foo\na=b;",
+        "if (a == b({p:12})){lhs=rhs[i..j] unless cond};else c=d"
+    };
+
+    @Override
+    public Acceptor getGrammar() {
+        return new laol.parser.apfe.IfStatement();
+    }
+
+    @Override
+    public void generateAndTestAst(Acceptor parsed) {
+        laol.ast.IfStatement dut = new laol.ast.IfStatement((laol.parser.apfe.IfStatement) parsed);
+        assertTrue(m_test.equals(m_accepted));
+    }
+
+    @Test
+    public void testIfStatement() {
+        TestRunner runner = new IfStatementTest();
+        runner.runTests(TESTS);
     }
 }

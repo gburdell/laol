@@ -27,6 +27,7 @@ import apfe.runtime.Acceptor;
 import apfe.runtime.Repetition;
 import apfe.runtime.Sequence;
 import gblib.Util;
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -59,6 +60,19 @@ public class IfStatement extends Item {
             super(createItem(seq, ix), createItem(seq, ix + 1));
         }
     }
+
+    public List<ExprStmt> getClauses() {
+        return Collections.unmodifiableList(m_clauses);
+    }
+
+    public Statement geElse() {
+        return m_else;
+    }
+
+    public boolean isIf() {
+        return m_if;
+    }
+    
     /**
      * True on if-statement; false on unless-statement.
      */

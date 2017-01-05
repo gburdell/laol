@@ -22,13 +22,7 @@
  * THE SOFTWARE.
  */
 package laol.ast;
-import apfe.runtime.Acceptor;
-import apfe.runtime.Marker;
-import apfe.runtime.Repetition;
 import apfe.runtime.Sequence;
-import apfe.runtime.Util;
-import java.util.LinkedList;
-import java.util.List;
 
 /**
  *
@@ -37,5 +31,25 @@ import java.util.List;
 public class StatementModifier extends Item {
     public StatementModifier(final laol.parser.apfe.StatementModifier decl) {
         super(decl);
+        final Sequence seq = asSequence();
+        m_type = new Keyword(asPrioritizedChoice(seq.itemAt(0)).getAccepted());
+        m_expr = createItem(seq, 1);
+        m_stmtModifier = getStatementModifier(seq, 2);
     }
+
+    public Expression getExpr() {
+        return m_expr;
+    }
+
+    public StatementModifier getStmtModifier() {
+        return m_stmtModifier;
+    }
+
+    public Keyword getType() {
+        return m_type;
+    }
+    
+    private final Keyword m_type;
+    private final Expression m_expr;
+    private final StatementModifier m_stmtModifier;
 }

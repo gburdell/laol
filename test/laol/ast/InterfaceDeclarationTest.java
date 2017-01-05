@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2016 gburdell.
+ * Copyright 2016 kpfalzer.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -23,12 +23,40 @@
  */
 package laol.ast;
 
+import apfe.runtime.Acceptor;
+import laol.test.TestRunner;
+import org.junit.Test;
+import static org.junit.Assert.*;
+
 /**
  *
- * @author gburdell
+ * @author kpfalzer
  */
-public class AND extends Item {
-    public AND(final laol.parser.apfe.AND decl) {
-        super(decl);
+public class InterfaceDeclarationTest extends TestRunner {
+
+    private final String TESTS[] = {
+        "private interface Foo {}",
+        "private interface Bar implements Foo{}",
+        "private interface Car implements Foo, Bar{a=b} if false"
+    };
+
+    @Override
+    public Acceptor getGrammar() {
+        return new laol.parser.apfe.InterfaceDeclaration();
     }
+
+    @Override
+    public void generateAndTestAst(Acceptor parsed) {
+        laol.ast.InterfaceDeclaration dut = new laol.ast.InterfaceDeclaration((laol.parser.apfe.InterfaceDeclaration) parsed);
+        assertTrue(m_test.equals(m_accepted));
+    }
+
+    @Test
+    public void testAccessModifier() {
+        TestRunner runner = new InterfaceDeclarationTest();
+        runner.runTests(TESTS);
+    }
+
 }
+
+

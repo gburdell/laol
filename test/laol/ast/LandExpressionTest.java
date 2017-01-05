@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2016 gburdell.
+ * Copyright 2016 kpfalzer.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -22,20 +22,39 @@
  * THE SOFTWARE.
  */
 package laol.ast;
+
 import apfe.runtime.Acceptor;
-import apfe.runtime.Marker;
-import apfe.runtime.Repetition;
-import apfe.runtime.Sequence;
-import apfe.runtime.Util;
-import java.util.LinkedList;
-import java.util.List;
+import laol.test.TestRunner;
+import org.junit.Test;
+import static org.junit.Assert.*;
 
 /**
  *
- * @author gburdell
+ * @author kpfalzer
  */
-public class OR extends Item {
-    public OR(final laol.parser.apfe.OR decl) {
-        super(decl);
+public class LandExpressionTest extends TestRunner {
+
+    private final String TESTS[] = {
+        "1+2&&3-4"
+    };
+
+    @Override
+    public Acceptor getGrammar() {
+        return new laol.parser.apfe.LandExpression();
     }
+
+    @Override
+    public void generateAndTestAst(Acceptor parsed) {
+        laol.ast.LandExpression dut = new laol.ast.LandExpression((laol.parser.apfe.LandExpression) parsed);
+        assertTrue(m_test.equals(m_accepted));
+    }
+
+    @Test
+    public void testAccessModifier() {
+        TestRunner runner = new LandExpressionTest();
+        runner.runTests(TESTS);
+    }
+
 }
+
+

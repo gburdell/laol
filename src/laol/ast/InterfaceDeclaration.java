@@ -37,5 +37,45 @@ import java.util.List;
 public class InterfaceDeclaration extends Item {
     public InterfaceDeclaration(final laol.parser.apfe.InterfaceDeclaration decl) {
         super(decl);
+        final Sequence seq = asSequence();
+        m_access = oneOrNone(seq, 0);
+        m_name = createItem(seq, 2);
+        {
+            final Repetition rep = asRepetition(seq, 3);
+            if (0 < rep.sizeofAccepted()) {
+                m_implements = createItem(rep.getOnlyAccepted(), 1);
+            } else {
+                m_implements = null;
+            }
+        }
+        m_body = createItem(seq, 5);
+        m_stmtModifier = getStatementModifier(seq, 7);
     }
+
+    public AccessModifier getAccess() {
+        return m_access;
+    }
+
+    public ClassBody getBody() {
+        return m_body;
+    }
+
+    public ClassNameList getImplements() {
+        return m_implements;
+    }
+
+    public ClassName getName() {
+        return m_name;
+    }
+
+    public StatementModifier getStmtModifier() {
+        return m_stmtModifier;
+    }
+    
+    private final AccessModifier    m_access;
+    private final ClassName         m_name;
+    private final ClassNameList     m_implements;
+    private final ClassBody         m_body;
+    private final StatementModifier m_stmtModifier;
+    
 }

@@ -30,10 +30,10 @@ package laol.ast;
 public class DotSuffix extends Item {
     public DotSuffix(final laol.parser.apfe.DotSuffix decl) {
         super(decl);
-        m_suffix = asPrioritizedChoice(1).getAccepted().getClass();
+        m_suffix = new Keyword(asPrioritizedChoice(1).getAccepted());
     }
 
-    public Class getSuffix() {
+    public Keyword getSuffix() {
         return m_suffix;
     }
     
@@ -42,5 +42,5 @@ public class DotSuffix extends Item {
         return ('?' == s.charAt(s.length() - 1));
     }
     
-    private final Class m_suffix;
+    private final Keyword m_suffix;
 }

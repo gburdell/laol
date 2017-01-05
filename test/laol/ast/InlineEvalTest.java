@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2016 gburdell.
+ * Copyright 2016 kpfalzer.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -23,12 +23,35 @@
  */
 package laol.ast;
 
+import apfe.runtime.Acceptor;
+import laol.test.TestRunner;
+import org.junit.Test;
+import static org.junit.Assert.*;
+
 /**
  *
- * @author gburdell
+ * @author kpfalzer
  */
-public class XOR extends Item {
-    public XOR(final laol.parser.apfe.XOR decl) {
-        super(decl);
+public class InlineEvalTest extends TestRunner {
+
+    private final String TESTS[] = {
+        "#{expr}"
+    };
+
+    @Override
+    public Acceptor getGrammar() {
+        return new laol.parser.apfe.InlineEval();
+    }
+
+    @Override
+    public void generateAndTestAst(Acceptor parsed) {
+        laol.ast.InlineEval dut = new laol.ast.InlineEval((laol.parser.apfe.InlineEval) parsed);
+        assertTrue(m_test.equals(m_accepted));
+    }
+
+    @Test
+    public void testInlineEval() {
+        TestRunner runner = new InlineEvalTest();
+        runner.runTests(TESTS);
     }
 }

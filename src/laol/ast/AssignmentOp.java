@@ -31,12 +31,12 @@ public class AssignmentOp extends Item {
 
     public AssignmentOp(final laol.parser.apfe.AssignmentOp decl) {
         super(decl);
-        m_op = asPrioritizedChoice().getAccepted().getClass();
+        m_op = new Keyword(asPrioritizedChoice().getAccepted());
     }
 
-    public Class getOp() {
+    public Keyword getOp() {
         return m_op;
     }
     
-    private final Class m_op;
+    private final Keyword m_op;
 }
