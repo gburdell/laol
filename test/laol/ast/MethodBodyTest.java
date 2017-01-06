@@ -32,19 +32,16 @@ import static org.junit.Assert.*;
  *
  * @author kpfalzer
  */
-public class LhsRefTest extends TestRunner {
+public class MethodBodyTest extends TestRunner {
+
     private final String TESTS[] = {
-        "2abc[123]",
-        "2defx[45..67]",
-        "2ghi.foobar",
-        "3jkl.goop++",
-        "1eek",
-        "7a[4][a..b].beek++[123].fleep"
+        "1a=b",
+        "2if(a)\nx=y\nelse\ny=x\nerg=43"
     };
 
     @Override
     public Acceptor getGrammar() {
-        return new laol.parser.apfe.LhsRef();
+        return new laol.parser.apfe.MethodBody();
     }
 
     @Override
@@ -54,23 +51,17 @@ public class LhsRefTest extends TestRunner {
     }
 
     @Override
-    public String getString(final Acceptor acc) {
-        final laol.parser.apfe.LhsRef lhs = (laol.parser.apfe.LhsRef)acc;
-        return lhs.getItems().get(0).toString();
-    }
-
-    @Override
     public void generateAndTestAst(Acceptor parsed) {
-        laol.ast.LhsRef dut = new laol.ast.LhsRef((laol.parser.apfe.LhsRef) parsed);
-        assertTrue(m_expectCnt == dut.getItems().size());
+        laol.ast.MethodBody dut = new laol.ast.MethodBody((laol.parser.apfe.MethodBody) parsed);
+        assertTrue(m_expectCnt == dut.getBody().size());
         assertTrue(m_test.equals(m_accepted));
     }
 
     private int m_expectCnt = Integer.MAX_VALUE;
 
     @Test
-    public void testLhsRef() {
-        TestRunner runner = new LhsRefTest();
+    public void testMethodBody() {
+        TestRunner runner = new MethodBodyTest();
         runner.runTests(TESTS);
     }
 }

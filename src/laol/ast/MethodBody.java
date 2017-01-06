@@ -22,12 +22,7 @@
  * THE SOFTWARE.
  */
 package laol.ast;
-import apfe.runtime.Acceptor;
-import apfe.runtime.Marker;
-import apfe.runtime.Repetition;
-import apfe.runtime.Sequence;
-import apfe.runtime.Util;
-import java.util.LinkedList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -37,6 +32,12 @@ import java.util.List;
 public class MethodBody extends Item {
     public MethodBody(final laol.parser.apfe.MethodBody decl) {
         super(decl);
+        m_body = zeroOrMore(decl.getBaseAccepted());
     }
 
+    public List<Statement> getBody() {
+        return Collections.unmodifiableList(m_body);
+    }
+    
+    private final List<Statement>   m_body;
 }

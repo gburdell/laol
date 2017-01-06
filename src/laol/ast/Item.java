@@ -190,13 +190,21 @@ public abstract class Item {
         return rval;
     }
 
+    final protected <T extends Item> List<T> zeroOrMore(final Repetition rep) {
+        List<T> rval = (0 < rep.sizeofAccepted()) ? new LinkedList<>() : Collections.EMPTY_LIST;
+        for (Acceptor acc : rep.getAccepted()) {
+            rval.add(createItem(acc));
+        }
+        return rval;
+    }
+    
     /**
      * Extract item* from a Sequence containing a Repetition of Sequence.
      *
      * @param <T> item is subclass of Item.
      * @param posOfRep position of Repetition in parsed Sequence.
      * @param posInSeq position of item in Sequence in Repetition.
-     * @return extrcated item(s).
+     * @return extracted item(s).
      */
     final protected <T extends Item> List<T> zeroOrMore(final int posOfRep, final int posInSeq) {
         return zeroOrMore(asRepetition(posOfRep), posInSeq);

@@ -22,7 +22,7 @@
  * THE SOFTWARE.
  */
 package laol.ast;
-import apfe.runtime.Marker;
+import apfe.runtime.Sequence;
 
 /**
  *
@@ -31,7 +31,55 @@ import apfe.runtime.Marker;
 public class MethodDeclaration extends Item {
     public MethodDeclaration(final laol.parser.apfe.MethodDeclaration decl) {
         super(decl);
+        final Sequence seq = asSequence();
+        m_access = oneOrNone(seq, 0);
+        m_isStatic = (null != oneOrNone(seq, 1));
+        m_name = createItem(seq, 3);
+        m_parmDecl = oneOrNone(seq, 4);
+        m_retnDecl = oneOrNone(seq, 5);
+        {
+            Sequence body = asRepetition(seq, 6).getOnlyAccepted();
+            if (null != body) {
+                body = asSequence(body);
+                m_body = createItem(body, 1);
+            } else {
+                m_body = null;
+            }
+        }
+        m_stmtModifier = getStatementModifier(seq, 7);
+    }
+
+    public AccessModifier getAccess() {
+        return m_access;
+    }
+
+    public MethodBody getBody() {
+        return m_body;
+    }
+
+    public MethodName getName() {
+        return m_name;
+    }
+
+    public MethodParamDecl getParmDecl() {
+        return m_parmDecl;
+    }
+
+    public MethodReturnDecl getRetnDecl() {
+        return m_retnDecl;
+    }
+
+    public StatementModifier getStmtModifier() {
+        return m_stmtModifier;
     }
     
-
+    private final AccessModifier    m_access;
+    private final boolean   m_isStatic;
+    private final MethodName    m_name;
+    private final MethodParamDecl   m_parmDecl;
+    private final MethodReturnDecl  m_retnDecl;
+    private final MethodBody    m_body;
+    private final StatementModifier m_stmtModifier;
+    
+    
 }

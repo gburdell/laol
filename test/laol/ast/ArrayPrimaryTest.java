@@ -54,6 +54,7 @@ public class ArrayPrimaryTest extends TestRunner {
     public void generateAndTestAst(Acceptor parsed) {
         laol.ast.ArrayPrimary dut = new laol.ast.ArrayPrimary((laol.parser.apfe.ArrayPrimary) parsed);
         assertTrue(m_expectCnt == dut.getElements().size());
+        assertTrue(m_test.equals(m_accepted));
     }
 
     private int m_expectCnt = Integer.MAX_VALUE;
