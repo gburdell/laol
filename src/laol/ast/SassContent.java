@@ -36,7 +36,7 @@ import java.util.List;
 public class SassContent extends Item {
     public SassContent(final laol.parser.apfe.SassContent decl) {
         super(decl);
-        final Acceptor choice = asPrioritizedChoice().getBaseAccepted();
+        final Acceptor choice = asPrioritizedChoice().getAccepted();
         if (choice instanceof Sequence) {
             final Repetition rep = asRepetition(asSequence(choice), 1);
             List<SassContent> items = new LinkedList<>();

@@ -23,6 +23,8 @@
  */
 package laol.ast;
 import apfe.runtime.Marker;
+import apfe.runtime.Sequence;
+import java.util.List;
 
 /**
  *
@@ -31,7 +33,14 @@ import apfe.runtime.Marker;
 public class TryStatement extends Item {
     public TryStatement(final laol.parser.apfe.TryStatement decl) {
         super(decl);
+        final Sequence seq = asSequence();
+        m_stmt = createItem(seq, 1);
+        m_catch = zeroOrMore(asRepetition(seq, 2));
+        m_finally = oneOrNone(seq, 3);
     }
     
 
+    private final Statement m_stmt;
+    private final List<CatchStatement>  m_catch;
+    private final FinallyStatement m_finally;
 }

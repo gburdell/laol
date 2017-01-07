@@ -27,14 +27,8 @@ package laol.ast;
  *
  * @author gburdell
  */
-public class Number extends Item {
+public class Number extends Keyword {
     public Number(final laol.parser.apfe.Number decl) {
-        super(decl);
-        m_type = asPrioritizedChoice(0).getAccepted().getClass();
+        super(asPrioritizedChoice(asSequence(decl).itemAt(0)).getAccepted());
     }
-    
-    /**
-     * Class of Number: BasedNumber, Integer, Float
-     */
-    private final Class m_type;
 }

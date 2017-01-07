@@ -27,8 +27,8 @@ package laol.ast;
  *
  * @author gburdell
  */
-public class UnaryOp extends Op {
+public class UnaryOp extends Keyword {
     public UnaryOp(final laol.parser.apfe.UnaryOp decl) {
-        super(decl);
+        super(asPrioritizedChoice(decl).getAccepted());
     }
 }

@@ -158,7 +158,10 @@ public abstract class Item {
     }
 
     final protected List<Ident> zeroOrMoreIdent(final int posOfRep, final int posInSeq) {
-        Repetition rep = asRepetition(posOfRep);
+        return zeroOrMoreIdent(asRepetition(posOfRep), posInSeq);
+    }
+
+    final protected List<Ident> zeroOrMoreIdent(final Repetition rep , final int posInSeq) {
         List<Ident> rval = (0 < rep.sizeofAccepted()) ? new LinkedList<>() : Collections.EMPTY_LIST;
         for (Acceptor acc : apfe.runtime.Util.extractList(rep, posInSeq)) {
             rval.add(new Ident((IDENT) acc));
@@ -197,7 +200,7 @@ public abstract class Item {
         }
         return rval;
     }
-    
+
     /**
      * Extract item* from a Sequence containing a Repetition of Sequence.
      *

@@ -22,13 +22,6 @@
  * THE SOFTWARE.
  */
 package laol.ast;
-import apfe.runtime.Acceptor;
-import apfe.runtime.Marker;
-import apfe.runtime.Repetition;
-import apfe.runtime.Sequence;
-import apfe.runtime.Util;
-import java.util.LinkedList;
-import java.util.List;
 
 /**
  *
@@ -37,5 +30,12 @@ import java.util.List;
 public class TypeName extends Item {
     public TypeName(final laol.parser.apfe.TypeName decl) {
         super(decl);
+        m_name = createItem(asPrioritizedChoice().getAccepted());
     }
+
+    public Item getName() {
+        return m_name;
+    }
+    
+    private final Item  m_name;
 }

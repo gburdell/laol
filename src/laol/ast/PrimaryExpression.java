@@ -50,6 +50,10 @@ public class PrimaryExpression extends Item {
             m_expr = createItem(acc);
         }
     }
+
+    public Item getExpr() {
+        return m_expr;
+    }
     
     private final Item  m_expr;
     private static final Set<Class> KWRDS = new HashSet<>();

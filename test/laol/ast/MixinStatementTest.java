@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2016 gburdell.
+ * Copyright 2016 kpfalzer.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -23,15 +23,35 @@
  */
 package laol.ast;
 
+import apfe.runtime.Acceptor;
+import laol.test.TestRunner;
+import org.junit.Test;
+import static org.junit.Assert.*;
+
 /**
  *
- * @author gburdell
+ * @author kpfalzer
  */
-public class NextStatement extends Item {
-    public NextStatement(final laol.parser.apfe.NextStatement decl) {
-        super(decl);
-        m_stmtModifier = getStatementModifier(asSequence(), 1);
+public class MixinStatementTest extends TestRunner {
+
+    private final String TESTS[] = {
+        "mixin foo, bar::dob"
+    };
+
+    @Override
+    public Acceptor getGrammar() {
+        return new laol.parser.apfe.MixinStatement();
     }
- 
-    private final StatementModifier m_stmtModifier;
+
+    @Override
+    public void generateAndTestAst(Acceptor parsed) {
+        laol.ast.MixinStatement dut = new laol.ast.MixinStatement((laol.parser.apfe.MixinStatement) parsed);
+        assertTrue(m_test.equals(m_accepted));
+    }
+
+    @Test
+    public void testMixinStatement() {
+        TestRunner runner = new MixinStatementTest();
+        runner.runTests(TESTS);
+    }
 }

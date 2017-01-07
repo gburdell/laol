@@ -23,6 +23,7 @@
  */
 package laol.ast;
 import apfe.runtime.Marker;
+import apfe.runtime.Sequence;
 
 /**
  *
@@ -31,6 +32,19 @@ import apfe.runtime.Marker;
 public class UntilStatement extends Item {
     public UntilStatement(final laol.parser.apfe.UntilStatement decl) {
         super(decl);
+        final Sequence seq = asSequence();
+        m_expr = createItem(seq, 1);
+        m_clause = createItem(seq, 2);
+    }
+
+    public StatementClause getClause() {
+        return m_clause;
+    }
+
+    public Expression getExpr() {
+        return m_expr;
     }
  
+    private final Expression    m_expr;
+    private final StatementClause   m_clause;
 }

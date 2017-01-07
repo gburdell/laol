@@ -35,7 +35,7 @@ public class StatementClause extends Item {
         super(decl);
         final Acceptor acc = asPrioritizedChoice().getAccepted();
         if (acc instanceof Sequence) {
-            final Sequence seq = Util.downcast(acc);
+            final Sequence seq = asSequence(acc);
             m_stmt = createItem(seq, 1);
             m_stmtModifier = getStatementModifier(seq, 3);
         } else {

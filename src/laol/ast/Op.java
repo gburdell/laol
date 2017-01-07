@@ -29,12 +29,9 @@ import apfe.runtime.Acceptor;
  *
  * @author gburdell
  */
-public abstract class Op extends Item {
+public abstract class Op extends Keyword {
 
     protected Op(final Acceptor decl) {
-        super(decl);
-        m_op = asPrioritizedChoice().getAccepted().getClass();
+        super(asPrioritizedChoice(decl).getAccepted());
     }
-
-    protected final Class m_op;
 }

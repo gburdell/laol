@@ -24,6 +24,7 @@
 package laol.ast;
 
 import apfe.runtime.Acceptor;
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -32,8 +33,8 @@ import java.util.List;
  * @author kpfalzer
  */
 public class StringItem extends Item {
-    
-     public StringItem(final laol.parser.apfe.StringItem str) {
+
+    public StringItem(final laol.parser.apfe.StringItem str) {
         super(str);
         final Acceptor acc = asPrioritizedChoice().getAccepted();
         if (acc.getClass() == laol.parser.apfe.InlineEval.class) {
@@ -42,6 +43,10 @@ public class StringItem extends Item {
             m_items.add(new AString.S(acc));
         }
     }
-    
-    protected final List<Item>  m_items = new LinkedList<>();   
+
+    public List<Item> getItems() {
+        return Collections.unmodifiableList(m_items);
+    }
+
+    protected final List<Item> m_items = new LinkedList<>();
 }

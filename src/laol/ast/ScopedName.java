@@ -24,6 +24,7 @@
 package laol.ast;
 
 import apfe.runtime.Repetition;
+import apfe.runtime.Sequence;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
@@ -36,10 +37,11 @@ public class ScopedName extends Item {
 
     public ScopedName(final laol.parser.apfe.ScopedName decl) {
         super(decl);
-        Repetition rep = asRepetition(0);
+        final Sequence seq = asSequence();
+        Repetition rep = asRepetition(seq, 0);
         m_isRooted = rep.sizeofAccepted() > 0;
-        m_path.add(getIdent(1));
-        m_path.addAll(zeroOrMoreIdent(2, 1));        
+        m_path.add(getIdent(seq, 1));
+        m_path.addAll(zeroOrMoreIdent(asRepetition(seq, 2), 1));        
     }
 
     public List<Ident>  getIdents() {

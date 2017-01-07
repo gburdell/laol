@@ -23,8 +23,6 @@
  */
 package laol.ast;
 
-import apfe.runtime.Marker;
-
 /**
  *
  * @author gburdell
@@ -34,6 +32,10 @@ public class Statement extends Item {
     public Statement(final laol.parser.apfe.Statement decl) {
         super(decl);
         m_stmt = createItem(asPrioritizedChoice().getAccepted());
+    }
+
+    public Item getStmt() {
+        return m_stmt;
     }
     
     private final Item  m_stmt;

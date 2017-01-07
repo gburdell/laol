@@ -23,12 +23,9 @@
  */
 package laol.ast;
 
-import apfe.runtime.Acceptor;
-import apfe.runtime.Marker;
-import apfe.runtime.Repetition;
-import apfe.runtime.Util;
-import static apfe.runtime.Util.downcast;
-import java.util.LinkedList;
+import apfe.runtime.Sequence;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -39,10 +36,19 @@ public class ModuleDeclaration extends Item {
 
     public ModuleDeclaration(final laol.parser.apfe.ModuleDeclaration mdecl) {
         super(mdecl);
-        m_name = createItem(1);
-        m_items = zeroOrMore(3);
+        final Sequence seq = asSequence();
+        m_name = createItem(seq, 1);
+        m_items = zeroOrMore(seq, 3);
     }
 
+    public List<Item> getM_items() {
+        return Collections.unmodifiableList(m_items);
+    }
+
+    public ModuleName getM_name() {
+        return m_name;
+    }
+    
     private final ModuleName m_name;
-     private final List<Item>    m_items;
+    private final List<Item>    m_items;
 }

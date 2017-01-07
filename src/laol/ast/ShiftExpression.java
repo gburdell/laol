@@ -22,19 +22,12 @@
  * THE SOFTWARE.
  */
 package laol.ast;
-import apfe.runtime.Acceptor;
-import apfe.runtime.Marker;
-import apfe.runtime.Repetition;
-import apfe.runtime.Sequence;
-import apfe.runtime.Util;
-import java.util.LinkedList;
-import java.util.List;
 
 /**
  *
  * @author gburdell
  */
-public class ShiftExpression extends Item {
+public class ShiftExpression extends BinaryOp.LRExpr<laol.parser.apfe.ShiftExpression> {
     public ShiftExpression(final laol.parser.apfe.ShiftExpression decl) {
         super(decl);
     }

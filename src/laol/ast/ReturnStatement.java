@@ -23,6 +23,7 @@
  */
 package laol.ast;
 import apfe.runtime.Marker;
+import apfe.runtime.Sequence;
 
 /**
  *
@@ -31,6 +32,19 @@ import apfe.runtime.Marker;
 public class ReturnStatement extends Item {
     public ReturnStatement(final laol.parser.apfe.ReturnStatement decl) {
         super(decl);
+        final Sequence seq = asSequence();
+        m_expr = oneOrNone(seq, 1);
+        m_stmtModifier = getStatementModifier(seq, 2);
+    }
+
+    public Expression getExpr() {
+        return m_expr;
+    }
+
+    public StatementModifier getStmtModifier() {
+        return m_stmtModifier;
     }
  
+    private final Expression m_expr;
+    private final StatementModifier m_stmtModifier;
 }

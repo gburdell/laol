@@ -25,6 +25,7 @@ package laol.ast;
 
 import apfe.runtime.Acceptor;
 import apfe.runtime.Sequence;
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -57,66 +58,90 @@ public class PostfixExpression extends Item {
         }
     }
 
-    private static class ItemWithBlock extends Item {
+    public static class ItemWithBlock extends Item {
         
         protected ItemWithBlock(Acceptor parsed) {
             super(parsed);
-            final int n = asSequence().getAccepted().length - 1;
-            m_block = oneOrNone(n);
+            m_seq = asSequence();
+            final int n = m_seq.getAccepted().length - 1;
+            m_block = oneOrNone(m_seq, n);
         }
+
+        public Block getBlock() {
+            return m_block;
+        }
+        
+        protected final Sequence m_seq;
         
         private final Block m_block;
     }
     
-    private static class ArySelExpr extends ItemWithBlock {
+    public static class ArySelExpr extends ItemWithBlock {
 
-        public ArySelExpr(Acceptor parsed) {
+        private ArySelExpr(Acceptor parsed) {
             super(parsed);
-            m_expr = createItem(1);
+            m_expr = createItem(m_seq, 1);
+        }
+
+        public ArraySelectExpression getExpr() {
+            return m_expr;
         }
         
         private final ArraySelectExpression m_expr;
     }
 
-    private static class PrimExprList extends ItemWithBlock {
+    public static class PrimExprList extends ItemWithBlock {
 
-        public PrimExprList(Acceptor parsed) {
+        private PrimExprList(Acceptor parsed) {
             super(parsed);
-            m_expr = oneOrNone(1);
+            m_expr = oneOrNone(m_seq, 1);
         }
+
+        public ParamExpressionList getExpr() {
+            return m_expr;
+        }        
         
         private ParamExpressionList m_expr;
     }
 
-    private static class DotSfx extends ItemWithBlock {
+    public static class DotSfx extends ItemWithBlock {
 
-        public DotSfx(Acceptor parsed) {
+        private DotSfx(Acceptor parsed) {
             super(parsed);
-            m_expr = createItem(0);
+            m_expr = createItem(m_seq, 0);
         }
-        
+
+        public DotSuffix getExpr() {
+            return m_expr;
+        }
+    
         private final DotSuffix   m_expr;
     }
 
-    private static class IncDec extends Item {
+    public static class IncDec extends Keyword {
 
-        public IncDec(Acceptor parsed) {
-            super(parsed);
-            m_op = getParsed().getBaseAccepted().getClass();
+        private IncDec(Acceptor parsed) {
+            super(parsed.getBaseAccepted());
         }
-        
-        private final Class m_op;
     }
 
-    private static class PrimExpr extends ItemWithBlock {
+    public static class PrimExpr extends ItemWithBlock {
 
-        public PrimExpr(Acceptor parsed) {
+        private PrimExpr(Acceptor parsed) {
             super(parsed);
-            m_expr = createItem(0);
+            m_expr = createItem(m_seq, 0);
+        }
+
+        public PrimaryExpression getExpr() {
+            return m_expr;
         }
         
         private final PrimaryExpression m_expr;
     }
 
-    private List<Item>  m_exprs = new LinkedList<>();
+    public List<Item> getExprs() {
+        return Collections.unmodifiableList(m_exprs);
+    }
+
+    private final List<Item>  m_exprs = new LinkedList<>();
 }

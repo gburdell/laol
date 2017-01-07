@@ -23,12 +23,7 @@
  */
 package laol.ast;
 import apfe.runtime.Acceptor;
-import apfe.runtime.Marker;
-import apfe.runtime.Repetition;
 import apfe.runtime.Sequence;
-import apfe.runtime.Util;
-import java.util.LinkedList;
-import java.util.List;
 
 /**
  *
@@ -37,5 +32,65 @@ import java.util.List;
 public class MethodParamDeclEle extends Item {
     public MethodParamDeclEle(final laol.parser.apfe.MethodParamDeclEle decl) {
         super(decl);
+        Sequence seq = asSequence();
+        m_modifier = createItem(seq, 0);
+        final Acceptor acc = asPrioritizedChoice(seq.itemAt(1)).getAccepted();
+        if (acc instanceof laol.parser.apfe.AnonymousFunctionDecl) {
+            m_ele = createItem(acc);
+        } else {
+            m_ele = new Named(acc);
+        }
     }
+    
+    /**
+     * A more complex element.
+     */
+    public static class Named extends Item {
+        
+        public Named(Acceptor parsed) {
+            super(parsed);
+            final Sequence seq = asSequence();
+            int offset = 0;
+            if (seq.itemAt(offset) instanceof laol.parser.apfe.TypeName) {
+                m_type = createItem(seq, offset++);
+            } else {
+                m_type = null;
+            }
+            m_hasStar = 0 < asRepetition(seq, offset++).sizeofAccepted();
+            m_paramName = createItem(seq, offset++);
+            m_default = oneOrNone(seq, offset++);
+        }
+
+        public MethodParamDeclDefault getDefault() {
+            return m_default;
+        }
+
+        public ParamName getParamName() {
+            return m_paramName;
+        }
+
+        public TypeName getType() {
+            return m_type;
+        }
+
+        public boolean hasStar() {
+            return m_hasStar;
+        }
+
+        private final TypeName  m_type;
+        private final boolean m_hasStar;
+        private final ParamName m_paramName;
+        private final MethodParamDeclDefault m_default;
+    }
+
+    public Item getEle() {
+        return m_ele;
+    }
+
+    public MethodParamDeclModifier getModifier() {
+        return m_modifier;
+    }
+   
+    private final MethodParamDeclModifier   m_modifier;
+    private final Item m_ele;
 }

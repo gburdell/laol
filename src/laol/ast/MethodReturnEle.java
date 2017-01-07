@@ -22,13 +22,7 @@
  * THE SOFTWARE.
  */
 package laol.ast;
-import apfe.runtime.Acceptor;
-import apfe.runtime.Marker;
-import apfe.runtime.Repetition;
 import apfe.runtime.Sequence;
-import apfe.runtime.Util;
-import java.util.LinkedList;
-import java.util.List;
 
 /**
  *
@@ -37,5 +31,19 @@ import java.util.List;
 public class MethodReturnEle extends Item {
     public MethodReturnEle(final laol.parser.apfe.MethodReturnEle decl) {
         super(decl);
+        final Sequence seq = asSequence();
+        m_type = createItem(seq, 0);
+        m_param = oneOrNone(seq, 1);
     }
+
+    public ParamName getParam() {
+        return m_param;
+    }
+
+    public TypeName getType() {
+        return m_type;
+    }
+    
+    private final TypeName  m_type;
+    private final ParamName m_param;
 }

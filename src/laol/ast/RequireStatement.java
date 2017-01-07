@@ -35,7 +35,15 @@ public class RequireStatement extends Item {
         m_require = getString(seq, 1);
         m_stmtModifier = getStatementModifier(seq, 2);
     }
-    
+
+    public AString getRequire() {
+        return m_require;
+    }
+
+    public StatementModifier getStmtModifier() {
+        return m_stmtModifier;
+    }
+   
     private final AString   m_require;
     private final StatementModifier m_stmtModifier;
     

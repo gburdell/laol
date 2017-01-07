@@ -23,6 +23,8 @@
  */
 package laol.ast;
 
+import apfe.runtime.Sequence;
+
 /**
  *
  * @author gburdell
@@ -30,8 +32,9 @@ package laol.ast;
 public class NamedParamEle extends Item {
     public NamedParamEle(final laol.parser.apfe.NamedParamEle decl) {
         super(decl);
-        m_name = createItem(0);
-        m_expr = createItem(2);
+        final Sequence seq = asSequence();
+        m_name = createItem(seq, 0);
+        m_expr = createItem(seq, 2);
     }
 
     public Expression getExpr() {

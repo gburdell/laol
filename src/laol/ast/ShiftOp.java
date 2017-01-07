@@ -22,20 +22,13 @@
  * THE SOFTWARE.
  */
 package laol.ast;
-import apfe.runtime.Acceptor;
-import apfe.runtime.Marker;
-import apfe.runtime.Repetition;
-import apfe.runtime.Sequence;
-import apfe.runtime.Util;
-import java.util.LinkedList;
-import java.util.List;
 
 /**
  *
  * @author gburdell
  */
-public class ShiftOp extends Item {
+public class ShiftOp extends Keyword {
     public ShiftOp(final laol.parser.apfe.ShiftOp decl) {
-        super(decl);
+        super(asPrioritizedChoice(decl).getAccepted());
     }
 }

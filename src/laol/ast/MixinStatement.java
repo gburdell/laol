@@ -22,8 +22,8 @@
  * THE SOFTWARE.
  */
 package laol.ast;
-import apfe.runtime.Acceptor;
-import apfe.runtime.Util;
+import apfe.runtime.Sequence;
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -34,11 +34,20 @@ import java.util.List;
 public class MixinStatement extends Item {
     public MixinStatement(final laol.parser.apfe.MixinStatement decl) {
         super(decl);
-        m_mixins.add(createItem(1));
-        for (Acceptor item : Util.extractList(asRepetition(2), 1)) {
-            m_mixins.add(createItem(item));
-        }
+        final Sequence seq = asSequence();
+        m_mixins.add(createItem(seq, 1));
+        m_mixins.addAll(zeroOrMore(asRepetition(seq, 2), 1));
+        m_stmtModifier = getStatementModifier(seq, 3);
+    }
+
+    public List<ModuleName> getM_mixins() {
+        return Collections.unmodifiableList(m_mixins);
+    }
+
+    public StatementModifier getM_stmtModifier() {
+        return m_stmtModifier;
     }
     
-    private List<ModuleName>    m_mixins = new LinkedList<>();
+    private final List<ModuleName>  m_mixins = new LinkedList<>();
+    private final StatementModifier m_stmtModifier;
 }

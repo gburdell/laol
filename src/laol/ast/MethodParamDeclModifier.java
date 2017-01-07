@@ -22,13 +22,7 @@
  * THE SOFTWARE.
  */
 package laol.ast;
-import apfe.runtime.Acceptor;
-import apfe.runtime.Marker;
-import apfe.runtime.Repetition;
 import apfe.runtime.Sequence;
-import apfe.runtime.Util;
-import java.util.LinkedList;
-import java.util.List;
 
 /**
  *
@@ -37,5 +31,19 @@ import java.util.List;
 public class MethodParamDeclModifier extends Item {
     public MethodParamDeclModifier(final laol.parser.apfe.MethodParamDeclModifier decl) {
         super(decl);
+        final Sequence seq = asSequence();
+        m_access = oneOrNone(seq, 0);
+        m_mutability = oneOrNone(seq, 1);
     }
+
+    public AccessModifier getAccess() {
+        return m_access;
+    }
+
+    public Mutability getMutability() {
+        return m_mutability;
+    }
+    
+    private final AccessModifier    m_access;
+    private final Mutability        m_mutability;
 }

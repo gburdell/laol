@@ -23,6 +23,8 @@
  */
 package laol.ast;
 
+import apfe.runtime.Sequence;
+
 /**
  *
  * @author gburdell
@@ -30,9 +32,14 @@ package laol.ast;
 public class Symbol extends Item {
     public Symbol(final laol.parser.apfe.SYMBOL decl) {
         super(decl);
-        m_sym = getIdent(1);
-        //TODO: could be ident or operator
+        final Sequence seq = asSequence(asPrioritizedChoice().getAccepted());
+        if (seq.itemAt(1) instanceof laol.parser.IDENTNK) {
+            m_symbol = getIdent(seq, 1);
+        } else {
+            //operator
+            m_symbol = createItem(asPrioritizedChoice(seq.itemAt(1)).getAccepted());
+        }
     }
     
-    private final Ident m_sym;
+    private final Item  m_symbol;
 }

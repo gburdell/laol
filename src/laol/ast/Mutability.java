@@ -23,8 +23,6 @@
  */
 package laol.ast;
 
-import apfe.runtime.Marker;
-import apfe.runtime.PrioritizedChoice;
 import laol.parser.apfe.KCONST;
 
 /**
@@ -47,6 +45,10 @@ public class Mutability extends Item {
         } else {
             m_type = EType.eVar;
         }
+    }
+
+    public EType getType() {
+        return m_type;
     }
 
     private final EType m_type;

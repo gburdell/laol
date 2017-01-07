@@ -22,13 +22,7 @@
  * THE SOFTWARE.
  */
 package laol.ast;
-import apfe.runtime.Acceptor;
-import apfe.runtime.Marker;
-import apfe.runtime.Repetition;
 import apfe.runtime.Sequence;
-import apfe.runtime.Util;
-import java.util.LinkedList;
-import java.util.List;
 
 /**
  *
@@ -37,5 +31,19 @@ import java.util.List;
 public class ParamName extends Item {
     public ParamName(final laol.parser.apfe.ParamName decl) {
         super(decl);
+        final Sequence seq = asSequence();
+        m_isMember = 0 < asRepetition(seq, 0).sizeofAccepted();
+        m_name = getIdent(seq, 1);
     }
+
+    public Ident getName() {
+        return m_name;
+    }
+
+    public boolean isMember() {
+        return m_isMember;
+    }
+    
+    private final boolean m_isMember;
+    private final Ident m_name;
 }

@@ -23,21 +23,25 @@
  */
 package laol.ast;
 
+import apfe.runtime.Sequence;
+
 /**
  *
  * @author gburdell
  */
 public class TypeDecl extends Item {
 
-    //TODO: just cut-n-paste from obsolete LhsDecl
     public TypeDecl(final laol.parser.apfe.TypeDecl decl) {
         super(decl);
-        m_access = oneOrNone(0);
-        m_isStatic = (0 < asRepetition(1).sizeofAccepted());
-        m_mutability = oneOrNone(2);
+        final Sequence seq = asSequence();
+        m_access = oneOrNone(seq, 0);
+        m_isStatic = (0 < asRepetition(seq, 1).sizeofAccepted());
+        m_mutability = oneOrNone(seq, 2);
+        m_type = createItem(seq, 3);
     }
 
     private final AccessModifier m_access;
     private final boolean m_isStatic;
     private final Mutability m_mutability;
+    private final TypeName  m_type;
 }

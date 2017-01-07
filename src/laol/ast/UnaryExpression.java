@@ -28,6 +28,7 @@ import apfe.runtime.Marker;
 import apfe.runtime.Repetition;
 import apfe.runtime.Sequence;
 import apfe.runtime.Util;
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -49,16 +50,28 @@ public class UnaryExpression extends Item {
         m_items.add(item);
     }
 
-    private static class UnaryOpExpr extends Item {
+    public static class UnaryOpExpr extends Item {
 
-        public UnaryOpExpr(Acceptor parsed) {
+        private UnaryOpExpr(Acceptor parsed) {
             super(parsed);
             m_op = createItem(0);
             m_expr = createItem(1);
         }
 
+        public UnaryExpression getExpr() {
+            return m_expr;
+        }
+
+        public UnaryOp getOp() {
+            return m_op;
+        }
+
         private final UnaryOp           m_op;
         private final UnaryExpression   m_expr;
+    }
+
+    public List<Item> getItems() {
+        return Collections.unmodifiableList(m_items);
     }
 
     private final List<Item> m_items = new LinkedList<>();

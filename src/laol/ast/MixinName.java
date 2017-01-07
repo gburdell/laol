@@ -22,20 +22,13 @@
  * THE SOFTWARE.
  */
 package laol.ast;
-import apfe.runtime.Acceptor;
-import apfe.runtime.Marker;
-import apfe.runtime.Repetition;
-import apfe.runtime.Sequence;
-import apfe.runtime.Util;
-import java.util.LinkedList;
-import java.util.List;
 
 /**
  *
  * @author gburdell
  */
-public class MixinName extends Item {
+public class MixinName extends ScopedName {
     public MixinName(final laol.parser.apfe.MixinName decl) {
-        super(decl);
+        super(decl.getBaseAccepted());
     }
 }

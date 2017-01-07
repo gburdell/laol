@@ -22,13 +22,6 @@
  * THE SOFTWARE.
  */
 package laol.ast;
-import apfe.runtime.Acceptor;
-import apfe.runtime.Marker;
-import apfe.runtime.Repetition;
-import apfe.runtime.Sequence;
-import apfe.runtime.Util;
-import java.util.LinkedList;
-import java.util.List;
 
 /**
  *
@@ -37,5 +30,12 @@ import java.util.List;
 public class MethodParamDeclDefault extends Item {
     public MethodParamDeclDefault(final laol.parser.apfe.MethodParamDeclDefault decl) {
         super(decl);
+        m_default = createItem(1);
     }
+
+    public Expression getDefault() {
+        return m_default;
+    }
+    
+    private final Expression    m_default;
 }

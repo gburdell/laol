@@ -22,7 +22,14 @@
  * THE SOFTWARE.
  */
 package laol.ast;
+import apfe.runtime.Acceptor;
 import apfe.runtime.Marker;
+import apfe.runtime.PrioritizedChoice;
+import apfe.runtime.Repetition;
+import apfe.runtime.Sequence;
+import java.util.Collections;
+import java.util.LinkedList;
+import java.util.List;
 
 /**
  *
@@ -31,6 +38,53 @@ import apfe.runtime.Marker;
 public class VarDeclStatement extends Item {
     public VarDeclStatement(final laol.parser.apfe.VarDeclStatement decl) {
         super(decl);
+        final Sequence seq = asSequence();
+        final PrioritizedChoice pc = asPrioritizedChoice(seq.itemAt(0));
+        Acceptor acc = pc.getAccepted();
+        if (acc instanceof Sequence) {
+            final Sequence seq2 = asSequence(acc);
+            m_type = createItem(seq2, 0);
+            m_names.add(createItem(seq2, 1));
+        } else {
+            m_type = null;
+            m_names.add(createItem(acc));
+        }
+        m_names.addAll(zeroOrMore(asRepetition(seq, 1), 1));
+        final Repetition rep = asRepetition(seq, 2);
+        if (0 < rep.sizeofAccepted()) {
+            final Sequence seq3 = rep.getOnlyAccepted();
+            m_op = createItem(seq3, 0);
+            m_rhs = createItem(seq3, 1);
+        } else {
+            m_op = null;
+            m_rhs = null;
+        }
+        m_stmtModifier = getStatementModifier(seq, 3);
+    }
+
+    public List<ScopedName> getNames() {
+        return Collections.unmodifiableList(m_names);
+    }
+
+    public AssignmentOp getOp() {
+        return m_op;
+    }
+
+    public AssignmentRhs getRhs() {
+        return m_rhs;
+    }
+
+    public StatementModifier getStmtModifier() {
+        return m_stmtModifier;
+    }
+
+    public TypeDecl getType() {
+        return m_type;
     }
  
+    private final TypeDecl  m_type;
+    private final List<ScopedName>    m_names = new LinkedList<>();
+    private final AssignmentOp  m_op;
+    private final AssignmentRhs m_rhs;
+    private final StatementModifier m_stmtModifier;
 }

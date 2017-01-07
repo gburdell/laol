@@ -24,6 +24,7 @@
 package laol.ast;
 
 import apfe.runtime.Acceptor;
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -41,6 +42,10 @@ public class RegexpItem extends Item {
             m_items.add(new AString.S(acc));
         }
     }
+
+    public List<Item> getM_items() {
+        return Collections.unmodifiableList(m_items);
+    }
     
-    protected final List<Item>  m_items = new LinkedList<>();   
+    private final List<Item>  m_items = new LinkedList<>();   
 }
