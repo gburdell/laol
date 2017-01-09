@@ -39,27 +39,26 @@ public class PostfixExpression extends Item {
         super(decl);
         Item expr;
         for (Acceptor ele : decl.getItems()) {
-            if (ele instanceof Sequence) {
-                final Sequence seq = asSequence(ele);
-                final Acceptor first = seq.getAccepted()[0];
-                if (first instanceof laol.parser.apfe.LBRACK) {
-                    expr = new ArySelExpr(seq);
-                } else if (first instanceof laol.parser.apfe.LPAREN) {
-                    expr = new PrimExprList(seq);
-                } else if (first instanceof laol.parser.apfe.DotSuffix) {
-                    expr = new DotSfx(seq);
-                } else {
-                    expr = new PrimExpr(seq);
-                }
+            final Sequence seq = asSequence(ele);
+            final Acceptor first = seq.itemAt(0);
+            if (first instanceof laol.parser.apfe.LBRACK) {
+                expr = new ArySelExpr(seq);
+            } else if (first instanceof laol.parser.apfe.LPAREN) {
+                expr = new PrimExprList(seq);
+            } else if (first instanceof laol.parser.apfe.DotSuffix) {
+                expr = new DotSfx(seq);
+            } else if (first instanceof laol.parser.apfe.PrimaryExpression) {
+                expr = new PrimExpr(seq);
             } else {
-                expr = new IncDec(ele);
+                assert (1 == seq.length());
+                expr = new IncDec(seq.itemAt(0));
             }
             m_exprs.add(expr);
         }
     }
 
     public static class ItemWithBlock extends Item {
-        
+
         protected ItemWithBlock(Acceptor parsed) {
             super(parsed);
             m_seq = asSequence();
@@ -70,12 +69,12 @@ public class PostfixExpression extends Item {
         public Block getBlock() {
             return m_block;
         }
-        
+
         protected final Sequence m_seq;
-        
+
         private final Block m_block;
     }
-    
+
     public static class ArySelExpr extends ItemWithBlock {
 
         private ArySelExpr(Acceptor parsed) {
@@ -86,7 +85,7 @@ public class PostfixExpression extends Item {
         public ArraySelectExpression getExpr() {
             return m_expr;
         }
-        
+
         private final ArraySelectExpression m_expr;
     }
 
@@ -99,8 +98,8 @@ public class PostfixExpression extends Item {
 
         public ParamExpressionList getExpr() {
             return m_expr;
-        }        
-        
+        }
+
         private ParamExpressionList m_expr;
     }
 
@@ -114,14 +113,14 @@ public class PostfixExpression extends Item {
         public DotSuffix getExpr() {
             return m_expr;
         }
-    
-        private final DotSuffix   m_expr;
+
+        private final DotSuffix m_expr;
     }
 
     public static class IncDec extends Keyword {
 
         private IncDec(Acceptor parsed) {
-            super(parsed.getBaseAccepted());
+            super(asPrioritizedChoice(parsed).getAccepted());
         }
     }
 
@@ -135,7 +134,7 @@ public class PostfixExpression extends Item {
         public PrimaryExpression getExpr() {
             return m_expr;
         }
-        
+
         private final PrimaryExpression m_expr;
     }
 
@@ -143,5 +142,5 @@ public class PostfixExpression extends Item {
         return Collections.unmodifiableList(m_exprs);
     }
 
-    private final List<Item>  m_exprs = new LinkedList<>();
+    private final List<Item> m_exprs = new LinkedList<>();
 }
