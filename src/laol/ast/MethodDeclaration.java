@@ -22,6 +22,7 @@
  * THE SOFTWARE.
  */
 package laol.ast;
+import apfe.runtime.Repetition;
 import apfe.runtime.Sequence;
 
 /**
@@ -38,10 +39,9 @@ public class MethodDeclaration extends Item {
         m_parmDecl = oneOrNone(seq, 4);
         m_retnDecl = oneOrNone(seq, 5);
         {
-            Sequence body = asRepetition(seq, 6).getOnlyAccepted();
-            if (null != body) {
-                body = asSequence(body);
-                m_body = createItem(body, 1);
+            final Repetition rep = asRepetition(seq, 6);
+            if (0 < rep.sizeofAccepted()) {
+                m_body = createItem(asSequence(rep.getOnlyAccepted()), 1);
             } else {
                 m_body = null;
             }

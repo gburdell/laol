@@ -40,11 +40,11 @@ public class MixinStatement extends Item {
         m_stmtModifier = getStatementModifier(seq, 3);
     }
 
-    public List<ModuleName> getM_mixins() {
+    public List<ModuleName> getMixins() {
         return Collections.unmodifiableList(m_mixins);
     }
 
-    public StatementModifier getM_stmtModifier() {
+    public StatementModifier getStmtModifier() {
         return m_stmtModifier;
     }
     
