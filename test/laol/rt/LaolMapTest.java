@@ -64,7 +64,7 @@ public class LaolMapTest {
             assertEquals(Double.toString(d), s);
         }
         {
-            final int N = 20000000;
+            final int N = 2000;
             LaolMap map = new LaolMap().setMutable();
             LaolObject key3, val3;
             for (int i = 0; i < N; i++) {

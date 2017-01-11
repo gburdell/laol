@@ -23,11 +23,64 @@
  */
 package laol.rt;
 
+import java.util.function.DoubleBinaryOperator;
+import java.util.function.IntBinaryOperator;
+
 /**
+ * We use exact methods here to catch over/underflow. TODO: If we catch these,
+ * use BigInteger...
  *
  * @author kpfalzer
  */
 public interface LaolNumber {
+
     public LaolInteger toInteger();
-    public LaolDouble  toDouble();
+
+    public LaolDouble toDouble();
+
+    public LaolNumber addOp(LaolNumber b);
+
+    public LaolNumber subOp(LaolNumber b);
+
+    public LaolNumber multOp(LaolNumber b);
+
+    public LaolNumber divOp(LaolNumber b);
+
+    static final LaolInteger ONE = new LaolInteger(1);
+
+    default public LaolNumber preIncrOp() {
+        set(addOp(ONE));
+        return this;
+    }
+
+    default public LaolNumber preDecrOp() {
+        set(subOp(ONE));
+        return this;
+    }
+
+    default public LaolNumber postIncrOp() {
+        LaolNumber currVal = clone();
+        set(addOp(ONE));
+        return currVal;
+    }
+
+    default public LaolNumber postDecrOp() {
+        LaolNumber currVal = clone();
+        set(subOp(ONE));
+        return currVal;
+    }
+
+    public void set(LaolNumber val);
+
+    public LaolNumber clone();
+
+    static LaolDouble binaryDblOp(LaolNumber a, LaolNumber b, DoubleBinaryOperator op) {
+        final double r = op.applyAsDouble(a.toDouble().get(), b.toDouble().get());
+        return new LaolDouble(r);
+    }
+
+    static LaolInteger binaryIntOp(LaolNumber a, LaolNumber b, IntBinaryOperator op) {
+        final int r = op.applyAsInt(a.toInteger().get(), b.toInteger().get());
+        return new LaolInteger(r);
+    }
 }

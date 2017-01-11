@@ -23,79 +23,14 @@
  */
 package laol.rt;
 
-import gblib.Util;
-import java.util.function.Function;
-
 /**
  *
  * @author kpfalzer
  */
 public class LaolInteger extends LaolBox<Integer> implements LaolNumber {
+
     public LaolInteger(final Integer val) {
         super(val);
-    }
-
-    public LaolInteger preIncrOp() {
-        set(get() + 1);
-        return this;
-    }
-
-    public LaolInteger postIncrOp() {
-        final LaolInteger rval = new LaolInteger(get());
-        set(get() + 1);
-        return rval;
-    }
-
-    public LaolInteger preDecrOp() {
-        set(get() - 1);
-        return this;
-    }
-
-    public LaolInteger postDecrOp() {
-        final LaolInteger rval = new LaolInteger(get());
-        set(get() - 1);
-        return rval;
-    }
-    
-    private LaolNumber binaryOp(final LaolObject b, Function<? extends Number, ? extends Number> f) {
-        LaolNumber bNum = Util.downCast(f);
-        return bNum;
-    }
-    
-    public LaolNumber addOp(final LaolObject b) {
-        LaolNumber bNum = Util.downCast(b); 
-        if (bNum instanceof LaolDouble) {
-            double val = this.toDouble().get() + ((LaolDouble) bNum).get();
-            bNum = new LaolDouble(val);
-        } else {
-            int val = this.toInteger().get() + bNum.toInteger().get();
-            bNum = new LaolInteger(val);
-        }
-        return bNum;
-    }
-
-    public LaolNumber subOp(final LaolObject b) {
-        LaolNumber bNum = Util.downCast(b); 
-        if (bNum instanceof LaolDouble) {
-            double val = this.toDouble().get() - ((LaolDouble) bNum).get();
-            bNum = new LaolDouble(val);
-        } else {
-            int val = this.toInteger().get() - bNum.toInteger().get();
-            bNum = new LaolInteger(val);
-        }
-        return bNum;
-    }
-
-    public LaolNumber multOp(final LaolObject b) {
-        LaolNumber bNum = Util.downCast(b); 
-        if (bNum instanceof LaolDouble) {
-            double val = this.toDouble().get() * ((LaolDouble) bNum).get();
-            bNum = new LaolDouble(val);
-        } else {
-            int val = this.toInteger().get() * bNum.toInteger().get();
-            bNum = new LaolInteger(val);
-        }
-        return bNum;
     }
 
     @Override
@@ -107,5 +42,42 @@ public class LaolInteger extends LaolBox<Integer> implements LaolNumber {
     public LaolInteger toInteger() {
         return this;
     }
-    
+
+    @Override
+    public LaolNumber addOp(LaolNumber b) {
+        return (b instanceof LaolInteger) 
+                ? LaolNumber.binaryIntOp(this, b, Math::addExact)
+                : LaolNumber.binaryDblOp(this, b, (x, y)-> x + y);
+    }
+
+    @Override
+    public LaolNumber subOp(LaolNumber b) {
+        return (b instanceof LaolInteger) 
+                ? LaolNumber.binaryIntOp(this, b, Math::subtractExact)
+                : LaolNumber.binaryDblOp(this, b, (x, y)-> x - y);
+    }
+
+    @Override
+    public LaolNumber multOp(LaolNumber b) {
+        return (b instanceof LaolInteger) 
+                ? LaolNumber.binaryIntOp(this, b, Math::multiplyExact)
+                : LaolNumber.binaryDblOp(this, b, (x, y)-> x * y);
+    }
+
+    @Override
+    public LaolNumber divOp(LaolNumber b) {
+        return (b instanceof LaolInteger) 
+                ? LaolNumber.binaryIntOp(this, b, (x, y)-> x / y)
+                : LaolNumber.binaryDblOp(this, b, (x, y)-> x / y);
+    }
+
+    @Override
+    public void set(LaolNumber val) {
+        super.set(val.toInteger().get());
+    }
+
+    @Override
+    public LaolInteger clone() {
+        return new LaolInteger(get());
+    }
 }

@@ -17,23 +17,21 @@ public class LaolIntegerTest {
 
     @Test
     public void testPreIncrOp() {
-        System.out.println("preIncrOp");
         int ival = 1;
         LaolInteger instance = new LaolInteger(ival);
         instance.setMutable();
         LaolInteger expResult = new LaolInteger(ival + 1);
-        LaolInteger result = instance.preIncrOp();
-        assertEquals(expResult, result);
+        LaolInteger result = (LaolInteger)instance.preIncrOp();
+        assertEquals(expResult, instance);
     }
 
     @Test
     public void testPostIncrOp() {
-        System.out.println("postIncrOp");
         int ival = 99;
         LaolInteger instance = new LaolInteger(ival);
         instance.setMutable();
         LaolInteger expResult = new LaolInteger(ival);
-        LaolInteger result = instance.postIncrOp();
+        LaolInteger result = (LaolInteger)instance.postIncrOp();
         assertEquals(expResult, result);
         expResult = new LaolInteger(ival + 1);
         assertEquals(expResult, instance);
@@ -41,23 +39,21 @@ public class LaolIntegerTest {
 
     @Test
     public void testPreDecrOp() {
-        System.out.println("preDecrOp");
         int ival = 1;
         LaolInteger instance = new LaolInteger(ival);
         instance.setMutable();
         LaolInteger expResult = new LaolInteger(ival - 1);
-        LaolInteger result = instance.preDecrOp();
+        LaolInteger result = (LaolInteger)instance.preDecrOp();
         assertEquals(expResult, result);
     }
 
     @Test
     public void testPostDecrOp() {
-        System.out.println("postDecrOp");
         int ival = 99;
         LaolInteger instance = new LaolInteger(ival);
         instance.setMutable();
         LaolInteger expResult = new LaolInteger(ival);
-        LaolInteger result = instance.postDecrOp();
+        LaolInteger result = (LaolInteger)instance.postDecrOp();
         assertEquals(expResult, result);
         expResult = new LaolInteger(ival - 1);
         assertEquals(expResult, instance);

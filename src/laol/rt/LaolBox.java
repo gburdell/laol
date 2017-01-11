@@ -31,7 +31,7 @@ import java.util.Objects;
  * @author kpfalzer
  * @param <T> type to box.
  */
-public abstract class LaolBox<T> extends LaolObject {
+public abstract class LaolBox<T> extends LaolObject implements Cloneable {
 
     public LaolBox(final T val) {
         m_val = val;
