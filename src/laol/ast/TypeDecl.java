@@ -23,6 +23,7 @@
  */
 package laol.ast;
 
+import apfe.runtime.Repetition;
 import apfe.runtime.Sequence;
 
 /**
@@ -37,7 +38,14 @@ public class TypeDecl extends Item {
         m_access = oneOrNone(seq, 0);
         m_isStatic = (0 < asRepetition(seq, 1).sizeofAccepted());
         m_mutability = oneOrNone(seq, 2);
-        m_type = createItem(seq, 3);
+        {
+            final Repetition rep = asRepetition(seq, 3);
+            if (0 < rep.sizeofAccepted()) {
+                m_type = createItem(rep.getOnlyAccepted(), 0);
+            } else {
+                m_type = null;
+            }
+        }
     }
 
     private final AccessModifier m_access;

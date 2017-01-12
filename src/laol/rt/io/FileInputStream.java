@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2016 kpfalzer.
+ * Copyright 2017 kpfalzer.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -21,41 +21,34 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package laol.ast;
+package laol.rt.io;
 
-import apfe.runtime.Acceptor;
-import laol.test.TestRunner;
-import org.junit.Test;
-import static org.junit.Assert.*;
+import gblib.Util;
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.function.Consumer;
+import laol.rt.*;
 
 /**
  *
  * @author kpfalzer
  */
-public class AssignStatementTest extends TestRunner {
+public class FileInputStream extends BufferedReader {
 
-    private final String TESTS[] = {
-        "private int x = f1(a,b,c)",
-        "a = a + 5",
-        "t1 b = {a:1,b:2}",
-        "a = b[345] * c[:foo] unless a==b"
-    };
-
-    @Override
-    public Acceptor getGrammar() {
-        return new laol.parser.apfe.AssignStatement();
+    public FileInputStream(LaolObject fname) throws FileNotFoundException {
+        super(new BufferedReader(new FileReader(Util.<LaolString>downCast(fname).get())));
     }
 
-    @Override
-    public void generateAndTestAst(Acceptor parsed) {
-        laol.ast.AssignStatement dut = new laol.ast.AssignStatement((laol.parser.apfe.AssignStatement) parsed);
-        assertTrue(m_test.equals(m_accepted));
+    public void eachLine(Consumer<LaolString> cb) throws IOException {
+        String s;
+        while (true) {
+            s = readLine();
+            if (null == s) {
+                break;
+            }
+            cb.accept(new LaolString(s));
+        }
     }
-
-    @Test
-    public void testAccessModifier() {
-        TestRunner runner = new AssignStatementTest();
-        runner.runTests(TESTS);
-    }
-
 }

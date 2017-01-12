@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2016 kpfalzer.
+ * Copyright 2017 kpfalzer.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -21,10 +21,11 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package laol.ast;
+package laol.rt.io;
 
-import apfe.runtime.Acceptor;
-import laol.test.TestRunner;
+import java.util.stream.Stream;
+import laol.rt.LaolInteger;
+import laol.rt.LaolString;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
@@ -32,30 +33,27 @@ import static org.junit.Assert.*;
  *
  * @author kpfalzer
  */
-public class AssignStatementTest extends TestRunner {
+public class FileInputStreamTest {
 
-    private final String TESTS[] = {
-        "private int x = f1(a,b,c)",
-        "a = a + 5",
-        "t1 b = {a:1,b:2}",
-        "a = b[345] * c[:foo] unless a==b"
-    };
-
-    @Override
-    public Acceptor getGrammar() {
-        return new laol.parser.apfe.AssignStatement();
-    }
-
-    @Override
-    public void generateAndTestAst(Acceptor parsed) {
-        laol.ast.AssignStatement dut = new laol.ast.AssignStatement((laol.parser.apfe.AssignStatement) parsed);
-        assertTrue(m_test.equals(m_accepted));
-    }
+    final static LaolString FNAMES[] = Stream
+            .of(
+                    "test/data/collection.laol",
+                    "dist/laol/io.laol"
+            )
+            .map(e -> new LaolString(e))
+            .toArray(LaolString[]::new);
 
     @Test
-    public void testAccessModifier() {
-        TestRunner runner = new AssignStatementTest();
-        runner.runTests(TESTS);
+    public void testEachLine() throws Exception {
+        for (LaolString fname : FNAMES) {
+            try (FileInputStream fis = new FileInputStream(fname)) {
+                System.out.println(fname.get());
+                fis.eachLine((line) -> {
+                    m_len += line.get().length();
+                });
+            }
+        }
     }
 
+    private int m_len = 0;
 }

@@ -238,7 +238,7 @@ assignment_lhs <-
 	type_decl lhs_ref (COMMA lhs_ref)*
 /	lhs_ref (COMMA lhs_ref)*
 
-type_decl <- access_modifier? K_STATIC? mutability? type_name
+type_decl <- access_modifier? K_STATIC? mutability? (type_name &scoped_name)?
 
 lhs_ref <-
     lhs_ref LBRACK array_select_expression RBRACK
