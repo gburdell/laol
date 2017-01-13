@@ -1,12 +1,12 @@
 module io {
-	class InputStream {
-		public def close
-		public def eachLine(->cb(line))
-	}
-	
-	class FileInputStream(fname) implements InputStream {
-		private m_is = java.io.FileInputStream(fname)
+    class InputStream {
+        public def close
+        public def eachLine(->cb(string line))
+    }
+    
+    class FileInputStream(string fname) implements InputStream {
+        private m_is = java.io.FileInputStream(fname)
 
-		def close {m_is.close}
-	}
+        def close {m_is.close}
+    }
 }
