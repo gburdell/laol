@@ -46,14 +46,14 @@ public class LaolArray extends LaolObject {
     }
 
     //operator <<
-    public <T extends LaolObject> LaolArray add(final T val) {
+    public LaolObject add(final LaolObject val) {
         mutableCheck();
         m_eles.add(val);
         return this;
     }
 
     //operator []=
-    public <T extends LaolObject> T set(final LaolObject ix, final T val) {
+    public LaolObject set(final LaolObject ix, final LaolObject val) {
         mutableCheck();
         final LaolNumber ix2 = Util.downCast(ix);
         final int i = realIndex(ix2);
@@ -65,7 +65,7 @@ public class LaolArray extends LaolObject {
     }
 
     //operator []
-    public <T extends LaolObject> T get(final LaolObject ix) {
+    public LaolObject get(final LaolObject ix) {
         return valOrNull(get(Util.<LaolNumber>downCast(ix)));
     }
 
@@ -76,11 +76,11 @@ public class LaolArray extends LaolObject {
     }
 
     //empty?
-    public LaolBoolean isEmpty() {
+    public LaolObject isEmpty() {
         return new LaolBoolean(m_eles.isEmpty());
     }
 
-    public LaolInteger size() {
+    public LaolObject size() {
         return new LaolInteger(m_eles.size());
     }
 
