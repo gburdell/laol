@@ -28,27 +28,30 @@ import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.function.Consumer;
 import laol.rt.*;
 
 /**
  *
  * @author kpfalzer
  */
-public class FileInputStream extends BufferedReader {
+public class FileInputStream extends LaolObject {
 
+    private final BufferedReader    m_rdr;
+    
     public FileInputStream(LaolObject fname) throws FileNotFoundException {
-        super(new BufferedReader(new FileReader(Util.<LaolString>downCast(fname).get())));
+        m_rdr = new BufferedReader(new FileReader(Util.<LaolString>downCast(fname).get()));
     }
 
-    public void eachLine(Consumer<LaolString> cb) throws IOException {
+    public Void eachLine(LaolObject cb) throws IOException {
+        final LaolConsumer consumer = Util.downCast(cb);
         String s;
         while (true) {
-            s = readLine();
+            s = m_rdr.readLine();
             if (null == s) {
                 break;
             }
-            cb.accept(new LaolString(s));
+            consumer.accept(new LaolString(s));
         }
+        return null;
     }
 }

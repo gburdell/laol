@@ -23,6 +23,7 @@
  */
 package laol.rt;
 
+import gblib.Util;
 import org.junit.Test;
 import static org.junit.Assert.*;
 import static laol.rt.LaolObject.isNull;
