@@ -40,8 +40,8 @@ public class FileInputStreamTest {
 
     final static LaolString FNAMES[] = Stream
             .of(
-                    "test/data/collection.laol",
-                    "dist/laol/io.laol"
+                    "lib/laol/collection.laol",
+                    "lib/laol/io.laol"
             )
             .map(e -> new LaolString(e))
             .toArray(LaolString[]::new);

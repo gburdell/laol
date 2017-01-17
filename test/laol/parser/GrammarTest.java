@@ -33,7 +33,7 @@ public class GrammarTest {
         final String fns[] = {
             "test/data/t2.txt",
             //"test/data/t1.txt",
-            "test/data/collection.laol",
+            "lib/laol/collection.laol",
             //"test/data/t3.txt",
         };
         try {
