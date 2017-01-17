@@ -36,21 +36,42 @@ import laol.rt.*;
  */
 public class FileInputStream extends LaolObject {
 
-    private final BufferedReader    m_rdr;
-    
+    private final BufferedReader m_rdr;
+
     public FileInputStream(LaolObject fname) throws FileNotFoundException {
-        m_rdr = new BufferedReader(new FileReader(Util.<LaolString>downCast(fname).get()));
+        try {
+            m_rdr = new BufferedReader(new FileReader(Util.<LaolString>downCast(fname).get()));
+        } catch (FileNotFoundException ex) {
+            throw new LaolException.FileNotFound(ex);
+        }
+    }
+
+    public final Void close() {
+        if (null != m_rdr) {
+            try {
+                m_rdr.close();
+            } catch (IOException ex) {
+                Util.abnormalExit(ex);
+            }
+        }
+        return null;
     }
 
     public Void eachLine(LaolObject cb) throws IOException {
         final LaolConsumer consumer = Util.downCast(cb);
         String s;
-        while (true) {
-            s = m_rdr.readLine();
-            if (null == s) {
-                break;
+        try {
+            while (true) {
+                s = m_rdr.readLine();
+                if (null == s) {
+                    break;
+                }
+                consumer.accept(new LaolString(s));
             }
-            consumer.accept(new LaolString(s));
+        } catch (IOException ex) {
+            throw new LaolException.IO(ex);
+        } finally {
+            m_rdr.close();
         }
         return null;
     }

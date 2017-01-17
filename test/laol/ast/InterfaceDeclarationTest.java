@@ -37,7 +37,7 @@ public class InterfaceDeclarationTest extends TestRunner {
     private final String TESTS[] = {
         "private interface Foo {}",
         "private interface Bar implements Foo{}",
-        "private interface Car implements Foo, Bar{a=b} if false"
+        "extern private interface Car implements Foo, Bar{a=b} if false"
     };
 
     @Override

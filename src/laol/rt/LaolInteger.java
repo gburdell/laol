@@ -34,46 +34,46 @@ public class LaolInteger extends LaolBox<Integer> implements LaolNumber {
     }
 
     @Override
-    public LaolDouble toDouble() {
+    public LaolObject toDouble() {
         return new LaolDouble(get().doubleValue());
     }
 
     @Override
-    public LaolInteger toInteger() {
+    public LaolObject toInteger() {
         return this;
     }
 
     @Override
-    public LaolNumber addOp(LaolNumber b) {
+    public LaolObject addOp(LaolObject b) {
         return (b instanceof LaolInteger) 
-                ? LaolNumber.binaryIntOp(this, b, Math::addExact)
-                : LaolNumber.binaryDblOp(this, b, (x, y)-> x + y);
+                ? binaryIntOp(this, b, Math::addExact)
+                : binaryDblOp(this, b, (x, y)-> x + y);
     }
 
     @Override
-    public LaolNumber subOp(LaolNumber b) {
+    public LaolObject subOp(LaolObject b) {
         return (b instanceof LaolInteger) 
-                ? LaolNumber.binaryIntOp(this, b, Math::subtractExact)
-                : LaolNumber.binaryDblOp(this, b, (x, y)-> x - y);
+                ? binaryIntOp(this, b, Math::subtractExact)
+                : binaryDblOp(this, b, (x, y)-> x - y);
     }
 
     @Override
-    public LaolNumber multOp(LaolNumber b) {
+    public LaolObject multOp(LaolObject b) {
         return (b instanceof LaolInteger) 
-                ? LaolNumber.binaryIntOp(this, b, Math::multiplyExact)
-                : LaolNumber.binaryDblOp(this, b, (x, y)-> x * y);
+                ? binaryIntOp(this, b, Math::multiplyExact)
+                : binaryDblOp(this, b, (x, y)-> x * y);
     }
 
     @Override
-    public LaolNumber divOp(LaolNumber b) {
+    public LaolObject divOp(LaolObject b) {
         return (b instanceof LaolInteger) 
-                ? LaolNumber.binaryIntOp(this, b, (x, y)-> x / y)
-                : LaolNumber.binaryDblOp(this, b, (x, y)-> x / y);
+                ? binaryIntOp(this, b, (x, y)-> x / y)
+                : binaryDblOp(this, b, (x, y)-> x / y);
     }
 
     @Override
-    public void set(LaolNumber val) {
-        super.set(val.toInteger().get());
+    public void set(LaolObject val) {
+        super.set(LaolNumber.toInteger(val).get());
     }
 
     @Override

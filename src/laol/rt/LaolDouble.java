@@ -34,38 +34,38 @@ public class LaolDouble extends LaolBox<Double> implements LaolNumber {
     }
 
     @Override
-    public LaolDouble toDouble() {
+    public LaolObject toDouble() {
         return this;
     }
 
     @Override
-    public LaolInteger toInteger() {
+    public LaolObject toInteger() {
         return new LaolInteger(get().intValue());
     }
 
     @Override
-    public LaolNumber addOp(LaolNumber b) {
-        return LaolNumber.binaryDblOp(this, b, (x, y) -> x + y);
+    public LaolObject addOp(LaolObject b) {
+        return binaryDblOp(this, b, (x, y) -> x + y);
     }
 
     @Override
-    public LaolNumber subOp(LaolNumber b) {
-        return LaolNumber.binaryDblOp(this, b, (x, y) -> x - y);
+    public LaolObject subOp(LaolObject b) {
+        return binaryDblOp(this, b, (x, y) -> x - y);
     }
 
     @Override
-    public LaolNumber multOp(LaolNumber b) {
-        return LaolNumber.binaryDblOp(this, b, (x, y) -> x * y);
+    public LaolObject multOp(LaolObject b) {
+        return binaryDblOp(this, b, (x, y) -> x * y);
     }
 
     @Override
-    public LaolNumber divOp(LaolNumber b) {
-        return LaolNumber.binaryDblOp(this, b, (x, y) -> x / y);
+    public LaolObject divOp(LaolObject b) {
+        return binaryDblOp(this, b, (x, y) -> x / y);
     }
 
     @Override
-    public void set(LaolNumber val) {
-        super.set(val.toDouble().get());
+    public void set(LaolObject val) {
+        super.set(LaolNumber.toDouble(val).get());
     }
 
     @Override

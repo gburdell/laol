@@ -73,6 +73,16 @@ public abstract class LaolObject {
         return new LaolString(super.toString());
     }
 
+    /**
+     * Alias for callPublic method.
+     * @param method public method to call.
+     * @param argv argument(s).
+     * @return result of method or Void.
+     */
+    public LaolObject cm(final String method, LaolObject... argv) {
+        return callPublic(method, argv);
+    }
+    
     public LaolObject callPublic(final String method, LaolObject... argv) {
         LaolObject rval = null;
         try {
@@ -85,7 +95,7 @@ public abstract class LaolObject {
         }
         return rval;
     }
-
+    
     private boolean m_mutable = false;
 
     private static final Map<String, MethodHandle> HANDLE_BY_NAME = new HashMap<>();

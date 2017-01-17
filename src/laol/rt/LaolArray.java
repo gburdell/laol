@@ -55,22 +55,17 @@ public class LaolArray extends LaolObject {
     //operator []=
     public LaolObject set(final LaolObject ix, final LaolObject val) {
         mutableCheck();
-        final LaolNumber ix2 = Util.downCast(ix);
-        final int i = realIndex(ix2);
+        final int i = realIndex(ix);
         if (isValidIndex(i)) {
             m_eles.set(i, val);
             return val;
         }
-        throw new IndexException(ix2);
+        throw new IndexException(ix);
     }
 
     //operator []
     public LaolObject get(final LaolObject ix) {
-        return valOrNull(get(Util.<LaolNumber>downCast(ix)));
-    }
-
-    private LaolObject get(final LaolNumber ix) {
-        final int i = realIndex(ix);
+        final int i = realIndex(LaolNumber.toInteger(ix).get());
         final LaolObject val = isValidIndex(i) ? m_eles.get(i) : null;
         return val;
     }
@@ -84,13 +79,13 @@ public class LaolArray extends LaolObject {
         return new LaolInteger(m_eles.size());
     }
 
+    private int realIndex(final LaolObject ix) {
+        return realIndex(realIndex(LaolNumber.toInteger(ix).get()));
+    }
+    
     private int realIndex(int i) {
         i = (0 > i) ? (m_eles.size() + i) : i;
         return i;
-    }
-
-    private int realIndex(final LaolNumber ix) {
-        return realIndex(ix.toInteger().get());
     }
 
     private boolean isValidIndex(int i) {
@@ -99,8 +94,8 @@ public class LaolArray extends LaolObject {
 
     public static class IndexException extends LaolException {
 
-        public IndexException(final LaolNumber ix) {
-            super("Invalid index: " + ix.toInteger());
+        public IndexException(final LaolObject ix) {
+            super("Invalid index: " + LaolNumber.toInteger(ix));
         }
 
     }

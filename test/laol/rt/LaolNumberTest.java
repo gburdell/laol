@@ -25,6 +25,8 @@ package laol.rt;
 
 import java.util.Arrays;
 import java.util.stream.Stream;
+import static laol.rt.LaolNumber.toDouble;
+import static laol.rt.LaolNumber.toInteger;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
@@ -38,26 +40,26 @@ public class LaolNumberTest {
     public void testAddOp() {
         int i = 1;
         final int tests[][] = {{123, 456}, {Integer.MAX_VALUE, 1}};
-        LaolNumber a, b;
-        LaolNumber z;
+        LaolObject a, b;
+        LaolObject z;
         for (int test[] : tests) {
             a = new LaolInteger(test[0]);
             b = new LaolInteger(test[1]);
             try {
-                z = a.addOp(b);
-                assertTrue(test[0] + test[1] == z.toInteger().get());
-            } catch (ArithmeticException ex) {
+                z = a.callPublic("addOp", b); //a.addOp(b);
+                assertTrue(test[0] + test[1] == toInteger(z).get());
+            } catch (LaolException ex) {
                 assertTrue(i == tests.length);
             }
             i++;
         }
         assertTrue(i >= tests.length);
         LaolInteger x[] = Stream.of(1, 2, 3).map(e -> new LaolInteger(e)).toArray(LaolInteger[]::new);
-        assertTrue(6 == x[0].addOp(x[1]).addOp(x[2]).toInteger().get());
+        assertTrue(6 == toInteger(x[0].callPublic("addOp", x[1]).callPublic("addOp", x[2])).get());
         a = new LaolDouble(1.234);
         b = new LaolInteger(4);
-        assertTrue(5.234 == a.addOp(b).toDouble().get());
-        assertTrue(5.234 == b.addOp(a).toDouble().get());
+        assertTrue(5.234 == toDouble(a.callPublic("addOp", b)).get());
+        assertTrue(5.234 == toDouble(b.callPublic("addOp", a)).get());
     }
 
     @Test

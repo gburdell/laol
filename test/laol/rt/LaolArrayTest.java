@@ -44,7 +44,10 @@ public class LaolArrayTest {
         {
             final LaolObject dut = (new LaolArray()).setMutable();
             LaolInteger ele = new LaolInteger(1234);
-            dut.callPublic("add", ele).callPublic("add", ele);
+            LaolObject res = dut
+                    .callPublic("add", ele)
+                    .callPublic("add", ele);
+            assertTrue(2 == LaolNumber.toInteger(res.callPublic("size")).get());
         }
     }
 

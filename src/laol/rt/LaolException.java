@@ -34,13 +34,13 @@ public class LaolException extends RuntimeException {
     }
 
     public LaolException(final Throwable thrown) {
-        super(thrown.getMessage());
+        super(thrown);
     }
-    
+
     public LaolException(final Exception thrown) {
-        super(thrown.getMessage());
+        super(thrown);
     }
-    
+
     public static class Immutable extends LaolException {
 
         public Immutable(final String detail) {
@@ -60,6 +60,20 @@ public class LaolException extends RuntimeException {
 
         public InvalidType() {
             this("invalid type");
+        }
+    }
+
+    public static class IO extends LaolException {
+
+        public IO(final Exception ex) {
+            super(ex);
+        }
+    }
+
+    public static class FileNotFound extends LaolException {
+
+        public FileNotFound(final Exception ex) {
+            super(ex);
         }
     }
 }

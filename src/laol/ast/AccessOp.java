@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2017 gburdell.
+ * Copyright 2016 gburdell.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -21,27 +21,14 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package laol.rt;
+package laol.ast;
 
 /**
  *
  * @author gburdell
  */
-public class LaolConsumer extends LaolObject {
-
-    @FunctionalInterface
-    public interface Consumer {
-
-        void accept(LaolObject ele);
+public class AccessOp extends Op {
+    public AccessOp(final laol.parser.apfe.AccessOp decl) {
+        super(decl);
     }
-
-    public LaolConsumer(Consumer c) {
-        m_consumer = c;
-    }
-
-    public void accept(LaolObject ele) {
-        m_consumer.accept(ele);
-    }
-
-    private final Consumer m_consumer;
 }

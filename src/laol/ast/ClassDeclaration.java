@@ -23,6 +23,8 @@
  */
 package laol.ast;
 
+import apfe.runtime.Sequence;
+
 /**
  *
  * @author gburdell
@@ -31,17 +33,50 @@ public class ClassDeclaration extends Item {
 
     public ClassDeclaration(final laol.parser.apfe.ClassDeclaration decl) {
         super(decl);
-        m_access = oneOrNone(0);
-        m_name = createItem(2);
-        m_parms = oneOrNone(3);
-        m_extends = oneOrNone(4);
-        m_body = createItem(6);
+        final Sequence seq = asSequence();
+        m_isExtern = 0 < asRepetition(seq, 0).sizeofAccepted();
+        m_access = oneOrNone(seq, 1);
+        m_name = createItem(seq, 3);
+        m_parms = oneOrNone(seq, 4);
+        m_extends = oneOrNone(seq, 5);
+        m_body = createItem(seq, 7);
+        m_stmtModifier = getStatementModifier(seq, 9);
     }
 
+    public StatementModifier getStmtModifier() {
+        return m_stmtModifier;
+    }
+
+    public AccessModifier getAccess() {
+        return m_access;
+    }
+
+    public ClassBody getBody() {
+        return m_body;
+    }
+
+    public ClassExtends getExtends() {
+        return m_extends;
+    }
+
+    public ClassName getName() {
+        return m_name;
+    }
+
+    public MethodParamDecl getParms() {
+        return m_parms;
+    }
+
+    public boolean isExtern() {
+        return m_isExtern;
+    }
+
+    private final boolean m_isExtern;
     private final AccessModifier  m_access;
     //TODO private final boolean m_isAbstract;
     private final ClassName m_name;
     private final MethodParamDecl   m_parms;
     private final ClassExtends  m_extends;
     private final ClassBody m_body;
+    private final StatementModifier m_stmtModifier;
 }

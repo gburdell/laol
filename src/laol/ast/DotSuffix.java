@@ -23,6 +23,8 @@
  */
 package laol.ast;
 
+import apfe.runtime.Sequence;
+
 /**
  *
  * @author gburdell
@@ -30,7 +32,13 @@ package laol.ast;
 public class DotSuffix extends Item {
     public DotSuffix(final laol.parser.apfe.DotSuffix decl) {
         super(decl);
-        m_suffix = new Keyword(asPrioritizedChoice(1).getAccepted());
+        final Sequence seq = asSequence();
+        m_op = createItem(seq, 0);
+        m_suffix = new Keyword(asPrioritizedChoice(seq.itemAt(1)).getAccepted());
+    }
+
+    public Op getOp() {
+        return m_op;
     }
 
     public Keyword getSuffix() {
@@ -42,5 +50,6 @@ public class DotSuffix extends Item {
         return ('?' == s.charAt(s.length() - 1));
     }
     
+    private final Op m_op;
     private final Keyword m_suffix;
 }

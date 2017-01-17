@@ -39,25 +39,23 @@ public class LaolMap extends LaolObject {
     }
 
     //operator []=
-    public <K extends LaolObject, V extends LaolObject>
-            V set(final K key, final V val) {
+    public LaolObject set(final LaolObject key, final LaolObject val) {
         mutableCheck();
         m_map.put(key, val);
         return val;
     }
 
     //operator []
-    public <K extends LaolObject, V extends LaolObject>
-            V get(final K key) {
+    public LaolObject get(final LaolObject key) {
         return valOrNull(m_map.get(key));
     }
 
     //empty?
-    public LaolBoolean isEmpty() {
+    public LaolObject isEmpty() {
         return new LaolBoolean(m_map.isEmpty());
     }
 
-    public LaolInteger size() {
+    public LaolObject size() {
         return new LaolInteger(m_map.size());
     }
 

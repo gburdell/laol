@@ -36,7 +36,8 @@ public class AssignmentLhsTest extends TestRunner {
 
     private final String TESTS[] = {
         "a",
-		"a[4]"
+        "a[4]",
+        "a.b.c"
     };
 
     @Override

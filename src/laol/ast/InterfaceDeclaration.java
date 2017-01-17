@@ -38,18 +38,19 @@ public class InterfaceDeclaration extends Item {
     public InterfaceDeclaration(final laol.parser.apfe.InterfaceDeclaration decl) {
         super(decl);
         final Sequence seq = asSequence();
-        m_access = oneOrNone(seq, 0);
-        m_name = createItem(seq, 2);
+        m_isExtern = 0 < asRepetition(seq, 0).sizeofAccepted();
+        m_access = oneOrNone(seq, 1);
+        m_name = createItem(seq, 3);
         {
-            final Repetition rep = asRepetition(seq, 3);
+            final Repetition rep = asRepetition(seq, 4);
             if (0 < rep.sizeofAccepted()) {
                 m_implements = createItem(rep.getOnlyAccepted(), 1);
             } else {
                 m_implements = null;
             }
         }
-        m_body = createItem(seq, 5);
-        m_stmtModifier = getStatementModifier(seq, 7);
+        m_body = createItem(seq, 6);
+        m_stmtModifier = getStatementModifier(seq, 8);
     }
 
     public AccessModifier getAccess() {
@@ -72,6 +73,7 @@ public class InterfaceDeclaration extends Item {
         return m_stmtModifier;
     }
     
+    private final boolean           m_isExtern;
     private final AccessModifier    m_access;
     private final ClassName         m_name;
     private final ClassNameList     m_implements;

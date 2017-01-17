@@ -204,7 +204,12 @@ binary_op <-
 /	cmp_op
 /	AND / OR / XOR / AND2 / OR2
 
-dot_suffix <- DOT (K_NIL / K_NEW / IDENTNK)
+/* .? is safe-navigation (Groovy): 
+ * i.e., returns 'nil' rather than throw // NullPointerException.
+ */
+access_op <- DOT / DOT_QMARK
+
+dot_suffix <- access_op (K_NIL / K_NEW / IDENTNK)
 
 block <- anonymous_function_defn
 
@@ -243,7 +248,7 @@ type_decl <- access_modifier? K_STATIC? mutability? (type_name &scoped_name)?
 lhs_ref <-
     lhs_ref LBRACK array_select_expression RBRACK
 /   lhs_ref LPAREN param_expression_list? RPAREN
-/   lhs_ref DOT IDENTNK
+/   lhs_ref access_op IDENTNK
 /   lhs_ref (PLUS2 / MINUS2) 
 /   scoped_name
 
@@ -337,7 +342,7 @@ module_declaration <-
 class_name <- scoped_name
 
 class_declaration <-
-    access_modifier?
+    K_EXTERN? access_modifier?
     K_CLASS class_name
         method_param_decl?
         class_extends?
@@ -346,7 +351,7 @@ class_declaration <-
         RCURLY eos
 
 interface_declaration <-
-    access_modifier?
+    K_EXTERN? access_modifier?
     K_INTERFACE class_name
 		(K_IMPLEMENTS class_name_list)?
         LCURLY 
@@ -470,7 +475,8 @@ here_doc.
 COLON       <- ':' !':' Spacing
 COLON2      <- "::" Spacing
 SEMI        <- ';' Spacing
-DOT         <- '.' !'.' Spacing
+DOT         <- '.' !('.' / '?') Spacing
+DOT_QMARK	<- ".?" Spacing
 DOT2        <- ".." Spacing
 COMMA       <- ',' Spacing
 LT          <- '<' !('<' / '=') Spacing
@@ -531,6 +537,7 @@ K_DOUBLE    <- "double"     K_tail
 K_ELSE      <- "else"       K_tail
 K_ELSIF     <- "elsif"      K_tail
 K_EXTENDS   <- "extends"    K_tail
+K_EXTERN    <- "extern"     K_tail
 K_FALSE     <- "false"      K_tail
 K_FINALLY   <- "finally"    K_tail
 K_FOR       <- "for"        K_tail

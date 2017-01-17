@@ -23,6 +23,8 @@
  */
 package laol.ast;
 
+import apfe.runtime.Acceptor;
+import apfe.runtime.Util;
 import laol.parser.IDENT;
 
 /**
@@ -31,6 +33,10 @@ import laol.parser.IDENT;
  */
 public class Ident extends Item {
 
+    public Ident(final Acceptor id) {
+        this(Util.downcast(id));
+    }
+    
     public Ident(final IDENT id) {
         super(id);
         final String s = id.getIdent();

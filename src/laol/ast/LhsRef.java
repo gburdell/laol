@@ -25,6 +25,8 @@ package laol.ast;
 
 import apfe.runtime.Acceptor;
 import apfe.runtime.Sequence;
+import apfe.runtime.Util;
+import static apfe.runtime.Util.downcast;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
@@ -47,48 +49,76 @@ public class LhsRef extends Item {
                 if (cls == laol.parser.apfe.LBRACK.class) {
                     m_items.add(new Index(accs[1]));
                 } else if (cls == laol.parser.apfe.LPAREN.class) {
-                   m_items.add(new Params(seq));
+                    m_items.add(new Params(seq));
                 } else if (cls == apfe.runtime.PrioritizedChoice.class) {
-                   m_items.add(new PostOp(asPrioritizedChoice(accs[0]).getAccepted()));
+                    m_items.add(new PostOp(asPrioritizedChoice(accs[0]).getAccepted()));
                 } else {
-                    m_items.add(new DotIdent(accs[1]));
+                    m_items.add(new AccessOpIdent(seq));
                 }
             }
         }
     }
-    
+
     public static class Params extends Item {
+
+        public ParamExpressionList getParms() {
+            return m_parms;
+        }
+
         private Params(final Acceptor acc) {
             super(acc);
             m_parms = oneOrNone(2);
         }
         private final ParamExpressionList m_parms;
     }
-    
+
     public static class Index extends ArraySelectExpression {
+
         private Index(final Acceptor expr) {
-            super((laol.parser.apfe.ArraySelectExpression)expr);
-        }
-    }
-    
-    public static class DotIdent extends Ident {
-        private DotIdent(final Acceptor ident) {
-            super((laol.parser.IDENT) ident);
+            super((laol.parser.apfe.ArraySelectExpression) expr);
         }
     }
 
+    public static class AccessOpIdent extends Item {
+
+        private AccessOpIdent(final Sequence opIdent) {
+            super(opIdent);
+            m_op = createItem(opIdent, 0);
+            m_ident = new Ident(opIdent.itemAt(1));
+        }
+
+        public Ident getIdent() {
+            return m_ident;
+        }
+
+        public AccessOp getOp() {
+            return m_op;
+        }
+        
+        private final AccessOp m_op;
+        private final Ident m_ident;
+    }
+
     public static class PostOp extends Item {
-        public static enum EType {eIncr, eDecr};
-        public final EType m_type;
+
+        public EType getM_type() {
+            return m_type;
+        }
+
+        public static enum EType {
+            eIncr, eDecr
+        };
+        private final EType m_type;
+
         private PostOp(final Acceptor op) {
             super(op);
             m_type = (op.getClass() == laol.parser.apfe.PLUS2.class) ? EType.eIncr : EType.eDecr;
         }
     }
-    
+
     public List<Item> getItems() {
         return Collections.unmodifiableList(m_items);
     }
-    
+
     private final List<Item> m_items = new LinkedList<>();
 }
