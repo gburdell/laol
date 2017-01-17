@@ -26,6 +26,7 @@ package laol.ast;
 import apfe.runtime.Acceptor;
 import apfe.runtime.Repetition;
 import apfe.runtime.Sequence;
+import gblib.Pair;
 import gblib.Util;
 import java.util.Collections;
 import java.util.LinkedList;
@@ -54,7 +55,7 @@ public class IfStatement extends Item {
         m_clauses.add(new ExprStmt(seq, 1));
     }
 
-    public class ExprStmt extends Util.Pair<Expression, Statement> {
+    public class ExprStmt extends Pair<Expression, Statement> {
 
         private ExprStmt(final Sequence seq, final int ix) {
             super(createItem(seq, ix), createItem(seq, ix + 1));

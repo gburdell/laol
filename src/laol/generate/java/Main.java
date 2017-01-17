@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2016 gburdell.
+ * Copyright 2017 kpfalzer.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -21,21 +21,42 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package laol.ast;
+package laol.generate.java;
+
+import gblib.MessageMgr;
+import static gblib.Util.error;
 
 /**
  *
- * @author gburdell
+ * @author kpfalzer
  */
-public class Grammar extends Item {
-    public Grammar(final laol.parser.apfe.Grammar decl) {
-        super(decl);
-        m_contents = oneOrNone(1);
+public class Main {
+
+    public static void main(final String argv[]) {
+        final int status = process(argv);
+        System.exit(status);
     }
-    
-    public Contents getContents() {
-        return m_contents;
+
+    private static int process(final String argv[]) {
+        int status = 0;
+        Parse parse = new Parse(argv);
+        if (parse.hasErrors()) {
+            error("LG-EXIT", parse.getErrorCnt());
+            status = 1;
+        }
+        return status;
     }
-    
-    private final Contents    m_contents;
+
+    /**
+     * These messages are added to those in apfe/messages.txt.
+     */
+    private static final String MESSAGES[] = new String[]{
+        "LG-FILE-1 | %s: processing ...",
+        "LG-FILE-2 | %s: could not read file (%s).",
+        "LG-EXIT | Cannot continue due to %d error(s)."
+    };
+
+    static {
+        MessageMgr.addMessages(MESSAGES);
+    }
 }

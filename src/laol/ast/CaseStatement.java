@@ -26,6 +26,7 @@ package laol.ast;
 import apfe.runtime.Acceptor;
 import apfe.runtime.Repetition;
 import apfe.runtime.Sequence;
+import gblib.Pair;
 import gblib.Util;
 import java.util.LinkedList;
 import java.util.List;
@@ -72,7 +73,7 @@ public class CaseStatement extends Item {
         m_alts.add(new WhenClause(exprs, stmt));
     }
 
-    public static final class WhenClause extends Util.Pair<ExpressionList, Statement> {
+    public static final class WhenClause extends Pair<ExpressionList, Statement> {
 
         private WhenClause(final ExpressionList expr, final Statement stmt) {
             super(expr, stmt);

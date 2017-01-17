@@ -1,6 +1,4 @@
 build/
 src/laol/parser/apfe
 nbproject/private
-dist/laol.jar
-dist/lib
-dist/README.TXT
+dist/

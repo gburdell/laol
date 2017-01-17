@@ -65,5 +65,4 @@ public class Main {
             System.out.printf("Memoize hit rate: %.1f%%\n", hitPcnt);
         }
     }
-
 }
