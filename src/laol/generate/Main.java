@@ -23,7 +23,6 @@
  */
 package laol.generate;
 
-import laol.generate.Parse;
 import gblib.MessageMgr;
 import static gblib.Util.error;
 

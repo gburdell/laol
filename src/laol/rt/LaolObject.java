@@ -53,7 +53,7 @@ public abstract class LaolObject {
 
     protected void mutableCheck(final boolean enable) {
         if (enable && !m_mutable) {
-            throw new LaolException.Immutable();
+            throw new LaolException.ImmutableException();
         }
     }
 

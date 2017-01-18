@@ -42,7 +42,7 @@ public class FileInputStream extends LaolObject {
         try {
             m_rdr = new BufferedReader(new FileReader(Util.<LaolString>downCast(fname).get()));
         } catch (FileNotFoundException ex) {
-            throw new LaolException.FileNotFound(ex);
+            throw new LaolException.FileNotFoundException(ex);
         }
     }
 
@@ -69,7 +69,7 @@ public class FileInputStream extends LaolObject {
                 consumer.accept(new LaolString(s));
             }
         } catch (IOException ex) {
-            throw new LaolException.IO(ex);
+            throw new LaolException.IOException(ex);
         } finally {
             try {
                 m_rdr.close();

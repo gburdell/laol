@@ -41,38 +41,38 @@ public class LaolException extends RuntimeException {
         super(thrown);
     }
 
-    public static class Immutable extends LaolException {
+    public static class ImmutableException extends LaolException {
 
-        public Immutable(final String detail) {
+        public ImmutableException(final String detail) {
             super(detail);
         }
 
-        public Immutable() {
+        public ImmutableException() {
             this("cannot change immutable object");
         }
     }
 
-    public static class InvalidType extends LaolException {
+    public static class InvalidTypeException extends LaolException {
 
-        public InvalidType(final String detail) {
+        public InvalidTypeException(final String detail) {
             super(detail);
         }
 
-        public InvalidType() {
+        public InvalidTypeException() {
             this("invalid type");
         }
     }
 
-    public static class IO extends LaolException {
+    public static class IOException extends LaolException {
 
-        public IO(final Exception ex) {
+        public IOException(final Exception ex) {
             super(ex);
         }
     }
 
-    public static class FileNotFound extends LaolException {
+    public static class FileNotFoundException extends LaolException {
 
-        public FileNotFound(final Exception ex) {
+        public FileNotFoundException(final Exception ex) {
             super(ex);
         }
     }
