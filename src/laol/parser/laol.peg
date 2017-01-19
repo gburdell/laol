@@ -105,7 +105,7 @@ array_primary <-
 
 primary_expression <-
     K_NIL
-/   K_FILE / K_TARGET
+/   K_FILE
 /   K_TRUE / K_FALSE
 /   K_THIS / K_SUPER
 /   STRING
@@ -265,9 +265,11 @@ assignment_op <-
 /   PCNT_EQ
     
 contents <-
-    require_statement* file_item+
+    package_statement? import_statement* file_item+
 
-require_statement <- K_REQUIRE STRING eos
+package_statement <- K_PACKAGE STRING
+
+import_statement <- K_IMPORT STRING
 
 file_item <-
     module_declaration
@@ -543,6 +545,7 @@ K_FINALLY   <- "finally"    K_tail
 K_FOR       <- "for"        K_tail
 K_IF        <- "if"         K_tail
 K_IMPLEMENTS <- "implements" K_tail
+K_IMPORT    <- "import"     K_tail
 K_INT		<-  "int"       K_tail
 K_IN        <-  "in"        K_tail
 K_INTERFACE <-  "interface" K_tail
@@ -551,10 +554,10 @@ K_MODULE    <- "module"     K_tail
 K_NEXT      <- "next"       K_tail
 K_NEW       <- "new"        K_tail
 K_NIL       <- "nil" '?'?   K_tail
+K_PACKAGE   <- "package"    K_tail
 K_PRIVATE   <- "private"    K_tail
 K_PROTECTED <- "protected"  K_tail
 K_PUBLIC    <- "public"     K_tail
-K_REQUIRE   <- "require"    K_tail
 K_RETURN    <- "return"     K_tail
 K_STATIC    <- "static"     K_tail
 K_STRING    <- "string"     K_tail
@@ -569,8 +572,6 @@ K_VAR       <- "var"        K_tail
 K_WHEN      <- "when"       K_tail
 K_WHILE     <- "while"      K_tail
 K_FILE      <- "__FILE__"   K_tail
-//Specifies target language
-K_TARGET    <- "__TARGET__" K_tail
 
 K_tail <- ![_a-zA-Z0-9] Spacing
 

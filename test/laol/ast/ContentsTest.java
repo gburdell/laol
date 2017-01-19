@@ -36,7 +36,7 @@ public class ContentsTest extends TestRunner {
 
     private final String TESTS[] = {
         "a = b",
-        "require \"xyz\";require \"abc\";a=b"
+        "import \"xyz\";import \"abc\";a=b"
     };
 
     @Override

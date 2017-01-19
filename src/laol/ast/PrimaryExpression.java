@@ -62,7 +62,6 @@ public class PrimaryExpression extends Item {
         final Class classes[] = {
             laol.parser.apfe.KNIL.class,
             laol.parser.apfe.KFILE.class,
-            laol.parser.apfe.KTARGET.class,
             laol.parser.apfe.KTRUE.class,
             laol.parser.apfe.KFALSE.class,
             laol.parser.apfe.KSUPER.class,

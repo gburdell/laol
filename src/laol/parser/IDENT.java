@@ -11,7 +11,7 @@ public class IDENT extends Acceptor {
     protected IDENT(boolean allowKwrd) {
         ALLOW_KEYWORDS = allowKwrd;
     }
-    
+
     public IDENT() {
         this(true);
     }
@@ -60,10 +60,10 @@ public class IDENT extends Acceptor {
                     "else", "elsif",
                     "extends", "extern",
                     "false", "finally", "for",
-                    "if", "implements", "in", "int", "interface",
+                    "if", "implements", "import", "in", "int", "interface",
                     "mixin", "module", "next", "new", "nil",
-                    "private", "protected", "public",
-                    "require", "return",
+                    "package", "private", "protected", "public",
+                    "return",
                     "static", "string", "super",
                     "this", "throw", "true", "try",
                     "unless", "until",
@@ -72,21 +72,15 @@ public class IDENT extends Acceptor {
             ));
 
     //NOTE: cannot memoize!
-    /**Begin memoize
-    @Override
-    protected void memoize(Marker mark, Marker endMark) {
-        stMemo.add(mark, this, endMark);
-    }
-
-    @Override
-    protected Memoize.Data hasMemoized(Marker mark) {
-        return stMemo.memoized(mark);
-    }
-    ///
-    // Memoize for all instances of IDENT.
-    //
-    private static final Memoize stMemo = new Memoize();
-    //End memoize
-    **/
-
+    /**
+     * Begin memoize
+     *
+     * @Override protected void memoize(Marker mark, Marker endMark) {
+     * stMemo.add(mark, this, endMark); }
+     *
+     * @Override protected Memoize.Data hasMemoized(Marker mark) { return
+     * stMemo.memoized(mark); } /// // Memoize for all instances of IDENT. //
+     * private static final Memoize stMemo = new Memoize(); //End memoize
+    *
+     */
 }

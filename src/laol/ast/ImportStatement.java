@@ -23,35 +23,22 @@
  */
 package laol.ast;
 import apfe.runtime.Sequence;
-import java.util.Collections;
-import java.util.List;
 
 /**
  *
  * @author gburdell
  */
-public class Contents extends Item {
-    public Contents(final laol.parser.apfe.Contents decl) {
+public class ImportStatement extends Item {
+    public ImportStatement(final laol.parser.apfe.ImportStatement decl) {
         super(decl);
         final Sequence seq = asSequence();
-        m_package = oneOrNone(seq, 0);
-        m_requires = zeroOrMore(seq, 1);
-        m_fileItems = zeroOrMore(seq, 2);
+        m_import = getString(seq, 1);
     }
 
-    public List<FileItem> getFileItems() {
-        return Collections.unmodifiableList(m_fileItems);
+    public AString getImport() {
+        return m_import;
     }
 
-    public List<ImportStatement> getRequires() {
-        return Collections.unmodifiableList(m_requires);
-    }
-
-    public PackageStatement getPackage() {
-        return m_package;
-    }
+    private final AString   m_import;
     
-    private final PackageStatement m_package;
-    private final List<ImportStatement> m_requires;
-    private final List<FileItem>    m_fileItems;
 }

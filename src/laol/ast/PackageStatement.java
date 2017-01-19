@@ -28,23 +28,17 @@ import apfe.runtime.Sequence;
  *
  * @author gburdell
  */
-public class RequireStatement extends Item {
-    public RequireStatement(final laol.parser.apfe.RequireStatement decl) {
+public class PackageStatement extends Item {
+    public PackageStatement(final laol.parser.apfe.PackageStatement decl) {
         super(decl);
         final Sequence seq = asSequence();
-        m_require = getString(seq, 1);
-        m_stmtModifier = getStatementModifier(seq, 2);
+        m_package = getString(seq, 1);
     }
 
-    public AString getRequire() {
-        return m_require;
+    public AString getPackage() {
+        return m_package;
     }
 
-    public StatementModifier getStmtModifier() {
-        return m_stmtModifier;
-    }
-   
-    private final AString   m_require;
-    private final StatementModifier m_stmtModifier;
+    private final AString   m_package;
     
 }
