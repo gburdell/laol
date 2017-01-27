@@ -32,6 +32,8 @@ import gblib.MessageMgr;
 import gblib.Pair;
 import static gblib.Util.error;
 import static gblib.Util.info;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 import laol.ast.Grammar;
@@ -42,7 +44,7 @@ import laol.ast.Grammar;
  */
 public class Parse {
 
-    public Parse(final String sources[]) {
+    public Parse(final Collection<String> sources) {
         for (String fname : sources) {
             try {
                 parse(fname);
@@ -68,7 +70,7 @@ public class Parse {
     }
 
     public List<Ast> getAsts() {
-        return m_asts;
+        return Collections.unmodifiableList(m_asts);
     }
 
     private void parse(final String fname) throws Exception {
