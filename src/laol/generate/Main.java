@@ -27,6 +27,10 @@ import gblib.Config;
 import gblib.MessageMgr;
 import gblib.Options;
 import static gblib.Util.error;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Collection;
 
 /**
@@ -54,16 +58,32 @@ public class Main {
                     error("LG-EXIT", parse.getErrorCnt());
                     status = 2;
                 } else {
-                    //TODO: processing
-                    status = 0;
+                    status = laol.generate.java.Generate
+                            .create(parse.getAsts(), CONFIG)
+                            .generate();
                 }
             }
         }
         return status;
     }
 
+    /**
+     * Check command line options.
+     *
+     * @return true if ok, else false on error(s).
+     */
     private static boolean checkOptions() {
-        //TODO: error() here on usage errors
+        {
+            Path outdir = Paths.get(CONFIG.getAsString("outputDir"));
+            if (!Files.exists(outdir)) {
+                try {
+                    Files.createDirectories(outdir);
+                } catch (IOException ex) {
+                    error("LG-DIR", outdir);
+                    return false;
+                }
+            }
+        }
         return true;
     }
 
@@ -76,34 +96,52 @@ public class Main {
 
     private static final Config CONFIG = Config.create()
             .add(new String[]{
-        "packageName" + " laol.java.user"
+        "packageName laol.java.user",
+        "outputDir " + PROGNM + "/generate/src"
     });
 
     private static final Options CMD_OPTIONS = Options.create();
 
     static {
-        String dflt = CONFIG.get("packageName").toString();
-        CMD_OPTIONS.add(
-                "-p|--package name",
-                "Java package name " + defaultOpt(dflt),
-                (opt) -> {
-                    CONFIG.put("packageName", opt);
-                }
-        );
+        {
+            final String keyName = "packageName";
+            final String dflt = CONFIG.get(keyName).toString();
+            CMD_OPTIONS
+                    .add(
+                            "-p|--package name",
+                            "Java package name " + defaultOpt(dflt),
+                            (opt) -> {
+                                CONFIG.put(keyName, opt);
+                            }
+                    );
+        }
+        {
+            final String keyName = "outputDir";
+            final String dflt = CONFIG.get(keyName).toString();
+            CMD_OPTIONS
+                    .add(
+                            "-o|--outputDir dirName",
+                            "Output generated files into dirName " + defaultOpt(dflt),
+                            (opt) -> {
+                                CONFIG.put(keyName, opt);
+                            }
+                    );
+        }
     }
 
     private static String defaultOpt(final String dflt) {
         return "(default: " + dflt + ")";
     }
-    
+
     /**
      * These messages are added to those in apfe/messages.txt.
      */
     private static final String MESSAGES[] = new String[]{
+        "LG-DIR | %s: could not create directory specified by --outputDir.",
+        "LG-EXIT | Cannot continue due to %d error(s).",
         "LG-FILE-1 | %s: processing ...",
         "LG-FILE-2 | %s: could not read file (%s).",
-        "LG-NOSRC | Missing source file(s).",
-        "LG-EXIT | Cannot continue due to %d error(s)."
+        "LG-NOSRC | Missing source file(s)."
     };
 
     static {
