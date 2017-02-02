@@ -38,6 +38,26 @@ import java.util.Map;
  */
 public abstract class LaolObject {
 
+    /**
+     * Set immutable object.
+     * @param <T> subclass of LaolObject.
+     * @param val object to make immutable.
+     * @return immutable object.
+     */
+    public static <T extends LaolObject> T asConst(final T val) {
+        return val.setMutable(false);
+    }
+    
+    /**
+     * Set mutable object.
+     * @param <T> subclass of LaolObject.
+     * @param val object to make mutable.
+     * @return mutable object.
+     */
+    public static <T extends LaolObject> T asVar(final T val) {
+        return val.setMutable(true);
+    }
+    
     public final <T extends LaolObject> T setMutable(boolean val) {
         m_mutable = val;
         return Util.downCast(this);

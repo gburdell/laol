@@ -59,6 +59,14 @@ public class Parse {
         private Ast(final String fn, final Grammar g) {
             super(fn, g);
         }
+        
+        public String getFileName() {
+            return super.v1;
+        }
+        
+        public Grammar getGrammar() {
+            return super.v2;
+        }
     }
 
     public int getErrorCnt() {
