@@ -29,7 +29,7 @@ import apfe.runtime.Sequence;
  *
  * @author gburdell
  */
-public class ClassDeclaration extends Item {
+public class ClassDeclaration extends Item implements IName {
 
     public ClassDeclaration(final laol.parser.apfe.ClassDeclaration decl) {
         super(decl);
@@ -59,7 +59,8 @@ public class ClassDeclaration extends Item {
         return m_extends;
     }
 
-    public ClassName getName() {
+    @Override
+    public ScopedName getName() {
         return m_name;
     }
 

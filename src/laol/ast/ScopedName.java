@@ -44,6 +44,16 @@ public class ScopedName extends Item {
         m_path.addAll(zeroOrMoreIdent(asRepetition(seq, 2), 1));        
     }
 
+    public ScopedName(final AString.S name) {
+        super(name.getParsed());
+        m_isRooted = false;
+        m_path.add(new Ident(name));
+    }
+    
+    public boolean hasScope() {
+        return isRooted() || (1 < m_path.size());
+    }
+    
     public List<Ident>  getIdents() {
         return Collections.unmodifiableList(m_path);
     }

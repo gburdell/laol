@@ -23,7 +23,6 @@
  */
 package laol.ast;
 import apfe.runtime.Acceptor;
-import apfe.runtime.Marker;
 import apfe.runtime.PrioritizedChoice;
 import apfe.runtime.Repetition;
 import apfe.runtime.Sequence;
@@ -35,7 +34,7 @@ import java.util.List;
  *
  * @author gburdell
  */
-public class VarDeclStatement extends Item {
+public class VarDeclStatement extends Item implements IName {
     public VarDeclStatement(final laol.parser.apfe.VarDeclStatement decl) {
         super(decl);
         final Sequence seq = asSequence();
@@ -62,6 +61,7 @@ public class VarDeclStatement extends Item {
         m_stmtModifier = getStatementModifier(seq, 3);
     }
 
+    @Override
     public List<ScopedName> getNames() {
         return Collections.unmodifiableList(m_names);
     }

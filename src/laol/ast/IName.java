@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2016 gburdell.
+ * Copyright 2017 kpfalzer.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -23,19 +23,19 @@
  */
 package laol.ast;
 
+import static gblib.Util.createList;
+import java.util.List;
+
 /**
  *
- * @author gburdell
+ * @author kpfalzer
  */
-public class MethodNameOp extends Item {
-    public MethodNameOp(final laol.parser.apfe.MethodNameOp decl) {
-        super(decl);
-        m_opName = new AString.S(asPrioritizedChoice().getAccepted());
+public interface IName {
+    public default ScopedName getName() {
+        return null;
     }
     
-    public AString.S getOpName() {
-        return m_opName;
+    public default List<ScopedName> getNames() {
+       return createList(getName());
     }
-    
-    private final AString.S m_opName;
 }

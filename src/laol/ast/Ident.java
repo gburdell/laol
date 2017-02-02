@@ -33,6 +33,12 @@ import laol.parser.IDENT;
  */
 public class Ident extends Item {
 
+    public Ident(final AString.S name) {
+        super(name.getParsed());
+        m_id = name.toString();
+        m_sfx = null;
+    }
+    
     public Ident(final Acceptor id) {
         this(Util.downcast(id));
     }
@@ -49,6 +55,14 @@ public class Ident extends Item {
         }
     }
 
+    public String getId() {
+        return m_id;
+    }
+    
+    public Character getSfx() {
+        return m_sfx;
+    }
+    
     private final String m_id;
     private final Character m_sfx;
 

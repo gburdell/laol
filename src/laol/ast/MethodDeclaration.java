@@ -24,12 +24,13 @@
 package laol.ast;
 import apfe.runtime.Repetition;
 import apfe.runtime.Sequence;
+import gblib.Util;
 
 /**
  *
  * @author gburdell
  */
-public class MethodDeclaration extends Item {
+public class MethodDeclaration extends Item implements IName {
     public MethodDeclaration(final laol.parser.apfe.MethodDeclaration decl) {
         super(decl);
         final Sequence seq = asSequence();
@@ -57,8 +58,17 @@ public class MethodDeclaration extends Item {
         return m_body;
     }
 
-    public MethodName getName() {
-        return m_name;
+    @Override
+    public ScopedName getName() {
+        final Item name = m_name.getName();
+        ScopedName scopedName;
+        if (name instanceof ScopedName) {
+            scopedName = Util.downCast(name);
+        } else {
+            MethodNameOp op = Util.downCast(name);
+            scopedName = new ScopedName(op.getOpName());
+        }
+        return scopedName;
     }
 
     public MethodParamDecl getParmDecl() {

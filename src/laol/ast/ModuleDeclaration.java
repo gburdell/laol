@@ -24,7 +24,6 @@
 package laol.ast;
 
 import apfe.runtime.Sequence;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
@@ -32,7 +31,7 @@ import java.util.List;
  *
  * @author gburdell
  */
-public class ModuleDeclaration extends Item {
+public class ModuleDeclaration extends Item implements IName {
 
     public ModuleDeclaration(final laol.parser.apfe.ModuleDeclaration mdecl) {
         super(mdecl);
@@ -41,11 +40,12 @@ public class ModuleDeclaration extends Item {
         m_items = zeroOrMore(seq, 3);
     }
 
-    public List<Item> getM_items() {
+    public List<Item> getItems() {
         return Collections.unmodifiableList(m_items);
     }
 
-    public ModuleName getM_name() {
+    @Override
+    public ScopedName getName() {
         return m_name;
     }
     
