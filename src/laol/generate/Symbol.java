@@ -24,8 +24,12 @@
 package laol.generate;
 
 import gblib.Util;
+import laol.ast.ClassDeclaration;
 import laol.ast.IName;
 import laol.ast.Item;
+import laol.ast.MethodDeclaration;
+import laol.ast.ModuleDeclaration;
+import laol.ast.VarDeclStatement;
 
 /**
  *
@@ -56,29 +60,29 @@ public abstract class Symbol {
 
     public static class Module extends Symbol {
 
-        public Module(final String name) {
-            super(name, EType.eModule);
+        public Module(final ModuleDeclaration decl) {
+            super(decl, EType.eModule);
         }
     }
 
     public static class Class extends Symbol {
 
-        public Class(final String name) {
-            super(name, EType.eClass);
+        public Class(final ClassDeclaration decl) {
+            super(decl, EType.eClass);
         }
     }
 
     public static class Method extends Symbol {
 
-        public Method(final String name) {
-            super(name, EType.eMethod);
+        public Method(final MethodDeclaration decl) {
+            super(decl, EType.eMethod);
         }
     }
 
     public static class LocalVar extends Symbol {
 
-        public LocalVar(final String name) {
-            super(name, EType.eLocalVar);
+        public LocalVar(final VarDeclStatement decl) {
+            super(decl, EType.eLocalVar);
         }
     }
 }
