@@ -55,7 +55,7 @@ public class IDENT extends Acceptor {
             Arrays.asList(
                     "alias",
                     "bool", "break",
-                    "case", "catch", "class",
+                    "case", "catch", "class", "const",
                     "def", "double",
                     "else", "elsif",
                     "extends", "extern",
@@ -67,7 +67,7 @@ public class IDENT extends Acceptor {
                     "static", "string", "super",
                     "this", "throw", "true", "try",
                     "unless", "until",
-                    "val", "var",
+                    "var",
                     "when", "while"
             ));
 

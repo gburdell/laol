@@ -35,6 +35,8 @@ import static org.junit.Assert.*;
 public class StatementTest extends TestRunner {
 
     private final String TESTS[] = {
+        "foo(bar: val, b: 34)",
+        "dog(b: 34)",
         "foo.bar;",
         "a=b",
         "1+2^3-4",

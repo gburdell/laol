@@ -2,12 +2,12 @@
 a =5;
 a = {a:6}
 foo(bar, b)
-foo(bar, b: 34)
-a.method(4).m2.m1(3,4, c: 12)[3..4].bar ->(a){}.m2
+foo(bar: e+345, b: 34)
+a.method(4).m2.m1(p1: [3,4], c: 12)[3..4].bar ->(a){}.m2
 
 here_is a: :bar, b: foo, c: "dog"
 
 /* a longer
  * comment
  */
-dsl_like a, b, d: 456
+dsl_like e1, p2:b, d: 456

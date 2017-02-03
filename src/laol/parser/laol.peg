@@ -222,10 +222,9 @@ named_param_ele <- param_name COLON expression
 // last: can be vararg
 named_param <- named_param_ele (COMMA named_param_ele)* (COMMA expression)*
 
-// Any named params are at the end
+// Either named or positional, not both
 param_expression_list <- 
-	unnamed_param named_param
-/	named_param
+	named_param
 /	unnamed_param
 
 array_select_expression <- expression_list
