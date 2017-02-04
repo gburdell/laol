@@ -35,7 +35,6 @@ import static org.junit.Assert.*;
 public class ExpressionTest extends TestRunner {
 
     private final String TESTS[] = {
-        "foobar; a",  //todo: how is this accepted?
         "foo.bar + 45 - 66;"
     };
 

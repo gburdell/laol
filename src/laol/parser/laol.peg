@@ -126,8 +126,6 @@ scoped_name <-
 postfix_expression <-
     postfix_expression LBRACK array_select_expression RBRACK block?
 /   postfix_expression LPAREN param_expression_list? RPAREN block?
-// allow dsl like
-/   postfix_expression param_expression_list block?
 /   postfix_expression dot_suffix block?
 /   postfix_expression (PLUS2 / MINUS2) 
 /   primary_expression block?
@@ -302,12 +300,14 @@ statement <-
 /   assign_statement
 /   expression_statement
 /   var_decl_statement
+/   dsl_statement
 
 block_statement <- LCURLY sp statement* RCURLY eos ;
 break_statement <- K_BREAK eos ;
 next_statement <-  K_NEXT eos ;
 alias_statement <- K_ALIAS method_name method_name eos ;
 expression_statement <- expression eos ;
+dsl_statement <- scoped_name param_expression_list eos ;
 
 try_statement <-
     K_TRY statement
@@ -634,7 +634,6 @@ eos <- SemiOrEOL
 statement_modifier <- (K_IF / K_UNLESS / K_WHILE / K_UNTIL) expression eos
 ;
 
-//ATRUE.  	//always true (but does not consume)
 SemiOrEOL.	//true if SpacingWithSemi ended w/ semi or nl
 SpacingWithSemi. // <- (SEMI / WS / Comment / EOL)*
-sp <- (SEMI / WS / Comment / EOL)*
+sp <- SpacingWithSemi //(SEMI / WS / Comment / EOL)*

@@ -44,9 +44,7 @@ public class PostfixExpression extends Item {
             if (first instanceof laol.parser.apfe.LBRACK) {
                 expr = new ArySelExpr(seq);
             } else if (first instanceof laol.parser.apfe.LPAREN) {
-                expr = new PrimExprList(seq, true);
-            } else if (first instanceof laol.parser.apfe.ParamExpressionList) {
-                expr = new PrimExprList(seq, false);
+                expr = new PrimExprList(seq);
             } else if (first instanceof laol.parser.apfe.DotSuffix) {
                 expr = new DotSfx(seq);
             } else if (first instanceof laol.parser.apfe.PrimaryExpression) {
@@ -93,11 +91,9 @@ public class PostfixExpression extends Item {
 
     public static class PrimExprList extends ItemWithBlock {
 
-        private PrimExprList(Acceptor parsed, boolean isOpt) {
+        private PrimExprList(Acceptor parsed) {
             super(parsed);
-            m_expr = isOpt 
-                    ? oneOrNone(m_seq, 1) 
-                    : createItem(m_seq, 0);
+            m_expr = oneOrNone(m_seq, 1);
         }
 
         public ParamExpressionList getExpr() {

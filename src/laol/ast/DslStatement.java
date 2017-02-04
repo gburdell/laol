@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2016 kpfalzer.
+ * Copyright 2016 gburdell.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -22,48 +22,40 @@
  * THE SOFTWARE.
  */
 package laol.ast;
-
 import apfe.runtime.Acceptor;
-import laol.test.TestRunner;
-import org.junit.Test;
-import static org.junit.Assert.*;
+import apfe.runtime.Marker;
+import apfe.runtime.Repetition;
+import apfe.runtime.Sequence;
+import apfe.runtime.Util;
+import java.util.LinkedList;
+import java.util.List;
 
 /**
  *
- * @author kpfalzer
+ * @author gburdell
  */
-public class StatementTest extends TestRunner {
-
-    private final String TESTS[] = {
-        "dsl_ok p2, p2",
-        "dsl_like p1, p2,\n a: :bar, b: foo, c: \"dog\"",
-        "dsl_ok ( p2, p2 )" , 
-        "dsl_like (p1, p2,\n a: :bar, b: foo, c: \"dog\")",
-        "foo(bar: val, b: 34)",
-        "dog(b: 34)",
-        "foo.bar;",
-        "a=b",
-        "1+2^3-4",
-        "total = by_sys.values.map{|h| h.values}.flatten.reduce(0){|m,o| m += o[:resource]}"
-    };
-
-    @Override
-    public Acceptor getGrammar() {
-        return new laol.parser.apfe.Statement();
+public class DslStatement extends Item {
+    public DslStatement(final laol.parser.apfe.DslStatement decl) {
+        super(decl);
+        final Sequence seq = asSequence();
+        m_name = createItem(seq, 0);
+        m_params = createItem(seq, 1);
+        m_stmtModifier = getStatementModifier(seq, 2);
     }
 
-    @Override
-    public void generateAndTestAst(Acceptor parsed) {
-        laol.ast.Statement dut = new laol.ast.Statement((laol.parser.apfe.Statement) parsed);
-        assertTrue(m_test.equals(m_accepted));
+    public ScopedName getName() {
+        return m_name;
     }
 
-    @Test
-    public void testAccessModifier() {
-        TestRunner runner = new StatementTest();
-        runner.runTests(TESTS);
+    public ParamExpressionList getParams() {
+        return m_params;
     }
 
+    public StatementModifier getStmtModifier() {
+        return m_stmtModifier;
+    }
+   
+    private final ScopedName    m_name;
+    private final ParamExpressionList m_params;
+    private final StatementModifier m_stmtModifier;
 }
-
-
