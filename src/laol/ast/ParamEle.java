@@ -23,28 +23,20 @@
  */
 package laol.ast;
 
-import apfe.runtime.Sequence;
-
 /**
  *
  * @author gburdell
  */
-public class NamedParamEle extends Item {
-    public NamedParamEle(final laol.parser.apfe.NamedParamEle decl) {
+public class ParamEle extends Item {
+
+    public ParamEle(final laol.parser.apfe.ParamEle decl) {
         super(decl);
-        final Sequence seq = asSequence();
-        m_name = createItem(seq, 0);
-        m_expr = createItem(seq, 2);
+        m_ele = createItem(asPrioritizedChoice().getAccepted());
     }
 
-    public Expression getExpr() {
-        return m_expr;
+    public Item getEle() {
+        return m_ele;
     }
 
-    public ParamName getName() {
-        return m_name;
-    }
-    
-    private final ParamName m_name;
-    private final Expression    m_expr;
+    private final Item m_ele;
 }

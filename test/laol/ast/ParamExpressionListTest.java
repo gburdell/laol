@@ -32,27 +32,29 @@ import static org.junit.Assert.*;
  *
  * @author kpfalzer
  */
-public class ExpressionTest extends TestRunner {
+public class ParamExpressionListTest extends TestRunner {
 
     private final String TESTS[] = {
-        "foobar; a",  //todo: how is this accepted?
-        "foo.bar + 45 - 66;"
+        "p1,p2,p3",
+        "p1:e1,p2,p3",
+        "p1,p2: expr1 ? if1 : else0, p3",
+        "p1: :s1, p2: :s3"
     };
 
     @Override
     public Acceptor getGrammar() {
-        return new laol.parser.apfe.Expression();
+        return new laol.parser.apfe.ParamExpressionList();
     }
 
     @Override
     public void generateAndTestAst(Acceptor parsed) {
-        laol.ast.Expression dut = new laol.ast.Expression((laol.parser.apfe.Expression) parsed);
+        laol.ast.ParamExpressionList dut = new laol.ast.ParamExpressionList((laol.parser.apfe.ParamExpressionList) parsed);
         assertTrue(m_test.equals(m_accepted));
     }
 
     @Test
     public void testAccessModifier() {
-        TestRunner runner = new ExpressionTest();
+        TestRunner runner = new ParamExpressionListTest();
         runner.runTests(TESTS);
     }
 

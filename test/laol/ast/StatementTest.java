@@ -35,6 +35,8 @@ import static org.junit.Assert.*;
 public class StatementTest extends TestRunner {
 
     private final String TESTS[] = {
+        "dsl_ok p2, p2",  //method call ambiguous w/ var-decl
+        "dsl_like p1, p2, a: :bar, b: foo, c: \"dog\"",
         "foo(bar: val, b: 34)",
         "dog(b: 34)",
         "foo.bar;",

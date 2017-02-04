@@ -22,8 +22,7 @@
  * THE SOFTWARE.
  */
 package laol.ast;
-import apfe.runtime.Acceptor;
-import apfe.runtime.PrioritizedChoice;
+
 import apfe.runtime.Repetition;
 import apfe.runtime.Sequence;
 import java.util.Collections;
@@ -35,21 +34,14 @@ import java.util.List;
  * @author gburdell
  */
 public class VarDeclStatement extends Item implements IName {
+
     public VarDeclStatement(final laol.parser.apfe.VarDeclStatement decl) {
         super(decl);
         final Sequence seq = asSequence();
-        final PrioritizedChoice pc = asPrioritizedChoice(seq.itemAt(0));
-        Acceptor acc = pc.getAccepted();
-        if (acc instanceof Sequence) {
-            final Sequence seq2 = asSequence(acc);
-            m_type = createItem(seq2, 0);
-            m_names.add(createItem(seq2, 1));
-        } else {
-            m_type = null;
-            m_names.add(createItem(acc));
-        }
-        m_names.addAll(zeroOrMore(asRepetition(seq, 1), 1));
-        final Repetition rep = asRepetition(seq, 2);
+        m_type = createItem(seq, 0);
+        m_names.add(createItem(seq, 1));
+        m_names.addAll(zeroOrMore(asRepetition(seq, 2), 1));
+        final Repetition rep = asRepetition(seq, 3);
         if (0 < rep.sizeofAccepted()) {
             final Sequence seq3 = rep.getOnlyAccepted();
             m_op = createItem(seq3, 0);
@@ -58,7 +50,7 @@ public class VarDeclStatement extends Item implements IName {
             m_op = null;
             m_rhs = null;
         }
-        m_stmtModifier = getStatementModifier(seq, 3);
+        m_stmtModifier = getStatementModifier(seq, 4);
     }
 
     @Override
@@ -78,13 +70,13 @@ public class VarDeclStatement extends Item implements IName {
         return m_stmtModifier;
     }
 
-    public TypeDecl getType() {
+    public MutTypeDecl getType() {
         return m_type;
     }
- 
-    private final TypeDecl  m_type;
-    private final List<ScopedName>    m_names = new LinkedList<>();
-    private final AssignmentOp  m_op;
+
+    private final MutTypeDecl m_type;
+    private final List<ScopedName> m_names = new LinkedList<>();
+    private final AssignmentOp m_op;
     private final AssignmentRhs m_rhs;
     private final StatementModifier m_stmtModifier;
 }

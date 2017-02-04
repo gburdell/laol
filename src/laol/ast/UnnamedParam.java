@@ -23,12 +23,15 @@
  */
 package laol.ast;
 
+import apfe.runtime.Sequence;
+import apfe.runtime.Util;
+
 /**
  *
  * @author gburdell
  */
-public class UnnamedParam extends ExpressionList {
+public class UnnamedParam extends Expression {
     public UnnamedParam(final laol.parser.apfe.UnnamedParam decl) {
-        super(decl.getBaseAccepted());
+        super(Util.downcast(Util.<Sequence>downcast(decl.getBaseAccepted()).itemAt(1)));
     }
 }

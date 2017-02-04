@@ -24,32 +24,27 @@
 package laol.ast;
 
 import apfe.runtime.Sequence;
-import java.util.Collections;
-import java.util.LinkedList;
-import java.util.List;
 
 /**
  *
  * @author gburdell
  */
 public class NamedParam extends Item {
-
     public NamedParam(final laol.parser.apfe.NamedParam decl) {
         super(decl);
         final Sequence seq = asSequence();
-        m_named.add(createItem(seq, 0));
-        m_named.addAll(zeroOrMore(asRepetition(seq, 1), 1));
-        m_varArgs = zeroOrMore(asRepetition(seq, 2), 1);
+        m_name = createItem(seq, 0);
+        m_expr = createItem(seq, 2);
     }
 
-    public List<NamedParamEle> getNamed() {
-        return Collections.unmodifiableList(m_named);
+    public Expression getExpr() {
+        return m_expr;
     }
 
-    public List<Expression> getVarArgs() {
-        return Collections.unmodifiableList(m_varArgs);
+    public ParamName getName() {
+        return m_name;
     }
-
-    private final List<NamedParamEle> m_named = new LinkedList<>();
-    private final List<Expression> m_varArgs;
+    
+    private final ParamName m_name;
+    private final Expression    m_expr;
 }

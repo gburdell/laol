@@ -35,10 +35,11 @@ import static org.junit.Assert.*;
 public class AssignStatementTest extends TestRunner {
 
     private final String TESTS[] = {
-        "private int x = f1(a,b,c)",
+        "private var int x = f1(a,b,c)",
         "a = a + 5",
-        "t1 b = {a:1,b:2}",
-        "a = b[345] * c[:foo] unless a==b"
+        "var t1 b = {a:1,b:2}",
+        "a = b[345] * c[:foo] unless a==b",
+        "a = b+c;"
     };
 
     @Override

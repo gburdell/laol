@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2016 kpfalzer.
+ * Copyright 2016 gburdell.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -23,37 +23,49 @@
  */
 package laol.ast;
 
-import apfe.runtime.Acceptor;
-import laol.test.TestRunner;
-import org.junit.Test;
-import static org.junit.Assert.*;
+import apfe.runtime.Repetition;
+import apfe.runtime.Sequence;
 
 /**
  *
- * @author kpfalzer
+ * @author gburdell
  */
-public class ExpressionTest extends TestRunner {
+public class MutTypeDecl extends Item {
 
-    private final String TESTS[] = {
-        "foobar; a",  //todo: how is this accepted?
-        "foo.bar + 45 - 66;"
-    };
-
-    @Override
-    public Acceptor getGrammar() {
-        return new laol.parser.apfe.Expression();
+    public MutTypeDecl(final laol.parser.apfe.MutTypeDecl decl) {
+        super(decl);
+        final Sequence seq = asSequence();
+        m_access = oneOrNone(seq, 0);
+        m_isStatic = (0 < asRepetition(seq, 1).sizeofAccepted());
+        m_mutability = createItem(seq, 2);
+        {
+            final Repetition rep = asRepetition(seq, 3);
+            if (0 < rep.sizeofAccepted()) {
+                m_type = createItem(rep.getOnlyAccepted(), 0);
+            } else {
+                m_type = null;
+            }
+        }
     }
 
-    @Override
-    public void generateAndTestAst(Acceptor parsed) {
-        laol.ast.Expression dut = new laol.ast.Expression((laol.parser.apfe.Expression) parsed);
-        assertTrue(m_test.equals(m_accepted));
+    public AccessModifier getAccess() {
+        return m_access;
     }
 
-    @Test
-    public void testAccessModifier() {
-        TestRunner runner = new ExpressionTest();
-        runner.runTests(TESTS);
+    public Mutability getMutability() {
+        return m_mutability;
     }
 
+    public TypeName getType() {
+        return m_type;
+    }
+
+    public boolean isStatic() {
+        return m_isStatic;
+    }
+
+    private final AccessModifier m_access;
+    private final boolean m_isStatic;
+    private final Mutability m_mutability;
+    private final TypeName  m_type;
 }

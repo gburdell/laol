@@ -126,6 +126,8 @@ scoped_name <-
 postfix_expression <-
     postfix_expression LBRACK array_select_expression RBRACK block?
 /   postfix_expression LPAREN param_expression_list? RPAREN block?
+// allow dsl like
+/   postfix_expression param_expression_list block?
 /   postfix_expression dot_suffix block?
 /   postfix_expression (PLUS2 / MINUS2) 
 /   primary_expression block?
@@ -215,24 +217,20 @@ block <- anonymous_function_defn
 
 expression_list <- expression (COMMA expression)*
 
-unnamed_param <- expression_list
+unnamed_param <- !(param_name COLON) expression
 
-named_param_ele <- param_name COLON expression
+named_param <- param_name COLON expression
 
-// last: can be vararg
-named_param <- named_param_ele (COMMA named_param_ele)* (COMMA expression)*
+param_ele <-
+	unnamed_param
+/	named_param
 
-// Either named or positional, not both
-param_expression_list <- 
-	named_param
-/	unnamed_param
+param_expression_list <- param_ele (COMMA param_ele)*
 
 array_select_expression <- expression_list
 
 var_decl_statement <- 
-	(	type_decl scoped_name 
-	/	scoped_name
-	)
+	mut_type_decl scoped_name 
 	(COMMA scoped_name)* 
 	(assignment_op assignment_rhs)? eos
 
@@ -241,6 +239,8 @@ assign_statement <- assignment_lhs assignment_op assignment_rhs eos
 assignment_lhs <- 
 	type_decl lhs_ref (COMMA lhs_ref)*
 /	lhs_ref (COMMA lhs_ref)*
+
+mut_type_decl <- access_modifier? K_STATIC? mutability (type_name &scoped_name)?
 
 type_decl <- access_modifier? K_STATIC? mutability? (type_name &scoped_name)?
 

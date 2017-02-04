@@ -23,8 +23,10 @@
  */
 package laol.ast;
 
-import apfe.runtime.Acceptor;
 import apfe.runtime.Sequence;
+import java.util.Collections;
+import java.util.LinkedList;
+import java.util.List;
 
 /**
  *
@@ -34,27 +36,14 @@ public class ParamExpressionList extends Item {
 
     public ParamExpressionList(final laol.parser.apfe.ParamExpressionList decl) {
         super(decl);
-        final Acceptor choice = asPrioritizedChoice().getAccepted();
-        if (choice instanceof Sequence) {
-            m_unnamed = createItem(choice, 0);
-            m_named = createItem(choice, 1);
-        } else if (choice instanceof laol.parser.apfe.UnnamedParam) {
-            m_unnamed = createItem(choice);
-            m_named = null;
-        } else {
-            m_named = createItem(choice);
-            m_unnamed = null;
-        }
+        final Sequence seq = asSequence();
+        m_eles.add(createItem(seq, 0));
+        m_eles.addAll(zeroOrMore(asRepetition(seq, 1), 1));
     }
 
-    public NamedParam getNamed() {
-        return m_named;
+    public List<ParamEle> getEles() {
+        return Collections.unmodifiableList(m_eles);
     }
-
-    public UnnamedParam getUnnamed() {
-        return m_unnamed;
-    }
-
-    private final UnnamedParam m_unnamed;
-    private final NamedParam m_named;
+    
+    private final List<ParamEle>    m_eles = new LinkedList<>();
 }
