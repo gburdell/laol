@@ -25,6 +25,7 @@ package laol.ast;
 
 import apfe.runtime.Repetition;
 import apfe.runtime.Sequence;
+import static gblib.Util.invariant;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
@@ -41,7 +42,7 @@ public class ScopedName extends Item {
         Repetition rep = asRepetition(seq, 0);
         m_isRooted = rep.sizeofAccepted() > 0;
         m_path.add(getIdent(seq, 1));
-        m_path.addAll(zeroOrMoreIdent(asRepetition(seq, 2), 1));        
+        m_path.addAll(zeroOrMoreIdent(asRepetition(seq, 2), 1));
     }
 
     public ScopedName(final AString.S name) {
@@ -49,19 +50,24 @@ public class ScopedName extends Item {
         m_isRooted = false;
         m_path.add(new Ident(name));
     }
-    
+
+    public String asSimpleName() {
+        invariant(!hasScope() && !isRooted());
+        return getIdents().get(0).getId();
+    }
+
     public boolean hasScope() {
         return isRooted() || (1 < m_path.size());
     }
-    
-    public List<Ident>  getIdents() {
+
+    public List<Ident> getIdents() {
         return Collections.unmodifiableList(m_path);
     }
-    
+
     public boolean isRooted() {
         return m_isRooted;
     }
-    
+
     /**
      * Scoped name started with '::'.
      */

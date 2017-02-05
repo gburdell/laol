@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2017 gburdell.
+ * Copyright 2017 kpfalzer.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -21,33 +21,14 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package laol.generate.java;
+package laol.generate;
 
-import gblib.Config;
-import gblib.Tree;
-import laol.ast.Contents;
-import laol.generate.Scope;
+import java.util.HashMap;
 
 /**
- * Organize sideband data during code generation.
  *
- * @author gburdell
+ * @author kpfalzer
  */
-public class Context {
-
-    public Context(final Contents contents, final Config config) {
-        m_contents = contents;
-        m_config = config;
-    }
+public class SymbolTable extends HashMap<String, Symbol> {
     
-    public Config getConfig() {
-        return m_config;
-    }
-    
-    private final Contents m_contents;
-    private final Config m_config;
-    /**
-     * Tree of Scope initialized with global scope.
-     */
-    private final Tree<Scope> m_scopes = new Tree<>(new Scope());
 }

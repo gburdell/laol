@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2017 gburdell.
+ * Copyright 2017 kpfalzer.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -21,33 +21,46 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package laol.generate.java;
+package laol.generate;
 
-import gblib.Config;
-import gblib.Tree;
-import laol.ast.Contents;
-import laol.generate.Scope;
+import gblib.MessageMgr;
+import static gblib.Util.invariant;
+import static java.util.Objects.isNull;
+import static java.util.Objects.nonNull;
 
 /**
- * Organize sideband data during code generation.
  *
- * @author gburdell
+ * @author kpfalzer
  */
-public class Context {
+public class Scope {
 
-    public Context(final Contents contents, final Config config) {
-        m_contents = contents;
-        m_config = config;
+    public static enum EType {
+        eBlock, eModule, eClass, eMethod
     }
-    
-    public Config getConfig() {
-        return m_config;
+
+    public Symbol getSymbol(String name) {
+        Symbol val = null;
+        if (nonNull(m_stab)) {
+            val = m_stab.get(name);
+        }
+        return val;
     }
-    
-    private final Contents m_contents;
-    private final Config m_config;
-    /**
-     * Tree of Scope initialized with global scope.
-     */
-    private final Tree<Scope> m_scopes = new Tree<>(new Scope());
+
+    public Scope add(Symbol sym) {
+        if (isNull(m_stab)) {
+            m_stab = new SymbolTable();
+        }
+        final String name = sym.getIName().getName().asSimpleName();
+        invariant(!m_stab.containsKey(name)); //TODO: LG-SYM error
+        m_stab.put(name, sym);
+        return this;
+    }
+
+    private SymbolTable m_stab;
+
+    static {
+        MessageMgr.addMessage(
+                "LG-SYM",
+                "%s:%d: symbol '%s' already defined at %s:%d");
+    }
 }

@@ -41,48 +41,66 @@ public abstract class Symbol {
         eModule, eClass, eMethod, eLocalVar
     }
 
-    protected Symbol(final Item namedItem, final EType type) {
+    protected Symbol(final Item namedItem) {
         m_item = namedItem;
         assert (m_item instanceof IName);
-        m_type = type;
     }
 
-    public EType getType() {
-        return m_type;
-    }
+    public abstract EType getType();
 
-    private IName getIName() {
+    public IName getIName() {
         return Util.downCast(m_item);
     }
 
-    private final EType m_type;
     private final Item m_item;
 
     public static class Module extends Symbol {
 
         public Module(final ModuleDeclaration decl) {
-            super(decl, EType.eModule);
+            super(decl);
+        }
+
+        @Override
+        public EType getType() {
+            return EType.eModule;
         }
     }
 
     public static class Class extends Symbol {
 
         public Class(final ClassDeclaration decl) {
-            super(decl, EType.eClass);
+            super(decl);
+        }
+
+        @Override
+        public EType getType() {
+            return EType.eClass;
         }
     }
 
     public static class Method extends Symbol {
 
         public Method(final MethodDeclaration decl) {
-            super(decl, EType.eMethod);
+            super(decl);
         }
+
+        @Override
+        public EType getType() {
+            return EType.eMethod;
+        }
+
     }
 
     public static class LocalVar extends Symbol {
 
         public LocalVar(final VarDeclStatement decl) {
-            super(decl, EType.eLocalVar);
+            super(decl);
         }
+
+        @Override
+        public EType getType() {
+            return EType.eLocalVar;
+        }
+
     }
 }
