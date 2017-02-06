@@ -23,6 +23,7 @@
  */
 package laol.generate;
 
+import static gblib.Util.assertNever;
 import java.util.HashMap;
 
 /**
@@ -30,5 +31,23 @@ import java.util.HashMap;
  * @author kpfalzer
  */
 public class SymbolTable extends HashMap<String, Symbol> {
-    
+    /**
+     * Insert symbol.
+     * @param key symbol key.
+     * @param value symbol value.
+     * @return true if key does not exist, else false (and no insert done).
+     */
+    public boolean insert(String key, Symbol value) {
+        boolean ok = false;
+        if (! super.containsKey(key)) {
+            ok = (null == super.put(key, value));
+        }
+        return ok;
+    }
+
+    @Override
+    public Symbol put(String key, Symbol value) {
+        assertNever("use insert() method instead");
+        return null;
+    }
 }

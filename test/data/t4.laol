@@ -1,0 +1,17 @@
+/** 
+ * An actual testcase which opens a file and prints out line length.
+ */
+
+import "laol.io"
+mixin io
+
+def main(args) {
+	args.each {|fn|
+		ifs = FileInputStream.new(fn)
+		ifs.eachLine {|line|
+			puts line.length
+		}
+	}
+}
+
+main(ARGV)

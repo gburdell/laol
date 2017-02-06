@@ -44,6 +44,10 @@ public class Context {
         return m_config;
     }
     
+    public Tree<Scope> getScopes() {
+        return m_scopes;
+    }
+    
     private final Contents m_contents;
     private final Config m_config;
     /**

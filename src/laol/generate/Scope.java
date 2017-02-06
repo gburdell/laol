@@ -51,8 +51,7 @@ public class Scope {
             m_stab = new SymbolTable();
         }
         final String name = sym.getIName().getName().asSimpleName();
-        invariant(!m_stab.containsKey(name)); //TODO: LG-SYM error
-        m_stab.put(name, sym);
+        invariant(m_stab.insert(name, sym)); //TODO: LG-SYM error
         return this;
     }
 

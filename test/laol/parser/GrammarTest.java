@@ -34,7 +34,8 @@ public class GrammarTest {
             "test/data/t2.laol",
             "test/data/t1.laol",
             "lib/laol/collection.laol",
-            //"test/data/t3.txt",
+            "lib/laol/io.laol",
+            "test/data/t4.laol"
         };
         try {
             for (String fn : fns) {
