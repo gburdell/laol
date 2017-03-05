@@ -266,7 +266,7 @@ contents <-
 
 package_statement <- K_PACKAGE STRING
 
-import_statement <- K_IMPORT STRING
+import_statement <- K_IMPORT K_STATIC? STRING
 
 file_item <-
     module_declaration

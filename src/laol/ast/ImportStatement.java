@@ -32,13 +32,19 @@ public class ImportStatement extends Item {
     public ImportStatement(final laol.parser.apfe.ImportStatement decl) {
         super(decl);
         final Sequence seq = asSequence();
-        m_import = getString(seq, 1);
+        m_isStatic = null != oneOrNone(seq, 1);
+        m_import = getString(seq, 2);
     }
 
+    public boolean isStatic() {
+        return m_isStatic;
+    }
+    
     public AString getImport() {
         return m_import;
     }
 
+    private final boolean   m_isStatic;
     private final AString   m_import;
     
 }
