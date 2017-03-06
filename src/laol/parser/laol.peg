@@ -25,20 +25,20 @@
 Grammar <- Spacing contents? EOF
 
 regexp_primary <-
-	"%r{" sp regexp_item2+ '}' [i]? sp
-/	'/' regexp_item1+ '/' [i]? sp
+    "%r{" sp regexp_item2+ '}' [i]? sp
+/   '/' regexp_item1+ '/' [i]? sp
 
 any_not_eof <- !EOF .
 
 regexp_item1 <-
-	inline_eval
-/	"#{"
-/	('\\' any_not_eof / !"#{" !'/' any_not_eof)+
+    inline_eval
+/   "#{"
+/   ('\\' any_not_eof / !"#{" !'/' any_not_eof)+
 
 regexp_item2 <-
-	inline_eval
-/	"#{"
-/	('\\' any_not_eof / !"#{" !'}' any_not_eof)+
+    inline_eval
+/   "#{"
+/   ('\\' any_not_eof / !"#{" !'}' any_not_eof)+
 
 hash_primary <- LCURLY (hash_key_value (COMMA hash_key_value)*)? RCURLY
 
@@ -52,49 +52,49 @@ html_begin <- "<!--%html{-->" sp
 html_end   <- "<!--%html}-->" sp
 
 html_primary <-
-	html_begin
-		(	&IDENT html_code
-		/	&"<!--" html_comment
-		/	&'<'   html_tag
-		)*
-		html_end
+    html_begin
+        (   &IDENT html_code
+        /   &"<!--" html_comment
+        /   &'<'   html_tag
+        )*
+        html_end
 
 html_code <-
-	IDENT  (LPAREN param_expression_list? RPAREN)? LCURLY
-		html_code_content*
-	RCURLY
+    IDENT  (LPAREN param_expression_list? RPAREN)? LCURLY
+        html_code_content*
+    RCURLY
 
 html_code_content <-
-	inline_eval
-/	html_code
-/	!RCURLY any_not_eof
+    inline_eval
+/   html_code
+/   !RCURLY any_not_eof
 
 html_comment <- !(html_begin / html_end) "<!--" (!"-->" any_not_eof)* "-->" sp
 
 html_tag <-
-	'<' IDENT html_attribute* '>' sp
-		html_tag_content*
-	("</" IDENT GT)?
+    '<' IDENT html_attribute* '>' sp
+        html_tag_content*
+    ("</" IDENT GT)?
 
 html_tag_content <-
-	inline_eval
-/	html_comment
-/	html_tag
-/	!(html_end / "</") any_not_eof
+    inline_eval
+/   html_comment
+/   html_tag
+/   !(html_end / "</") any_not_eof
 
 html_attribute <-
-	IDENT EQ STRING
+    IDENT EQ STRING
 
 sass_primary <-
-	"%sass{" sp 
-		sass_content*
-	RCURLY
+    "%sass{" sp 
+        sass_content*
+    RCURLY
 
 sass_content <-
-	LCURLY (!RCURLY sass_content)* RCURLY
-/	inline_eval
-/	STRING
-/	!RCURLY any_not_eof
+    LCURLY (!RCURLY sass_content)* RCURLY
+/   inline_eval
+/   STRING
+/   !RCURLY any_not_eof
 
 inline_eval <- "#{" sp expression RCURLY
 
@@ -110,18 +110,18 @@ primary_expression <-
 /   K_THIS / K_SUPER
 /   STRING
 /   SYMBOL
-/	LPAREN expression RPAREN
+/   LPAREN expression RPAREN
 /   here_doc
 /   scoped_name
 /   Number
 /   hash_primary
 /   array_primary
 /   regexp_primary
-/	html_primary
-/	sass_primary
+/   html_primary
+/   sass_primary
 
 scoped_name <- 
-	COLON2? IDENTNK (COLON2 IDENTNK)*
+    COLON2? IDENTNK (COLON2 IDENTNK)*
 
 postfix_expression <-
     postfix_expression LBRACK array_select_expression RBRACK block?
@@ -131,78 +131,78 @@ postfix_expression <-
 /   primary_expression block?
 
 unary_expression <-
-	unary_op unary_expression
+    unary_op unary_expression
 /   postfix_expression
 
 unary_op <- TILDE / EXCL / PLUS / MINUS / STAR / STAR2 / PLUS2 / MINUS2 / AND
 
 mult_expression <-
-	mult_expression mult_op unary_expression
-/	unary_expression
-	
+    mult_expression mult_op unary_expression
+/   unary_expression
+    
 mult_op <- STAR / DIV / PCNT / STAR2
 
 add_expression <-
-	add_expression add_op mult_expression
-/	mult_expression
+    add_expression add_op mult_expression
+/   mult_expression
 
 add_op <- PLUS / MINUS
 
 shift_expression <-
-	shift_expression shift_op add_expression
-/	add_expression
+    shift_expression shift_op add_expression
+/   add_expression
 
 shift_op <- LT2 / GT2
 
 rel_expression <-
-	rel_expression rel_op shift_expression
-/	shift_expression
+    rel_expression rel_op shift_expression
+/   shift_expression
 
 rel_op <- LT / LTEQ / GT / GTEQ
 
 cmp_expression <-
-	cmp_expression cmp_op rel_expression
-/	rel_expression
+    cmp_expression cmp_op rel_expression
+/   rel_expression
 
 cmp_op <- CMP / NEQ / EQ2 / REXEQ / REXNEQ
 
 and_expression <-
-	and_expression AND cmp_expression
-/	cmp_expression
+    and_expression AND cmp_expression
+/   cmp_expression
 
 xor_expression <-
-	xor_expression XOR and_expression
-/	and_expression
+    xor_expression XOR and_expression
+/   and_expression
 
 or_expression <-
-	or_expression OR xor_expression
-/	xor_expression
+    or_expression OR xor_expression
+/   xor_expression
 
 land_expression <-
-	land_expression AND2 or_expression
-/	or_expression
+    land_expression AND2 or_expression
+/   or_expression
 
 lor_expression <-
-	lor_expression OR2 land_expression
-/	land_expression
+    lor_expression OR2 land_expression
+/   land_expression
 
 range_expression <- 
-	range_expression DOT2 lor_expression
-/	lor_expression
+    range_expression DOT2 lor_expression
+/   lor_expression
 
 conditional_expression <-
     range_expression QMARK expression COLON expression
-/	range_expression
+/   range_expression
 
 expression <- conditional_expression
 
 binary_op <-
-	mult_op
-/	add_op
-/	shift_op
-/	rel_op
-/	cmp_op
-/	AND / OR / XOR / AND2 / OR2
+    mult_op
+/   add_op
+/   shift_op
+/   rel_op
+/   cmp_op
+/   AND / OR / XOR / AND2 / OR2
 
 /* .? is safe-navigation (Groovy): 
  * i.e., returns 'nil' rather than throw // NullPointerException.
@@ -220,23 +220,23 @@ unnamed_param <- !(param_name COLON) expression
 named_param <- param_name COLON expression
 
 param_ele <-
-	unnamed_param
-/	named_param
+    unnamed_param
+/   named_param
 
 param_expression_list <- param_ele (COMMA param_ele)*
 
 array_select_expression <- expression_list
 
 var_decl_statement <- 
-	mut_type_decl scoped_name 
-	(COMMA scoped_name)* 
-	(assignment_op assignment_rhs)? eos
+    mut_type_decl scoped_name 
+    (COMMA scoped_name)* 
+    (assignment_op assignment_rhs)? eos
 
 assign_statement <- assignment_lhs assignment_op assignment_rhs eos
 
 assignment_lhs <- 
-	type_decl lhs_ref (COMMA lhs_ref)*
-/	lhs_ref (COMMA lhs_ref)*
+    type_decl lhs_ref (COMMA lhs_ref)*
+/   lhs_ref (COMMA lhs_ref)*
 
 mut_type_decl <- access_modifier? K_STATIC? mutability (type_name &scoped_name)?
 
@@ -296,7 +296,6 @@ statement <-
 /   class_declaration
 /   interface_declaration 
 /   method_declaration 
-/   mixin_statement
 /   assign_statement
 /   expression_statement
 /   var_decl_statement
@@ -313,7 +312,7 @@ try_statement <-
     K_TRY statement
         catch_statement*
         finally_statement?
-		eos
+        eos
 
 // NOTE: while ruby allows most statements as rhs; e.g.: "foo = if xxx; 12", 
 // we will not.  Use method to do so.
@@ -329,10 +328,6 @@ catch_statement <- K_CATCH expression sp statement_clause
 
 finally_statement <- K_FINALLY statement_clause
 
-mixin_name <- scoped_name
-
-mixin_statement <- K_MIXIN module_name (COMMA module_name)* eos
-    
 module_name <- scoped_name
 
 module_declaration <-
@@ -354,7 +349,7 @@ class_declaration <-
 interface_declaration <-
     K_EXTERN? access_modifier?
     K_INTERFACE class_name
-		(K_IMPLEMENTS class_name_list)?
+        (K_IMPLEMENTS class_name_list)?
         LCURLY 
             class_body
         RCURLY eos
@@ -378,53 +373,53 @@ method_param_decl_ele <-
     //NOTE: only last in list can have STAR (marks as varargs)
     // AND (&) marks as function parameter
     method_param_decl_modifier 
-	(	anonymous_function_decl	
-	/	type_name STAR? param_name method_param_decl_default?
-	/	STAR? param_name method_param_decl_default?
-	)
+    (   anonymous_function_decl 
+    /   type_name STAR? param_name method_param_decl_default?
+    /   STAR? param_name method_param_decl_default?
+    )
 
 // @foo declares foo as a member
 param_name <- '@'? IDENTNK
 
 type_name <- 
-	builtin_type_name 
-/ 	scoped_name
+    builtin_type_name 
+/   scoped_name
 
 builtin_type_name <-
-	K_INT / K_DOUBLE / K_BOOL / K_STRING
-/	LCURLY RCURLY
-/	LBRACK RBRACK
-/	QMARK
+    K_INT / K_DOUBLE / K_BOOL / K_STRING
+/   LCURLY RCURLY
+/   LBRACK RBRACK
+/   QMARK
 
 method_param_decl_default <- EQ expression
 
 class_extends <- 
-	K_EXTENDS class_name (K_IMPLEMENTS class_name_list)?
-/	K_IMPLEMENTS class_name_list
+    K_EXTENDS class_name (K_IMPLEMENTS class_name_list)?
+/   K_IMPLEMENTS class_name_list
 
 class_name_list <- class_name (COMMA class_name)*
 
 anonymous_function_decl <- 
-	ARROW param_name method_param_decl? method_return_decl?
+    ARROW param_name method_param_decl? method_return_decl?
 
 method_return_decl <-
-	EQGT type_name
-/	EQGT LPAREN method_return_ele (COMMA method_return_ele)* RPAREN
+    EQGT type_name
+/   EQGT LPAREN method_return_ele (COMMA method_return_ele)* RPAREN
 
 method_return_ele <- type_name param_name?
 
 anonymous_function_defn <-
-	ARROW method_param_decl method_return_decl? LCURLY sp method_body? sp RCURLY 
+    ARROW method_param_decl method_return_decl? LCURLY sp method_body? sp RCURLY 
 //Ruby style block, :)
-/	LCURLY OR method_param_decl_list OR method_return_decl? sp method_body? sp RCURLY
+/   LCURLY OR method_param_decl_list OR method_return_decl? sp method_body? sp RCURLY
 
 method_declaration <-
     access_modifier?
-    K_STATIC?
+    (K_STATIC / K_DEFAULT)?
     K_DEF method_name method_param_decl? method_return_decl?
         //NOTE: abstract declaration if empty
         (LCURLY sp method_body sp RCURLY)?
-		eos
+        eos
     
 method_name <-
     method_name_op
@@ -451,14 +446,14 @@ case_statement <-
     RCURLY eos
 
 if_statement <-
-	//NOTE: dont allow eos here (statement_modifier) since too confusing!
+    //NOTE: dont allow eos here (statement_modifier) since too confusing!
     (K_IF / K_UNLESS) expression sp statement sp
         (K_ELSIF expression sp statement sp)*
         (K_ELSE statement sp)?
 
 statement_clause <-
-	LCURLY statement RCURLY eos
-/	statement
+    LCURLY statement RCURLY eos
+/   statement
 
 while_statement <- K_WHILE expression sp statement_clause
 until_statement <- K_UNTIL expression sp statement_clause
@@ -477,7 +472,7 @@ COLON       <- ':' !':' Spacing
 COLON2      <- "::" Spacing
 SEMI        <- ';' Spacing
 DOT         <- '.' !('.' / '?') Spacing
-DOT_QMARK	<- ".?" Spacing
+DOT_QMARK   <- ".?" Spacing
 DOT2        <- ".." Spacing
 COMMA       <- ',' Spacing
 LT          <- '<' !('<' / '=') Spacing
@@ -534,6 +529,7 @@ K_CATCH     <- "catch"      K_tail
 K_CLASS     <- "class"      K_tail
 K_CONST     <- "const"      K_tail
 K_DEF       <- "def"        K_tail
+K_DEFAULT   <- "default"    K_tail
 K_DOUBLE    <- "double"     K_tail
 K_ELSE      <- "else"       K_tail
 K_ELSIF     <- "elsif"      K_tail
@@ -545,10 +541,9 @@ K_FOR       <- "for"        K_tail
 K_IF        <- "if"         K_tail
 K_IMPLEMENTS <- "implements" K_tail
 K_IMPORT    <- "import"     K_tail
-K_INT		<-  "int"       K_tail
+K_INT       <-  "int"       K_tail
 K_IN        <-  "in"        K_tail
 K_INTERFACE <-  "interface" K_tail
-K_MIXIN     <-  "mixin"     K_tail
 K_MODULE    <- "module"     K_tail
 K_NEXT      <- "next"       K_tail
 K_NEW       <- "new"        K_tail
@@ -575,8 +570,8 @@ K_FILE      <- "__FILE__"   K_tail
 K_tail <- ![_a-zA-Z0-9] Spacing
 
 SYMBOL <- 
-	':' IDENTNK Spacing
-/	':' (binary_op / unary_op)
+    ':' IDENTNK Spacing
+/   ':' (binary_op / unary_op)
 ;
 
 // includes optional '?'
@@ -610,9 +605,9 @@ STRING <-
 /   '\'' ('\\' any_not_eof / !'\'' any_not_eof)? '\'' Spacing
 
 string_item <-
-	inline_eval
-/	"#{"
-/	('\\' any_not_eof / !"#{" !'"' any_not_eof)+
+    inline_eval
+/   "#{"
+/   ('\\' any_not_eof / !"#{" !'"' any_not_eof)+
 
 //Spacing <- (WS / Comment / EOL)*
 Spacing <- SpacingWithSemi
@@ -627,13 +622,13 @@ ML_COMMENT <- "/*" (!"*/" any_not_eof)* "*/"
 
 eos <- SemiOrEOL 
 /      (WS / Comment)* &'}'
-/	   WS* statement_modifier
-/	   &EOF
+/      WS* statement_modifier
+/      &EOF
 ;
 
 statement_modifier <- (K_IF / K_UNLESS / K_WHILE / K_UNTIL) expression eos
 ;
 
-SemiOrEOL.	//true if SpacingWithSemi ended w/ semi or nl
+SemiOrEOL.  //true if SpacingWithSemi ended w/ semi or nl
 SpacingWithSemi. // <- (SEMI / WS / Comment / EOL)*
 sp <- SpacingWithSemi //(SEMI / WS / Comment / EOL)*

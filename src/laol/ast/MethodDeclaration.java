@@ -25,6 +25,8 @@ package laol.ast;
 import apfe.runtime.Repetition;
 import apfe.runtime.Sequence;
 import gblib.Util;
+import laol.parser.apfe.KDEFAULT;
+import laol.parser.apfe.KSTATIC;
 
 /**
  *
@@ -35,7 +37,20 @@ public class MethodDeclaration extends Item implements IName {
         super(decl);
         final Sequence seq = asSequence();
         m_access = oneOrNone(seq, 0);
-        m_isStatic = (null != oneOrNone(seq, 1));
+        {
+            final Repetition rep = seq.itemAt(1).getBaseAccepted();
+            if (null == rep) {
+                m_isDefault = false;
+                m_isStatic = false;
+            } else if (rep.getOnlyAccepted() instanceof KSTATIC) {
+                m_isStatic = true;
+                m_isDefault = false;
+            } else {
+                assert(rep.getOnlyAccepted() instanceof KDEFAULT);
+                m_isDefault = true;
+                m_isStatic = false;
+            }
+        }
         m_name = createItem(seq, 3);
         m_parmDecl = oneOrNone(seq, 4);
         m_retnDecl = oneOrNone(seq, 5);
@@ -82,9 +97,17 @@ public class MethodDeclaration extends Item implements IName {
     public StatementModifier getStmtModifier() {
         return m_stmtModifier;
     }
+
+    public boolean isDefault() {
+        return m_isDefault;
+    }
+
+    public boolean isStatic() {
+        return m_isStatic;
+    }
     
     private final AccessModifier    m_access;
-    private final boolean   m_isStatic;
+    private final boolean   m_isStatic, m_isDefault;
     private final MethodName    m_name;
     private final MethodParamDecl   m_parmDecl;
     private final MethodReturnDecl  m_retnDecl;
