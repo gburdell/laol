@@ -51,7 +51,8 @@ public class Generate extends laol.generate.Generate {
 
     @Override
     public int generate() {
-        m_asts.stream()
+        m_asts
+                .stream()
                 .forEachOrdered((ast) -> {
                     process(ast);
                 });
@@ -62,7 +63,9 @@ public class Generate extends laol.generate.Generate {
         final Contents contents = ast.getGrammar().getContents();
         if (nonNull(contents)) {
             m_ctx = new Context(contents, m_config);
-            contents.getFileItems().stream()
+            contents
+                    .getFileItems()
+                    .stream()
                     .forEachOrdered((fileItem) -> {
                         callProcess(fileItem.getItem(), m_ctx);
                     });

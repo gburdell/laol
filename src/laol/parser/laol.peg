@@ -268,17 +268,7 @@ package_statement <- K_PACKAGE STRING
 
 import_statement <- K_IMPORT K_STATIC? STRING
 
-file_item <-
-    module_declaration
-/   statement
-
-module_item <-
-    var_decl_statement
-/   assign_statement
-/   class_declaration 
-/   interface_declaration 
-/   method_declaration
-/   module_declaration
+file_item <- statement
 
 statement <- 
     case_statement
@@ -327,13 +317,6 @@ throw_statement <- K_THROW expression eos
 catch_statement <- K_CATCH expression sp statement_clause
 
 finally_statement <- K_FINALLY statement_clause
-
-module_name <- scoped_name
-
-module_declaration <-
-    K_MODULE module_name LCURLY
-        module_item*
-    RCURLY eos
 
 class_name <- scoped_name
 
@@ -544,7 +527,6 @@ K_IMPORT    <- "import"     K_tail
 K_INT       <-  "int"       K_tail
 K_IN        <-  "in"        K_tail
 K_INTERFACE <-  "interface" K_tail
-K_MODULE    <- "module"     K_tail
 K_NEXT      <- "next"       K_tail
 K_NEW       <- "new"        K_tail
 K_NIL       <- "nil" '?'?   K_tail

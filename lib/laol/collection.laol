@@ -1,6 +1,8 @@
 // All objects are immutable (val) by default
 
-module collection {
+package "loal.lang.collection"
+
+
     extern class Array {
         public def size =>int
         public def empty?
@@ -19,4 +21,4 @@ module collection {
         public def [](key)
         public def []=(key, value)
     }
-}
+

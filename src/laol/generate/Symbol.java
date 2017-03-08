@@ -28,7 +28,6 @@ import laol.ast.ClassDeclaration;
 import laol.ast.IName;
 import laol.ast.Item;
 import laol.ast.MethodDeclaration;
-import laol.ast.ModuleDeclaration;
 import laol.ast.VarDeclStatement;
 
 /**
@@ -38,7 +37,7 @@ import laol.ast.VarDeclStatement;
 public abstract class Symbol {
 
     public static enum EType {
-        eModule, eClass, eMethod, eLocalVar
+        eClass, eMethod, eLocalVar
     }
 
     protected Symbol(final Item namedItem) {
@@ -53,18 +52,6 @@ public abstract class Symbol {
     }
 
     private final Item m_item;
-
-    public static class Module extends Symbol {
-
-        public Module(final ModuleDeclaration decl) {
-            super(decl);
-        }
-
-        @Override
-        public EType getType() {
-            return EType.eModule;
-        }
-    }
 
     public static class Class extends Symbol {
 
