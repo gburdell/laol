@@ -24,12 +24,14 @@
 package laol.ast;
 
 import apfe.runtime.Acceptor;
+import apfe.runtime.CharBuffer;
 import apfe.runtime.CharClass;
 import apfe.runtime.Marker;
 import apfe.runtime.PrioritizedChoice;
 import apfe.runtime.Repetition;
 import apfe.runtime.Sequence;
 import gblib.Util;
+import static gblib.Util.downCast;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
@@ -58,10 +60,18 @@ public abstract class Item {
         m_parsed = parsed;
     }
 
-    public final Marker getLocation() {
-        return m_loc;
+    public final CharBuffer.MarkerImpl getLocation() {
+        return downCast(m_loc);
     }
 
+    public String getFileLineCol() {
+        final Marker loc = getLocation();
+        return String.format("%s:%d:%d",
+          loc.getFileName(),
+          loc.getLnum(),
+          loc.getCol());
+    }
+    
     public final Acceptor getParsed() {
         return m_parsed;
     }

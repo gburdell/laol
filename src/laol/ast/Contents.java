@@ -25,6 +25,7 @@ package laol.ast;
 import apfe.runtime.Sequence;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 
 /**
  *
@@ -49,6 +50,10 @@ public class Contents extends Item {
 
     public PackageStatement getPackage() {
         return m_package;
+    }
+    
+    public String getPackageName() {
+        return Objects.nonNull(getPackage()) ? getPackage().getPackageName().toString() : null;
     }
     
     private final PackageStatement m_package;

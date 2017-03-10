@@ -27,6 +27,7 @@ import apfe.runtime.Acceptor;
 import apfe.runtime.PrioritizedChoice;
 import apfe.runtime.Sequence;
 import gblib.Util;
+import static gblib.Util.downCast;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
@@ -85,6 +86,16 @@ public class AString extends Item {
         }
     }
 
+    @Override
+    public String toString() {
+        assert (1 == m_items.size());
+        StringItem sitem = downCast(m_items.get(0));
+        assert (1 == sitem.getItems().size());
+        Item item = sitem.getItems().get(0);
+        assert (item instanceof S);
+        return item.toString();
+    }
+    
     public List<Item> getItems() {
         return Collections.unmodifiableList(m_items);
     }

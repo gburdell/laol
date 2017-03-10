@@ -30,12 +30,16 @@ package laol.ast;
 public class FileItem extends Item {
     public FileItem(final laol.parser.apfe.FileItem decl) {
         super(decl);
-        m_item = createItem(asPrioritizedChoice().getAccepted());
+        m_stmt = createItem(decl.getBaseAccepted());
     }
     
-    public Item getItem() {
-        return m_item;
+    public Statement getStatement() {
+        return m_stmt;
     }
     
-    private final Item  m_item;
+    public Item getStatementItem() {
+        return getStatement().getStmt();
+    }
+    
+    private final Statement m_stmt;
 }

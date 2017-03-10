@@ -1,0 +1,6 @@
+package "laol.lang"
+
+import "p1.p2.p3.*"
+
+class C1 {
+}

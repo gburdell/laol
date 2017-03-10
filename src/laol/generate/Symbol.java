@@ -37,7 +37,7 @@ import laol.ast.VarDeclStatement;
 public abstract class Symbol {
 
     public static enum EType {
-        eClass, eMethod, eLocalVar
+        eClass, eInterface, eMethod, eLocalVar
     }
 
     protected Symbol(final Item namedItem) {
@@ -51,6 +51,10 @@ public abstract class Symbol {
         return Util.downCast(m_item);
     }
 
+    public String getName() {
+        return getIName().getName().asSimpleName();
+    }
+
     private final Item m_item;
 
     public static class Class extends Symbol {
@@ -62,6 +66,18 @@ public abstract class Symbol {
         @Override
         public EType getType() {
             return EType.eClass;
+        }
+    }
+
+    public static class Interface extends Symbol {
+
+        public Interface(final ClassDeclaration decl) {
+            super(decl);
+        }
+
+        @Override
+        public EType getType() {
+            return EType.eInterface;
         }
     }
 

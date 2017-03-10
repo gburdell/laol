@@ -25,33 +25,124 @@ package laol.generate.java;
 
 import gblib.Config;
 import gblib.Tree;
+import static gblib.Util.info;
+import java.io.FileNotFoundException;
+import java.io.PrintStream;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.time.LocalDateTime;
+import java.util.Objects;
+import static java.util.Objects.isNull;
 import laol.ast.Contents;
+import laol.ast.ImportStatement;
+import laol.ast.Item;
 import laol.generate.Scope;
+import laol.generate.Util;
 
 /**
  * Organize sideband data during code generation.
  *
  * @author gburdell
  */
-public class Context {
+public class Context implements AutoCloseable {
 
     public Context(final Contents contents, final Config config) {
         m_contents = contents;
         m_config = config;
+        m_parent = null;
+        reset();
     }
-    
+
+    public Context(final Context parent) {
+        m_contents = parent.getContents();
+        m_config = parent.getConfig();
+        m_parent = parent;
+        reset();
+    }
+
+    public Scope getScope() {
+        return m_here;
+    }
+
+    public Context getParent() {
+        return m_parent;
+    }
+
+    public boolean hasParent() {
+        return Objects.nonNull(m_parent);
+    }
+
     public Config getConfig() {
         return m_config;
     }
-    
-    public Tree<Scope> getScopes() {
-        return m_scopes;
+
+    public Contents getContents() {
+        return m_contents;
+    }
+
+    @Override
+    public void close() throws Exception {
+        reset();
+    }
+
+    public Context createOS(final String fname) throws FileNotFoundException, Util.EarlyTermination {
+        assert (Objects.isNull(m_os));
+        Path dir = Util.getOutputDir(
+                getConfig().getAsString("outputDir"),
+                getPackageName());
+        m_ofn = Paths.get(dir.toString(), fname);
+        m_os = new PrintStream(m_ofn.toFile());
+        info(2, "LG-FILE-3", m_ofn.toString());
+        return this;
+    }
+
+    public Context header(final Item item) {
+        LocalDateTime now = LocalDateTime.now();
+        os().println("// Created: " + now);
+        from(item);
+        return this;
+    }
+
+    public Context from(final Item item) {
+        os().println("// From " + item.getFileLineCol());
+        return this;
+    }
+
+    public String getPackageName() {
+        String pkg = getContents().getPackageName();
+        if (isNull(pkg)) {
+            pkg = getConfig().getAsString("packageName");
+        }
+        return pkg;
     }
     
+    public Context packageAndImports() {
+        os().println("package " + getPackageName() + ";");
+        getContents().getRequires().forEach((istmt) -> {
+            os().format("import %s%s ;\n", 
+                    (istmt.isStatic()) ? "static " : "",
+                    istmt.getImport().toString());
+        });
+        return this;
+    }
+    
+    public PrintStream os() {
+        return m_os;
+    }
+
+    private void reset() {
+        if (Objects.nonNull(m_os)) {
+            m_os.close();
+        }
+        m_ofn = null;
+        m_os = null;
+    }
+
+    private Path m_ofn = null;
+    private PrintStream m_os = null;
     private final Contents m_contents;
     private final Config m_config;
-    /**
-     * Tree of Scope initialized with global scope.
-     */
-    private final Tree<Scope> m_scopes = new Tree<>(new Scope());
+    private final Scope m_here = new Scope();
+    private final Context m_parent;
+
 }

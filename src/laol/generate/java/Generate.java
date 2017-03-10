@@ -30,10 +30,13 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Collection;
 import static java.util.Objects.nonNull;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import laol.generate.Parse;
 import laol.generate.Parse.Ast;
 import laol.ast.Contents;
 import laol.ast.Item;
+import laol.generate.Util;
 
 /**
  *
@@ -51,24 +54,31 @@ public class Generate extends laol.generate.Generate {
 
     @Override
     public int generate() {
-        m_asts
-                .stream()
-                .forEachOrdered((ast) -> {
-                    process(ast);
-                });
+        for (Ast ast : m_asts) {
+            try {
+                process(ast);
+            } catch (Util.EarlyTermination ex) {
+                break;
+            }
+        }
         return MessageMgr.getErrorCnt();
     }
 
-    private void process(final Ast ast) {
+    private void process(final Ast ast) throws Util.EarlyTermination {
         final Contents contents = ast.getGrammar().getContents();
         if (nonNull(contents)) {
-            m_ctx = new Context(contents, m_config);
-            contents
-                    .getFileItems()
-                    .stream()
-                    .forEachOrdered((fileItem) -> {
-                        callProcess(fileItem.getItem(), m_ctx);
-                    });
+            try (Context ctx = new Context(contents, m_config)) {
+                contents
+                        .getFileItems()
+                        .stream()
+                        .forEachOrdered((fileItem) -> {
+                            callProcess(fileItem.getStatement(), ctx);
+                        });
+            } catch (Util.EarlyTermination ex) {
+                throw ex;
+            } catch (Exception ex) {
+                Util.handleException(ex);
+            }
         }
     }
 
@@ -83,9 +93,7 @@ public class Generate extends laol.generate.Generate {
             final Method genMethod = genCls.getMethod("process", item.getClass(), Context.class);
             genMethod.invoke(null, item, ctx);
         } catch (ClassNotFoundException | NoSuchMethodException | SecurityException | IllegalAccessException | IllegalArgumentException | InvocationTargetException ex) {
-            abnormalExit(ex);
+            Util.handleException(ex);
         }
     }
-
-    private Context m_ctx;
 }

@@ -27,11 +27,9 @@ import gblib.Config;
 import gblib.MessageMgr;
 import gblib.Options;
 import static gblib.Util.error;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.Collection;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -50,6 +48,7 @@ public class Main {
             usage();
         } else {
             Collection<String> srcFiles = CMD_OPTIONS.process(argv);
+            MessageMgr.setMessageLevel(CONFIG.getAsInteger("verbosity"));
             if (srcFiles.isEmpty()) {
                 error("LG-NOSRC");
             } else if (checkOptions()) {
@@ -73,18 +72,12 @@ public class Main {
      * @return true if ok, else false on error(s).
      */
     private static boolean checkOptions() {
-        {
-            Path outdir = Paths.get(CONFIG.getAsString("outputDir"));
-            if (!Files.exists(outdir)) {
-                try {
-                    Files.createDirectories(outdir);
-                } catch (IOException ex) {
-                    error("LG-DIR", outdir);
-                    return false;
-                }
-            }
+        try {
+            Util.createDirectory(CONFIG.getAsString("outputDir"));
+            return true;
+        } catch (Util.EarlyTermination ex) {
+            return false;
         }
-        return true;
     }
 
     private static void usage() {
@@ -97,7 +90,9 @@ public class Main {
     private static final Config CONFIG = Config.create()
             .add(new String[]{
         "packageName laol.java.user",
-        "outputDir " + PROGNM + "/generate/src"
+        "outputDir " + PROGNM + "/generate/src",
+        "verbosity *I1",
+        "class Main"
     });
 
     private static final Options CMD_OPTIONS = Options.create();
@@ -109,7 +104,7 @@ public class Main {
             CMD_OPTIONS
                     .add(
                             "-p|--package name",
-                            "Java package name " + defaultOpt(dflt),
+                            "Default Java package name " + defaultOpt(dflt),
                             (opt) -> {
                                 CONFIG.put(keyName, opt);
                             }
@@ -122,6 +117,30 @@ public class Main {
                     .add(
                             "-o|--outputDir dirName",
                             "Output generated files into dirName " + defaultOpt(dflt),
+                            (opt) -> {
+                                CONFIG.put(keyName, opt);
+                            }
+                    );
+        }
+        {
+            final String keyName = "verbosity";
+            final String dflt = CONFIG.get(keyName).toString();
+            CMD_OPTIONS
+                    .add(
+                            "-v|--verbosity level",
+                            "Message verbosity level " + defaultOpt(dflt),
+                            (opt) -> {
+                                CONFIG.put(keyName, Integer.parseInt((String)opt));
+                            }
+                    );
+        }
+                {
+            final String keyName = "class";
+            final String dflt = CONFIG.get(keyName).toString();
+            CMD_OPTIONS
+                    .add(
+                            "-c|--class class",
+                            "Default class " + defaultOpt(dflt),
                             (opt) -> {
                                 CONFIG.put(keyName, opt);
                             }
@@ -141,7 +160,9 @@ public class Main {
         "LG-EXIT | Cannot continue due to %d error(s).",
         "LG-FILE-1 | %s: processing ...",
         "LG-FILE-2 | %s: could not read file (%s).",
-        "LG-NOSRC | Missing source file(s)."
+        "LG-FILE-3 | %s: creating ...",
+        "LG-NOSRC | Missing source file(s).",
+        "LG-EXCPT | Unhandled exception"
     };
 
     static {

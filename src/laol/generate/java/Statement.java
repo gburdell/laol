@@ -29,6 +29,6 @@ package laol.generate.java;
  */
 public class Statement {
     public static void process(final laol.ast.Statement item, final Context ctx) {
-        
+        Generate.callProcess(item.getStmt(), ctx);
     }
 }

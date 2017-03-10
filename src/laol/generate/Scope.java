@@ -34,10 +34,6 @@ import static java.util.Objects.nonNull;
  */
 public class Scope {
 
-    public static enum EType {
-        eBlock, eModule, eClass, eMethod
-    }
-
     public Symbol getSymbol(String name) {
         Symbol val = null;
         if (nonNull(m_stab)) {
@@ -50,7 +46,7 @@ public class Scope {
         if (isNull(m_stab)) {
             m_stab = new SymbolTable();
         }
-        final String name = sym.getIName().getName().asSimpleName();
+        final String name = sym.getName();
         invariant(m_stab.insert(name, sym)); //TODO: LG-SYM error
         return this;
     }

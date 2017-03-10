@@ -35,7 +35,7 @@ public class PackageStatement extends Item {
         m_package = getString(seq, 1);
     }
 
-    public AString getPackage() {
+    public AString getPackageName() {
         return m_package;
     }
 
