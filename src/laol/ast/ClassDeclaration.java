@@ -40,11 +40,6 @@ public class ClassDeclaration extends Item implements IName {
         m_parms = oneOrNone(seq, 4);
         m_extends = oneOrNone(seq, 5);
         m_body = createItem(seq, 7);
-        m_stmtModifier = getStatementModifier(seq, 9);
-    }
-
-    public StatementModifier getStmtModifier() {
-        return m_stmtModifier;
     }
 
     public AccessModifier getAccess() {
@@ -79,5 +74,4 @@ public class ClassDeclaration extends Item implements IName {
     private final MethodParamDecl   m_parms;
     private final ClassExtends  m_extends;
     private final ClassBody m_body;
-    private final StatementModifier m_stmtModifier;
 }

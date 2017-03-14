@@ -2,5 +2,10 @@ package "laol.lang"
 
 import "p1.p2.p3.*"
 
-class C1 {
+class C1 implements I1, i2, i3{
 }
+
+class C2 {}
+
+class C3 extends C2 {}
+

@@ -29,14 +29,13 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.Arrays;
-import java.util.LinkedList;
-import java.util.List;
-import static java.util.Objects.isNull;
-import java.util.stream.Collectors;
+import java.util.Objects;
+import java.util.function.Supplier;
+import java.util.function.Function;
 
 /**
- *
+ * Utilities for target agnostic generation.
+ * 
  * @author kpfalzer
  */
 public class Util {
@@ -81,24 +80,22 @@ public class Util {
         }
     }
 
-    /**
-     * Get output directory based on root and package name.
-     *
-     * @param rootDir root directory.
-     * @param pkgName package name (or null).
-     * @return output directory.
-     * @throws laol.generate.Util.EarlyTermination
-     */
-    public static Path getOutputDir(final String rootDir, String pkgName) throws EarlyTermination {
-        Path outdir = Paths.get(rootDir, pkgName.replace(".", "/"));
-        createDirectory(outdir);
-        return outdir;
-    }
-
-    public static void handleException(Exception ex) {
+     public static void handleException(Exception ex) {
         error("LG-EXCPT");
         ex.printStackTrace(MessageMgr.getOstrm('E'));
         System.exit(3);
     }
     
+    /**
+     * Generate non-null value.
+     * @param <T> value type of check.
+     * @param <R> return value type.
+     * @param check check for non-null.
+     * @param onNonNull apply function to check if check != null.
+     * @param onNull produce value if check is null.
+     * @return value of type R.
+     */
+    public static <T,R> R getNonNullValue(T check, Function<T,R> onNonNull, Supplier<R> onNull) {
+        return Objects.nonNull(check) ? onNonNull.apply(check) : onNull.get();
+    }
 }

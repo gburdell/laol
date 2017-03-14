@@ -25,8 +25,12 @@ package laol.generate.java;
 
 import java.io.FileNotFoundException;
 import java.io.PrintStream;
+import static java.util.Objects.nonNull;
+import laol.ast.Item;
 import laol.generate.Symbol;
 import laol.generate.Util;
+import static laol.generate.java.Util.getAccessModifier;
+import static laol.generate.java.Util.getExtends;
 
 /**
  *
@@ -43,6 +47,9 @@ public class ClassDeclaration {
         //add class to current scope
         m_sym = new Symbol.Class(m_decl);
         m_ctx.getScope().add(m_sym);
+        if (m_decl.isExtern()) {
+            return;
+        }
         //create new context
         final boolean isTopClass = !m_ctx.hasParent();
         //NOTE: we switch to new/our context
@@ -53,7 +60,17 @@ public class ClassDeclaration {
                     .header(m_decl)
                     .packageAndImports();
         }
-        //todo: class decl
+        //print declaration
+        StringBuilder buf = new StringBuilder();
+        buf
+                .append(getAccessModifier(m_decl))
+                .append(" class ")
+                .append(m_sym.getName())
+                .append(getExtends(m_decl))
+                .append(" {");
+        os().println(buf);
+        //todo
+        os().println("}");
     }
 
     private ClassDeclaration(final laol.ast.ClassDeclaration decl, final Context ctx) {
@@ -61,6 +78,10 @@ public class ClassDeclaration {
         m_ctx = ctx;
     }
 
+    private PrintStream os() {
+        return m_ctx.os();
+    }
+    
     private Symbol m_sym;
     private final laol.ast.ClassDeclaration m_decl;
     private Context m_ctx;

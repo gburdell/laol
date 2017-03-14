@@ -35,6 +35,10 @@ public interface IName {
         return null;
     }
     
+    public default String getSimpleName() {
+        return getName().asSimpleName();
+    }
+    
     public default List<ScopedName> getNames() {
        return createList(getName());
     }

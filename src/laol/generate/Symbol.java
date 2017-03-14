@@ -52,7 +52,7 @@ public abstract class Symbol {
     }
 
     public String getName() {
-        return getIName().getName().asSimpleName();
+        return getIName().getSimpleName();
     }
 
     private final Item m_item;

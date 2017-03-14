@@ -50,7 +50,6 @@ public class InterfaceDeclaration extends Item {
             }
         }
         m_body = createItem(seq, 6);
-        m_stmtModifier = getStatementModifier(seq, 8);
     }
 
     public AccessModifier getAccess() {
@@ -69,15 +68,10 @@ public class InterfaceDeclaration extends Item {
         return m_name;
     }
 
-    public StatementModifier getStmtModifier() {
-        return m_stmtModifier;
-    }
-    
     private final boolean           m_isExtern;
     private final AccessModifier    m_access;
     private final ClassName         m_name;
     private final ClassNameList     m_implements;
     private final ClassBody         m_body;
-    private final StatementModifier m_stmtModifier;
     
 }

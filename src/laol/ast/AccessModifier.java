@@ -34,7 +34,12 @@ import laol.parser.apfe.KPUBLIC;
 public class AccessModifier extends Item {
 
     public static enum EType {
-        ePrivate, eProtected, ePublic
+        ePrivate, eProtected, ePublic;
+
+        @Override
+        public String toString() {
+            return super.toString().substring(1).toLowerCase();
+        }
     }
 
     public AccessModifier(final Marker loc, final EType type) {
@@ -63,6 +68,11 @@ public class AccessModifier extends Item {
     public EType getType() {
         return m_access;
     }
-    
+
+    @Override
+    public String toString() {
+        return getType().toString();
+    }
+
     private final EType m_access;
 }

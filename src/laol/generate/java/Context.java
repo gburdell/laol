@@ -24,7 +24,6 @@
 package laol.generate.java;
 
 import gblib.Config;
-import gblib.Tree;
 import static gblib.Util.info;
 import java.io.FileNotFoundException;
 import java.io.PrintStream;
@@ -34,10 +33,10 @@ import java.time.LocalDateTime;
 import java.util.Objects;
 import static java.util.Objects.isNull;
 import laol.ast.Contents;
-import laol.ast.ImportStatement;
 import laol.ast.Item;
 import laol.generate.Scope;
 import laol.generate.Util;
+import static laol.generate.java.Util.getOutputDir;
 
 /**
  * Organize sideband data during code generation.
@@ -87,7 +86,7 @@ public class Context implements AutoCloseable {
 
     public Context createOS(final String fname) throws FileNotFoundException, Util.EarlyTermination {
         assert (Objects.isNull(m_os));
-        Path dir = Util.getOutputDir(
+        Path dir = getOutputDir(
                 getConfig().getAsString("outputDir"),
                 getPackageName());
         m_ofn = Paths.get(dir.toString(), fname);

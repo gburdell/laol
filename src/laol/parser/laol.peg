@@ -327,7 +327,7 @@ class_declaration <-
         class_extends?
         LCURLY 
             class_body
-        RCURLY eos
+        RCURLY sp	//NOTE: no eos here
 
 interface_declaration <-
     K_EXTERN? access_modifier?
@@ -335,7 +335,7 @@ interface_declaration <-
         (K_IMPLEMENTS class_name_list)?
         LCURLY 
             class_body
-        RCURLY eos
+        RCURLY sp	//NOTE: no eos here
 
 //1st statement is initializer
 class_body <- base_class_initializer? statement*
