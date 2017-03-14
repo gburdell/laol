@@ -66,8 +66,8 @@ public class UnaryExpression extends Item {
             return m_op;
         }
 
-        private final UnaryOp           m_op;
-        private final UnaryExpression   m_expr;
+        private final UnaryOp m_op;
+        private final UnaryExpression m_expr;
     }
 
     public List<Item> getItems() {

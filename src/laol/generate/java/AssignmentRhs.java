@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2016 gburdell.
+ * Copyright 2017 gburdell.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -21,43 +21,14 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package laol.ast;
-
-import apfe.runtime.Sequence;
+package laol.generate.java;
 
 /**
  *
  * @author gburdell
  */
-public class AssignStatement extends Item {
-
-    public AssignStatement(final laol.parser.apfe.AssignStatement decl) {
-        super(decl);
-        final Sequence seq = asSequence();
-        m_lhs = createItem(seq, 0);
-        m_op = createItem(seq, 1);
-        m_rhs = createItem(seq, 2);
-        m_stmtModifier = getStatementModifier(seq, 3);
+public class AssignmentRhs {
+    public static void process(final laol.ast.AssignmentRhs item, final Context ctx) {
+        Generate.callProcess(item.getRhs(), ctx);
     }
-
-    public AssignmentLhs getLhs() {
-        return m_lhs;
-    }
-
-    public AssignmentOp getOp() {
-        return m_op;
-    }
-
-    public AssignmentRhs getRhs() {
-        return m_rhs;
-    }
-
-    public StatementModifier getStmtModifier() {
-        return m_stmtModifier;
-    }
-    
-    private final AssignmentLhs m_lhs;
-    private final AssignmentOp  m_op;
-    private final AssignmentRhs m_rhs;
-    private final StatementModifier m_stmtModifier;
 }

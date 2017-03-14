@@ -2,3 +2,6 @@ build/
 src/laol/parser/apfe
 nbproject/private
 dist/
+.DS_Store
+src/.DS_Store
+

@@ -1,11 +1,18 @@
 package "laol.lang"
 
-import "p1.p2.p3.*"
+import "laol.rt.*"
+import "laol.rt.io.*"
+
+//interface I1 {}; interface I2{}; interface I3{}
 
 class C1 implements I1, i2, i3{
 }
 
-class C2 {}
+class C2 {
+}
 
 class C3 extends C2 {}
+
+const NUM = 12 * 23 - 45 * 56 - 67
+
 
