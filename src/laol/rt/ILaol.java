@@ -30,6 +30,7 @@ import static java.lang.invoke.MethodType.methodType;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 /**
  * Tagging interface base for all Laol objects (and interfaces).
@@ -64,7 +65,7 @@ public interface ILaol {
         return rval;
     }
 
-    static final Map<String, MethodHandle> HANDLE_BY_NAME = new HashMap<>();
+    /*private*/ static final Map<String, MethodHandle> HANDLE_BY_NAME = new HashMap<>();
 
     /*private*/ default MethodHandle getHandle(Class clz, String name, int arity) throws NoSuchMethodException, IllegalAccessException {
         final String key = clz.getName() + "/" + name + "#" + arity;
@@ -101,4 +102,16 @@ public interface ILaol {
         return handle;
     }
 
+    // Convenient routines
+    public default <T extends ILaol> T downCast(ILaol ele) {
+        return Util.downCast(ele);
+    }
+
+    public default boolean isNull(Object ele) {
+        return Objects.isNull(ele);
+    }
+
+    public default boolean isNonNull(Object ele) {
+        return !isNull(ele);
+    }
 }

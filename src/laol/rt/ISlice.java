@@ -1,3 +1,5 @@
+package laol.rt;
+
 /*
  * The MIT License
  *
@@ -21,34 +23,22 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package laol.rt;
-
-import static gblib.Util.downCast;
 
 /**
- *
+ * Methods to manipulate selected objects of a collection.
+ * 
  * @author kpfalzer
  */
-public interface Iterable extends ILaol {
-    
-    public abstract Iterator iterator();
-    
+public interface ISlice extends Iterable {
     /**
-     * Iterate over each element and pass to consumer.
-     * @param cb consumer.
-     * @return null.
+     * 
+     * @param items
+     * @return 
      */
-    public default Void forEach(ILaol cb) {
-        final LaolConsumer consumer = downCast(cb);
-        final Iterator iter = iterator();
-        ILaol ele;
-        while (true) {
-            ele = iter.next();
-            if (null == ele) {
-                break;
-            }
-            consumer.accept(ele);
-        }
-        return null;
+    public default Void assign(ILaol items) {
+        Iterator iter = downCast(items);
+        return assignImpl(iter);
     }
+
+    public Void assignImpl(Iterator items);
 }

@@ -65,7 +65,11 @@ public class LaolArray extends LaolObject {
 
     //operator []
     public ILaol get(final ILaol ix) {
-        final int i = realIndex(LaolNumber.toInteger(ix).get());
+        return get(LaolNumber.toInteger(ix).get());
+    }
+      //operator []
+    private ILaol get(final int ix) {
+        final int i = realIndex(ix);
         final ILaol val = isValidIndex(i) ? m_eles.get(i) : null;
         return val;
     }
@@ -120,5 +124,62 @@ public class LaolArray extends LaolObject {
         return Objects.deepEquals(this.m_eles, other.m_eles);
     }
 
+    public class Slice implements ISlice {
+        public Slice(int startIx, int length) {
+            m_startIx = startIx;
+            m_lastIx = m_startIx + length - 1;
+        }
+        
+        private final int m_startIx, m_lastIx;
+        
+        public Slice(ILaol startIx, ILaol length) {
+            this(LaolNumber.toInteger(startIx).get(), LaolNumber.toInteger(length).get());
+        }
+        
+        @Override
+        public Void assignImpl(laol.rt.Iterator items) {
+            throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        }
+
+        @Override
+        public Iterator iterator() {
+            throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        }
+
+        @Override
+        public LaolString toS() {
+            throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        }
+        
+       public class Iterator implements laol.rt.Iterator {
+            private Iterator() {
+                m_currIx = m_startIx;
+            }
+            
+            private int m_currIx;
+            
+            @Override
+            public ILaol next() {
+                ILaol rval = null;
+                if (hasNext().get()) {
+                    rval = get(m_currIx++);
+                }
+                return rval;
+            }
+
+            @Override
+            public LaolBoolean hasNext() {
+                return new LaolBoolean(m_currIx < m_lastIx);
+            }
+
+            @Override
+            public LaolString toS() {
+                throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+            }
+            
+        }
+        
+     }
+    
     private final ArrayList<ILaol> m_eles;
 }

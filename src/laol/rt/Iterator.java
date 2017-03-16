@@ -24,17 +24,21 @@
 package laol.rt;
 
 /**
- *
+ * NOTE: We have iterator as an interface.
+ * In theory, we should consider the (const_)iterator types in C++/stdlib,
+ * where a const_iterator will not allow one to modify lhs/reference.
+ * TODO...
+ * 
  * @author kpfalzer
  */
-public interface Iterator {
+public interface Iterator extends ILaol {
 
     /**
      * Provide next object or null, if no more exist.
      *
      * @return next object or null.
      */
-    public LaolObject next();
+    public ILaol next();
     
     public LaolBoolean hasNext(); 
 
