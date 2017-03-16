@@ -27,7 +27,7 @@ import gblib.Util;
 import java.util.stream.Stream;
 import laol.rt.LaolConsumer;
 import laol.rt.LaolInteger;
-import laol.rt.LaolObject;
+import laol.rt.ILaol;
 import laol.rt.LaolString;
 import org.junit.Test;
 import static org.junit.Assert.*;
@@ -49,11 +49,11 @@ public class FileInputStreamTest {
     @Test
     public void testEachLine() throws Exception {
         for (LaolString fname : FNAMES) {
-            LaolObject fis = new FileInputStream(fname);
+            ILaol fis = new FileInputStream(fname);
             System.out.println(fname.get());
             fis.callPublic("eachLine",
-                    new LaolConsumer((LaolObject line) -> {
-                        LaolObject r = line.callPublic("length");
+                    new LaolConsumer((ILaol line) -> {
+                        ILaol r = line.callPublic("length");
                         m_len += Util.<LaolInteger>downCast(r).get();
                     })
             );

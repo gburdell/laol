@@ -32,14 +32,14 @@ public class LaolConsumer extends LaolObject {
     @FunctionalInterface
     public interface Consumer {
 
-        void accept(LaolObject ele);
+        void accept(ILaol ele);
     }
 
     public LaolConsumer(Consumer c) {
         m_consumer = c;
     }
 
-    public void accept(LaolObject ele) {
+    public void accept(ILaol ele) {
         m_consumer.accept(ele);
     }
 

@@ -23,7 +23,6 @@
  */
 package laol.rt;
 
-import java.util.Arrays;
 import java.util.stream.Stream;
 import static laol.rt.LaolNumber.toDouble;
 import static laol.rt.LaolNumber.toInteger;
@@ -40,8 +39,8 @@ public class LaolNumberTest {
     public void testAddOp() {
         int i = 1;
         final int tests[][] = {{123, 456}, {Integer.MAX_VALUE, 1}};
-        LaolObject a, b;
-        LaolObject z;
+        ILaol a, b;
+        ILaol z;
         for (int test[] : tests) {
             a = new LaolInteger(test[0]);
             b = new LaolInteger(test[1]);

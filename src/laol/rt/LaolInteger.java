@@ -34,45 +34,45 @@ public class LaolInteger extends LaolBox<Integer> implements LaolNumber {
     }
 
     @Override
-    public LaolObject toDouble() {
+    public ILaol toDouble() {
         return new LaolDouble(get().doubleValue());
     }
 
     @Override
-    public LaolObject toInteger() {
+    public ILaol toInteger() {
         return this;
     }
 
     @Override
-    public LaolObject addOp(LaolObject b) {
+    public ILaol addOp(ILaol b) {
         return (b instanceof LaolInteger) 
                 ? binaryIntOp(this, b, Math::addExact)
                 : binaryDblOp(this, b, (x, y)-> x + y);
     }
 
     @Override
-    public LaolObject subOp(LaolObject b) {
+    public ILaol subOp(ILaol b) {
         return (b instanceof LaolInteger) 
                 ? binaryIntOp(this, b, Math::subtractExact)
                 : binaryDblOp(this, b, (x, y)-> x - y);
     }
 
     @Override
-    public LaolObject multOp(LaolObject b) {
+    public ILaol multOp(ILaol b) {
         return (b instanceof LaolInteger) 
                 ? binaryIntOp(this, b, Math::multiplyExact)
                 : binaryDblOp(this, b, (x, y)-> x * y);
     }
 
     @Override
-    public LaolObject divOp(LaolObject b) {
+    public ILaol divOp(ILaol b) {
         return (b instanceof LaolInteger) 
                 ? binaryIntOp(this, b, (x, y)-> x / y)
                 : binaryDblOp(this, b, (x, y)-> x / y);
     }
 
     @Override
-    public void set(LaolObject val) {
+    public void set(ILaol val) {
         super.set(LaolNumber.toInteger(val).get());
     }
 

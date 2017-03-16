@@ -24,9 +24,9 @@
 package laol.rt;
 
 import static gblib.Util.downCast;
+import static java.util.Objects.isNull;
 import org.junit.Test;
 import static org.junit.Assert.*;
-import static laol.rt.LaolObject.isNull;
 
 /**
  *
@@ -53,11 +53,11 @@ public class LaolMapTest {
             assertEquals(from2, val2);
         }
         {
-            LaolObject dutObj = dut;
-            LaolObject key2 = new LaolString("key2");
+            ILaol dutObj = dut;
+            ILaol key2 = new LaolString("key2");
             double d = 9876.4321;
-            LaolObject val2 = new LaolDouble(d);
-            LaolObject rval = dutObj.callPublic("set", key2, val2);
+            ILaol val2 = new LaolDouble(d);
+            ILaol rval = dutObj.callPublic("set", key2, val2);
             assertEquals(val2, rval);
             rval = dutObj.callPublic("get", key2);
             assertEquals(val2, rval);
@@ -67,7 +67,7 @@ public class LaolMapTest {
         {
             final int N = 2000;
             LaolMap map = new LaolMap().setMutable();
-            LaolObject key3, val3;
+            ILaol key3, val3;
             for (int i = 0; i < N; i++) {
                 key3 = new LaolInteger(i);
                 val3 = new LaolString(key3.toS());

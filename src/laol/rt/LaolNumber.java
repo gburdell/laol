@@ -32,62 +32,62 @@ import java.util.function.IntBinaryOperator;
  *
  * @author kpfalzer
  */
-public interface LaolNumber {
+public interface LaolNumber extends ILaol {
 
     /**
      * Conversion to LaolInteger.
      * @return conversion to 'int' as LaolInteger.
      */
-    public LaolObject toInteger();
+    public ILaol toInteger();
 
     /**
      * Conversion to LaolDouble.
      * @return conversion to 'double' as LaolDouble.
      */
-    public LaolObject toDouble();
+    public ILaol toDouble();
 
-    public LaolObject addOp(LaolObject b);
+    public ILaol addOp(ILaol b);
 
-    public LaolObject subOp(LaolObject b);
+    public ILaol subOp(ILaol b);
 
-    public LaolObject multOp(LaolObject b);
+    public ILaol multOp(ILaol b);
 
-    public LaolObject divOp(LaolObject b);
+    public ILaol divOp(ILaol b);
 
-    static final LaolObject ONE = new LaolInteger(1);
+    static final ILaol ONE = new LaolInteger(1);
 
-    default public LaolObject preIncrOp() {
+    default public ILaol preIncrOp() {
         set(addOp(ONE));
-        return LaolObject.class.cast(this);
+        return ILaol.class.cast(this);
     }
 
-    default public LaolObject preDecrOp() {
+    default public ILaol preDecrOp() {
         set(subOp(ONE));
-        return LaolObject.class.cast(this);
+        return ILaol.class.cast(this);
     }
 
-    default public LaolObject postIncrOp() {
-        LaolObject currVal = clone();
+    default public ILaol postIncrOp() {
+        ILaol currVal = clone();
         set(addOp(ONE));
         return currVal;
     }
 
-    default public LaolObject postDecrOp() {
-        LaolObject currVal = clone();
+    default public ILaol postDecrOp() {
+        ILaol currVal = clone();
         set(subOp(ONE));
         return currVal;
     }
 
-    public void set(LaolObject val);
+    public void set(ILaol val);
 
-    public LaolObject clone();
+    public ILaol clone();
 
     /**
      * Convert LaolNumber to LaolDouble. 
      * @param o Subclass of LaolNumber to convert.
      * @return conversion to LaolDouble.
      */
-    public static LaolDouble toDouble(final LaolObject o) {
+    public static LaolDouble toDouble(final ILaol o) {
         return LaolDouble.class.cast(LaolNumber.class.cast(o).toDouble());
     }
 
@@ -96,16 +96,16 @@ public interface LaolNumber {
      * @param o Subclass of LaolNumber to convert.
      * @return conversion to LaolInteger.
      */
-    public static LaolInteger toInteger(final LaolObject o) {
+    public static LaolInteger toInteger(final ILaol o) {
         return LaolInteger.class.cast(LaolNumber.class.cast(o).toInteger());
     }
 
-    default public LaolObject binaryDblOp(LaolObject a, LaolObject b, DoubleBinaryOperator op) {
+    default public ILaol binaryDblOp(ILaol a, ILaol b, DoubleBinaryOperator op) {
         final double r = op.applyAsDouble(toDouble(a).get(), toDouble(b).get());
         return new LaolDouble(r);
     }
 
-    default public LaolObject binaryIntOp(LaolObject a, LaolObject b, IntBinaryOperator op) {
+    default public ILaol binaryIntOp(ILaol a, ILaol b, IntBinaryOperator op) {
         final int r = op.applyAsInt(toInteger(a).get(), toInteger(b).get());
         return new LaolInteger(r);
     }

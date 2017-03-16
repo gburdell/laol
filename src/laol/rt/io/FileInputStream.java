@@ -38,7 +38,7 @@ public class FileInputStream extends LaolObject {
 
     private final BufferedReader m_rdr;
 
-    public FileInputStream(LaolObject fname) {
+    public FileInputStream(ILaol fname) {
         try {
             m_rdr = new BufferedReader(new FileReader(Util.<LaolString>downCast(fname).get()));
         } catch (FileNotFoundException ex) {
@@ -57,7 +57,7 @@ public class FileInputStream extends LaolObject {
         return null;
     }
 
-    public Void eachLine(LaolObject cb) {
+    public Void eachLine(ILaol cb) {
         final LaolConsumer consumer = Util.downCast(cb);
         String s;
         try {

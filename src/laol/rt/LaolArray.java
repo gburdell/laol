@@ -41,19 +41,19 @@ public class LaolArray extends LaolObject {
         m_eles = new ArrayList();
     }
 
-    public LaolArray(final Collection<? extends LaolObject> items) {
+    public LaolArray(final Collection<? extends ILaol> items) {
         m_eles = new ArrayList(items);
     }
 
     //operator <<
-    public LaolObject add(final LaolObject val) {
+    public ILaol add(final ILaol val) {
         mutableCheck();
         m_eles.add(val);
         return this;
     }
 
     //operator []=
-    public LaolObject set(final LaolObject ix, final LaolObject val) {
+    public ILaol set(final ILaol ix, final ILaol val) {
         mutableCheck();
         final int i = realIndex(ix);
         if (isValidIndex(i)) {
@@ -64,22 +64,22 @@ public class LaolArray extends LaolObject {
     }
 
     //operator []
-    public LaolObject get(final LaolObject ix) {
+    public ILaol get(final ILaol ix) {
         final int i = realIndex(LaolNumber.toInteger(ix).get());
-        final LaolObject val = isValidIndex(i) ? m_eles.get(i) : null;
+        final ILaol val = isValidIndex(i) ? m_eles.get(i) : null;
         return val;
     }
 
     //empty?
-    public LaolObject isEmpty() {
+    public ILaol isEmpty() {
         return new LaolBoolean(m_eles.isEmpty());
     }
 
-    public LaolObject size() {
+    public ILaol size() {
         return new LaolInteger(m_eles.size());
     }
 
-    private int realIndex(final LaolObject ix) {
+    private int realIndex(final ILaol ix) {
         return realIndex(realIndex(LaolNumber.toInteger(ix).get()));
     }
     
@@ -94,7 +94,7 @@ public class LaolArray extends LaolObject {
 
     public static class IndexException extends LaolException {
 
-        public IndexException(final LaolObject ix) {
+        public IndexException(final ILaol ix) {
             super("Invalid index: " + LaolNumber.toInteger(ix));
         }
 
@@ -120,5 +120,5 @@ public class LaolArray extends LaolObject {
         return Objects.deepEquals(this.m_eles, other.m_eles);
     }
 
-    private final ArrayList<LaolObject> m_eles;
+    private final ArrayList<ILaol> m_eles;
 }

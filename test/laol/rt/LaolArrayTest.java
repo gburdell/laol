@@ -42,9 +42,9 @@ public class LaolArrayTest {
         //
         //Test as code generator would be
         {
-            final LaolObject dut = (new LaolArray()).setMutable();
+            final ILaol dut = (new LaolArray()).setMutable();
             LaolInteger ele = new LaolInteger(1234);
-            LaolObject res = dut
+            ILaol res = dut
                     .callPublic("add", ele)
                     .callPublic("add", ele);
             assertTrue(2 == LaolNumber.toInteger(res.callPublic("size")).get());
@@ -63,7 +63,7 @@ public class LaolArrayTest {
 //            new LaolInteger(5678)
 //        };
 //        dut.add(vals[0]).add(vals[1]);
-//        LaolObject ix = new LaolInteger(0);
+//        ILaol ix = new LaolInteger(0);
 //        LaolInteger v1 = dut.get(ix);
 //        assertEquals(vals[0], v1);
 //        assertTrue(!v1.isMutable());
