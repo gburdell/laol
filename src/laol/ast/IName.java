@@ -32,6 +32,7 @@ import java.util.List;
  */
 public interface IName {
     public default ScopedName getName() {
+        assert(false);//todo
         return null;
     }
     

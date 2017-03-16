@@ -117,7 +117,7 @@ public class LaolArray extends LaolObject {
             return false;
         }
         final LaolArray other = (LaolArray) obj;
-        return Objects.equals(this.m_eles, other.m_eles);
+        return Objects.deepEquals(this.m_eles, other.m_eles);
     }
 
     private final ArrayList<LaolObject> m_eles;

@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2016 gburdell.
+ * Copyright 2017 kpfalzer.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -23,55 +23,19 @@
  */
 package laol.rt;
 
-import java.util.Objects;
-
 /**
- * Box types.
  *
  * @author kpfalzer
- * @param <T> primitive type to box.
  */
-public abstract class LaolBox<T> extends LaolObject implements Cloneable {
+public interface Iterator {
 
-    public LaolBox(final T val) {
-        m_val = val;
-    }
-
-    public final LaolBox<T> set(final T val) {
-        mutableCheck();
-        m_val = val;
-        return this;
-    }
-
-    public final T get() {
-        return m_val;  //could be null
-    }
-
-    @Override
-    public int hashCode() {
-        return m_val.hashCode();
-    }
-
-    @Override
-    public LaolString toS() {
-        return new LaolString(m_val.toString());
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj) {
-            return true;
-        }
-        if (obj == null) {
-            return false;
-        }
-        if (getClass() != obj.getClass()) {
-            return false;
-        }
-        final LaolBox<?> other = (LaolBox<?>) obj;
-        return Objects.equals(this.m_val, other.m_val);
-    }
-
-    private T m_val;
+    /**
+     * Provide next object or null, if no more exist.
+     *
+     * @return next object or null.
+     */
+    public LaolObject next();
+    
+    public LaolBoolean hasNext(); 
 
 }
