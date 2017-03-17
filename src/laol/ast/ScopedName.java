@@ -34,7 +34,7 @@ import java.util.List;
  *
  * @author gburdell
  */
-public class ScopedName extends Item {
+public class ScopedName extends Item implements ISimpleName {
 
     public ScopedName(final laol.parser.apfe.ScopedName decl) {
         super(decl);
@@ -51,9 +51,19 @@ public class ScopedName extends Item {
         m_path.add(new Ident(name));
     }
 
+    @Override
     public String asSimpleName() {
+        return getFirst().getId();
+    }
+ 
+    public Ident getFirst() {
         invariant(!hasScope() && !isRooted());
-        return getIdents().get(0).getId();
+        return getIdents().get(0);        
+    }
+    
+    @Override
+    public String getFileLineCol() {
+        return getFirst().getFileLineCol();
     }
 
     public boolean hasScope() {

@@ -22,13 +22,15 @@
  * THE SOFTWARE.
  */
 package laol.ast;
+
 import apfe.runtime.Sequence;
 
 /**
  *
  * @author gburdell
  */
-public class ParamName extends Item {
+public class ParamName extends Item implements ISimpleName {
+
     public ParamName(final laol.parser.apfe.ParamName decl) {
         super(decl);
         final Sequence seq = asSequence();
@@ -43,7 +45,18 @@ public class ParamName extends Item {
     public boolean isMember() {
         return m_isMember;
     }
-    
+
     private final boolean m_isMember;
     private final Ident m_name;
+
+    @Override
+    public String asSimpleName() {
+        return getName().getId();
+    }
+
+    @Override
+    public String getFileLineCol() {
+        return getName().getFileLineCol();
+    }
+
 }

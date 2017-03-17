@@ -28,7 +28,7 @@ import apfe.runtime.Sequence;
  *
  * @author gburdell
  */
-public class MethodParamDeclModifier extends Item {
+public class MethodParamDeclModifier extends Item implements IAccessMutability {
     public MethodParamDeclModifier(final laol.parser.apfe.MethodParamDeclModifier decl) {
         super(decl);
         final Sequence seq = asSequence();
@@ -36,10 +36,12 @@ public class MethodParamDeclModifier extends Item {
         m_mutability = oneOrNone(seq, 1);
     }
 
+    @Override
     public AccessModifier getAccess() {
         return m_access;
     }
 
+    @Override
     public Mutability getMutability() {
         return m_mutability;
     }

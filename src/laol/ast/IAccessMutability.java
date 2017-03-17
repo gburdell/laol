@@ -23,25 +23,13 @@
  */
 package laol.ast;
 
-import static gblib.Util.createList;
-import java.util.List;
-
 /**
  *
  * @author kpfalzer
  */
-public interface IName extends ISimpleName {
-    public default ScopedName getName() {
-        assert(false);//todo
-        return null;
-    }
-    
-    @Override
-    public default String getSimpleName() {
-        return getName().asSimpleName();
-    }
-    
-    public default List<ScopedName> getNames() {
-       return createList(getName());
-    }
+public interface IAccessMutability {
+
+    public AccessModifier getAccess();
+
+    public Mutability getMutability();
 }

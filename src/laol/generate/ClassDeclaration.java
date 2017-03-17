@@ -33,6 +33,8 @@ import static java.util.Objects.nonNull;
 import laol.ast.AccessModifier;
 import laol.ast.AssignStatement;
 import laol.ast.ClassBody;
+import laol.ast.IAccessMutability;
+import laol.ast.ISimpleName;
 import laol.ast.Item;
 import laol.ast.LhsRef;
 import laol.ast.MethodDeclaration;
@@ -100,10 +102,8 @@ public class ClassDeclaration {
                         assert (!name.getName().hasSuffix());
                         MethodParamDeclModifier modifier = ele.getModifier();
                         addMember(membersByName,
-                                name.getName().getId(),
-                                name.getFileLineCol(),
-                                modifier.getAccess().getType(),
-                                modifier.getMutability().isVar());
+                                name,
+                                modifier);
                     }
                 }
             }
@@ -121,10 +121,8 @@ public class ClassDeclaration {
                         for (LhsRef lhs : refs) {
                             ScopedName name = downCast(lhs.getItems().get(0));
                             addMember(membersByName,
-                                    name.asSimpleName(),
-                                    name.getFileLineCol(),
-                                    tdecl.getAccess().getType(),
-                                    tdecl.getMutability().isVar());
+                                    name,
+                                    tdecl);
                         }
                     } else if (item instanceof VarDeclStatement) {
                         VarDeclStatement decl = downCast(item);
@@ -132,19 +130,11 @@ public class ClassDeclaration {
                         List<ScopedName> names = decl.getNames();
                         for (ScopedName name : names) {
                             addMember(membersByName, 
-                                    name.asSimpleName(), 
-                                    name.getFileLineCol(), 
-                                    tdecl.getAccess().getType(), 
-                                    tdecl.getMutability().isVar());
+                                    name, 
+                                    tdecl);
                         }
                     } else if (item instanceof MethodDeclaration) {
                         //todo
-                        /**
-                         * TODO: create/add interface ISimpleName to ScopedName
-                         * and ParamName; and IAccessMutability to MethodParamDeclModifier
-                         * and TypeDecl and MutTypeDecl.
-                         * Then addMember(..., ISimpleName, IAccessMutability)
-                         */
                     }
                 }
             }
@@ -154,9 +144,18 @@ public class ClassDeclaration {
 
     private static void addMember(
             Map<String, Member> membersByName,
-            String name, String loc, AccessModifier.EType type, boolean isMutable) {
-        if (!membersByName.containsKey(name)) {
-            membersByName.put(name, new Member(loc, name, type, isMutable));
+            ISimpleName name, IAccessMutability accMut) {
+        final String sname = name.asSimpleName();
+        if (!membersByName.containsKey(sname)) {
+            membersByName.put(
+                    sname, 
+                    new Member(
+                            name.getFileLineCol(), 
+                            sname, 
+                            accMut.getAccess().getType(),
+                            accMut.getMutability().isVar()
+                    )
+            );
         }
     }
 }

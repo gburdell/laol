@@ -30,7 +30,7 @@ import apfe.runtime.Sequence;
  *
  * @author gburdell
  */
-public class TypeDecl extends Item {
+public class TypeDecl extends Item implements IAccessMutability {
 
     public TypeDecl(final laol.parser.apfe.TypeDecl decl) {
         super(decl);
@@ -48,10 +48,12 @@ public class TypeDecl extends Item {
         }
     }
 
+    @Override
     public AccessModifier getAccess() {
         return m_access;
     }
 
+    @Override
     public Mutability getMutability() {
         return m_mutability;
     }

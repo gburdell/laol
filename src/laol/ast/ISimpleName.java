@@ -23,25 +23,24 @@
  */
 package laol.ast;
 
-import static gblib.Util.createList;
-import java.util.List;
+import gblib.Util;
 
 /**
  *
  * @author kpfalzer
  */
-public interface IName extends ISimpleName {
-    public default ScopedName getName() {
-        assert(false);//todo
+public interface ISimpleName {
+    public default String asSimpleName() {
+        Util.assertNever("not implemented");
         return null;
     }
     
-    @Override
-    public default String getSimpleName() {
-        return getName().asSimpleName();
+    public default String getFileLineCol() {
+        Item asItem = Util.downCast(this);
+        return asItem.getFileLineCol();
     }
     
-    public default List<ScopedName> getNames() {
-       return createList(getName());
+    public default String getSimpleName() {
+        return asSimpleName();
     }
 }
