@@ -22,6 +22,7 @@
  * THE SOFTWARE.
  */
 package laol.ast;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -33,6 +34,14 @@ public class ClassBody extends Item {
         super(decl);
         m_base = oneOrNone(0);
         m_stmts = zeroOrMore(1);
+    }
+
+    public BaseClassInitializer getBase() {
+        return m_base;
+    }
+    
+    public List<Statement> getStatements() {
+        return Collections.unmodifiableList(isNonNull(m_stmts) ? m_stmts : Collections.emptyList());
     }
     
     private final BaseClassInitializer m_base;

@@ -1,3 +1,9 @@
+16-mar-2017
+see: https://docs.oracle.com/javase/tutorial/reflect/class/classMembers.html
+for information on using reflection to access member and Field to
+change their values.
+
+==============================================================================
 Class
 =====
 A class declaration is similar to Scala and Ruby.

@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2016 gburdell.
+ * Copyright 2017 gburdell.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -21,54 +21,18 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package laol.ast;
+package laol.generate.java;
 
-import apfe.runtime.Acceptor;
-import apfe.runtime.Util;
-import java.util.Objects;
-import laol.parser.IDENT;
+import java.util.List;
+import laol.ast.Item;
 
 /**
  *
  * @author gburdell
  */
-public class Ident extends Item {
-
-    public Ident(final AString.S name) {
-        super(name.getParsed());
-        m_id = name.toString();
-        m_sfx = null;
+public class ArraySelectionExpression {
+    public static void process(final laol.ast.ArraySelectExpression item, final Context ctx) {
+        List<laol.ast.Expression> exprs = item.getExpressions();
+        //todo: 
     }
-    
-    public Ident(final Acceptor id) {
-        this(Util.downcast(id));
-    }
-    
-    public Ident(final IDENT id) {
-        super(id);
-        final String s = id.getIdent();
-        if (s.endsWith("?")) {
-            m_id = s.substring(0, s.length() - 1);
-            m_sfx = '?';
-        } else {
-            m_id = s;
-            m_sfx = null;
-        }
-    }
-
-    public String getId() {
-        return m_id;
-    }
-    
-    public Character getSfx() {
-        return m_sfx;
-    }
-    
-    public boolean hasSuffix() {
-        return Objects.nonNull(m_sfx);
-    }
-    
-    private final String m_id;
-    private final Character m_sfx;
-
 }

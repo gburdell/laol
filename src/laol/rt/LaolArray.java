@@ -23,15 +23,15 @@
  */
 package laol.rt;
 
-import gblib.Util;
+import static gblib.Util.invariant;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Objects;
 
 /**
- * Array/List implementation.
- * Unlike Ruby array, LaolArray only grows linearly in size:
- * i.e., cannot: a = []; a << 4; a[34] = 7;
+ * Array/List implementation. Unlike Ruby array, LaolArray only grows linearly
+ * in size: i.e., cannot: a = []; a << 4; a[34] = 7;
+ * Array is also bounded: so index out of bounds throws exception.
  *
  * @author kpfalzer
  */
@@ -54,6 +54,11 @@ public class LaolArray extends LaolObject {
 
     //operator []=
     public ILaol set(final ILaol ix, final ILaol val) {
+        return set(LaolNumber.toInteger(ix).get(), val);
+    }
+
+    //operator []=
+    private ILaol set(final int ix, final ILaol val) {
         mutableCheck();
         final int i = realIndex(ix);
         if (isValidIndex(i)) {
@@ -67,7 +72,8 @@ public class LaolArray extends LaolObject {
     public ILaol get(final ILaol ix) {
         return get(LaolNumber.toInteger(ix).get());
     }
-      //operator []
+
+    //operator []
     private ILaol get(final int ix) {
         final int i = realIndex(ix);
         final ILaol val = isValidIndex(i) ? m_eles.get(i) : null;
@@ -86,7 +92,7 @@ public class LaolArray extends LaolObject {
     private int realIndex(final ILaol ix) {
         return realIndex(realIndex(LaolNumber.toInteger(ix).get()));
     }
-    
+
     private int realIndex(int i) {
         i = (0 > i) ? (m_eles.size() + i) : i;
         return i;
@@ -99,7 +105,11 @@ public class LaolArray extends LaolObject {
     public static class IndexException extends LaolException {
 
         public IndexException(final ILaol ix) {
-            super("Invalid index: " + LaolNumber.toInteger(ix));
+            this((int)LaolNumber.toInteger(ix).get());
+        }
+
+        public IndexException(final int ix) {
+            super("Invalid index: " + ix);
         }
 
     }
@@ -124,40 +134,58 @@ public class LaolArray extends LaolObject {
         return Objects.deepEquals(this.m_eles, other.m_eles);
     }
 
+    public Slice slice(ILaol startIx, ILaol length) {
+        return new Slice(startIx, length);
+    }
+    
     public class Slice implements ISlice {
-        public Slice(int startIx, int length) {
-            m_startIx = startIx;
-            m_lastIx = m_startIx + length - 1;
-        }
-        
-        private final int m_startIx, m_lastIx;
-        
+
         public Slice(ILaol startIx, ILaol length) {
             this(LaolNumber.toInteger(startIx).get(), LaolNumber.toInteger(length).get());
         }
-        
+
+        public Slice(int startIx, int length) {
+            m_startIx = startIx;
+            m_length = length;
+            invariant(0 <= m_length);
+            m_lastIx = m_startIx + m_length - 1;
+        }
+
+        private final int m_startIx, m_lastIx, m_length;
+
         @Override
-        public Void assignImpl(laol.rt.Iterator items) {
-            throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        public ISlice assignImpl(laol.rt.Iterator items) {
+            ILaol newval;
+            for (int ix = m_startIx; ix < m_lastIx; ix++) {
+                newval = items.next();  //we get null (ok!) if exhausted
+                set(ix, newval);
+            }
+            return this;
         }
 
         @Override
         public Iterator iterator() {
-            throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+            return new Iterator();
         }
 
         @Override
         public LaolString toS() {
             throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
         }
-        
-       public class Iterator implements laol.rt.Iterator {
+
+        @Override
+        public LaolInteger size() {
+            return new LaolInteger(m_length);
+        }
+
+        public class Iterator implements laol.rt.Iterator {
+
             private Iterator() {
                 m_currIx = m_startIx;
             }
-            
+
             private int m_currIx;
-            
+
             @Override
             public ILaol next() {
                 ILaol rval = null;
@@ -176,10 +204,10 @@ public class LaolArray extends LaolObject {
             public LaolString toS() {
                 throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
             }
-            
+
         }
-        
-     }
-    
+
+    }
+
     private final ArrayList<ILaol> m_eles;
 }

@@ -51,6 +51,14 @@ public class Mutability extends Item {
         return m_type;
     }
 
+    public boolean isConst() {
+        return m_type == EType.eConst;
+    }
+    
+    public boolean isVar() {
+        return m_type == EType.eVar;
+    }
+    
     private final EType m_type;
 
 }

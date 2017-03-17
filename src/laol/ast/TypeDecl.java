@@ -48,6 +48,23 @@ public class TypeDecl extends Item {
         }
     }
 
+    public AccessModifier getAccess() {
+        return m_access;
+    }
+
+    public Mutability getMutability() {
+        return m_mutability;
+    }
+
+    public TypeName getType() {
+        return m_type;
+    }
+
+    public boolean isStatic() {
+        return m_isStatic;
+    }
+
+    
     private final AccessModifier m_access;
     private final boolean m_isStatic;
     private final Mutability m_mutability;

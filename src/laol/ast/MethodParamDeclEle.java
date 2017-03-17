@@ -24,6 +24,7 @@
 package laol.ast;
 import apfe.runtime.Acceptor;
 import apfe.runtime.Sequence;
+import gblib.Util;
 
 /**
  *
@@ -91,6 +92,22 @@ public class MethodParamDeclEle extends Item {
         return m_modifier;
     }
    
+    public boolean isNamed() {
+        return getEle() instanceof Named;
+    }
+    
+    public ParamName getParamName() {
+        ParamName name;
+        if (isNamed()) {
+            final Named named = Util.downCast(getEle());
+            name = named.getParamName();
+        } else {
+            final AnonymousFunctionDecl afunc = Util.downCast(getEle());
+            name = afunc.getParmName();
+        }
+        return name;
+    }
+    
     private final MethodParamDeclModifier   m_modifier;
     private final Item m_ele;
 }

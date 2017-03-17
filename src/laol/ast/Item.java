@@ -38,6 +38,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Objects;
 import laol.parser.IDENT;
 import laol.parser.apfe.STRING;
 
@@ -47,6 +48,14 @@ import laol.parser.apfe.STRING;
  */
 public abstract class Item {
 
+    public boolean isNull(Object ele) {
+        return Objects.isNull(ele);
+    }
+    
+    public boolean isNonNull(Object ele) {
+        return Objects.nonNull(ele);
+    }
+    
     protected Item(final Marker loc) {
         this(loc, null);
     }

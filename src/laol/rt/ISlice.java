@@ -31,14 +31,27 @@ package laol.rt;
  */
 public interface ISlice extends Iterable {
     /**
-     * 
-     * @param items
-     * @return 
+     * Assign (1:1) to slice elements.
+     * If there are fewer number of items, then null values are assigned
+     * to remaining elements in slice.
+     * If there are more number of items, then the extra assign items are unused.
+     * @param items (Iterator) new values to assign to each element of slice.
+     * @return this slice.
      */
-    public default Void assign(ILaol items) {
+    public default ISlice assign(ILaol items) {
         Iterator iter = downCast(items);
         return assignImpl(iter);
     }
 
-    public Void assignImpl(Iterator items);
+    public ISlice assignImpl(Iterator items);
+    
+    /**
+     * Get number of objects in this slice.
+     * @return number of objects in this slice.
+     */
+    public LaolInteger size();
+    
+    public default LaolBoolean isEmpty() {
+        return new LaolBoolean(1 > size().get());
+    }
 }
