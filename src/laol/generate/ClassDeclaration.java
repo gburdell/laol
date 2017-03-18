@@ -23,7 +23,6 @@
  */
 package laol.generate;
 
-import gblib.Util.Triplet;
 import static gblib.Util.downCast;
 import java.util.Collection;
 import java.util.LinkedHashMap;
@@ -38,16 +37,17 @@ import laol.ast.ISimpleName;
 import laol.ast.Item;
 import laol.ast.LhsRef;
 import laol.ast.MethodDeclaration;
-import laol.ast.MethodParamDecl;
 import laol.ast.MethodParamDeclEle;
 import laol.ast.MethodParamDeclList;
 import laol.ast.MethodParamDeclModifier;
 import laol.ast.MutTypeDecl;
+import laol.ast.Mutability;
 import laol.ast.ParamName;
 import laol.ast.ScopedName;
 import laol.ast.Statement;
 import laol.ast.TypeDecl;
 import laol.ast.VarDeclStatement;
+import static laol.generate.Util.getNonNullValue;
 
 /**
  * Useful utilities for (target agnostic) manipulation of ast.ClassDeclaration.
@@ -56,30 +56,34 @@ import laol.ast.VarDeclStatement;
  */
 public class ClassDeclaration {
 
-    public static class Member extends Triplet<String, AccessModifier.EType, Boolean> {
+    public static class Member {
 
-        private Member(String where, String name, AccessModifier.EType access, Boolean isMutable) {
-            super(name, access, isMutable);
+        private Member(String where, String name, AccessModifier.EType access, boolean isMutable) {
             m_where = where;
+            m_name = name;
+            m_access = access;
+            m_isMutable = isMutable;
         }
 
         public String getName() {
-            return super.v1;
+            return m_name;
         }
 
         public AccessModifier.EType getAccess() {
-            return super.v2;
+            return m_access;
         }
 
         public boolean isMutable() {
-            return super.e3;
+            return m_isMutable;
         }
 
         public String getWhere() {
             return m_where;
         }
 
-        private final String m_where;
+        private final String m_where, m_name;
+        private final AccessModifier.EType m_access;
+        private final boolean m_isMutable;
     }
 
     /**
@@ -92,20 +96,8 @@ public class ClassDeclaration {
         Map<String, Member> membersByName = new LinkedHashMap<>();
         {
             //parameters
-            MethodParamDecl mparams = cdecl.getParms();
-            if (nonNull(mparams)) {
-                MethodParamDeclList decls = mparams.getDecl();
-                if (nonNull(decls)) {
-                    List<MethodParamDeclEle> params = decls.getParms();
-                    for (MethodParamDeclEle ele : params) {
-                        ParamName name = ele.getParamName();
-                        assert (!name.getName().hasSuffix());
-                        MethodParamDeclModifier modifier = ele.getModifier();
-                        addMember(membersByName,
-                                name,
-                                modifier);
-                    }
-                }
+            if (cdecl.hasParams()) {
+                addMembers(membersByName, cdecl.getParms().getDecl());
             }
         }
         {
@@ -129,17 +121,41 @@ public class ClassDeclaration {
                         MutTypeDecl tdecl = decl.getType();
                         List<ScopedName> names = decl.getNames();
                         for (ScopedName name : names) {
-                            addMember(membersByName, 
-                                    name, 
+                            addMember(membersByName,
+                                    name,
                                     tdecl);
                         }
                     } else if (item instanceof MethodDeclaration) {
-                        //todo
+                        MethodDeclaration decl = downCast(item);
+                        if (decl.hasParmDecl()) {
+                            addMembers(membersByName, decl.getParmDecl().getDecl(), true);
+                        }
                     }
                 }
             }
         }
         return membersByName.values();
+    }
+
+    private static void addMembers(Map<String, Member> membersByName, MethodParamDeclList decls) {
+        addMembers(membersByName, decls, false);
+    }
+
+    private static void addMembers(Map<String, Member> membersByName, MethodParamDeclList decls,
+            boolean iffMember) {
+        if (nonNull(decls)) {
+            List<MethodParamDeclEle> params = decls.getParms();
+            for (MethodParamDeclEle ele : params) {
+                ParamName name = ele.getParamName();
+                if (!iffMember || name.isMember()) {
+                    assert (!name.getName().hasSuffix());
+                    MethodParamDeclModifier modifier = ele.getModifier();
+                    addMember(membersByName,
+                            name,
+                            modifier);
+                }
+            }
+        }
     }
 
     private static void addMember(
@@ -148,12 +164,18 @@ public class ClassDeclaration {
         final String sname = name.asSimpleName();
         if (!membersByName.containsKey(sname)) {
             membersByName.put(
-                    sname, 
+                    sname,
                     new Member(
-                            name.getFileLineCol(), 
-                            sname, 
-                            accMut.getAccess().getType(),
-                            accMut.getMutability().isVar()
+                            name.getFileLineCol(),
+                            sname,
+                            getNonNullValue(
+                                    accMut.getAccess(), 
+                                    AccessModifier::getType, 
+                                    ()->AccessModifier.EType.ePublic),
+                            getNonNullValue(
+                                    accMut.getMutability(), 
+                                    Mutability::isVar, 
+                                    ()->false)
                     )
             );
         }

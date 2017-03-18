@@ -23,9 +23,9 @@
  */
 package laol.generate;
 
-import gblib.Util;
 import laol.ast.ClassDeclaration;
 import laol.ast.IName;
+import laol.ast.InterfaceDeclaration;
 import laol.ast.Item;
 import laol.ast.MethodDeclaration;
 import laol.ast.VarDeclStatement;
@@ -33,29 +33,34 @@ import laol.ast.VarDeclStatement;
 /**
  *
  * @author kpfalzer
+ * @param <T> subclass of Item which also implements IName. 
  */
-public abstract class Symbol {
+public abstract class Symbol<T extends Item> {
 
     public static enum EType {
         eClass, eInterface, eMethod, eLocalVar
     }
 
-    protected Symbol(final Item namedItem) {
+    protected Symbol(final T namedItem) {
         m_item = namedItem;
         assert (m_item instanceof IName);
     }
 
     public abstract EType getType();
 
+    public T getItem() {
+        return m_item;
+    }
+    
     public IName getIName() {
-        return Util.downCast(m_item);
+        return IName.class.cast(getItem());
     }
 
     public String getName() {
         return getIName().getSimpleName();
     }
 
-    private final Item m_item;
+    private final T m_item;
 
     public static class Class extends Symbol {
 
@@ -71,7 +76,7 @@ public abstract class Symbol {
 
     public static class Interface extends Symbol {
 
-        public Interface(final ClassDeclaration decl) {
+        public Interface(final InterfaceDeclaration decl) {
             super(decl);
         }
 

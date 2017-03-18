@@ -90,6 +90,10 @@ public class MethodDeclaration extends Item implements IName {
         return m_parmDecl;
     }
 
+    public boolean hasParmDecl() {
+        return isNonNull(getParmDecl());
+    }
+    
     public MethodReturnDecl getRetnDecl() {
         return m_retnDecl;
     }

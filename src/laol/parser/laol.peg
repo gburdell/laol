@@ -559,7 +559,7 @@ SYMBOL <-
 // includes optional '?'
 IDENT.
 
-//same as IDENT by No Keywords allowed
+//same as IDENT but No Keywords allowed
 IDENTNK.
 
 Number <-   (   BasedNumber

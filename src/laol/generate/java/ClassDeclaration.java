@@ -25,8 +25,10 @@ package laol.generate.java;
 
 import java.io.FileNotFoundException;
 import java.io.PrintStream;
+import java.util.Collection;
 import static java.util.Objects.nonNull;
 import laol.ast.Item;
+import laol.generate.ClassDeclaration.Member;
 import laol.generate.Symbol;
 import laol.generate.Util;
 import static laol.generate.java.Util.getAccessModifier;
@@ -45,8 +47,8 @@ public class ClassDeclaration {
 
     private void process() throws FileNotFoundException, Util.EarlyTermination {
         //add class to current scope
-        m_sym = new Symbol.Class(m_decl);
-        m_ctx.getScope().add(m_sym);
+        m_clsSym = new Symbol.Class(m_decl);
+        m_ctx.getScope().add(m_clsSym);
         if (m_decl.isExtern()) {
             return;
         }
@@ -56,21 +58,38 @@ public class ClassDeclaration {
         m_ctx = new Context(m_ctx);
         if (isTopClass) {
             m_ctx
-                    .createOS(m_sym.getName() + ".java")
+                    .createOS(m_clsSym.getName() + ".java")
                     .header(m_decl)
                     .packageAndImports();
         }
         //print declaration
-        StringBuilder buf = new StringBuilder();
-        buf
-                .append(getAccessModifier(m_decl))
-                .append(" class ")
-                .append(m_sym.getName())
-                .append(getExtends(m_decl))
-                .append(" {");
-        os().println(buf);
+        os().printf("%s class %s %s {\n",
+                getAccessModifier(m_decl),
+                m_clsSym.getName(),
+                getExtends(m_decl)
+        );
+        declareMembersAndAccessors();
         //todo
         os().println("}");
+    }
+
+    private void declareMembersAndAccessors() {
+        Collection<Member> members = laol.generate.ClassDeclaration.getMembers(m_decl);
+        os().println("//{{ Member declarations\n//** All are mutable (for now)!");
+        for (Member mbr : members) {
+            os()
+                    .printf("\n// %s\n", mbr.getWhere())
+                    .printf("private ILaol m_%s ;\n", mbr.getName())
+                    .printf("%s ILaol %s() {return m_%s;}\n",
+                            mbr.getAccess().toString(),
+                            mbr.getName(),
+                            mbr.getName())
+                    .printf("%s ILaol %s(ILaol _val) {m_%s = _val; return _val;}\n",
+                            mbr.getAccess().toString(),
+                            mbr.getName(),
+                            mbr.getName());
+        }
+        os().println("//Member declarations }}");
     }
 
     private ClassDeclaration(final laol.ast.ClassDeclaration decl, final Context ctx) {
@@ -81,8 +100,8 @@ public class ClassDeclaration {
     private PrintStream os() {
         return m_ctx.os();
     }
-    
-    private Symbol m_sym;
+
+    private Symbol m_clsSym;
     private final laol.ast.ClassDeclaration m_decl;
     private Context m_ctx;
 }

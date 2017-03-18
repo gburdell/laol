@@ -23,6 +23,8 @@
  */
 package laol.generate.java;
 
+import static gblib.Util.downCast;
+
 /**
  *
  * @author gburdell

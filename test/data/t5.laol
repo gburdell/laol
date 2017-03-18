@@ -8,7 +8,11 @@ import "laol.rt.io.*"
 class C1 implements I1, i2, i3{
 }
 
-class C2 {
+class C2(p1,p2) {
+ def m1(a,@b) {}
+ def m2? {}
+ var v1 = 12
+const C1
 }
 
 class C3 extends C2 {}

@@ -63,6 +63,10 @@ public class ClassDeclaration extends Item implements IName {
         return m_parms;
     }
 
+    public boolean hasParams() {
+        return isNonNull(getParms());
+    }
+    
     public boolean isExtern() {
         return m_isExtern;
     }

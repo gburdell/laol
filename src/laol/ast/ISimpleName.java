@@ -31,7 +31,7 @@ import gblib.Util;
  */
 public interface ISimpleName {
     public default String asSimpleName() {
-        Util.assertNever("not implemented");
+        Util.assertNever("not implemented here");
         return null;
     }
     
