@@ -37,24 +37,25 @@ public abstract class TestRunner {
 
     /**
      * Message test and possibly extract "goal" artifacts.
+     *
      * @param test
      * @return test to pass through to parser.
      */
     public String getTest(final String test) {
         return test;
     }
-    
+
     public abstract Acceptor getGrammar();
-    
+
     public abstract void generateAndTestAst(final Acceptor parsed);
-    
+
     public String getString(final Acceptor acc) {
         String ss = acc.toString();
         return ss;
     }
-    
+
     public void runTests(final String tests[]) {
-            for (String test : tests) {
+        for (String test : tests) {
             m_test = getTest(test);
             System.out.println("Info: " + m_test);
             CharBuffer cbuf = new CharBuffer("<stdin>", m_test);
@@ -76,7 +77,7 @@ public abstract class TestRunner {
         }
         invariant(tests.length == m_passCnt);
     }
-    
+
     protected int m_passCnt = 0;
     protected String m_test, m_accepted;
 }

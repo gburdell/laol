@@ -49,9 +49,6 @@ public class ClassDeclaration {
         //add class to current scope
         m_clsSym = new Symbol.Class(m_decl);
         m_ctx.getScope().add(m_clsSym);
-        if (m_decl.isExtern()) {
-            return;
-        }
         //create new context
         final boolean isTopClass = !m_ctx.hasParent();
         //NOTE: we switch to new/our context

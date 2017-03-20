@@ -36,11 +36,10 @@ import static org.junit.Assert.*;
 public class ScopedNameTest extends TestRunner {
 
     private final String TESTS[] = {
-        //1st 2 chars: T/F for rooted (True); n is number of names
-        "F1name1",
-        "T2::name2::name3",
-        "T1::name4",
-        "F3name5::name6::name7"
+        "1name1",
+        "2name2.name3",
+        "1name4",
+        "3name5.name6.name7"
     };
 
     @Override
@@ -50,15 +49,13 @@ public class ScopedNameTest extends TestRunner {
 
     @Override
     public String getTest(String test) {
-        m_expectRoot = test.charAt(0) == 'T';
-        m_expectCnt = Integer.parseInt(test.substring(1, 2));
-        return test.substring(2);
+        m_expectCnt = Integer.parseInt(test.substring(0, 1));
+        return test.substring(1);
     }
 
     @Override
     public void generateAndTestAst(Acceptor parsed) {
         laol.ast.ScopedName dut = new laol.ast.ScopedName((ScopedName) parsed);
-        assertTrue(m_expectRoot == dut.isRooted());
         assertTrue(m_expectCnt == dut.getIdents().size());
     }
 

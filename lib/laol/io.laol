@@ -1,9 +1,0 @@
-package "laol.lang.io"
-
-    extern interface InputStream {
-        public def close
-        public def eachLine(->cb(string line))
-    }
-    
-    extern class FileInputStream(string fname) implements InputStream {
-    }

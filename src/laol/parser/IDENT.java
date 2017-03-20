@@ -58,7 +58,7 @@ public class IDENT extends Acceptor {
                     "case", "catch", "class", "const",
                     "def", "default", "double",
                     "else", "elsif",
-                    "extends", "extern",
+                    "extends",
                     "false", "finally", "for",
                     "if", "implements", "import", "in", "int", "interface",
                     "next", "new", "nil",

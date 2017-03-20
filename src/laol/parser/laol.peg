@@ -121,7 +121,7 @@ primary_expression <-
 /   sass_primary
 
 scoped_name <- 
-    COLON2? IDENTNK (COLON2 IDENTNK)*
+    IDENTNK (DOT IDENTNK)*
 
 postfix_expression <-
     postfix_expression LBRACK array_select_expression RBRACK block?
@@ -318,11 +318,9 @@ catch_statement <- K_CATCH expression sp statement_clause
 
 finally_statement <- K_FINALLY statement_clause
 
-class_name <- scoped_name
-
 class_declaration <-
-    K_EXTERN? access_modifier?
-    K_CLASS class_name
+    access_modifier?
+    K_CLASS IDENTNK
         method_param_decl?
         class_extends?
         LCURLY 
@@ -330,9 +328,9 @@ class_declaration <-
         RCURLY sp	//NOTE: no eos here
 
 interface_declaration <-
-    K_EXTERN? access_modifier?
-    K_INTERFACE class_name
-        (K_EXTENDS class_name_list)?
+    access_modifier?
+    K_INTERFACE IDENTNK
+        (K_EXTENDS scoped_name_list)?
         LCURLY 
             class_body
         RCURLY sp	//NOTE: no eos here
@@ -377,10 +375,10 @@ builtin_type_name <-
 method_param_decl_default <- EQ expression
 
 class_extends <- 
-    K_EXTENDS class_name (K_IMPLEMENTS class_name_list)?
-/   K_IMPLEMENTS class_name_list
+    K_EXTENDS scoped_name (K_IMPLEMENTS scoped_name_list)?
+/   K_IMPLEMENTS scoped_name_list
 
-class_name_list <- class_name (COMMA class_name)*
+scoped_name_list <- scoped_name (COMMA scoped_name)*
 
 anonymous_function_decl <- 
     ARROW param_name method_param_decl? method_return_decl?
@@ -517,7 +515,6 @@ K_DOUBLE    <- "double"     K_tail
 K_ELSE      <- "else"       K_tail
 K_ELSIF     <- "elsif"      K_tail
 K_EXTENDS   <- "extends"    K_tail
-K_EXTERN    <- "extern"     K_tail
 K_FALSE     <- "false"      K_tail
 K_FINALLY   <- "finally"    K_tail
 K_FOR       <- "for"        K_tail

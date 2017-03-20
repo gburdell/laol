@@ -34,12 +34,11 @@ public class ClassDeclaration extends Item implements IName {
     public ClassDeclaration(final laol.parser.apfe.ClassDeclaration decl) {
         super(decl);
         final Sequence seq = asSequence();
-        m_isExtern = 0 < asRepetition(seq, 0).sizeofAccepted();
-        m_access = oneOrNone(seq, 1);
-        m_name = createItem(seq, 3);
-        m_parms = oneOrNone(seq, 4);
-        m_extends = oneOrNone(seq, 5);
-        m_body = createItem(seq, 7);
+        m_access = oneOrNone(seq, 0);
+        m_name = getIdent(seq, 2);
+        m_parms = oneOrNone(seq, 3);
+        m_extends = oneOrNone(seq, 4);
+        m_body = createItem(seq, 6);
     }
 
     public AccessModifier getAccess() {
@@ -56,7 +55,12 @@ public class ClassDeclaration extends Item implements IName {
 
     @Override
     public ScopedName getName() {
-        return m_name;
+        return new ScopedName(m_name);
+    }
+
+    @Override
+    public String getSimpleName() {
+        return m_name.getId();
     }
 
     public MethodParamDecl getParms() {
@@ -66,16 +70,11 @@ public class ClassDeclaration extends Item implements IName {
     public boolean hasParams() {
         return isNonNull(getParms());
     }
-    
-    public boolean isExtern() {
-        return m_isExtern;
-    }
 
-    private final boolean m_isExtern;
-    private final AccessModifier  m_access;
+    private final AccessModifier m_access;
     //TODO private final boolean m_isAbstract;
-    private final ClassName m_name;
-    private final MethodParamDecl   m_parms;
-    private final ClassExtends  m_extends;
+    private final Ident m_name;
+    private final MethodParamDecl m_parms;
+    private final ClassExtends m_extends;
     private final ClassBody m_body;
 }

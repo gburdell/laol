@@ -25,12 +25,14 @@ package laol.generate.java;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Collection;
+import java.util.HashMap;
 import java.util.Iterator;
-import java.util.stream.Stream;
+import java.util.Map;
 import laol.ast.AccessModifier;
 import laol.ast.ClassDeclaration;
 import laol.ast.ClassExtends;
-import laol.ast.ClassName;
+import laol.ast.ScopedName;
 import static laol.generate.Util.createDirectory;
 
 /**
@@ -95,10 +97,11 @@ public class Util {
                                     .getImplements()
                                     .getNames()
                                     .stream()
-                                    .map(ClassName::asSimpleName).iterator();
+                                    .map(ScopedName::asSimpleName).iterator();
                         }
                     }));
         }
         return sbuf.toString();
     }
+    
 }

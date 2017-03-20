@@ -22,6 +22,7 @@
  * THE SOFTWARE.
  */
 package laol.ast;
+
 import apfe.runtime.Acceptor;
 import apfe.runtime.Marker;
 import apfe.runtime.Repetition;
@@ -35,21 +36,21 @@ import java.util.List;
  * @author gburdell
  */
 public class InterfaceDeclaration extends Item {
+
     public InterfaceDeclaration(final laol.parser.apfe.InterfaceDeclaration decl) {
         super(decl);
         final Sequence seq = asSequence();
-        m_isExtern = 0 < asRepetition(seq, 0).sizeofAccepted();
-        m_access = oneOrNone(seq, 1);
-        m_name = createItem(seq, 3);
+        m_access = oneOrNone(seq, 0);
+        m_name = getIdent(seq, 2);
         {
-            final Repetition rep = asRepetition(seq, 4);
+            final Repetition rep = asRepetition(seq, 3);
             if (0 < rep.sizeofAccepted()) {
                 m_implements = createItem(rep.getOnlyAccepted(), 1);
             } else {
                 m_implements = null;
             }
         }
-        m_body = createItem(seq, 6);
+        m_body = createItem(seq, 5);
     }
 
     public AccessModifier getAccess() {
@@ -60,18 +61,17 @@ public class InterfaceDeclaration extends Item {
         return m_body;
     }
 
-    public ClassNameList getImplements() {
+    public ScopedNameList getImplements() {
         return m_implements;
     }
 
-    public ClassName getName() {
+    public Ident getName() {
         return m_name;
     }
 
-    private final boolean           m_isExtern;
-    private final AccessModifier    m_access;
-    private final ClassName         m_name;
-    private final ClassNameList     m_implements;
-    private final ClassBody         m_body;
-    
+    private final AccessModifier m_access;
+    private final Ident m_name;
+    private final ScopedNameList m_implements;
+    private final ClassBody m_body;
+
 }

@@ -36,9 +36,9 @@ public class MethodNameTest  extends TestRunner {
 
     private final String TESTS[] = {
         "M1",
-        "M2::M3",
-        "::m4",
-        "::Moobar::gooble",
+        "M2.M3",
+        "m4",
+        "Moobar.gooble",
         "[]",
         "[]=",
         "="

@@ -23,7 +23,6 @@
  */
 package laol.ast;
 
-import apfe.runtime.Repetition;
 import apfe.runtime.Sequence;
 import static gblib.Util.invariant;
 import java.util.Collections;
@@ -39,16 +38,17 @@ public class ScopedName extends Item implements ISimpleName {
     public ScopedName(final laol.parser.apfe.ScopedName decl) {
         super(decl);
         final Sequence seq = asSequence();
-        Repetition rep = asRepetition(seq, 0);
-        m_isRooted = rep.sizeofAccepted() > 0;
-        m_path.add(getIdent(seq, 1));
-        m_path.addAll(zeroOrMoreIdent(asRepetition(seq, 2), 1));
+        m_path.add(getIdent(seq, 0));
+        m_path.addAll(zeroOrMoreIdent(asRepetition(seq, 1), 1));
     }
 
     public ScopedName(final AString.S name) {
+        this(new Ident(name));
+    }
+
+    public ScopedName(final Ident name) {
         super(name.getParsed());
-        m_isRooted = false;
-        m_path.add(new Ident(name));
+        m_path.add(name);
     }
 
     @Override
@@ -57,7 +57,7 @@ public class ScopedName extends Item implements ISimpleName {
     }
  
     public Ident getFirst() {
-        invariant(!hasScope() && !isRooted());
+        invariant(!hasScope());
         return getIdents().get(0);        
     }
     
@@ -67,20 +67,12 @@ public class ScopedName extends Item implements ISimpleName {
     }
 
     public boolean hasScope() {
-        return isRooted() || (1 < m_path.size());
+        return (1 < m_path.size());
     }
 
     public List<Ident> getIdents() {
         return Collections.unmodifiableList(m_path);
     }
 
-    public boolean isRooted() {
-        return m_isRooted;
-    }
-
-    /**
-     * Scoped name started with '::'.
-     */
-    private final boolean m_isRooted;
     private final List<Ident> m_path = new LinkedList<>();
 }

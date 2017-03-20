@@ -49,7 +49,7 @@ public class ClassExtends extends Item {
         return (null != m_extends);
     }
     
-    public ClassName getExtends() {
+    public ScopedName getExtends() {
         return m_extends;
     }
 
@@ -57,10 +57,10 @@ public class ClassExtends extends Item {
         return (null != m_implements);
     }
     
-    public ClassNameList getImplements() {
+    public ScopedNameList getImplements() {
         return m_implements;
     }
     
-    private final ClassName m_extends;
-    private final ClassNameList   m_implements;
+    private final ScopedName m_extends;
+    private final ScopedNameList   m_implements;
 }

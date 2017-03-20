@@ -36,8 +36,8 @@ public class LhsRefTest extends TestRunner {
     private final String TESTS[] = {
         "2abc[123]",
         "2defx[45..67]",
-        "2ghi.foobar",
-        "3jkl.goop++",
+        "1ghi.foobar",
+        "2jkl.goop++",
         "1eek",
         "7a[4][a..b].beek++[123].fleep"
     };

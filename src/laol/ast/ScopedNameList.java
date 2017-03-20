@@ -22,13 +22,26 @@
  * THE SOFTWARE.
  */
 package laol.ast;
+import apfe.runtime.Sequence;
+import java.util.Collections;
+import java.util.LinkedList;
+import java.util.List;
 
 /**
  *
  * @author gburdell
  */
-public class ClassName extends ScopedName {
-    public ClassName(final laol.parser.apfe.ClassName decl) {
-        super(decl.getBaseAccepted());
+public class ScopedNameList extends Item {
+    public ScopedNameList(final laol.parser.apfe.ScopedNameList decl) {
+        super(decl);
+        final Sequence seq = asSequence();
+        m_names.add(createItem(seq, 0));
+        m_names.addAll(zeroOrMore(asRepetition(seq, 1), 1));
     }
+    
+    public List<ScopedName> getNames() {
+        return Collections.unmodifiableList(m_names);
+    }
+    
+    private final List<ScopedName>   m_names = new LinkedList<>();
 }
