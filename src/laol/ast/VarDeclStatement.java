@@ -25,15 +25,17 @@ package laol.ast;
 
 import apfe.runtime.Repetition;
 import apfe.runtime.Sequence;
-import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
+import laol.ast.etc.ISymbol;
+import laol.ast.etc.ISymbolCreator;
+import laol.ast.etc.SymbolTable;
 
 /**
  *
  * @author gburdell
  */
-public class VarDeclStatement extends Item implements IName {
+public class VarDeclStatement extends Item implements ISymbolCreator {
 
     public VarDeclStatement(final laol.parser.apfe.VarDeclStatement decl) {
         super(decl);
@@ -50,12 +52,47 @@ public class VarDeclStatement extends Item implements IName {
             m_op = null;
             m_rhs = null;
         }
-        m_stmtModifier = getStatementModifier(seq, 4);
+    }
+
+    /**
+     * An inner class (so can access enclosing info) capturing declared
+     * var(s) as ISymbol.
+     */
+    public class Symbol implements ISymbol {
+
+        private Symbol(ScopedName name, int modifiers) {
+            m_name = name;
+            m_modifers = modifiers;
+        }
+
+        @Override
+        public EType getType() {
+            return EType.eVar;
+        }
+
+        @Override
+        public Ident getIdent() {
+            return m_name;
+        }
+
+        @Override
+        public int getModifiers() {
+            return m_modifers;
+        }
+
+        private final int m_modifers;
+        private final ScopedName m_name;
     }
 
     @Override
-    public List<ScopedName> getNames() {
-        return Collections.unmodifiableList(m_names);
+    public boolean insert(SymbolTable stab) {
+        int modifiers = getType().getModifiers();
+        boolean ok = true;
+        for (ScopedName name : m_names) {
+            Symbol sym = new Symbol(name, modifiers);
+            ok &= stab.insert(sym);
+        }
+        return ok;
     }
 
     public AssignmentOp getOp() {
@@ -66,10 +103,6 @@ public class VarDeclStatement extends Item implements IName {
         return m_rhs;
     }
 
-    public StatementModifier getStmtModifier() {
-        return m_stmtModifier;
-    }
-
     public MutTypeDecl getType() {
         return m_type;
     }
@@ -78,5 +111,4 @@ public class VarDeclStatement extends Item implements IName {
     private final List<ScopedName> m_names = new LinkedList<>();
     private final AssignmentOp m_op;
     private final AssignmentRhs m_rhs;
-    private final StatementModifier m_stmtModifier;
 }

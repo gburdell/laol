@@ -23,6 +23,7 @@
  */
 package laol.ast;
 
+import laol.ast.etc.IModifiers;
 import apfe.runtime.Repetition;
 import apfe.runtime.Sequence;
 
@@ -30,7 +31,7 @@ import apfe.runtime.Sequence;
  *
  * @author gburdell
  */
-public class TypeDecl extends Item implements IAccessMutability {
+public class TypeDecl extends Item implements IModifiers {
 
     public TypeDecl(final laol.parser.apfe.TypeDecl decl) {
         super(decl);
@@ -48,27 +49,20 @@ public class TypeDecl extends Item implements IAccessMutability {
         }
     }
 
-    @Override
-    public AccessModifier getAccess() {
-        return m_access;
-    }
-
-    @Override
-    public Mutability getMutability() {
-        return m_mutability;
-    }
-
     public TypeName getType() {
         return m_type;
     }
 
-    public boolean isStatic() {
-        return m_isStatic;
+    @Override
+    public int getModifiers() {
+        return getModifiers(
+                m_access,
+                m_mutability,
+                m_isStatic);
     }
 
-    
     private final AccessModifier m_access;
     private final boolean m_isStatic;
     private final Mutability m_mutability;
-    private final TypeName  m_type;
+    private final TypeName m_type;
 }

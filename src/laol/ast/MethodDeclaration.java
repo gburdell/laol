@@ -22,9 +22,15 @@
  * THE SOFTWARE.
  */
 package laol.ast;
+
+import laol.ast.etc.IModifiers;
 import apfe.runtime.Repetition;
 import apfe.runtime.Sequence;
 import gblib.Util;
+import static gblib.Util.invariant;
+import java.lang.reflect.Modifier;
+import laol.ast.etc.ISymbol;
+import laol.ast.etc.ISymbolCreator;
 import laol.parser.apfe.KDEFAULT;
 import laol.parser.apfe.KSTATIC;
 
@@ -32,7 +38,8 @@ import laol.parser.apfe.KSTATIC;
  *
  * @author gburdell
  */
-public class MethodDeclaration extends Item implements IName {
+public class MethodDeclaration extends Item implements ISymbol, ISymbolCreator, IModifiers {
+
     public MethodDeclaration(final laol.parser.apfe.MethodDeclaration decl) {
         super(decl);
         final Sequence seq = asSequence();
@@ -46,7 +53,7 @@ public class MethodDeclaration extends Item implements IName {
                 m_isStatic = true;
                 m_isDefault = false;
             } else {
-                assert(rep.getOnlyAccepted() instanceof KDEFAULT);
+                assert (rep.getOnlyAccepted() instanceof KDEFAULT);
                 m_isDefault = true;
                 m_isStatic = false;
             }
@@ -65,25 +72,8 @@ public class MethodDeclaration extends Item implements IName {
         m_stmtModifier = getStatementModifier(seq, 7);
     }
 
-    public AccessModifier getAccess() {
-        return m_access;
-    }
-
     public MethodBody getBody() {
         return m_body;
-    }
-
-    @Override
-    public ScopedName getName() {
-        final Item name = m_name.getName();
-        ScopedName scopedName;
-        if (name instanceof ScopedName) {
-            scopedName = Util.downCast(name);
-        } else {
-            MethodNameOp op = Util.downCast(name);
-            scopedName = new ScopedName(op.getOpName());
-        }
-        return scopedName;
     }
 
     public MethodParamDecl getParmDecl() {
@@ -93,7 +83,7 @@ public class MethodDeclaration extends Item implements IName {
     public boolean hasParmDecl() {
         return isNonNull(getParmDecl());
     }
-    
+
     public MethodReturnDecl getRetnDecl() {
         return m_retnDecl;
     }
@@ -106,17 +96,30 @@ public class MethodDeclaration extends Item implements IName {
         return m_isDefault;
     }
 
-    public boolean isStatic() {
-        return m_isStatic;
+    @Override
+    public Ident getIdent() {
+        //todo: need to handle operator
+        invariant(!m_name.isOp());
+        return ScopedName.class.cast(m_name.getName());
     }
-    
-    private final AccessModifier    m_access;
-    private final boolean   m_isStatic, m_isDefault;
-    private final MethodName    m_name;
-    private final MethodParamDecl   m_parmDecl;
-    private final MethodReturnDecl  m_retnDecl;
-    private final MethodBody    m_body;
+
+    @Override
+    public EType getType() {
+        return EType.eMethod;
+    }
+
+    @Override
+    public int getModifiers() {
+        return getModifiers(m_access, Modifier.PRIVATE)
+                | (m_isStatic ? Modifier.STATIC : 0);
+    }
+
+    private final AccessModifier m_access;
+    private final boolean m_isStatic, m_isDefault;
+    private final MethodName m_name;
+    private final MethodParamDecl m_parmDecl;
+    private final MethodReturnDecl m_retnDecl;
+    private final MethodBody m_body;
     private final StatementModifier m_stmtModifier;
-    
-    
+
 }

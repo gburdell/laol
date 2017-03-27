@@ -86,16 +86,4 @@ public class Util {
         System.exit(3);
     }
     
-    /**
-     * Generate non-null value.
-     * @param <T> value type of check.
-     * @param <R> return value type.
-     * @param check check for non-null.
-     * @param onNonNull apply function to check if check != null.
-     * @param onNull produce value if check is null.
-     * @return value of type R.
-     */
-    public static <T,R> R getNonNullValue(T check, Function<T,R> onNonNull, Supplier<R> onNull) {
-        return Objects.nonNull(check) ? onNonNull.apply(check) : onNull.get();
-    }
 }

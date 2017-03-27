@@ -21,15 +21,16 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package laol.ast;
+package laol.ast.etc;
 
 /**
- *
+ * Wrap an ISymbol when a subclass inherits content (from super).
  * @author kpfalzer
  */
-public interface IAccessMutability {
-
-    public AccessModifier getAccess();
-
-    public Mutability getMutability();
+public class Inherited {
+    public Inherited(ISymbol fromSuper) {
+        m_fromSuper = fromSuper;
+    }
+    
+    private final ISymbol m_fromSuper;
 }

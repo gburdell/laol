@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2016 gburdell.
+ * Copyright 2017 kpfalzer.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -21,50 +21,56 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package laol.ast;
+package laol.ast.etc;
 
-import laol.ast.etc.IModifiers;
-import apfe.runtime.Repetition;
-import apfe.runtime.Sequence;
-import gblib.Util;
-import java.lang.reflect.Modifier;
+import laol.ast.Ident;
+import laol.ast.Item;
 
 /**
+ * Class from an import/require statement
  *
- * @author gburdell
+ * @author kpfalzer
  */
-public class MutTypeDecl extends Item implements IModifiers {
+public class ImportedClass implements ISymbol, ISymbolCreator {
 
-    public MutTypeDecl(final laol.parser.apfe.MutTypeDecl decl) {
-        super(decl);
-        final Sequence seq = asSequence();
-        m_access = oneOrNone(seq, 0);
-        m_isStatic = (0 < asRepetition(seq, 1).sizeofAccepted());
-        m_mutability = createItem(seq, 2);
-        {
-            final Repetition rep = asRepetition(seq, 3);
-            if (0 < rep.sizeofAccepted()) {
-                m_type = createItem(rep.getOnlyAccepted(), 0);
-            } else {
-                m_type = null;
-            }
-        }
+    public ImportedClass(String loc, String fqn, Class cls) {
+        m_fullyQualifiedName = fqn;
+        m_class = cls;
+        m_location = loc;
+    }
+
+    private final String m_fullyQualifiedName;
+    private final Class m_class;
+    private final String m_location;
+
+    @Override
+    public EType getType() {
+        return EType.eClass;
+    }
+
+    @Override
+    public boolean isImported() {
+        return true;
     }
 
     @Override
     public int getModifiers() {
-        return getModifiers(
-                m_access,
-                m_mutability,
-                m_isStatic);
-    }
-    
-    public TypeName getType() {
-        return m_type;
+        return m_class.getModifiers();
     }
 
-    private final AccessModifier m_access;
-    private final boolean m_isStatic;
-    private final Mutability m_mutability;
-    private final TypeName  m_type;
+    @Override
+    public String getName() {
+        return m_class.getSimpleName();
+    }
+
+    @Override
+    public String getFileLineCol() {
+        return m_location;
+    }
+
+    @Override
+    public Ident getIdent() {
+        return null;
+    }
+
 }

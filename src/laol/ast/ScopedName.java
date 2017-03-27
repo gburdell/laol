@@ -23,56 +23,13 @@
  */
 package laol.ast;
 
-import apfe.runtime.Sequence;
-import static gblib.Util.invariant;
-import java.util.Collections;
-import java.util.LinkedList;
-import java.util.List;
-
 /**
- *
+ * TODO: KISS.
  * @author gburdell
  */
-public class ScopedName extends Item implements ISimpleName {
+public class ScopedName extends Ident {
 
     public ScopedName(final laol.parser.apfe.ScopedName decl) {
-        super(decl);
-        final Sequence seq = asSequence();
-        m_path.add(getIdent(seq, 0));
-        m_path.addAll(zeroOrMoreIdent(asRepetition(seq, 1), 1));
+        super(decl.getBaseAccepted());
     }
-
-    public ScopedName(final AString.S name) {
-        this(new Ident(name));
-    }
-
-    public ScopedName(final Ident name) {
-        super(name.getParsed());
-        m_path.add(name);
-    }
-
-    @Override
-    public String asSimpleName() {
-        return getFirst().getId();
-    }
- 
-    public Ident getFirst() {
-        invariant(!hasScope());
-        return getIdents().get(0);        
-    }
-    
-    @Override
-    public String getFileLineCol() {
-        return getFirst().getFileLineCol();
-    }
-
-    public boolean hasScope() {
-        return (1 < m_path.size());
-    }
-
-    public List<Ident> getIdents() {
-        return Collections.unmodifiableList(m_path);
-    }
-
-    private final List<Ident> m_path = new LinkedList<>();
 }

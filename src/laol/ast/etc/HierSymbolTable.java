@@ -21,26 +21,20 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package laol.ast;
-
-import gblib.Util;
+package laol.ast.etc;
 
 /**
  *
  * @author kpfalzer
  */
-public interface ISimpleName {
-    public default String asSimpleName() {
-        Util.assertNever("not implemented here");
-        return null;
+public class HierSymbolTable extends SymbolTable {
+    public HierSymbolTable(SymbolTable parent) {
+        m_parent = parent;
     }
     
-    public default String getFileLineCol() {
-        Item asItem = Util.downCast(this);
-        return asItem.getFileLineCol();
+    public SymbolTable getParent() {
+        return m_parent;
     }
     
-    public default String getSimpleName() {
-        return asSimpleName();
-    }
+    private final SymbolTable m_parent;
 }

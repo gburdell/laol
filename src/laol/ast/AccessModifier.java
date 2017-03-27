@@ -23,7 +23,9 @@
  */
 package laol.ast;
 
+import laol.ast.etc.IModifiers;
 import apfe.runtime.Marker;
+import java.lang.reflect.Modifier;
 import laol.parser.apfe.KPRIVATE;
 import laol.parser.apfe.KPUBLIC;
 
@@ -31,7 +33,7 @@ import laol.parser.apfe.KPUBLIC;
  *
  * @author gburdell
  */
-public class AccessModifier extends Item {
+public class AccessModifier extends Item implements IModifiers {
 
     public static enum EType {
         ePrivate, eProtected, ePublic;
@@ -39,6 +41,14 @@ public class AccessModifier extends Item {
         @Override
         public String toString() {
             return super.toString().substring(1).toLowerCase();
+        }
+        
+        public int getModifier() {
+            return (0 == compareTo(ePrivate))
+                    ? Modifier.PRIVATE
+                    : (0 == compareTo(ePublic))
+                    ? Modifier.PUBLIC
+                    : Modifier.PROTECTED;
         }
     }
 
@@ -69,6 +79,11 @@ public class AccessModifier extends Item {
         return m_access;
     }
 
+    @Override
+    public int getModifiers() {
+        return getType().getModifier();
+    }
+    
     @Override
     public String toString() {
         return getType().toString();

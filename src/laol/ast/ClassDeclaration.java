@@ -24,12 +24,23 @@
 package laol.ast;
 
 import apfe.runtime.Sequence;
+import gblib.Util;
+import static gblib.Util.invariant;
+import java.lang.reflect.Modifier;
+import java.util.Collections;
+import java.util.List;
+import java.util.stream.Collectors;
+import laol.ast.etc.HierSymbolTable;
+import laol.ast.etc.IModifiers;
+import laol.ast.etc.ISymbol;
+import laol.ast.etc.ISymbolCreator;
+import laol.ast.etc.SymbolTable;
 
 /**
  *
  * @author gburdell
  */
-public class ClassDeclaration extends Item implements IName {
+public class ClassDeclaration extends Item implements IModifiers, ISymbol, ISymbolCreator {
 
     public ClassDeclaration(final laol.parser.apfe.ClassDeclaration decl) {
         super(decl);
@@ -41,10 +52,6 @@ public class ClassDeclaration extends Item implements IName {
         m_body = createItem(seq, 6);
     }
 
-    public AccessModifier getAccess() {
-        return m_access;
-    }
-
     public ClassBody getBody() {
         return m_body;
     }
@@ -54,13 +61,8 @@ public class ClassDeclaration extends Item implements IName {
     }
 
     @Override
-    public ScopedName getName() {
-        return new ScopedName(m_name);
-    }
-
-    @Override
-    public String getSimpleName() {
-        return m_name.getId();
+    public Ident getIdent() {
+        return m_name;
     }
 
     public MethodParamDecl getParms() {
@@ -72,9 +74,88 @@ public class ClassDeclaration extends Item implements IName {
     }
 
     private final AccessModifier m_access;
-    //TODO private final boolean m_isAbstract;
     private final Ident m_name;
     private final MethodParamDecl m_parms;
     private final ClassExtends m_extends;
     private final ClassBody m_body;
+
+    @Override
+    public EType getType() {
+        return EType.eClass;
+    }
+
+    /**
+     * Get access privilege for ClassDeclaration. Default is private.
+     *
+     * @return modifiers encoded as per java.lang.reflect.Modifier.
+     */
+    @Override
+    public int getModifiers() {
+        return getModifiers(m_access, Modifier.PRIVATE);
+    }
+
+    @Override
+    public void createContentSymbolsImpl(SymbolTable parent) {
+        m_stab = new HierSymbolTable(parent);
+        // Add constructor params as members
+        Util.getNonNullValue(
+                getParms(),
+                mpd -> mpd.getDecl(),
+                mpdl -> mpdl.getParms(),
+                () -> MethodParamDeclEle.EMPTY_LIST
+        )
+                .stream()
+                //take named and anonFuncDecl; so NO filter: .filter(MethodParamDeclEle::isNamed)
+                .forEach((MethodParamDeclEle ele) -> {
+                    ele.insert(m_stab);
+                });
+        //inherited class and its members
+        if (isNonNull(m_extends)) {
+            if (m_extends.hasExtends()) {
+                final String superClsName = m_extends.getExtends().getId();
+                List<ISymbol> superClsDecls = Util.getNonNullValue(
+                        m_stab.getParent().get(superClsName),
+                        ISymbol.EMPTY_LIST
+                )
+                        .stream()
+                        .filter(sym -> sym.getType() == EType.eClass)
+                        .collect(Collectors.toList());
+                invariant(1 == superClsDecls.size());
+                //we dont add the inherited/super cls decl: but we'll
+                //add its public/protected constructor/methods/vars (and label inheritedXXX)
+                //and public inheritedMethods/vars
+                SymbolTable superClsSymbols = superClsDecls.get(0).getSymbolTable();
+                superClsSymbols.values()
+                        .stream()
+                        .flatMap(symList -> {
+                            return symList
+                                    .stream()
+                                    .filter(sym->canInherit(sym));
+                        })
+                        .forEach((ISymbol inherited) -> {
+                            
+                        });
+            }
+        }
+        //todo: var decls...
+        //todo: method defs...
+        //todo: inner class decl
+    }
+
+    private static boolean canInherit(ISymbol sym) {
+        switch (sym.getType()) {
+            case eConstructor: case eMemberMethod: case eMemberVar:
+                break;
+            default:
+                return false;
+        }
+        return sym.isPublic() || sym.isProtected();
+    }
+    
+    @Override
+    public SymbolTable getSymbolTable() {
+        return m_stab;
+    }
+
+    private HierSymbolTable m_stab;
 }

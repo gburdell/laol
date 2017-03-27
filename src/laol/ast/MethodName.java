@@ -33,6 +33,10 @@ public class MethodName extends Item {
         m_name = createItem(asPrioritizedChoice().getAccepted());
     }
     
+    public boolean isOp() {
+        return (m_name instanceof MethodNameOp);
+    }
+    
     public Item getName() {
         return m_name;
     }

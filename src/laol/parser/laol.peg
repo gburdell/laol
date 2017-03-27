@@ -120,8 +120,9 @@ primary_expression <-
 /   html_primary
 /   sass_primary
 
-scoped_name <- 
-    IDENTNK (DOT IDENTNK)*
+//KISS: drop true scoped for now
+//scoped_name <- IDENTNK (DOT IDENTNK)*
+scoped_name <- IDENTNK
 
 postfix_expression <-
     postfix_expression LBRACK array_select_expression RBRACK block?
@@ -230,7 +231,7 @@ array_select_expression <- expression_list
 var_decl_statement <- 
     mut_type_decl scoped_name 
     (COMMA scoped_name)* 
-    (assignment_op assignment_rhs)? eos
+    (assignment_op assignment_rhs)? sp //no eos here
 
 assign_statement <- assignment_lhs assignment_op assignment_rhs eos
 

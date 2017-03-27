@@ -21,27 +21,62 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package laol.ast;
+package laol.ast.etc;
 
-import static gblib.Util.createList;
-import java.util.List;
+import java.lang.reflect.Field;
+import laol.ast.Ident;
 
 /**
+ * Field from an import/require statement
  *
  * @author kpfalzer
  */
-public interface IName extends ISimpleName {
-    public default ScopedName getName() {
-        assert(false);//todo
+public class ImportedField implements ISymbol, ISymbolCreator {
+
+    public ImportedField(String loc, String fqn, Field fld) {
+        m_fullyQualifiedName = fqn;
+        m_field = fld;
+        m_location = loc;
+    }
+
+    private final String m_fullyQualifiedName;
+    private final Field m_field;
+    private final String m_location;
+
+    @Override
+    public EType getType() {
+        return EType.eVar;
+    }
+
+    @Override
+    public SymbolTable getSymbolTable() {
         return null;
     }
-    
+
     @Override
-    public default String getSimpleName() {
-        return getName().asSimpleName();
+    public boolean isImported() {
+        return true;
     }
-    
-    public default List<ScopedName> getNames() {
-       return createList(getName());
+
+    @Override
+    public int getModifiers() {
+        return m_field.getModifiers();
     }
+
+    @Override
+    public String getName() {
+        return m_field.getName();
+    }
+
+    @Override
+    public String getFileLineCol() {
+        return m_location;
+    }
+
+    @Override
+    public Ident getIdent() {
+        assert(false);
+        return null;
+    }
+
 }

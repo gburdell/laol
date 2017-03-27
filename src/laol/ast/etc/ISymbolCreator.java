@@ -21,33 +21,21 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package laol.generate;
-
-import static gblib.Util.assertNever;
-import java.util.HashMap;
+package laol.ast.etc;
 
 /**
- *
+ * Creator of ISymbol.
  * @author kpfalzer
  */
-public class SymbolTable extends HashMap<String, Symbol> {
+public interface ISymbolCreator {
     /**
-     * Insert symbol.
-     * @param key symbol key.
-     * @param value symbol value.
-     * @return true if key does not exist, else false (and no insert done).
+     * The default implementation assumes the interface also implements
+     * the ISymbol too.
+     * @param stab symbol table to insert symbol(s) into.
+     * @return true on success; else fail.
      */
-    public boolean insert(String key, Symbol value) {
-        boolean ok = false;
-        if (! super.containsKey(key)) {
-            ok = (null == super.put(key, value));
-        }
-        return ok;
-    }
-
-    @Override
-    public Symbol put(String key, Symbol value) {
-        assertNever("use insert() method instead");
-        return null;
+    public default boolean insert(SymbolTable stab) {
+        ISymbol sym = ISymbol.class.cast(this);
+        return stab.insert(sym.getName(), sym);
     }
 }

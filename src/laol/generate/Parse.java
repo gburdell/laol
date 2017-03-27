@@ -54,19 +54,21 @@ public class Parse {
         }
     }
 
-    public static class Ast extends Pair<String, Grammar> {
+    public static class Ast {
 
         private Ast(final String fn, final Grammar g) {
-            super(fn, g);
+            m_gram = new Pair(fn, g);
         }
         
         public String getFileName() {
-            return super.v1;
+            return m_gram.v1;
         }
         
         public Grammar getGrammar() {
-            return super.v2;
+            return m_gram.v2;
         }
+        
+        private final Pair<String, Grammar> m_gram;
     }
 
     public int getErrorCnt() {

@@ -23,17 +23,18 @@
  */
 package laol.generate;
 
+import gblib.JarFile;
 import static gblib.Util.downCast;
+import java.lang.reflect.Field;
 import java.util.Collection;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import static java.util.Objects.nonNull;
+import java.util.stream.Collectors;
 import laol.ast.AccessModifier;
 import laol.ast.AssignStatement;
 import laol.ast.ClassBody;
-import laol.ast.IAccessMutability;
-import laol.ast.ISimpleName;
 import laol.ast.Item;
 import laol.ast.LhsRef;
 import laol.ast.MethodDeclaration;
@@ -47,7 +48,7 @@ import laol.ast.ScopedName;
 import laol.ast.Statement;
 import laol.ast.TypeDecl;
 import laol.ast.VarDeclStatement;
-import static laol.generate.Util.getNonNullValue;
+import laol.ast.etc.IModifiers;
 
 /**
  * Useful utilities for (target agnostic) manipulation of ast.ClassDeclaration.
@@ -87,12 +88,36 @@ public class ClassDeclaration {
     }
 
     /**
+     * Get Field for static names found in package. Static elements (of class)
+     * are:
+     * <ul>
+     * <li>method</li>
+     * <li>member</li>
+     * </ul>
+     *
+     * <B>Note:</B> we do not get enum values here since they have no equivalent
+     * in laol.
+     *
+     * @param hierName name (syntax) as would appear in "import static ..."
+     * statement.
+     * @return map of Field by fully qualified name.
+     * @throws ClassNotFoundException
+     */
+    protected static Map<String, Field> getStaticNamesInPackage(String hierName) throws ClassNotFoundException {
+        return JarFile.getStaticNamesInPackage(hierName)
+                .entrySet()
+                .stream()
+                .filter(map -> !map.getValue().isEnumConstant())
+                .collect(Collectors.toMap(e -> e.getKey(), e -> e.getValue()));
+    }
+
+    /**
      * Walk class declaration and innards to determine members.
      *
      * @param cdecl class declaration.
      * @return list of class members.
      */
-    public static Collection<Member> getMembers(final laol.ast.ClassDeclaration cdecl) {
+    protected static Collection<Member> getMembers(final laol.ast.ClassDeclaration cdecl) {
         Map<String, Member> membersByName = new LinkedHashMap<>();
         {
             //parameters
@@ -137,11 +162,11 @@ public class ClassDeclaration {
         return membersByName.values();
     }
 
-    private static void addMembers(Map<String, Member> membersByName, MethodParamDeclList decls) {
+    protected static void addMembers(Map<String, Member> membersByName, MethodParamDeclList decls) {
         addMembers(membersByName, decls, false);
     }
 
-    private static void addMembers(Map<String, Member> membersByName, MethodParamDeclList decls,
+    protected static void addMembers(Map<String, Member> membersByName, MethodParamDeclList decls,
             boolean iffMember) {
         if (nonNull(decls)) {
             List<MethodParamDeclEle> params = decls.getParms();
@@ -160,7 +185,7 @@ public class ClassDeclaration {
 
     private static void addMember(
             Map<String, Member> membersByName,
-            ISimpleName name, IAccessMutability accMut) {
+            ISimpleName name, IModifiers accMut) {
         final String sname = name.asSimpleName();
         if (!membersByName.containsKey(sname)) {
             membersByName.put(
@@ -169,13 +194,13 @@ public class ClassDeclaration {
                             name.getFileLineCol(),
                             sname,
                             getNonNullValue(
-                                    accMut.getAccess(), 
-                                    AccessModifier::getType, 
-                                    ()->AccessModifier.EType.ePublic),
+                                    accMut.getAccess(),
+                                    AccessModifier::getType,
+                                    () -> AccessModifier.EType.ePublic),
                             getNonNullValue(
-                                    accMut.getMutability(), 
-                                    Mutability::isVar, 
-                                    ()->false)
+                                    accMut.getMutability(),
+                                    Mutability::isVar,
+                                    () -> false)
                     )
             );
         }

@@ -21,37 +21,22 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package laol.generate;
+package laol.ast.etc;
 
-import gblib.MessageMgr;
-import static gblib.Util.invariant;
-import static java.util.Objects.isNull;
-import static java.util.Objects.nonNull;
+import laol.ast.Ident;
 
 /**
  *
  * @author kpfalzer
  */
-public class Scope {
-
-    public Symbol getSymbol(String name) {
-        Symbol val = null;
-        if (nonNull(m_stab)) {
-            val = m_stab.get(name);
-        }
-        return val;
+public interface IName {
+    public Ident getIdent();
+    
+    public default String getName() {
+        return getIdent().getId();
     }
-
-    public Scope add(Symbol sym) {
-        if (isNull(m_stab)) {
-            m_stab = new SymbolTable();
-        }
-        final String name = sym.getName();
-        invariant(m_stab.insert(name, sym)); //TODO: LG-SYM error
-        return this;
+    
+    public default String getFileLineCol() {
+        return getIdent().getFileLineCol();
     }
-
-    private SymbolTable m_stab;
-
-
 }

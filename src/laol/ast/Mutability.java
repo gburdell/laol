@@ -23,13 +23,15 @@
  */
 package laol.ast;
 
+import laol.ast.etc.IModifiers;
+import java.lang.reflect.Modifier;
 import laol.parser.apfe.KCONST;
 
 /**
  *
  * @author gburdell
  */
-public class Mutability extends Item {
+public class Mutability extends Item implements IModifiers {
 
     public static enum EType {
         eConst, eVar
@@ -51,14 +53,19 @@ public class Mutability extends Item {
         return m_type;
     }
 
+    @Override
+    public int getModifiers() {
+        return isConst() ? Modifier.FINAL : 0;
+    }
+
     public boolean isConst() {
         return m_type == EType.eConst;
     }
-    
+
     public boolean isVar() {
         return m_type == EType.eVar;
     }
-    
+
     private final EType m_type;
 
 }

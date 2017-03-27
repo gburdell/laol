@@ -22,13 +22,20 @@
  * THE SOFTWARE.
  */
 package laol.ast;
+
+import laol.ast.etc.IModifiers;
 import apfe.runtime.Sequence;
+import java.lang.reflect.Modifier;
 
 /**
+ * Method parameter declaration. By default, a method parameter is PUBLIC in
+ * constructor declaration; scope does not apply in a class method (other than
+ * constructor).
  *
  * @author gburdell
  */
-public class MethodParamDeclModifier extends Item implements IAccessMutability {
+public class MethodParamDeclModifier extends Item implements IModifiers {
+
     public MethodParamDeclModifier(final laol.parser.apfe.MethodParamDeclModifier decl) {
         super(decl);
         final Sequence seq = asSequence();
@@ -37,15 +44,13 @@ public class MethodParamDeclModifier extends Item implements IAccessMutability {
     }
 
     @Override
-    public AccessModifier getAccess() {
-        return m_access;
+    public int getModifiers() {
+        return getModifiers(
+                m_access, Modifier.PUBLIC,
+                m_mutability, 0
+        );
     }
 
-    @Override
-    public Mutability getMutability() {
-        return m_mutability;
-    }
-    
-    private final AccessModifier    m_access;
-    private final Mutability        m_mutability;
+    private final AccessModifier m_access;
+    private final Mutability m_mutability;
 }

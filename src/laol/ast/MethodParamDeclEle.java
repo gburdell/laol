@@ -22,15 +22,23 @@
  * THE SOFTWARE.
  */
 package laol.ast;
+
 import apfe.runtime.Acceptor;
 import apfe.runtime.Sequence;
-import gblib.Util;
+import java.util.Collections;
+import java.util.LinkedList;
+import java.util.List;
+import laol.ast.etc.IModifiers;
+import laol.ast.etc.ISymbol;
+import laol.ast.etc.ISymbolCreator;
+import laol.ast.etc.SymbolTable;
 
 /**
  *
  * @author gburdell
  */
-public class MethodParamDeclEle extends Item {
+public class MethodParamDeclEle extends Item implements ISymbolCreator, IModifiers {
+
     public MethodParamDeclEle(final laol.parser.apfe.MethodParamDeclEle decl) {
         super(decl);
         Sequence seq = asSequence();
@@ -42,12 +50,12 @@ public class MethodParamDeclEle extends Item {
             m_ele = new Named(acc);
         }
     }
-    
+
     /**
      * A more complex element.
      */
-    public static class Named extends Item {
-        
+    public class Named extends Item implements ISymbol {
+
         public Named(Acceptor parsed) {
             super(parsed);
             final Sequence seq = asSequence();
@@ -70,7 +78,7 @@ public class MethodParamDeclEle extends Item {
             return m_paramName;
         }
 
-        public TypeName getType() {
+        public TypeName getTypeName() {
             return m_type;
         }
 
@@ -78,36 +86,86 @@ public class MethodParamDeclEle extends Item {
             return m_hasStar;
         }
 
-        private final TypeName  m_type;
+        private final TypeName m_type;
         private final boolean m_hasStar;
         private final ParamName m_paramName;
         private final MethodParamDeclDefault m_default;
+
+        @Override
+        public Ident getIdent() {
+            return m_paramName.getName();
+        }
+
+        @Override
+        public EType getType() {
+            return EType.eMemberVar;
+        }
+
+        @Override
+        public int getModifiers() {
+            return MethodParamDeclEle.this.getModifiers();
+        }
     }
 
-    public Item getEle() {
-        return m_ele;
+    public Named asNamed() {
+        return Named.class.cast(m_ele);
     }
 
-    public MethodParamDeclModifier getModifier() {
-        return m_modifier;
+    public AnonymousFunctionDecl asAnonFuncDecl() {
+        return AnonymousFunctionDecl.class.cast(m_ele);
     }
-   
+
+    @Override
+    public int getModifiers() {
+        return m_modifier.getModifiers();
+    }
+
     public boolean isNamed() {
-        return getEle() instanceof Named;
+        return m_ele instanceof Named;
     }
-    
+
     public ParamName getParamName() {
         ParamName name;
         if (isNamed()) {
-            final Named named = Util.downCast(getEle());
-            name = named.getParamName();
+            name = asNamed().getParamName();
         } else {
-            final AnonymousFunctionDecl afunc = Util.downCast(getEle());
-            name = afunc.getParmName();
+            name = asAnonFuncDecl().getParmName();
         }
         return name;
     }
-    
-    private final MethodParamDeclModifier   m_modifier;
+
+    private final MethodParamDeclModifier m_modifier;
     private final Item m_ele;
+
+    public class AnonFuncDeclSymbol implements ISymbol {
+
+        private AnonFuncDeclSymbol(AnonymousFunctionDecl decl) {
+            m_decl = decl;
+        }
+
+        private final AnonymousFunctionDecl m_decl;
+
+        @Override
+        public EType getType() {
+            return m_decl.getType();
+        }
+
+        @Override
+        public Ident getIdent() {
+            return m_decl.getIdent();
+        }
+
+        @Override
+        public int getModifiers() {
+            return MethodParamDeclEle.this.getModifiers();
+        }
+    }
+
+    @Override
+    public boolean insert(SymbolTable stab) {
+        ISymbol sym = isNamed() ? asNamed() : new AnonFuncDeclSymbol(asAnonFuncDecl());
+        return stab.insert(sym);
+    }
+
+    public final static List<MethodParamDeclEle> EMPTY_LIST = Collections.unmodifiableList(new LinkedList<>());
 }

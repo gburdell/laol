@@ -23,19 +23,18 @@
  */
 package laol.ast;
 
-import apfe.runtime.Acceptor;
-import apfe.runtime.Marker;
 import apfe.runtime.Repetition;
 import apfe.runtime.Sequence;
-import apfe.runtime.Util;
-import java.util.LinkedList;
-import java.util.List;
+import gblib.Util;
+import java.lang.reflect.Modifier;
+import laol.ast.etc.ISymbol;
+import laol.ast.etc.ISymbolCreator;
 
 /**
  *
  * @author gburdell
  */
-public class InterfaceDeclaration extends Item {
+public class InterfaceDeclaration extends Item implements ISymbol, ISymbolCreator {
 
     public InterfaceDeclaration(final laol.parser.apfe.InterfaceDeclaration decl) {
         super(decl);
@@ -65,8 +64,27 @@ public class InterfaceDeclaration extends Item {
         return m_implements;
     }
 
-    public Ident getName() {
+    @Override
+    public EType getType() {
+        return EType.eInterface;
+    }
+
+    @Override
+    public Ident getIdent() {
         return m_name;
+    }
+
+    /**
+     * Get access privilege for InterfaceDeclaration. Default is private.
+     *
+     * @return modifiers encoded as per java.lang.reflect.Modifier.
+     */
+    @Override
+    public int getModifiers() {
+        return Util.getNonNullValue(
+                getAccess(),
+                e -> e.getType().getModifier(),
+                () -> Modifier.PRIVATE);
     }
 
     private final AccessModifier m_access;

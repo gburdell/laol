@@ -29,7 +29,7 @@ import apfe.runtime.Sequence;
  *
  * @author gburdell
  */
-public class ParamName extends Item implements ISimpleName {
+public class ParamName extends Item {
 
     public ParamName(final laol.parser.apfe.ParamName decl) {
         super(decl);
@@ -48,15 +48,5 @@ public class ParamName extends Item implements ISimpleName {
 
     private final boolean m_isMember;
     private final Ident m_name;
-
-    @Override
-    public String asSimpleName() {
-        return getName().getId();
-    }
-
-    @Override
-    public String getFileLineCol() {
-        return getName().getFileLineCol();
-    }
 
 }

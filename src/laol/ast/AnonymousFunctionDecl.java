@@ -24,12 +24,15 @@
 package laol.ast;
 
 import apfe.runtime.Sequence;
+import laol.ast.etc.IName;
+import laol.ast.etc.ISymbol;
 
 /**
  *
  * @author gburdell
  */
-public class AnonymousFunctionDecl extends Item {
+public class AnonymousFunctionDecl extends Item implements IName, ISymbol {
+
     public AnonymousFunctionDecl(final laol.parser.apfe.AnonymousFunctionDecl decl) {
         super(decl);
         final Sequence seq = asSequence();
@@ -49,10 +52,31 @@ public class AnonymousFunctionDecl extends Item {
     public ParamName getParmName() {
         return m_parmName;
     }
-    
+
     private final ParamName m_parmName;
     private final MethodParamDecl m_parms;
     private final MethodReturnDecl m_return;
-    
-    
+
+    @Override
+    public Ident getIdent() {
+        return getParmName().getName();
+    }
+
+    @Override
+    public EType getType() {
+        return EType.eAnonFunc;
+    }
+
+    /**
+     * We're almost a ISymbol --- but we need an actual implementation of
+     * getModifiers.
+     *
+     * @return 0 (invalid).
+     */
+    @Override
+    public int getModifiers() {
+        assert (false);
+        return 0;
+    }
+
 }

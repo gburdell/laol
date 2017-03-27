@@ -38,7 +38,7 @@ import static laol.generate.java.Util.getExtends;
  *
  * @author gburdell
  */
-public class ClassDeclaration {
+public class ClassDeclaration extends laol.generate.ClassDeclaration {
 
     public static void process(final laol.ast.ClassDeclaration item, final Context ctx) throws FileNotFoundException, Util.EarlyTermination {
         final ClassDeclaration cdecl = new ClassDeclaration(item, ctx);
@@ -71,7 +71,7 @@ public class ClassDeclaration {
     }
 
     private void declareMembersAndAccessors() {
-        Collection<Member> members = laol.generate.ClassDeclaration.getMembers(m_decl);
+        Collection<Member> members = getMembers(m_decl);
         os().println("//{{ Member declarations\n//** All are mutable (for now)!");
         for (Member mbr : members) {
             os()
