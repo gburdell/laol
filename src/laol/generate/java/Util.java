@@ -56,20 +56,23 @@ public class Util {
         return outdir;
     }
 
+    /*
     public static String getAccessModifier(final ClassDeclaration cdecl) {
         return laol.generate.Util.getNonNullValue(
                 cdecl.getAccess(),
                 AccessModifier::toString,
                 () -> "public");
     }
-
+     */
     /**
-     * Get extend clause.  We're always based on LaolObject: directly if there is
+     * Get extend clause. We're always based on LaolObject: directly if there is
      * no base class; else presumably indirectly through base class (being
      * derived from LaolObject).
+     *
      * @param cdecl ClassDeclaration with possible extends.
      * @return complete extends and implement(s).
      */
+    /*
     public static String getExtends(final ClassDeclaration cdecl) {
         StringBuilder sbuf = new StringBuilder(" extends ");
         sbuf.append(laol.generate.Util.getNonNullValue(
@@ -79,7 +82,8 @@ public class Util {
         );
         return sbuf.toString();
     }
-
+     */
+ /*
     private static String getExtends(final ClassExtends cex) {
         StringBuilder sbuf = new StringBuilder();
         sbuf.append(cex.hasExtends() ? cex.getExtends().asSimpleName() : "LaolObject ");
@@ -103,5 +107,5 @@ public class Util {
         }
         return sbuf.toString();
     }
-    
+     */
 }

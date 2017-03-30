@@ -40,6 +40,14 @@ import java.util.function.Function;
  */
 public class Util {
 
+    public static boolean hasErrors() {
+        return (0 < getErrorCount());
+    }
+    
+    public static int getErrorCount() {
+        return MessageMgr.getErrorCnt();
+    }
+    
     /**
      * Exception to indicate early termination, with all relevant
      * messaging done already.

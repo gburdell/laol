@@ -27,6 +27,7 @@ import apfe.runtime.Repetition;
 import apfe.runtime.Sequence;
 import gblib.Util;
 import java.lang.reflect.Modifier;
+import java.util.EnumSet;
 import laol.ast.etc.ISymbol;
 import laol.ast.etc.ISymbolCreator;
 
@@ -65,8 +66,8 @@ public class InterfaceDeclaration extends Item implements ISymbol, ISymbolCreato
     }
 
     @Override
-    public EType getType() {
-        return EType.eInterface;
+    public EnumSet<EType> getType() {
+        return ISymbol.INTERFACE_TYPE;
     }
 
     @Override

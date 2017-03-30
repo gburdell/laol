@@ -25,6 +25,7 @@ package laol.ast;
 
 import apfe.runtime.Repetition;
 import apfe.runtime.Sequence;
+import java.util.EnumSet;
 import java.util.LinkedList;
 import java.util.List;
 import laol.ast.etc.ISymbol;
@@ -66,8 +67,8 @@ public class VarDeclStatement extends Item implements ISymbolCreator {
         }
 
         @Override
-        public EType getType() {
-            return EType.eVar;
+        public EnumSet<EType> getType() {
+            return ISymbol.VAR_TYPE;
         }
 
         @Override

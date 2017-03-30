@@ -1,0 +1,17 @@
+package "pkg6"
+import "laol.rt.*"
+/* an error: since * above matches LaolMap
+import "laol.rt.LaolMap"
+*/
+
+class C extends D {
+	def f1 {return "C::f1"}	
+}
+
+class D extends E {
+	def f1 {return "D::f1"}	
+}
+
+class E {
+	def f1 {return "E::f1"}	
+}

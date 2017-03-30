@@ -27,13 +27,18 @@ import apfe.runtime.Sequence;
 import gblib.Util;
 import static gblib.Util.invariant;
 import java.lang.reflect.Modifier;
-import java.util.Collections;
+import java.util.EnumSet;
 import java.util.List;
+import gblib.AtomicBoolean;
+import java.util.Collection;
+import java.util.LinkedList;
+import java.util.Objects;
 import java.util.stream.Collectors;
 import laol.ast.etc.HierSymbolTable;
 import laol.ast.etc.IModifiers;
 import laol.ast.etc.ISymbol;
 import laol.ast.etc.ISymbolCreator;
+import laol.ast.etc.Inherited;
 import laol.ast.etc.SymbolTable;
 
 /**
@@ -80,8 +85,8 @@ public class ClassDeclaration extends Item implements IModifiers, ISymbol, ISymb
     private final ClassBody m_body;
 
     @Override
-    public EType getType() {
-        return EType.eClass;
+    public EnumSet<EType> getType() {
+        return ISymbol.CLASS_TYPE;
     }
 
     /**
@@ -95,7 +100,8 @@ public class ClassDeclaration extends Item implements IModifiers, ISymbol, ISymb
     }
 
     @Override
-    public void createContentSymbolsImpl(SymbolTable parent) {
+    public boolean createContentSymbolsImpl(SymbolTable parent) {
+        AtomicBoolean ok = new AtomicBoolean(true);
         m_stab = new HierSymbolTable(parent);
         // Add constructor params as members
         Util.getNonNullValue(
@@ -107,51 +113,111 @@ public class ClassDeclaration extends Item implements IModifiers, ISymbol, ISymb
                 .stream()
                 //take named and anonFuncDecl; so NO filter: .filter(MethodParamDeclEle::isNamed)
                 .forEach((MethodParamDeclEle ele) -> {
-                    ele.insert(m_stab);
+                    ok.and(ele.insert(m_stab));
                 });
         //inherited class and its members
         if (isNonNull(m_extends)) {
+            List<ISymbol> superDecls = new LinkedList<>();
             if (m_extends.hasExtends()) {
                 final String superClsName = m_extends.getExtends().getId();
-                List<ISymbol> superClsDecls = Util.getNonNullValue(
-                        m_stab.getParent().get(superClsName),
-                        ISymbol.EMPTY_LIST
-                )
+                List<ISymbol> superClsDecls = m_stab
+                        .getParent()
+                        .getOrDefault(superClsName, ISymbol.EMPTY_LIST)
                         .stream()
-                        .filter(sym -> sym.getType() == EType.eClass)
+                        .filter(sym -> sym.isClass())
                         .collect(Collectors.toList());
                 invariant(1 == superClsDecls.size());
-                //we dont add the inherited/super cls decl: but we'll
+                superDecls.addAll(superDecls);
+            }
+            //continue with implements/interfaces
+            if (m_extends.hasImplements()) {
+                m_extends
+                        .getImplements()
+                        .getNames()
+                        .stream()
+                        .map(
+                                (intrfcName) -> m_stab
+                                        .getParent()
+                                        .getOrDefault(intrfcName.getId(), ISymbol.EMPTY_LIST)
+                                        .stream()
+                                        .filter(sym -> sym.isInterface())
+                                        .collect(Collectors.toList())
+                        )
+                        .forEachOrdered((intrfcDecls) -> {
+                            superDecls.addAll(intrfcDecls);
+                        });
+            }
+            ok.and(pushDownInherited(superDecls));
+        }
+        //todo: var decls...
+        //todo: method defs...
+        //todo: inner class decl
+        return ok.get();
+    }
+
+    private boolean pushDownInherited(Collection<ISymbol> inherited) {
+        return pushDownInherited(inherited, m_stab);
+    }
+
+    /**
+     * Push down inherited Class or Interface members into HierSymbolTable.
+     * TODO: this is not a recursive operation: we only do one level here!
+     *
+     * @param inherited inherited Class and/or Interface.
+     * @param stab hierarchical symbol table.
+     * @return true on success; else false if issue(s).
+     */
+    /*package: share with InterfaceDecl*/
+    static boolean pushDownInherited(Collection<ISymbol> inherited, HierSymbolTable stab) {
+        AtomicBoolean ok = new AtomicBoolean(true);
+        for (ISymbol superCls : inherited) {
+            SymbolTable superClsSymbols = superCls.getSymbolTable();
+            if (Objects.nonNull(superClsSymbols)) {
                 //add its public/protected constructor/methods/vars (and label inheritedXXX)
-                //and public inheritedMethods/vars
-                SymbolTable superClsSymbols = superClsDecls.get(0).getSymbolTable();
                 superClsSymbols.values()
                         .stream()
                         .flatMap(symList -> {
                             return symList
                                     .stream()
-                                    .filter(sym->canInherit(sym));
+                                    .filter(sym -> canInherit(sym, superCls.isInterface()));
                         })
-                        .forEach((ISymbol inherited) -> {
-                            
+                        .forEach((ISymbol inheritedSym) -> {
+                            ok.and(stab.insert(new Inherited(inheritedSym)));
                         });
+                //and add public inheritedMethods/vars
+                superClsSymbols.values()
+                        .stream()
+                        .flatMap(symList -> {
+                            return symList
+                                    .stream()
+                                    .filter(sym -> sym.isPublic() && sym.isInherited());
+                        })
+                        .forEach((ISymbol publicInherited) -> {
+                            ok.and(stab.insert(publicInherited));
+                        });
+
+            }
+            if (!ok.get()) {
+                break; //for: if we have any issues
             }
         }
-        //todo: var decls...
-        //todo: method defs...
-        //todo: inner class decl
+        return ok.get();
     }
 
-    private static boolean canInherit(ISymbol sym) {
-        switch (sym.getType()) {
-            case eConstructor: case eMemberMethod: case eMemberVar:
-                break;
-            default:
-                return false;
+    /**
+     * Check if can inherit symbol.
+     *
+     * @param sym symbol to check for inherit-ability.
+     * @return true if we can inherit symbol.
+     */
+    private static boolean canInherit(ISymbol sym, boolean isInterface) {
+        invariant(!isInterface || !sym.isConstructor());  //interface does not have constructor
+        if (!sym.isAnyOf(CONSTRUCTOR_TYPE, MEMBER_METHOD_TYPE, MEMBER_VAR_TYPE)) {
+            return false;
         }
         return sym.isPublic() || sym.isProtected();
     }
-    
+
     @Override
     public SymbolTable getSymbolTable() {
         return m_stab;

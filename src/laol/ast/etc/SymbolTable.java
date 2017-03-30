@@ -25,7 +25,6 @@ package laol.ast.etc;
 
 import gblib.MessageMgr;
 import gblib.Pair;
-import static gblib.Util.assertNever;
 import static gblib.Util.error;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -35,13 +34,14 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.Consumer;
+import java.util.function.Predicate;
 
 /**
  *
  * @author kpfalzer
  */
 public class SymbolTable extends HashMap<String, List<ISymbol>> {
-
+    
     /**
      * Insert a map of element by name into symbol table.
      *
@@ -96,13 +96,8 @@ public class SymbolTable extends HashMap<String, List<ISymbol>> {
     }
 
     private static boolean allowedDup(ISymbol value) {
-        switch (value.getType()) {
-            case eConstructor: //fall through
-            case eMemberMethod:
-                return true;
-            default:
-                return false;
-        }
+        return value.getType().equals(ISymbol.CONSTRUCTOR_TYPE)
+                || value.getType().equals(ISymbol.MEMBER_METHOD_TYPE);
     }
 
     public boolean insert(ISymbol sym) {
@@ -113,17 +108,18 @@ public class SymbolTable extends HashMap<String, List<ISymbol>> {
      * Insert another SymbolTable into this one.
      *
      * @param stab SymbolTable to add.
+     * @param ifTrue insert symbol ifTrue(sym[i].value)
      * @param onDup optional receiver to handle duplicates. If invoked, pass
      * Pair of current and new ISymbol with same name/key. If onDup is null,
      * then no receiver called on duplicate.
      * @return true if no duplicates detected during insert; else false.
      */
-    public boolean insert(SymbolTable stab, Consumer<Pair<ISymbol, ISymbol>> onDup) {
+    public boolean insert(SymbolTable stab, Predicate<ISymbol> ifTrue, Consumer<Pair<ISymbol, ISymbol>> onDup) {
         // We use Atomic to be able to update w/in lambda.
         AtomicBoolean ok = new AtomicBoolean(true);
         stab.forEach((k, vals) -> {
-            vals.forEach(v -> {
-                if (ok.get() && !insert(k, v)) {
+            vals.forEach((ISymbol v) -> {
+                if (ok.get() && ifTrue.test(v) && !insert(k, v)) {
                     ok.set(false);
                     if (Objects.nonNull(onDup)) {
                         onDup.accept(new Pair<>(get(k).get(0), v));
@@ -134,15 +130,15 @@ public class SymbolTable extends HashMap<String, List<ISymbol>> {
         return ok.get();
     }
 
-    public boolean insert(SymbolTable stab) {
-        return insert(stab, DUP_MSG);
+    public boolean insert(SymbolTable stab, Predicate<ISymbol> ifTrue) {
+        return insert(stab, ifTrue, DUP_MSG);
     }
 
     private static final Consumer DUP_MSG = new Consumer<Pair<ISymbol, ISymbol>>() {
 
         @Override
         public void accept(Pair<ISymbol, ISymbol> dup) {
-            error("LG-SYM", dup.v2.getFileLineCol(), dup.v1.getFileLineCol());
+            error("LG-SYM", dup.v2.getFileLineCol(), dup.v1.getName(), dup.v1.getFileLineCol());
         }
 
     };

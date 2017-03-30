@@ -24,6 +24,7 @@
 package laol.ast;
 
 import apfe.runtime.Sequence;
+import java.util.EnumSet;
 import laol.ast.etc.IName;
 import laol.ast.etc.ISymbol;
 
@@ -62,9 +63,11 @@ public class AnonymousFunctionDecl extends Item implements IName, ISymbol {
         return getParmName().getName();
     }
 
+    public static final EnumSet<ISymbol.EType> ANONFUNC_TYPE = ISymbol.createType(EType.eAnonFunc);
+    
     @Override
-    public EType getType() {
-        return EType.eAnonFunc;
+    public EnumSet<EType> getType() {
+        return ANONFUNC_TYPE;
     }
 
     /**

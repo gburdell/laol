@@ -32,10 +32,10 @@ import apfe.runtime.Repetition;
 import apfe.runtime.Sequence;
 import gblib.Util;
 import static gblib.Util.downCast;
+import static gblib.Util.emptyUnmodifiableList;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Objects;
@@ -180,8 +180,10 @@ public abstract class Item {
         return zeroOrMoreIdent(asRepetition(posOfRep), posInSeq);
     }
 
+    private static final List<Ident> EMPTY_IDENT_LIST = emptyUnmodifiableList();
+    
     final protected List<Ident> zeroOrMoreIdent(final Repetition rep , final int posInSeq) {
-        List<Ident> rval = (0 < rep.sizeofAccepted()) ? new LinkedList<>() : Collections.EMPTY_LIST;
+        List<Ident> rval = (0 < rep.sizeofAccepted()) ? new LinkedList<>() : EMPTY_IDENT_LIST;
         for (Acceptor acc : apfe.runtime.Util.extractList(rep, posInSeq)) {
             rval.add(new Ident((IDENT) acc));
         }
@@ -189,7 +191,7 @@ public abstract class Item {
     }
 
     final protected List<Ident> zeroOrMoreIdent(final Repetition rep) {
-        List<Ident> rval = (0 < rep.sizeofAccepted()) ? new LinkedList<>() : Collections.EMPTY_LIST;
+        List<Ident> rval = (0 < rep.sizeofAccepted()) ? new LinkedList<>() : EMPTY_IDENT_LIST;
         for (Acceptor acc : rep.getAccepted()) {
             rval.add(new Ident((IDENT) acc));
         }
@@ -205,7 +207,7 @@ public abstract class Item {
      * @return extracted item(s).
      */
     final protected <T extends Item> List<T> zeroOrMore(final Repetition rep, final int posInSeq) {
-        List<T> rval = (0 < rep.sizeofAccepted()) ? new LinkedList<>() : Collections.EMPTY_LIST;
+        List<T> rval = (0 < rep.sizeofAccepted()) ? new LinkedList<>() : emptyUnmodifiableList();
         for (Acceptor acc : apfe.runtime.Util.extractList(rep, posInSeq)) {
             rval.add(createItem(acc));
         }
@@ -213,7 +215,7 @@ public abstract class Item {
     }
 
     final protected <T extends Item> List<T> zeroOrMore(final Repetition rep) {
-        List<T> rval = (0 < rep.sizeofAccepted()) ? new LinkedList<>() : Collections.EMPTY_LIST;
+        List<T> rval = (0 < rep.sizeofAccepted()) ? new LinkedList<>() : emptyUnmodifiableList();
         for (Acceptor acc : rep.getAccepted()) {
             rval.add(createItem(acc));
         }
@@ -245,7 +247,7 @@ public abstract class Item {
                 rval.add(createItem(item));
             }
         } else {
-            rval = Collections.EMPTY_LIST;
+            rval = emptyUnmodifiableList();
         }
         return rval;
     }

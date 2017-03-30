@@ -24,6 +24,7 @@
 package laol.ast.etc;
 
 import java.lang.reflect.Field;
+import java.util.EnumSet;
 import laol.ast.Ident;
 
 /**
@@ -42,10 +43,11 @@ public class ImportedField implements ISymbol, ISymbolCreator {
     private final String m_fullyQualifiedName;
     private final Field m_field;
     private final String m_location;
+    private static final EnumSet<EType> VAR_TYPE = ISymbol.createType(EType.eVar);
 
     @Override
-    public EType getType() {
-        return EType.eVar;
+    public EnumSet<EType> getType() {
+        return VAR_TYPE;
     }
 
     @Override
@@ -75,7 +77,7 @@ public class ImportedField implements ISymbol, ISymbolCreator {
 
     @Override
     public Ident getIdent() {
-        assert(false);
+        assert (false);
         return null;
     }
 

@@ -22,9 +22,11 @@
  * THE SOFTWARE.
  */
 package laol.ast;
+
 import apfe.runtime.Acceptor;
 import apfe.runtime.Repetition;
 import apfe.runtime.Sequence;
+import gblib.Util;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
@@ -34,24 +36,23 @@ import java.util.List;
  * @author gburdell
  */
 public class HtmlPrimary extends Item {
+
     public HtmlPrimary(final laol.parser.apfe.HtmlPrimary decl) {
         super(decl);
         final Sequence seq = asSequence();
         final Repetition rep = asRepetition(seq, 1);
+        m_items = new LinkedList<>();
         if (0 < rep.sizeofAccepted()) {
-            m_items = new LinkedList<>();
             for (Acceptor acc : rep.getAccepted()) {
                 final Item item = createItem(asPrioritizedChoice(acc).getAccepted(), 1);
                 m_items.add(item);
             }
-        } else {
-            m_items = Collections.EMPTY_LIST;
         }
     }
 
     public List<Item> getItems() {
         return Collections.unmodifiableList(m_items);
     }
-    
-    private List<Item>    m_items;
+
+    private final List<Item> m_items;
 }

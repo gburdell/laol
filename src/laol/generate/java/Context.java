@@ -34,7 +34,6 @@ import java.util.Objects;
 import static java.util.Objects.isNull;
 import laol.ast.Contents;
 import laol.ast.Item;
-import laol.generate.Scope;
 import laol.generate.Util;
 import static laol.generate.java.Util.getOutputDir;
 
@@ -57,10 +56,6 @@ public class Context implements AutoCloseable {
         m_config = parent.getConfig();
         m_parent = parent;
         reset();
-    }
-
-    public Scope getScope() {
-        return m_here;
     }
 
     public Context getParent() {
@@ -141,7 +136,7 @@ public class Context implements AutoCloseable {
     private PrintStream m_os = null;
     private final Contents m_contents;
     private final Config m_config;
-    private final Scope m_here = new Scope();
+    //private final Scope m_here = new Scope();
     private final Context m_parent;
 
 }

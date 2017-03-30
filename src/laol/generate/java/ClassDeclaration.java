@@ -26,25 +26,20 @@ package laol.generate.java;
 import java.io.FileNotFoundException;
 import java.io.PrintStream;
 import java.util.Collection;
-import static java.util.Objects.nonNull;
-import laol.ast.Item;
-import laol.generate.ClassDeclaration.Member;
-import laol.generate.Symbol;
 import laol.generate.Util;
-import static laol.generate.java.Util.getAccessModifier;
-import static laol.generate.java.Util.getExtends;
 
 /**
  *
  * @author gburdell
  */
-public class ClassDeclaration extends laol.generate.ClassDeclaration {
+public class ClassDeclaration  {
 
     public static void process(final laol.ast.ClassDeclaration item, final Context ctx) throws FileNotFoundException, Util.EarlyTermination {
-        final ClassDeclaration cdecl = new ClassDeclaration(item, ctx);
-        cdecl.process();
+        //todo: final ClassDeclaration cdecl = new ClassDeclaration(item, ctx);
+        //todo: cdecl.process();
     }
 
+    /*
     private void process() throws FileNotFoundException, Util.EarlyTermination {
         //add class to current scope
         m_clsSym = new Symbol.Class(m_decl);
@@ -101,4 +96,5 @@ public class ClassDeclaration extends laol.generate.ClassDeclaration {
     private Symbol m_clsSym;
     private final laol.ast.ClassDeclaration m_decl;
     private Context m_ctx;
+*/
 }

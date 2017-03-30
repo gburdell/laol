@@ -25,7 +25,9 @@ package laol.ast;
 
 import apfe.runtime.Acceptor;
 import apfe.runtime.Sequence;
+import static gblib.Util.emptyUnmodifiableList;
 import java.util.Collections;
+import java.util.EnumSet;
 import java.util.LinkedList;
 import java.util.List;
 import laol.ast.etc.IModifiers;
@@ -97,8 +99,8 @@ public class MethodParamDeclEle extends Item implements ISymbolCreator, IModifie
         }
 
         @Override
-        public EType getType() {
-            return EType.eMemberVar;
+        public EnumSet<EType> getType() {
+            return ISymbol.MEMBER_VAR_TYPE;
         }
 
         @Override
@@ -146,7 +148,7 @@ public class MethodParamDeclEle extends Item implements ISymbolCreator, IModifie
         private final AnonymousFunctionDecl m_decl;
 
         @Override
-        public EType getType() {
+        public EnumSet<EType> getType() {
             return m_decl.getType();
         }
 
@@ -167,5 +169,5 @@ public class MethodParamDeclEle extends Item implements ISymbolCreator, IModifie
         return stab.insert(sym);
     }
 
-    public final static List<MethodParamDeclEle> EMPTY_LIST = Collections.unmodifiableList(new LinkedList<>());
+    public final static List<MethodParamDeclEle> EMPTY_LIST = emptyUnmodifiableList();
 }

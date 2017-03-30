@@ -23,14 +23,55 @@
  */
 package laol.ast.etc;
 
+import static gblib.Util.invariant;
+import java.lang.reflect.Modifier;
+import java.util.EnumSet;
+import laol.ast.Ident;
+
 /**
  * Wrap an ISymbol when a subclass inherits content (from super).
  * @author kpfalzer
  */
-public class Inherited {
+public class Inherited implements ISymbol {
     public Inherited(ISymbol fromSuper) {
         m_fromSuper = fromSuper;
+        m_inheritedType = m_fromSuper.getType().clone();
+        invariant(true == m_inheritedType.add(EType.eIsInherited));
+        //we should not have affected super's type.
+        assert (false == m_fromSuper.isInherited());
+        int inheritedModifier = m_fromSuper.getModifiers();
+        if (m_fromSuper.isProtected()) {
+            //a protected becomes private in inherited...
+            inheritedModifier |= Modifier.PRIVATE;
+        }
+        m_inheritedModifiers = inheritedModifier;
     }
     
     private final ISymbol m_fromSuper;
+    private final EnumSet<EType> m_inheritedType;
+    private final int m_inheritedModifiers;
+
+    @Override
+    public EnumSet<EType> getType() {
+        return m_inheritedType;
+    }
+
+    @Override
+    public boolean hasScope() {
+        return m_fromSuper.hasScope();
+    }
+
+    @Override
+    public int getModifiers() {
+        return m_inheritedModifiers;
+    }
+
+    @Override
+    public Ident getIdent() {
+        return m_fromSuper.getIdent();
+    }
+    
+    public ISymbol getSuper() {
+        return m_fromSuper;
+    }
 }

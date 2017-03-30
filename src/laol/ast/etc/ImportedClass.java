@@ -23,8 +23,8 @@
  */
 package laol.ast.etc;
 
+import java.util.EnumSet;
 import laol.ast.Ident;
-import laol.ast.Item;
 
 /**
  * Class from an import/require statement
@@ -44,8 +44,8 @@ public class ImportedClass implements ISymbol, ISymbolCreator {
     private final String m_location;
 
     @Override
-    public EType getType() {
-        return EType.eClass;
+    public EnumSet<EType> getType() {
+        return CLASS_TYPE;
     }
 
     @Override

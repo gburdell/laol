@@ -92,6 +92,12 @@ public class Contents extends Item {
         return isNonNull(m_package);
     }
 
+    public boolean hasSamePackage(Contents cmp) {
+        boolean isSame = (!hasPackage() && !cmp.hasPackage());
+        isSame |= getPackageName().equals(cmp.getPackageName());
+        return isSame;
+    }
+    
     public String getPackageName() {
         return hasPackage() ? getPackage().getPackageName().toString() : null;
     }
@@ -123,7 +129,7 @@ public class Contents extends Item {
                         .entrySet()
                         .stream()
                         .collect(Collectors.toMap(
-                                kv -> kv.getValue().getName(),
+                                kv -> kv.getValue().getSimpleName(),
                                 kv -> new ImportedClass(
                                         where,
                                         kv.getKey(),
@@ -146,6 +152,10 @@ public class Contents extends Item {
                 });
     }
 
+    public SymbolTable getSymbolTable() {
+        return m_stab;
+    }
+    
     private final PackageStatement m_package;
     private final List<ImportStatement> m_requires;
     private final List<FileItem> m_fileItems;

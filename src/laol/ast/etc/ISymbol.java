@@ -23,7 +23,10 @@
  */
 package laol.ast.etc;
 
+import static gblib.Util.emptyUnmodifiableList;
 import static gblib.Util.invariant;
+import java.util.Collections;
+import java.util.EnumSet;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -33,49 +36,120 @@ import java.util.List;
  */
 public interface ISymbol extends IName, IModifiers {
 
-    //todo: use EnumSet for storage...
     public static enum EType {
-        eClass, eInterface, 
-        eMethod, //not associated with class/interface
-        eVar,    //ditto...
-        eMemberVar, 
-        eAnonFunc, 
-        eMemberMethod,
+        //primitive types
+        eClass,
+        eInterface,
+        eMethod,
+        eVar,
         eConstructor,
-        eInheritedMethod,
-        eInheritedVar,
-        eInheritedConstructor
+        eAnonFunc,
+        //modifiers
+        eIsMember,
+        eIsInherited
     }
 
-    public EType getType();
+    /**
+     * Return enumerated set of one type.
+     *
+     * @param t0 one type.
+     * @return enumerated set.
+     */
+    public static EnumSet<EType> createType(EType t0) {
+        return EnumSet.of(t0);
+    }
+
+    /**
+     * Return enumerated set of one or more type.
+     *
+     * @param t0 at least one type.
+     * @param types more types.
+     * @return enumerated set.
+     */
+    public static EnumSet<EType> createType(EType t0, EType... types) {
+        return EnumSet.of(t0, types);
+    }
+
+    public static final EnumSet<EType> CLASS_TYPE = ISymbol.createType(EType.eClass);
+    public static final EnumSet<EType> INTERFACE_TYPE = ISymbol.createType(EType.eInterface);
+    public static final EnumSet<EType> CONSTRUCTOR_TYPE = ISymbol.createType(EType.eConstructor);
+    public static final EnumSet<EType> MEMBER_METHOD_TYPE = ISymbol.createType(EType.eIsMember, EType.eMethod);
+    public static final EnumSet<EType> MEMBER_VAR_TYPE = ISymbol.createType(EType.eIsMember, EType.eVar);
+    public static final EnumSet<EType> VAR_TYPE = ISymbol.createType(EType.eVar);
+    public static final EnumSet<EType> ANONFUNC_TYPE = ISymbol.createType(EType.eAnonFunc);
+
+    public EnumSet<EType> getType();
+
+    public default boolean isConstructor() {
+        return getType().equals(CONSTRUCTOR_TYPE);
+    }
+
+    public default boolean isClass() {
+        return getType().equals(CLASS_TYPE);
+    }
+
+    public default boolean isInterface() {
+        return getType().equals(INTERFACE_TYPE);
+    }
+
+    public default boolean isMemberMethod() {
+        return getType().equals(MEMBER_METHOD_TYPE);
+    }
+
+    public default boolean isMemberVar() {
+        return getType().equals(MEMBER_VAR_TYPE);
+    }
+
+    public default boolean isInherited() {
+        return isAnyOf(EType.eIsInherited);
+    }
 
     /**
      * Check if symbol is (at least) one of the specified types.
+     *
      * @param types types to check.
      * @return true if symbol at least one of these types.
      */
-    public default boolean isA(EType... types) {
+    public default boolean isAnyOf(EType... types) {
         for (EType type : types) {
-            if (getType() == type) {
+            if (getType().contains(type)) {
                 return true;
             }
         }
         return false;
     }
-    
+
+    /**
+     * Check if symbol is (at least) one of the specified types.
+     *
+     * @param types types to check.
+     * @return true if symbol at least one of these types.
+     */
+    public default boolean isAnyOf(EnumSet<EType>... types) {
+        for (EnumSet<EType> type : types) {
+            if (getType().equals(type)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     public default boolean hasScope() {
-        return (EType.eVar != getType()) && (EType.eMemberVar != getType());
+        return !isAnyOf(EType.eVar) && !isImported();
     }
 
     /**
      * Create SymbolTable within contents (i.e., for hasScope()==true types).
      *
      * @param parent
+     * @return true on success (or if no scope); false on symbol error.
      */
-    public default void createContentSymbols(SymbolTable parent) {
+    public default boolean createContentSymbols(SymbolTable parent) {
+        boolean ok = true;
         if (hasScope()) {
-            createContentSymbolsImpl(parent);
+            ok = createContentSymbolsImpl(parent);
         }
+        return ok;
     }
 
     /**
@@ -83,9 +157,10 @@ public interface ISymbol extends IName, IModifiers {
      * will implement this method.
      *
      * @param parent parent SymbolTable.
+     * @return true on success; else false on symbol error.
      */
-    public default void createContentSymbolsImpl(SymbolTable parent) {
-        invariant(false);
+    public default boolean createContentSymbolsImpl(SymbolTable parent) {
+        return true;
     }
 
     public default boolean isImported() {
@@ -97,6 +172,7 @@ public interface ISymbol extends IName, IModifiers {
      *
      * @return encoded modifiers.
      */
+    @Override
     public default int getModifiers() {
         return 0;
     }
@@ -109,6 +185,6 @@ public interface ISymbol extends IName, IModifiers {
     public default SymbolTable getSymbolTable() {
         return null;
     }
-    
-    public static final List<ISymbol> EMPTY_LIST = new LinkedList<>();
+
+    public static final List<ISymbol> EMPTY_LIST = emptyUnmodifiableList();
 }

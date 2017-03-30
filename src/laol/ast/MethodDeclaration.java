@@ -29,6 +29,7 @@ import apfe.runtime.Sequence;
 import gblib.Util;
 import static gblib.Util.invariant;
 import java.lang.reflect.Modifier;
+import java.util.EnumSet;
 import laol.ast.etc.ISymbol;
 import laol.ast.etc.ISymbolCreator;
 import laol.parser.apfe.KDEFAULT;
@@ -104,8 +105,8 @@ public class MethodDeclaration extends Item implements ISymbol, ISymbolCreator, 
     }
 
     @Override
-    public EType getType() {
-        return EType.eMethod;
+    public EnumSet<EType> getType() {
+        return ISymbol.MEMBER_METHOD_TYPE;
     }
 
     @Override
