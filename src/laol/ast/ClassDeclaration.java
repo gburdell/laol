@@ -118,35 +118,22 @@ public class ClassDeclaration extends Item implements IModifiers, ISymbol, ISymb
         //inherited class and its members
         if (isNonNull(m_extends)) {
             List<ISymbol> superDecls = new LinkedList<>();
-            if (m_extends.hasExtends()) {
-                final String superClsName = m_extends.getExtends().getId();
-                List<ISymbol> superClsDecls = m_stab
-                        .getParent()
-                        .getOrDefault(superClsName, ISymbol.EMPTY_LIST)
-                        .stream()
-                        .filter(sym -> sym.isClass())
-                        .collect(Collectors.toList());
-                invariant(1 == superClsDecls.size());
-                superDecls.addAll(superDecls);
-            }
-            //continue with implements/interfaces
-            if (m_extends.hasImplements()) {
-                m_extends
-                        .getImplements()
-                        .getNames()
-                        .stream()
-                        .map(
-                                (intrfcName) -> m_stab
-                                        .getParent()
-                                        .getOrDefault(intrfcName.getId(), ISymbol.EMPTY_LIST)
-                                        .stream()
-                                        .filter(sym -> sym.isInterface())
-                                        .collect(Collectors.toList())
-                        )
-                        .forEachOrdered((intrfcDecls) -> {
-                            superDecls.addAll(intrfcDecls);
-                        });
-            }
+            //only has implements/interfaces
+            m_extends
+                    .getImplements()
+                    .getNames()
+                    .stream()
+                    .map(
+                            (intrfcName) -> m_stab
+                                    .getParent()
+                                    .computeIfAbsent(intrfcName.getId(), x->ISymbol.EMPTY_LIST)
+                                    .stream()
+                                    .filter(sym -> sym.isInterface())
+                                    .collect(Collectors.toList())
+                    )
+                    .forEachOrdered((intrfcDecls) -> {
+                        superDecls.addAll(intrfcDecls);
+                    });
             ok.and(pushDownInherited(superDecls));
         }
         //todo: var decls...
@@ -160,10 +147,10 @@ public class ClassDeclaration extends Item implements IModifiers, ISymbol, ISymb
     }
 
     /**
-     * Push down inherited Class or Interface members into HierSymbolTable.
+     * Push down inherited Interface members into HierSymbolTable.
      * TODO: this is not a recursive operation: we only do one level here!
      *
-     * @param inherited inherited Class and/or Interface.
+     * @param inherited inherited Interface.
      * @param stab hierarchical symbol table.
      * @return true on success; else false if issue(s).
      */

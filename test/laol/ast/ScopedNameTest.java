@@ -36,10 +36,7 @@ import static org.junit.Assert.*;
 public class ScopedNameTest extends TestRunner {
 
     private final String TESTS[] = {
-        "1name1",
-        "2name2.name3",
-        "1name4",
-        "3name5.name6.name7"
+        "1name1"
     };
 
     @Override

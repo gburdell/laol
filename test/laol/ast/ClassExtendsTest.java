@@ -35,10 +35,8 @@ import static org.junit.Assert.*;
 public class ClassExtendsTest extends TestRunner {
 
     private final String TESTS[] = {
-        "extends Foo",
-        "implements Bar",
-        "extends Dog implements Bar",
-        "extends Cat implements Im1, Jk3"
+        "implements Foo",
+        "implements Im1, Jk3"
     };
 
     @Override
@@ -59,5 +57,3 @@ public class ClassExtendsTest extends TestRunner {
     }
 
 }
-
-

@@ -22,23 +22,24 @@
  * THE SOFTWARE.
  */
 package laol.ast;
-import apfe.runtime.Sequence;
+import java.util.Collections;
+import java.util.List;
 
 /**
  *
  * @author gburdell
  */
-public class PackageStatement extends Item {
-    public PackageStatement(final laol.parser.apfe.PackageStatement decl) {
+public class InterfaceBody extends Item {
+    public InterfaceBody(final laol.parser.apfe.InterfaceBody decl) {
         super(decl);
-        final Sequence seq = asSequence();
-        m_package = new AString(seq.itemAt(1));
+        m_stmts = zeroOrMore(decl.getBaseAccepted());
     }
 
-    public AString getPackageName() {
-        return m_package;
+    public List<Statement> getStatements() {
+        return isNonNull(m_stmts) 
+                ? Collections.unmodifiableList(m_stmts) 
+                : gblib.Util.emptyUnmodifiableList();
     }
-
-    private final AString   m_package;
     
+    private final List<Statement>   m_stmts;
 }

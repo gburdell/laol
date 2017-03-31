@@ -1,14 +1,14 @@
-package "pkg6"
-import "laol.rt.*"
+package pkg6
+import laol.rt.*
 /* an error: since * above matches LaolMap
-import "laol.rt.LaolMap"
+import laol.rt.LaolMap
 */
 
-class C extends D {
+class C implements D {
 	def f1 {return "C::f1"}	
 }
 
-class D extends E {
+class D implements E {
 	def f1 {return "D::f1"}	
 }
 

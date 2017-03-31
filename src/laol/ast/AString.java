@@ -89,7 +89,11 @@ public class AString extends Item {
     @Override
     public String toString() {
         assert (1 == m_items.size());
-        StringItem sitem = downCast(m_items.get(0));
+        Item asItem = m_items.get(0);
+        if (asItem instanceof S) {
+            return ((S) asItem).toString();
+        }
+        StringItem sitem = downCast(asItem);
         assert (1 == sitem.getItems().size());
         Item item = sitem.getItems().get(0);
         assert (item instanceof S);

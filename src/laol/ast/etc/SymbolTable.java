@@ -27,6 +27,7 @@ import gblib.MessageMgr;
 import gblib.Pair;
 import static gblib.Util.error;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -41,12 +42,13 @@ import java.util.function.Predicate;
  * @author kpfalzer
  */
 public class SymbolTable extends HashMap<String, List<ISymbol>> {
-    
+
     /**
      * Insert a map of element by name into symbol table.
      *
      * @param <T> type which we apply createSymbol to create ISymbol.
      * @param symbols map of elements by name.
+     * @param ifTrue insert symbol ifTrue(sym[i].value)
      * @param onDup optional receiver to handle duplicates. If invoked, pass
      * Pair of current and new ISymbol with same name/key. If onDup is null,
      * then no receiver called on duplicate.
@@ -54,10 +56,11 @@ public class SymbolTable extends HashMap<String, List<ISymbol>> {
      */
     public <T> boolean insert(
             Map<String, ISymbol> symbols,
+            Predicate<ISymbol> ifTrue,
             Consumer<Pair<ISymbol, ISymbol>> onDup) {
         AtomicBoolean ok = new AtomicBoolean(true);
         symbols.forEach((k, v) -> {
-            if (!insert(k, v)) {
+            if (ifTrue.test(v) && !insert(k, v)) {
                 ok.set(false);
                 if (Objects.nonNull(onDup)) {
                     onDup.accept(new Pair<>(get(k).get(0), v));
@@ -67,8 +70,13 @@ public class SymbolTable extends HashMap<String, List<ISymbol>> {
         return ok.get();
     }
 
-    public <T> boolean insert(Map<String, ISymbol> symbols) {
-        return insert(symbols, DUP_MSG);
+    /**
+     * Insert (more) symbols iff. they don't already exist.
+     * @param symbols symbols to insert (if they dont already exist).
+     * @return true; else, false on insert error.
+     */
+    public boolean insert(Map<String, ISymbol> symbols) {
+        return insert(symbols, s -> !super.containsKey(s.getName()), DUP_MSG);
     }
 
     /**

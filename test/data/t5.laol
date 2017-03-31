@@ -1,9 +1,8 @@
-package "laol.lang"
+package laol.lang
 
-import "laol.rt.*"
-import "laol.rt.io.*"
+import  laol.rt.*, laol.rt.io.*
 
-//interface I1 {}; interface I2{}; interface I3{}
+interface I1 {}; interface I2{}; interface I3{}
 
 class C1 implements I1, i2, i3{
 }
@@ -15,7 +14,7 @@ class C2(p1,p2) {
 const C1
 }
 
-class C3 extends C2 {}
+class C3 implements I1 {}
 
 const NUM = 12 * 23 - 45 * 56 - 67
 

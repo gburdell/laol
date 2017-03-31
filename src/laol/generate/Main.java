@@ -31,7 +31,11 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.function.Function;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
@@ -47,31 +51,46 @@ import laol.ast.etc.SymbolTable;
  */
 public class Main {
 
-    public static void main(final String argv[]) {
+    private Main(String argv[]) {
+        m_argv = argv;
+    }
+
+    private final String m_argv[];
+    private Parse m_parsed;
+    private Map<String, SymbolTable> m_stabByPackage = new HashMap<>();
+
+    public static void main(final String argv[], boolean exitOn0) {
         try {
-            final int status = process(argv);
-            System.exit(status);
+            Main me = new Main(argv);
+            final int status = me.process();
+            if ((0 != status) || exitOn0) {
+                System.exit(status);
+            }
         } catch (IOException | ClassNotFoundException ex) {
             gblib.Util.abnormalExit(ex);
         }
     }
 
-    private static int process(final String argv[]) throws IOException, ClassNotFoundException {
+    public static void main(final String argv[]) {
+        main(argv, false);
+    }
+
+    private int process() throws IOException, ClassNotFoundException {
         int status = 1;
-        if (1 > argv.length) {
+        if (1 > m_argv.length) {
             usage();
         } else {
-            Collection<String> srcFiles = CMD_OPTIONS.process(argv);
+            Collection<String> srcFiles = CMD_OPTIONS.process(m_argv);
             MessageMgr.setMessageLevel(CONFIG.getAsInteger("verbosity"));
             if (srcFiles.isEmpty()) {
                 error("LG-NOSRC");
             } else if (checkOptions()) {
-                Parse parse = new Parse(srcFiles);
-                if (parse.hasErrors()) {
-                    error("LG-EXIT", parse.getErrorCnt());
+                m_parsed = new Parse(srcFiles);
+                if (m_parsed.hasErrors()) {
+                    error("LG-EXIT", m_parsed.getErrorCnt());
                     status = 2;
                 } else {
-                    status = link(parse.getAsts(), CONFIG.getAsString("jars"));
+                    status = setupStabs(CONFIG.getAsString("jars"));
                     if (0 == status) {
                         /*todo
                         status = laol.generate.java.Generate
@@ -86,59 +105,59 @@ public class Main {
     }
 
     /**
-     * Run link step to resolve symbols:
+     * Setup SymbolTables:
      * <ol>
-     * <li>foreach ast/compilation-unit (aka. CU[i]): import into CU[i]
+     * <li>foreach ast/compilation-unit (aka. CU[i]): import into CU[i])
      * <li>foreach CU[i]: add toplevel symbols to CU[i]
-     * <li>foreach CU[i]: add CU[!=i].symbols to CU[i].symbol iff same package
-     * <li>foreach CU[i]: pushdown symbols into class and interface. CU[i]
+     * <li>foreach CU[i]: populate stabByPackage.
      * </ol>
      *
      * @param asts CUs to process.
      * @param jars colon-separated .jar file(s)
      * @return 0 on success; !=0 if error(s).
      */
-    private static int link(Collection<Parse.Ast> asts, String jars) throws IOException, ClassNotFoundException {
+    private int setupStabs(String jars) {
+        Collection<Parse.Ast> asts = m_parsed.getAsts();
         Collection<String> jarFiles = Arrays.asList(jars.split(":"));
+        //get contents to process
         List<Contents> allCUs = asts
                 .stream()
                 .map((Parse.Ast to) -> {
                     return to.getGrammar().getContents();
                 })
                 .collect(Collectors.toList());
-        for (Contents contents : allCUs) {
-            //easier to deal w/ exceptions using old-fashioned for(){}
-            contents.createSymbolTable(jarFiles);
-        }
-        if (Util.hasErrors()) {
-            return Util.getErrorCount();
-        }
-        //cross symbols from other CU into this CU iff. same package.
-        int errCnt = allCUs
+        //add toplevel symbols to CU[i] 
+        boolean ok = allCUs
                 .stream()
-                .mapToInt((Contents to) -> {
-                    return allCUs
-                            .stream()
-                            .filter((Contents from) -> !to.equals(from) && to.hasSamePackage(from))
-                            .map(from -> {
-                                return to
-                                        .getSymbolTable()
-                                        .insert(from.getSymbolTable(), (ISymbol sym) -> !sym.isImported());
-                            })
-                            .mapToInt(ok -> {
-                                return ok ? 0 : 1;
-                            }).sum();
-                }).sum();
-        if (0 == errCnt) {
-            errCnt = allCUs
-                    .stream()
-                    .mapToInt((Contents contents) -> {
-                        boolean ok = true; //TODO
-                        return (ok) ? 0 : 1;
-                    })
-                    .sum();
-        }
-        return errCnt;
+                .map(contents -> {
+                    return contents.createSymbolTable();
+                })
+                .allMatch(e -> e);
+        //update SymbolTables by package.
+        ok &= allCUs
+                .stream()
+                .map((Contents cu) -> {
+                    SymbolTable pkgStab = m_stabByPackage.computeIfAbsent(cu.getPackageName(), x -> new SymbolTable());
+                    return pkgStab.insert(cu.getSymbolTable(), (ISymbol sym) -> !sym.isImported());
+                }).allMatch(e -> e);
+        /*
+         *  At this point, we have processed all CU.  
+         *  Each has a symbol table.
+         *  We also have a map of SymbolTable by package.
+         *  Next, pull imports into each CU.
+         */
+        ok &= allCUs
+                .stream()
+                .map((Contents contents) -> {
+                    try {
+                        return contents.processImports(jarFiles, m_stabByPackage);
+                    } catch (IOException | ClassNotFoundException ex) {
+                        Util.handleException(ex);
+                    }
+                    return false;
+                })
+                .allMatch(e -> e);
+        return ok ? 0 : 1;
     }
 
     /**

@@ -22,45 +22,21 @@
  * THE SOFTWARE.
  */
 package laol.ast;
-import apfe.runtime.Repetition;
-import apfe.runtime.Sequence;
-import laol.parser.apfe.KEXTENDS;
 
 /**
- *
+ * A class can only implement.
  * @author gburdell
  */
 public class ClassExtends extends Item {
+
     public ClassExtends(final laol.parser.apfe.ClassExtends decl) {
         super(decl);
-        Sequence cls = asPrioritizedChoice().getAccepted();
-        Class clz = cls.getAccepted()[0].getClass();
-        if (clz == KEXTENDS.class) {
-            m_extends = createItem(cls, 1);
-            Repetition imps = asRepetition(cls, 2);
-            cls = (0 < imps.sizeofAccepted()) ? imps.getOnlyAccepted() : null;
-        } else {
-            m_extends = null;
-        }
-        m_implements = (null != cls) ? createItem(cls, 1) : null;
+        m_implements = createItem(1);
     }
 
-    public boolean hasExtends() {
-        return (null != m_extends);
-    }
-    
-    public ScopedName getExtends() {
-        return m_extends;
-    }
-
-    public boolean hasImplements() {
-        return (null != m_implements);
-    }
-    
     public ScopedNameList getImplements() {
         return m_implements;
     }
-    
-    private final ScopedName m_extends;
-    private final ScopedNameList   m_implements;
+
+    private final ScopedNameList m_implements;
 }

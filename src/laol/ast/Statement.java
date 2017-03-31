@@ -23,6 +23,8 @@
  */
 package laol.ast;
 
+import apfe.runtime.Acceptor;
+
 /**
  *
  * @author gburdell
@@ -30,6 +32,10 @@ package laol.ast;
 public class Statement extends Item {
 
     public Statement(final laol.parser.apfe.Statement decl) {
+        this((Acceptor)decl);
+    }
+
+    protected Statement(final Acceptor decl) {
         super(decl);
         m_stmt = createItem(asPrioritizedChoice().getAccepted());
     }

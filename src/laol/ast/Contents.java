@@ -25,24 +25,20 @@ package laol.ast;
 
 import apfe.runtime.Sequence;
 import gblib.JarFile;
-import gblib.Pair;
 import java.io.IOException;
-import java.lang.reflect.Field;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.HashMap;
-import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
-import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import laol.ast.etc.ISymbol;
 import laol.ast.etc.ISymbolCreator;
 import laol.ast.etc.ImportedClass;
 import laol.ast.etc.ImportedField;
 import laol.ast.etc.SymbolTable;
+import static laol.generate.Util.resolve;
 
 /**
  * Contents is the topmost compilation unit (a source file). It/Contents is
@@ -60,28 +56,14 @@ public class Contents extends Item {
         m_fileItems = zeroOrMore(seq, 2);
     }
 
-    /**
-     * Create symbol table:
-     * <ol>
-     * <li>process require/import statements
-     * <li>process declarations in this Contents (source file).
-     * </ol>
-     *
-     * @param jarFiles collection of .jar used for require statement processing.
-     * @throws java.io.IOException
-     * @throws java.lang.ClassNotFoundException
-     */
-    public void createSymbolTable(Collection<String> jarFiles) throws IOException, ClassNotFoundException {
-        processImports(jarFiles);
-        processContents();
-    }
-
     public List<FileItem> getFileItems() {
         return Collections.unmodifiableList(m_fileItems);
     }
 
     public List<ImportStatement> getRequires() {
-        return Collections.unmodifiableList(m_requires);
+        List<ImportStatement> stmts = new LinkedList<>();
+        m_requires.forEach((ImportStatements imports)->{stmts.addAll(imports.getImports());});
+        return Collections.unmodifiableList(stmts);
     }
 
     public PackageStatement getPackage() {
@@ -97,7 +79,7 @@ public class Contents extends Item {
         isSame |= getPackageName().equals(cmp.getPackageName());
         return isSame;
     }
-    
+
     public String getPackageName() {
         return hasPackage() ? getPackage().getPackageName().toString() : null;
     }
@@ -106,58 +88,82 @@ public class Contents extends Item {
      * After AST is created, pull in any required packages, etc.
      *
      * @param jarFiles .jar file(s) to process to find requires/imports.
+     * @param stabByPackage SymbolTable by package name.
+     * @return true on success; false on error.
      * @throws java.io.IOException
      * @throws java.lang.ClassNotFoundException
      */
-    private void processImports(Collection<String> jarFiles) throws IOException, ClassNotFoundException {
+    public boolean processImports(
+            Collection<String> jarFiles,
+            Map<String, SymbolTable> stabByPackage
+    ) throws IOException, ClassNotFoundException {
+        boolean ok = true;
         for (ImportStatement imprt : getRequires()) {
             final String where = imprt.getImport().getFileLineCol();
             final String req = imprt.getImport().toString();
-            Map<String, ISymbol> imported;
-            if (imprt.isStatic()) {
-                imported = JarFile.getStaticNamesInPackage(req)
-                        .entrySet()
-                        .stream()
-                        .collect(Collectors.toMap(
-                                kv -> kv.getValue().getName(),
-                                kv -> new ImportedField(
-                                        where,
-                                        kv.getKey(),
-                                        kv.getValue())));
+            SymbolTable fromPkg = resolve(stabByPackage, req);
+            if (isNonNull(fromPkg)) {
+                //insert from package iff. symbol does NOT exist.
+                //thus: package defined symbols overshadow imports
+                ok &= m_stab.insert(fromPkg, s -> !m_stab.containsKey(s.getName()));
             } else {
-                imported = JarFile.getImports(Arrays.asList(req), jarFiles)
-                        .entrySet()
-                        .stream()
-                        .collect(Collectors.toMap(
-                                kv -> kv.getValue().getSimpleName(),
-                                kv -> new ImportedClass(
-                                        where,
-                                        kv.getKey(),
-                                        kv.getValue())));
+                Map<String, ISymbol> imported;
+                if (imprt.isStatic()) {
+                    imported = JarFile.getStaticNamesInPackage(req)
+                            .entrySet()
+                            .stream()
+                            .collect(Collectors.toMap(
+                                    kv -> kv.getValue().getName(),
+                                    kv -> new ImportedField(
+                                            where,
+                                            kv.getKey(),
+                                            kv.getValue())));
+                } else {
+                    imported = JarFile.getImports(Arrays.asList(req), jarFiles)
+                            .entrySet()
+                            .stream()
+                            .collect(Collectors.toMap(
+                                    kv -> kv.getValue().getSimpleName(),
+                                    kv -> new ImportedClass(
+                                            where,
+                                            kv.getKey(),
+                                            kv.getValue())));
+                }
+                ok &= m_stab.insert(imported);
             }
-            m_stab.insert(imported);
+            if (!ok) {
+                break;//for
+            }
         }
+        return ok;
     }
 
-    private void processContents() {
+    /**
+     * Create SymbolTable for elements declared in Contents.
+     *
+     * @return true on success; false on error.
+     */
+    public boolean createSymbolTable() {
         //map to Statements which create symbols
-        getFileItems()
+        boolean ok = getFileItems()
                 .stream()
                 .map(fileItem -> fileItem.getStatement().getStmt())
                 .filter(item -> item instanceof ISymbolCreator)
                 .map(ISymbolCreator.class::cast)
                 //insert into symbol table
-                .forEach(symCreator -> {
-                    symCreator.insert(m_stab);
-                });
+                .map(symCreator -> {
+                    return symCreator.insert(m_stab);
+                })
+                .allMatch(e -> e);
+        return ok;
     }
 
     public SymbolTable getSymbolTable() {
         return m_stab;
     }
-    
+
     private final PackageStatement m_package;
-    private final List<ImportStatement> m_requires;
+    private final List<ImportStatements> m_requires;
     private final List<FileItem> m_fileItems;
 
     /**

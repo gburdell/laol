@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2016 gburdell.
+ * Copyright 2017 kpfalzer.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -22,23 +22,15 @@
  * THE SOFTWARE.
  */
 package laol.ast;
-import apfe.runtime.Sequence;
 
 /**
  *
- * @author gburdell
+ * @author kpfalzer
  */
-public class PackageStatement extends Item {
-    public PackageStatement(final laol.parser.apfe.PackageStatement decl) {
+public class ClassBodyStatement extends Statement {
+
+    public ClassBodyStatement(final laol.parser.apfe.ClassBodyStatement decl) {
         super(decl);
-        final Sequence seq = asSequence();
-        m_package = new AString(seq.itemAt(1));
     }
-
-    public AString getPackageName() {
-        return m_package;
-    }
-
-    private final AString   m_package;
     
 }

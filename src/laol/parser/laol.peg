@@ -263,11 +263,14 @@ assignment_op <-
 /   PCNT_EQ
     
 contents <-
-    package_statement? import_statement* file_item+
+    package_statement? import_statements* file_item+
 
-package_statement <- K_PACKAGE STRING
+package_statement <- K_PACKAGE PACKAGE_NAME K_tail
+PACKAGE_NAME <- [a-zA-Z][a-zA-Z_0-9]* ('.' [a-zA-Z][a-zA-Z_0-9]*)*
 
-import_statement <- K_IMPORT K_STATIC? STRING
+import_statements <- K_IMPORT import_statement (COMMA import_statement)*
+import_statement  <- K_STATIC? IMPORT_NAME
+IMPORT_NAME <- PACKAGE_NAME ".*"? K_tail
 
 file_item <- statement
 
@@ -291,6 +294,30 @@ statement <-
 /   expression_statement
 /   var_decl_statement
 /   dsl_statement
+
+// same as statement: but no inner class/interface
+class_body_statement <-
+    case_statement
+/   if_statement
+/   while_statement
+/   until_statement
+/   for_statement
+/   block_statement
+/   break_statement
+/   next_statement
+/   alias_statement
+/   return_statement 
+/   try_statement 
+/   throw_statement
+/   method_declaration 
+/   assign_statement
+/   expression_statement
+/   var_decl_statement
+/   dsl_statement
+
+interface_body_statement <-
+	method_declaration 
+/   assign_statement
 
 block_statement <- LCURLY sp statement* RCURLY eos ;
 break_statement <- K_BREAK eos ;
@@ -333,13 +360,15 @@ interface_declaration <-
     K_INTERFACE IDENTNK
         (K_EXTENDS scoped_name_list)?
         LCURLY 
-            class_body
+            interface_body
         RCURLY sp	//NOTE: no eos here
 
 //1st statement is initializer
-class_body <- base_class_initializer? statement*
+class_body <- base_class_initializer? class_body_statement*
 
 base_class_initializer <- K_SUPER method_param_decl 
+
+interface_body <- interface_body_statement*
 
 access_modifier <- (K_PRIVATE / K_PROTECTED / K_PUBLIC) 
 
@@ -353,7 +382,6 @@ method_param_decl_list <- method_param_decl_ele (COMMA method_param_decl_ele)*
 
 method_param_decl_ele <-
     //NOTE: only last in list can have STAR (marks as varargs)
-    // AND (&) marks as function parameter
     method_param_decl_modifier 
     (   anonymous_function_decl 
     /   type_name STAR? param_name method_param_decl_default?
@@ -375,9 +403,8 @@ builtin_type_name <-
 
 method_param_decl_default <- EQ expression
 
-class_extends <- 
-    K_EXTENDS scoped_name (K_IMPLEMENTS scoped_name_list)?
-/   K_IMPLEMENTS scoped_name_list
+//James Gosling would be happy: we only only interfaces
+class_extends <- K_IMPLEMENTS scoped_name_list
 
 scoped_name_list <- scoped_name (COMMA scoped_name)*
 
@@ -391,9 +418,11 @@ method_return_decl <-
 method_return_ele <- type_name param_name?
 
 anonymous_function_defn <-
-    ARROW method_param_decl method_return_decl? LCURLY sp method_body? sp RCURLY 
+    ARROW method_param_decl method_return_decl? 
+	LCURLY sp method_body? sp RCURLY 
 //Ruby style block, :)
-/   LCURLY OR method_param_decl_list OR method_return_decl? sp method_body? sp RCURLY
+/   LCURLY OR method_param_decl_list 
+	OR method_return_decl? sp method_body? sp RCURLY
 
 method_declaration <-
     access_modifier?

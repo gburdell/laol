@@ -47,8 +47,8 @@ public class GrammarTest {
         final String fns[] = {
             //"test/data/t2.txt",
             //"test/data/t1.txt",
-            "lib/laol/collection.laol",
-            //"test/data/t3.txt"
+            //"lib/laol/collection.laol",
+            "test/data/t6.laol"
         };
         try {
             for (String fn : fns) {

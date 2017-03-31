@@ -29,13 +29,15 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Map;
 import java.util.Objects;
-import java.util.function.Supplier;
-import java.util.function.Function;
+import java.util.function.Predicate;
+import laol.ast.etc.ISymbol;
+import laol.ast.etc.SymbolTable;
 
 /**
  * Utilities for target agnostic generation.
- * 
+ *
  * @author kpfalzer
  */
 public class Util {
@@ -43,14 +45,14 @@ public class Util {
     public static boolean hasErrors() {
         return (0 < getErrorCount());
     }
-    
+
     public static int getErrorCount() {
         return MessageMgr.getErrorCnt();
     }
-    
+
     /**
-     * Exception to indicate early termination, with all relevant
-     * messaging done already.
+     * Exception to indicate early termination, with all relevant messaging done
+     * already.
      */
     public static class EarlyTermination extends Exception {
 
@@ -58,8 +60,9 @@ public class Util {
         public String getMessage() {
             return "Terminate early due to previous error(s)";
         }
-        
+
     }
+
     /**
      * Create directory if not already exists.
      *
@@ -88,10 +91,37 @@ public class Util {
         }
     }
 
-     public static void handleException(Exception ex) {
+    public static void handleException(Exception ex) {
         error("LG-EXCPT");
         ex.printStackTrace(MessageMgr.getOstrm('E'));
         System.exit(3);
     }
-    
+
+    /**
+     * Resolve import name against SymbolTable by package name.
+     *
+     * @param stabByPackage map of SymbolTable by package name.
+     * @param importNm name to import (including package.* style)
+     * @return SymbolTable with result; null if not found.
+     */
+    public static SymbolTable resolve(Map<String, SymbolTable> stabByPackage, final String importNm) {
+        SymbolTable stab = null;
+        Predicate<ISymbol> takeSymbol;
+        final int n = importNm.lastIndexOf('.');
+        String pkgName = importNm.substring(0, n);
+        if (stabByPackage.containsKey(pkgName)) {
+            if (importNm.endsWith(".*")) {
+                takeSymbol = s -> {
+                    return true;
+                };
+            } else {
+                takeSymbol = (ISymbol s) -> {
+                    return s.getName().equals(importNm.substring(n + 1));
+                };
+            }
+            stab = new SymbolTable();
+            stab.insert(stabByPackage.get(pkgName), takeSymbol);
+        }
+        return stab;
+    }
 }

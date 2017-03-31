@@ -31,7 +31,7 @@ import static gblib.Util.downCast;
  */
 public interface Iterable extends ILaol {
     
-    public abstract Iterator iterator();
+    public Iterator iterator();
     
     /**
      * Iterate over each element and pass to consumer.

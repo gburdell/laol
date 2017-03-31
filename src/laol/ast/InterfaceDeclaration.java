@@ -57,7 +57,7 @@ public class InterfaceDeclaration extends Item implements ISymbol, ISymbolCreato
         return m_access;
     }
 
-    public ClassBody getBody() {
+    public InterfaceBody getBody() {
         return m_body;
     }
 
@@ -91,6 +91,6 @@ public class InterfaceDeclaration extends Item implements ISymbol, ISymbolCreato
     private final AccessModifier m_access;
     private final Ident m_name;
     private final ScopedNameList m_implements;
-    private final ClassBody m_body;
+    private final InterfaceBody m_body;
 
 }

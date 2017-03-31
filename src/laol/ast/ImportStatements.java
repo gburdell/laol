@@ -23,22 +23,25 @@
  */
 package laol.ast;
 import apfe.runtime.Sequence;
+import java.util.Collections;
+import java.util.LinkedList;
+import java.util.List;
 
 /**
  *
  * @author gburdell
  */
-public class PackageStatement extends Item {
-    public PackageStatement(final laol.parser.apfe.PackageStatement decl) {
+public class ImportStatements extends Item {
+    public ImportStatements(final laol.parser.apfe.ImportStatements decl) {
         super(decl);
         final Sequence seq = asSequence();
-        m_package = new AString(seq.itemAt(1));
+        m_imports.add(createItem(seq, 1));
+        m_imports.addAll(zeroOrMore(asRepetition(seq, 2), 1));
     }
 
-    public AString getPackageName() {
-        return m_package;
+    public List<ImportStatement> getImports() {
+        return Collections.unmodifiableList(m_imports);
     }
-
-    private final AString   m_package;
     
+    private final List<ImportStatement> m_imports = new LinkedList<>();
 }

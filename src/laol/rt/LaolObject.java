@@ -76,6 +76,7 @@ public abstract class LaolObject implements ILaol {
         mutableCheck(true);
     }
 
+    @Override
     public LaolString toS() {
         return new LaolString(super.toString());
     }

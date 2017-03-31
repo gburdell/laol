@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2016 gburdell.
+ * Copyright 2017 kpfalzer.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -21,24 +21,60 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package laol.ast;
-import apfe.runtime.Sequence;
+package laol.rt;
+
+import gblib.Util;
+import org.junit.Test;
+import static org.junit.Assert.*;
 
 /**
  *
- * @author gburdell
+ * @author kpfalzer
  */
-public class PackageStatement extends Item {
-    public PackageStatement(final laol.parser.apfe.PackageStatement decl) {
-        super(decl);
-        final Sequence seq = asSequence();
-        m_package = new AString(seq.itemAt(1));
+public class LaolObjectTest {
+
+    public class A extends LaolObject {
+
+        public ILaol f1() {
+            return new LaolCharacter('A');
+        }
     }
 
-    public AString getPackageName() {
-        return m_package;
+    public class B extends A {
+
     }
 
-    private final AString   m_package;
-    
+    public class C extends B {
+
+        @Override
+        public ILaol f1() {
+            return new LaolCharacter('C');
+        }
+    }
+
+    @Test
+    public void testInheritance() {
+        ILaol obj1, r1;
+        LaolCharacter c1;
+        {
+            obj1 = new C();
+            r1 = obj1.cm("f1");
+            c1 = Util.downCast(r1);
+            assertTrue('C' == c1.get());
+        }
+        {
+            A asA = new C();
+            obj1 = asA;
+            r1 = obj1.cm("f1");
+            c1 = Util.downCast(r1);
+            assertTrue('C' == c1.get());
+        }
+        {
+            obj1 = new B();
+            r1 = obj1.cm("f1");
+            c1 = Util.downCast(r1);
+            assertTrue('A' == c1.get());
+        }
+    }
+
 }
