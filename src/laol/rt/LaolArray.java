@@ -35,30 +35,30 @@ import java.util.Objects;
  *
  * @author kpfalzer
  */
-public class LaolArray extends LaolObject {
+public class LaolArray extends LaolBase {
 
     public LaolArray() {
         m_eles = new ArrayList();
     }
 
-    public LaolArray(final Collection<? extends ILaol> items) {
+    public LaolArray(final Collection<? extends Laol> items) {
         m_eles = new ArrayList(items);
     }
 
     //operator <<
-    public ILaol add(final ILaol val) {
+    public Laol add(final Laol val) {
         mutableCheck();
         m_eles.add(val);
         return this;
     }
 
     //operator []=
-    public ILaol set(final ILaol ix, final ILaol val) {
+    public Laol set(final Laol ix, final Laol val) {
         return set(LaolNumber.toInteger(ix).get(), val);
     }
 
     //operator []=
-    private ILaol set(final int ix, final ILaol val) {
+    private Laol set(final int ix, final Laol val) {
         mutableCheck();
         final int i = realIndex(ix);
         if (isValidIndex(i)) {
@@ -69,27 +69,27 @@ public class LaolArray extends LaolObject {
     }
 
     //operator []
-    public ILaol get(final ILaol ix) {
+    public Laol get(final Laol ix) {
         return get(LaolNumber.toInteger(ix).get());
     }
 
     //operator []
-    private ILaol get(final int ix) {
+    private Laol get(final int ix) {
         final int i = realIndex(ix);
-        final ILaol val = isValidIndex(i) ? m_eles.get(i) : null;
+        final Laol val = isValidIndex(i) ? m_eles.get(i) : null;
         return val;
     }
 
     //empty?
-    public ILaol isEmpty() {
+    public Laol isEmpty() {
         return new LaolBoolean(m_eles.isEmpty());
     }
 
-    public ILaol size() {
+    public Laol size() {
         return new LaolInteger(m_eles.size());
     }
 
-    private int realIndex(final ILaol ix) {
+    private int realIndex(final Laol ix) {
         return realIndex(realIndex(LaolNumber.toInteger(ix).get()));
     }
 
@@ -104,7 +104,7 @@ public class LaolArray extends LaolObject {
 
     public static class IndexException extends LaolException {
 
-        public IndexException(final ILaol ix) {
+        public IndexException(final Laol ix) {
             this((int)LaolNumber.toInteger(ix).get());
         }
 
@@ -134,13 +134,13 @@ public class LaolArray extends LaolObject {
         return Objects.deepEquals(this.m_eles, other.m_eles);
     }
 
-    public Slice slice(ILaol startIx, ILaol length) {
+    public Slice slice(Laol startIx, Laol length) {
         return new Slice(startIx, length);
     }
     
     public class Slice implements ISlice {
 
-        public Slice(ILaol startIx, ILaol length) {
+        public Slice(Laol startIx, Laol length) {
             this(LaolNumber.toInteger(startIx).get(), LaolNumber.toInteger(length).get());
         }
 
@@ -155,7 +155,7 @@ public class LaolArray extends LaolObject {
 
         @Override
         public ISlice assignImpl(laol.rt.Iterator items) {
-            ILaol newval;
+            Laol newval;
             for (int ix = m_startIx; ix < m_lastIx; ix++) {
                 newval = items.next();  //we get null (ok!) if exhausted
                 set(ix, newval);
@@ -187,8 +187,8 @@ public class LaolArray extends LaolObject {
             private int m_currIx;
 
             @Override
-            public ILaol next() {
-                ILaol rval = null;
+            public Laol next() {
+                Laol rval = null;
                 if (hasNext().get()) {
                     rval = get(m_currIx++);
                 }
@@ -209,5 +209,5 @@ public class LaolArray extends LaolObject {
 
     }
 
-    private final ArrayList<ILaol> m_eles;
+    private final ArrayList<Laol> m_eles;
 }

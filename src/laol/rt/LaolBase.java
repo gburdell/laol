@@ -31,34 +31,34 @@ import gblib.Util;
  *
  * @author kpfalzer
  */
-public abstract class LaolObject implements ILaol {
+public abstract class LaolBase implements Laol {
 
     /**
      * Set immutable object.
-     * @param <T> subclass of LaolObject.
+     * @param <T> subclass of LaolBase.
      * @param val object to make immutable.
      * @return immutable object.
      */
-    public static <T extends LaolObject> T asConst(final T val) {
+    public static <T extends LaolBase> T asConst(final T val) {
         return val.setMutable(false);
     }
     
     /**
      * Set mutable object.
-     * @param <T> subclass of LaolObject.
+     * @param <T> subclass of LaolBase.
      * @param val object to make mutable.
      * @return mutable object.
      */
-    public static <T extends LaolObject> T asVar(final T val) {
+    public static <T extends LaolBase> T asVar(final T val) {
         return val.setMutable(true);
     }
     
-    public final <T extends LaolObject> T setMutable(boolean val) {
+    public final <T extends LaolBase> T setMutable(boolean val) {
         m_mutable = val;
         return Util.downCast(this);
     }
 
-    public final <T extends LaolObject> T setMutable() {
+    public final <T extends LaolBase> T setMutable() {
         return setMutable(true);
     }
 

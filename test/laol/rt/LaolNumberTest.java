@@ -39,8 +39,9 @@ public class LaolNumberTest {
     public void testAddOp() {
         int i = 1;
         final int tests[][] = {{123, 456}, {Integer.MAX_VALUE, 1}};
-        ILaol a, b;
-        ILaol z;
+        Laol a;
+        Laol b;
+        Laol z;
         for (int test[] : tests) {
             a = new LaolInteger(test[0]);
             b = new LaolInteger(test[1]);

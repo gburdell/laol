@@ -31,14 +31,14 @@ package laol.rt;
  * 
  * @author kpfalzer
  */
-public interface Iterator extends ILaol {
+public interface Iterator extends Laol {
 
     /**
      * Provide next object or null, if no more exist.
      *
      * @return next object or null.
      */
-    public ILaol next();
+    public Laol next();
     
     public LaolBoolean hasNext(); 
 

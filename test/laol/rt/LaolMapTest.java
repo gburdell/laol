@@ -53,11 +53,11 @@ public class LaolMapTest {
             assertEquals(from2, val2);
         }
         {
-            ILaol dutObj = dut;
-            ILaol key2 = new LaolString("key2");
+            Laol dutObj = dut;
+            Laol key2 = new LaolString("key2");
             double d = 9876.4321;
-            ILaol val2 = new LaolDouble(d);
-            ILaol rval = dutObj.callPublic("set", key2, val2);
+            Laol val2 = new LaolDouble(d);
+            Laol rval = dutObj.callPublic("set", key2, val2);
             assertEquals(val2, rval);
             rval = dutObj.callPublic("get", key2);
             assertEquals(val2, rval);
@@ -67,7 +67,8 @@ public class LaolMapTest {
         {
             final int N = 2000;
             LaolMap map = new LaolMap().setMutable();
-            ILaol key3, val3;
+            Laol key3;
+            Laol val3;
             for (int i = 0; i < N; i++) {
                 key3 = new LaolInteger(i);
                 val3 = new LaolString(key3.toS());

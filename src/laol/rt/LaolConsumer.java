@@ -27,19 +27,19 @@ package laol.rt;
  *
  * @author gburdell
  */
-public class LaolConsumer extends LaolObject {
+public class LaolConsumer extends LaolBase {
 
     @FunctionalInterface
     public interface Consumer {
 
-        void accept(ILaol ele);
+        void accept(Laol ele);
     }
 
     public LaolConsumer(Consumer c) {
         m_consumer = c;
     }
 
-    public void accept(ILaol ele) {
+    public void accept(Laol ele) {
         m_consumer.accept(ele);
     }
 

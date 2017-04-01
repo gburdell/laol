@@ -33,20 +33,20 @@ public class LaolString extends LaolBox<String> {
         super(val);
     }
 
-    public LaolString(final ILaol val) {
+    public LaolString(final Laol val) {
         this(val.toS().toString());
     }
 
-    public ILaol plusEqOp(final LaolString a) {
+    public Laol plusEqOp(final LaolString a) {
         set(get() + a.get());
         return this;
     }
 
-    public ILaol plusEqOp(final ILaol a) {
+    public Laol plusEqOp(final Laol a) {
         return plusEqOp(a.toS());
     }
 
-    public ILaol length() {
+    public Laol length() {
         return new LaolInteger(get().length());
     }
 }

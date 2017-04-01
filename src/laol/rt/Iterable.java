@@ -29,7 +29,7 @@ import static gblib.Util.downCast;
  *
  * @author kpfalzer
  */
-public interface Iterable extends ILaol {
+public interface Iterable extends Laol {
     
     public Iterator iterator();
     
@@ -38,10 +38,10 @@ public interface Iterable extends ILaol {
      * @param cb consumer.
      * @return null.
      */
-    public default Void forEach(ILaol cb) {
+    public default Void forEach(Laol cb) {
         final LaolConsumer consumer = downCast(cb);
         final Iterator iter = iterator();
-        ILaol ele;
+        Laol ele;
         while (true) {
             ele = iter.next();
             if (null == ele) {

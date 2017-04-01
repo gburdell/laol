@@ -33,29 +33,29 @@ import java.util.Objects;
  *
  * @author kpfalzer
  */
-public class LaolMap extends LaolObject {
+public class LaolMap extends LaolBase {
 
     public LaolMap() {
     }
 
     //operator []=
-    public ILaol set(final ILaol key, final ILaol val) {
+    public Laol set(final Laol key, final Laol val) {
         mutableCheck();
         m_map.put(key, val);
         return val;
     }
 
     //operator []
-    public ILaol get(final ILaol key) {
+    public Laol get(final Laol key) {
         return m_map.get(key);
     }
 
     //empty?
-    public ILaol isEmpty() {
+    public Laol isEmpty() {
         return new LaolBoolean(m_map.isEmpty());
     }
 
-    public ILaol size() {
+    public Laol size() {
         return new LaolInteger(m_map.size());
     }
 
@@ -69,7 +69,7 @@ public class LaolMap extends LaolObject {
         if (this == obj) {
             return true;
         }
-        if (obj == null) {
+        if (Objects.isNull(obj)) {
             return false;
         }
         if (getClass() != obj.getClass()) {
@@ -79,5 +79,5 @@ public class LaolMap extends LaolObject {
         return Objects.equals(this.m_map, other.m_map);
     }
 
-    private final Map<ILaol, ILaol> m_map = new LinkedHashMap<>();
+    private final Map<Laol, Laol> m_map = new LinkedHashMap<>();
 }

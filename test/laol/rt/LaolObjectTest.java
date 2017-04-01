@@ -33,9 +33,9 @@ import static org.junit.Assert.*;
  */
 public class LaolObjectTest {
 
-    public class A extends LaolObject {
+    public class A extends LaolBase {
 
-        public ILaol f1() {
+        public Laol f1() {
             return new LaolCharacter('A');
         }
     }
@@ -47,14 +47,15 @@ public class LaolObjectTest {
     public class C extends B {
 
         @Override
-        public ILaol f1() {
+        public Laol f1() {
             return new LaolCharacter('C');
         }
     }
 
     @Test
     public void testInheritance() {
-        ILaol obj1, r1;
+        Laol obj1;
+        Laol r1;
         LaolCharacter c1;
         {
             obj1 = new C();

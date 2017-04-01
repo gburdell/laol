@@ -92,11 +92,10 @@ public class Main {
                 } else {
                     status = setupStabs(CONFIG.getAsString("jars"));
                     if (0 == status) {
-                        /*todo
                         status = laol.generate.java.Generate
-                                .create(parse.getAsts(), CONFIG)
+                                .create(m_parsed.getAsts(), CONFIG)
                                 .generate();
-                         */
+
                     }
                 }
             }

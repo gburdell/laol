@@ -47,23 +47,13 @@ public class Context implements AutoCloseable {
     public Context(final Contents contents, final Config config) {
         m_contents = contents;
         m_config = config;
-        m_parent = null;
         reset();
     }
 
     public Context(final Context parent) {
         m_contents = parent.getContents();
         m_config = parent.getConfig();
-        m_parent = parent;
         reset();
-    }
-
-    public Context getParent() {
-        return m_parent;
-    }
-
-    public boolean hasParent() {
-        return Objects.nonNull(m_parent);
     }
 
     public Config getConfig() {
@@ -136,7 +126,5 @@ public class Context implements AutoCloseable {
     private PrintStream m_os = null;
     private final Contents m_contents;
     private final Config m_config;
-    //private final Scope m_here = new Scope();
-    private final Context m_parent;
 
 }

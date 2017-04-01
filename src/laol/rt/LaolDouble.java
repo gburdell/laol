@@ -34,37 +34,37 @@ public class LaolDouble extends LaolBox<Double> implements LaolNumber {
     }
 
     @Override
-    public ILaol toDouble() {
+    public Laol toDouble() {
         return this;
     }
 
     @Override
-    public ILaol toInteger() {
+    public Laol toInteger() {
         return new LaolInteger(get().intValue());
     }
 
     @Override
-    public ILaol addOp(ILaol b) {
+    public Laol addOp(Laol b) {
         return binaryDblOp(this, b, (x, y) -> x + y);
     }
 
     @Override
-    public ILaol subOp(ILaol b) {
+    public Laol subOp(Laol b) {
         return binaryDblOp(this, b, (x, y) -> x - y);
     }
 
     @Override
-    public ILaol multOp(ILaol b) {
+    public Laol multOp(Laol b) {
         return binaryDblOp(this, b, (x, y) -> x * y);
     }
 
     @Override
-    public ILaol divOp(ILaol b) {
+    public Laol divOp(Laol b) {
         return binaryDblOp(this, b, (x, y) -> x / y);
     }
 
     @Override
-    public void set(ILaol val) {
+    public void set(Laol val) {
         super.set(LaolNumber.toDouble(val).get());
     }
 

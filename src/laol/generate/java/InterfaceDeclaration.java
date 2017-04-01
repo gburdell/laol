@@ -1,9 +1,7 @@
-package laol.rt;
-
 /*
  * The MIT License
  *
- * Copyright 2017 kpfalzer.
+ * Copyright 2017 gburdell.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -23,35 +21,22 @@ package laol.rt;
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
+package laol.generate.java;
+
+import java.io.FileNotFoundException;
+import java.io.PrintStream;
+import java.util.Collection;
+import laol.generate.Util;
 
 /**
- * Methods to manipulate selected objects of a collection.
- * 
- * @author kpfalzer
+ *
+ * @author gburdell
  */
-public interface ISlice extends Iterable {
-    /**
-     * Assign (1:1) to slice elements.
-     * If there are fewer number of items, then null values are assigned
-     * to remaining elements in slice.
-     * If there are more number of items, then the extra assign items are unused.
-     * @param items (Iterator) new values to assign to each element of slice.
-     * @return this slice.
-     */
-    public default ISlice assign(Laol items) {
-        Iterator iter = downCast(items);
-        return assignImpl(iter);
+public class InterfaceDeclaration  {
+
+    public static void process(final laol.ast.InterfaceDeclaration item, final Context ctx) throws FileNotFoundException, Util.EarlyTermination {
+        //todo: final ClassDeclaration cdecl = new ClassDeclaration(item, ctx);
+        //todo: cdecl.process();
     }
 
-    public ISlice assignImpl(Iterator items);
-    
-    /**
-     * Get number of objects in this slice.
-     * @return number of objects in this slice.
-     */
-    public LaolInteger size();
-    
-    public default LaolBoolean isEmpty() {
-        return new LaolBoolean(1 > size().get());
-    }
 }

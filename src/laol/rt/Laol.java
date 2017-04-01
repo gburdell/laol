@@ -37,7 +37,7 @@ import java.util.Objects;
  *
  * @author kpfalzer
  */
-public interface ILaol {
+public interface Laol {
 
     public LaolString toS();
 
@@ -48,14 +48,14 @@ public interface ILaol {
      * @param argv argument(s).
      * @return result of method or Void.
      */
-    public default ILaol cm(final String method, ILaol... argv) {
+    public default Laol cm(final String method, Laol... argv) {
         return callPublic(method, argv);
     }
 
-    public default ILaol callPublic(final String method, ILaol... argv) {
-        ILaol rval = null;
+    public default Laol callPublic(final String method, Laol... argv) {
+        Laol rval = null;
         try {
-            rval = (ILaol) getHandle(this.getClass(), method, argv.length)
+            rval = (Laol) getHandle(this.getClass(), method, argv.length)
                     .invoke(this, argv);
         } catch (Exception ex) {
             throw new LaolException(ex);
@@ -71,10 +71,10 @@ public interface ILaol {
         final String key = clz.getName() + "/" + name + "#" + arity;
         MethodHandle handle = HANDLE_BY_NAME.get(key);
         if (null == handle) {
-            final Class<ILaol> rtypes[] = new Class[arity];
-            Arrays.fill(rtypes, ILaol.class);
+            final Class<Laol> rtypes[] = new Class[arity];
+            Arrays.fill(rtypes, Laol.class);
             NoSuchMethodException lastExc = null;
-            for (Class rtnClz : new Class[]{ILaol.class, Void.class}) {
+            for (Class rtnClz : new Class[]{Laol.class, Void.class}) {
                 try {
                     handle = publicLookup()
                             .findVirtual(
@@ -96,14 +96,14 @@ public interface ILaol {
                 throw lastExc;
             }
             //arguments to method are p1,...,p2 (spread: not array)
-            handle = handle.asSpreader(ILaol[].class, arity);
+            handle = handle.asSpreader(Laol[].class, arity);
             HANDLE_BY_NAME.put(key, handle);
         }
         return handle;
     }
 
     // Convenient routines
-    public default <T extends ILaol> T downCast(ILaol ele) {
+    public default <T extends Laol> T downCast(Laol ele) {
         return Util.downCast(ele);
     }
 
