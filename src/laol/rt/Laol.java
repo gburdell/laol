@@ -23,6 +23,7 @@
  */
 package laol.rt;
 
+import laol.rt.primitives.String;
 import gblib.Util;
 import java.lang.invoke.MethodHandle;
 import static java.lang.invoke.MethodHandles.publicLookup;
@@ -39,7 +40,7 @@ import java.util.Objects;
  */
 public interface Laol {
 
-    public LaolString toS();
+    public String toS();
 
     /**
      * Alias for callPublic method.
@@ -48,11 +49,11 @@ public interface Laol {
      * @param argv argument(s).
      * @return result of method or Void.
      */
-    public default Laol cm(final String method, Laol... argv) {
+    public default Laol cm(final java.lang.String method, Laol... argv) {
         return callPublic(method, argv);
     }
 
-    public default Laol callPublic(final String method, Laol... argv) {
+    public default Laol callPublic(final java.lang.String method, Laol... argv) {
         Laol rval = null;
         try {
             rval = (Laol) getHandle(this.getClass(), method, argv.length)
@@ -65,10 +66,10 @@ public interface Laol {
         return rval;
     }
 
-    /*private*/ static final Map<String, MethodHandle> HANDLE_BY_NAME = new HashMap<>();
+    /*private*/ static final Map<java.lang.String, MethodHandle> HANDLE_BY_NAME = new HashMap<>();
 
-    /*private*/ default MethodHandle getHandle(Class clz, String name, int arity) throws NoSuchMethodException, IllegalAccessException {
-        final String key = clz.getName() + "/" + name + "#" + arity;
+    /*private*/ default MethodHandle getHandle(Class clz, java.lang.String name, int arity) throws NoSuchMethodException, IllegalAccessException {
+        final java.lang.String key = clz.getName() + "/" + name + "#" + arity;
         MethodHandle handle = HANDLE_BY_NAME.get(key);
         if (null == handle) {
             final Class<Laol> rtypes[] = new Class[arity];

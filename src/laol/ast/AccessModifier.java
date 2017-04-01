@@ -52,6 +52,10 @@ public class AccessModifier extends Item implements IModifiers {
         }
     }
 
+    public static String toString(int modifier) {
+        return Modifier.toString(modifier);
+    }
+    
     public AccessModifier(final Marker loc, final EType type) {
         super(loc);
         m_access = type;

@@ -25,9 +25,9 @@ package laol.rt.io;
 
 import gblib.Util;
 import java.util.stream.Stream;
-import laol.rt.LaolConsumer;
-import laol.rt.LaolInteger;
-import laol.rt.LaolString;
+import laol.rt.Consumer;
+import laol.rt.primitives.Integer;
+import laol.rt.primitives.String;
 import org.junit.Test;
 import static org.junit.Assert.*;
 import laol.rt.Laol;
@@ -38,23 +38,23 @@ import laol.rt.Laol;
  */
 public class FileInputStreamTest {
 
-    final static LaolString FNAMES[] = Stream
+    final static String FNAMES[] = Stream
             .of(
                     "lib/laol/collection.laol",
                     "lib/laol/io.laol"
             )
-            .map(e -> new LaolString(e))
-            .toArray(LaolString[]::new);
+            .map(e -> new String(e))
+            .toArray(String[]::new);
 
     @Test
     public void testEachLine() throws Exception {
-        for (LaolString fname : FNAMES) {
+        for (String fname : FNAMES) {
             Laol fis = new FileInputStream(fname);
             System.out.println(fname.get());
             fis.callPublic("eachLine",
-                    new LaolConsumer((Laol line) -> {
+                    new Consumer((Laol line) -> {
                         Laol r = line.callPublic("length");
-                        m_len += Util.<LaolInteger>downCast(r).get();
+                        m_len += Util.<Integer>downCast(r).get();
                     })
             );
         }

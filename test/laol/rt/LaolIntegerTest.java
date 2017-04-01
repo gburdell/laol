@@ -5,6 +5,7 @@
  */
 package laol.rt;
 
+import laol.rt.primitives.Integer;
 import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.*;
@@ -18,44 +19,44 @@ public class LaolIntegerTest {
     @Test
     public void testPreIncrOp() {
         int ival = 1;
-        LaolInteger instance = new LaolInteger(ival);
+        Integer instance = new Integer(ival);
         instance.setMutable();
-        LaolInteger expResult = new LaolInteger(ival + 1);
-        LaolInteger result = (LaolInteger)instance.preIncrOp();
+        Integer expResult = new Integer(ival + 1);
+        Integer result = (Integer)instance.preIncrOp();
         assertEquals(expResult, instance);
     }
 
     @Test
     public void testPostIncrOp() {
         int ival = 99;
-        LaolInteger instance = new LaolInteger(ival);
+        Integer instance = new Integer(ival);
         instance.setMutable();
-        LaolInteger expResult = new LaolInteger(ival);
-        LaolInteger result = (LaolInteger)instance.postIncrOp();
+        Integer expResult = new Integer(ival);
+        Integer result = (Integer)instance.postIncrOp();
         assertEquals(expResult, result);
-        expResult = new LaolInteger(ival + 1);
+        expResult = new Integer(ival + 1);
         assertEquals(expResult, instance);
     }
 
     @Test
     public void testPreDecrOp() {
         int ival = 1;
-        LaolInteger instance = new LaolInteger(ival);
+        Integer instance = new Integer(ival);
         instance.setMutable();
-        LaolInteger expResult = new LaolInteger(ival - 1);
-        LaolInteger result = (LaolInteger)instance.preDecrOp();
+        Integer expResult = new Integer(ival - 1);
+        Integer result = (Integer)instance.preDecrOp();
         assertEquals(expResult, result);
     }
 
     @Test
     public void testPostDecrOp() {
         int ival = 99;
-        LaolInteger instance = new LaolInteger(ival);
+        Integer instance = new Integer(ival);
         instance.setMutable();
-        LaolInteger expResult = new LaolInteger(ival);
-        LaolInteger result = (LaolInteger)instance.postDecrOp();
+        Integer expResult = new Integer(ival);
+        Integer result = (Integer)instance.postDecrOp();
         assertEquals(expResult, result);
-        expResult = new LaolInteger(ival - 1);
+        expResult = new Integer(ival - 1);
         assertEquals(expResult, instance);
     }
 

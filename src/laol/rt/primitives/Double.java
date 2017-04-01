@@ -21,63 +21,59 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package laol.rt;
+package laol.rt.primitives;
 
-import java.util.LinkedHashMap;
-import java.util.Map;
-import java.util.Objects;
+import laol.rt.Laol;
+import laol.rt.Box;
+import laol.rt.primitives.Integer;
 
 /**
- * Map implementation which uses LinkedHashMap to maintain (insertion) key
- * order.
  *
  * @author kpfalzer
  */
-public class LaolMap extends LaolBase {
+public class Double extends Box<java.lang.Double> implements Number {
 
-    public LaolMap() {
-    }
-
-    //operator []=
-    public Laol set(final Laol key, final Laol val) {
-        mutableCheck();
-        m_map.put(key, val);
-        return val;
-    }
-
-    //operator []
-    public Laol get(final Laol key) {
-        return m_map.get(key);
-    }
-
-    //empty?
-    public Laol isEmpty() {
-        return new LaolBoolean(m_map.isEmpty());
-    }
-
-    public Laol size() {
-        return new LaolInteger(m_map.size());
+    public Double(final java.lang.Double val) {
+        super(val);
     }
 
     @Override
-    public int hashCode() {
-        return m_map.hashCode();
+    public Laol toDouble() {
+        return this;
     }
 
     @Override
-    public boolean equals(Object obj) {
-        if (this == obj) {
-            return true;
-        }
-        if (Objects.isNull(obj)) {
-            return false;
-        }
-        if (getClass() != obj.getClass()) {
-            return false;
-        }
-        final LaolMap other = (LaolMap) obj;
-        return Objects.equals(this.m_map, other.m_map);
+    public Laol toInteger() {
+        return new Integer(get().intValue());
     }
 
-    private final Map<Laol, Laol> m_map = new LinkedHashMap<>();
+    @Override
+    public Laol addOp(Laol b) {
+        return binaryDblOp(this, b, (x, y) -> x + y);
+    }
+
+    @Override
+    public Laol subOp(Laol b) {
+        return binaryDblOp(this, b, (x, y) -> x - y);
+    }
+
+    @Override
+    public Laol multOp(Laol b) {
+        return binaryDblOp(this, b, (x, y) -> x * y);
+    }
+
+    @Override
+    public Laol divOp(Laol b) {
+        return binaryDblOp(this, b, (x, y) -> x / y);
+    }
+
+    @Override
+    public void set(Laol val) {
+        super.set(Number.toDouble(val).get());
+    }
+
+    @Override
+    public Double clone() {
+        return new Double(get());
+    }
 }

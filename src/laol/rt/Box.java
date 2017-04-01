@@ -23,61 +23,56 @@
  */
 package laol.rt;
 
+import laol.rt.primitives.String;
+import java.util.Objects;
+
 /**
+ * Box types.
  *
  * @author kpfalzer
+ * @param <T> primitive type to box.
  */
-public class LaolInteger extends LaolBox<Integer> implements LaolNumber {
+public abstract class Box<T> extends LaolBase implements Cloneable {
 
-    public LaolInteger(final Integer val) {
-        super(val);
+    public Box(final T val) {
+        m_val = val;
     }
 
-    @Override
-    public Laol toDouble() {
-        return new LaolDouble(get().doubleValue());
-    }
-
-    @Override
-    public Laol toInteger() {
+    public final Box<T> set(final T val) {
+        mutableCheck();
+        m_val = val;
         return this;
     }
 
-    @Override
-    public Laol addOp(Laol b) {
-        return (b instanceof LaolInteger) 
-                ? binaryIntOp(this, b, Math::addExact)
-                : binaryDblOp(this, b, (x, y)-> x + y);
+    public final T get() {
+        return m_val;  //could be null
     }
 
     @Override
-    public Laol subOp(Laol b) {
-        return (b instanceof LaolInteger) 
-                ? binaryIntOp(this, b, Math::subtractExact)
-                : binaryDblOp(this, b, (x, y)-> x - y);
+    public int hashCode() {
+        return m_val.hashCode();
     }
 
     @Override
-    public Laol multOp(Laol b) {
-        return (b instanceof LaolInteger) 
-                ? binaryIntOp(this, b, Math::multiplyExact)
-                : binaryDblOp(this, b, (x, y)-> x * y);
+    public String toS() {
+        return new String(m_val.toString());
     }
 
     @Override
-    public Laol divOp(Laol b) {
-        return (b instanceof LaolInteger) 
-                ? binaryIntOp(this, b, (x, y)-> x / y)
-                : binaryDblOp(this, b, (x, y)-> x / y);
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final Box<?> other = (Box<?>) obj;
+        return Objects.equals(this.m_val, other.m_val);
     }
 
-    @Override
-    public void set(Laol val) {
-        super.set(LaolNumber.toInteger(val).get());
-    }
+    private T m_val;
 
-    @Override
-    public LaolInteger clone() {
-        return new LaolInteger(get());
-    }
 }

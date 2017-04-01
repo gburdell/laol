@@ -23,9 +23,11 @@
  */
 package laol.rt;
 
+import laol.rt.primitives.Double;
+import laol.rt.primitives.Integer;
 import java.util.stream.Stream;
-import static laol.rt.LaolNumber.toDouble;
-import static laol.rt.LaolNumber.toInteger;
+import static laol.rt.primitives.Number.toDouble;
+import static laol.rt.primitives.Number.toInteger;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
@@ -38,13 +40,13 @@ public class LaolNumberTest {
     @Test
     public void testAddOp() {
         int i = 1;
-        final int tests[][] = {{123, 456}, {Integer.MAX_VALUE, 1}};
+        final int tests[][] = {{123, 456}, {java.lang.Integer.MAX_VALUE, 1}};
         Laol a;
         Laol b;
         Laol z;
         for (int test[] : tests) {
-            a = new LaolInteger(test[0]);
-            b = new LaolInteger(test[1]);
+            a = new Integer(test[0]);
+            b = new Integer(test[1]);
             try {
                 z = a.callPublic("addOp", b); //a.addOp(b);
                 assertTrue(test[0] + test[1] == toInteger(z).get());
@@ -54,10 +56,10 @@ public class LaolNumberTest {
             i++;
         }
         assertTrue(i >= tests.length);
-        LaolInteger x[] = Stream.of(1, 2, 3).map(e -> new LaolInteger(e)).toArray(LaolInteger[]::new);
+        Integer x[] = Stream.of(1, 2, 3).map(e -> new Integer(e)).toArray(Integer[]::new);
         assertTrue(6 == toInteger(x[0].callPublic("addOp", x[1]).callPublic("addOp", x[2])).get());
-        a = new LaolDouble(1.234);
-        b = new LaolInteger(4);
+        a = new Double(1.234);
+        b = new Integer(4);
         assertTrue(5.234 == toDouble(a.callPublic("addOp", b)).get());
         assertTrue(5.234 == toDouble(b.callPublic("addOp", a)).get());
     }
@@ -77,10 +79,10 @@ public class LaolNumberTest {
     @Test
     public void testPreIncrOp() {
         double ival = 1.234;
-        LaolDouble instance = new LaolDouble(ival);
+        Double instance = new Double(ival);
         instance.setMutable();
-        LaolDouble expResult = new LaolDouble(ival + 1);
-        LaolDouble result = (LaolDouble) instance.preIncrOp();
+        Double expResult = new Double(ival + 1);
+        Double result = (Double) instance.preIncrOp();
         assertEquals(expResult, instance);
     }
 }

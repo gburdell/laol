@@ -50,12 +50,6 @@ public class Context implements AutoCloseable {
         reset();
     }
 
-    public Context(final Context parent) {
-        m_contents = parent.getContents();
-        m_config = parent.getConfig();
-        reset();
-    }
-
     public Config getConfig() {
         return m_config;
     }

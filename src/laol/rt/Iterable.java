@@ -39,7 +39,7 @@ public interface Iterable extends Laol {
      * @return null.
      */
     public default Void forEach(Laol cb) {
-        final LaolConsumer consumer = downCast(cb);
+        final Consumer consumer = downCast(cb);
         final Iterator iter = iterator();
         Laol ele;
         while (true) {

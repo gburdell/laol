@@ -21,55 +21,66 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package laol.rt;
+package laol.rt.primitives;
+
+import laol.rt.Laol;
+import laol.rt.Box;
 
 /**
  *
  * @author kpfalzer
  */
-public class LaolDouble extends LaolBox<Double> implements LaolNumber {
+public class Integer extends Box<java.lang.Integer> implements Number {
 
-    public LaolDouble(final Double val) {
+    public Integer(final java.lang.Integer val) {
         super(val);
     }
 
     @Override
     public Laol toDouble() {
-        return this;
+        return new Double(get().doubleValue());
     }
 
     @Override
     public Laol toInteger() {
-        return new LaolInteger(get().intValue());
+        return this;
     }
 
     @Override
     public Laol addOp(Laol b) {
-        return binaryDblOp(this, b, (x, y) -> x + y);
+        return (b instanceof Integer) 
+                ? binaryIntOp(this, b, Math::addExact)
+                : binaryDblOp(this, b, (x, y)-> x + y);
     }
 
     @Override
     public Laol subOp(Laol b) {
-        return binaryDblOp(this, b, (x, y) -> x - y);
+        return (b instanceof Integer) 
+                ? binaryIntOp(this, b, Math::subtractExact)
+                : binaryDblOp(this, b, (x, y)-> x - y);
     }
 
     @Override
     public Laol multOp(Laol b) {
-        return binaryDblOp(this, b, (x, y) -> x * y);
+        return (b instanceof Integer) 
+                ? binaryIntOp(this, b, Math::multiplyExact)
+                : binaryDblOp(this, b, (x, y)-> x * y);
     }
 
     @Override
     public Laol divOp(Laol b) {
-        return binaryDblOp(this, b, (x, y) -> x / y);
+        return (b instanceof Integer) 
+                ? binaryIntOp(this, b, (x, y)-> x / y)
+                : binaryDblOp(this, b, (x, y)-> x / y);
     }
 
     @Override
     public void set(Laol val) {
-        super.set(LaolNumber.toDouble(val).get());
+        super.set(Number.toInteger(val).get());
     }
 
     @Override
-    public LaolDouble clone() {
-        return new LaolDouble(get());
+    public Integer clone() {
+        return new Integer(get());
     }
 }

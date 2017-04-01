@@ -21,32 +21,18 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package laol.rt;
+package laol.rt.primitives;
+
+import laol.rt.Box;
 
 /**
  *
  * @author kpfalzer
  */
-public class LaolString extends LaolBox<String> {
+public class Boolean extends Box<java.lang.Boolean> {
 
-    public LaolString(final String val) {
+    public Boolean(final java.lang.Boolean val) {
         super(val);
     }
-
-    public LaolString(final Laol val) {
-        this(val.toS().toString());
-    }
-
-    public Laol plusEqOp(final LaolString a) {
-        set(get() + a.get());
-        return this;
-    }
-
-    public Laol plusEqOp(final Laol a) {
-        return plusEqOp(a.toS());
-    }
-
-    public Laol length() {
-        return new LaolInteger(get().length());
-    }
+    
 }

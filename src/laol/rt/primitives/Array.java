@@ -21,27 +21,30 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package laol.rt;
+package laol.rt.primitives;
 
 import static gblib.Util.invariant;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Objects;
+import laol.rt.Laol;
+import laol.rt.LaolBase;
+import laol.rt.LaolException;
 
 /**
- * Array/List implementation. Unlike Ruby array, LaolArray only grows linearly
- * in size: i.e., cannot: a = []; a << 4; a[34] = 7;
+ * Array/List implementation. Unlike Ruby array, Array only grows linearly
+ in size: i.e., cannot: a = []; a << 4; a[34] = 7;
  * Array is also bounded: so index out of bounds throws exception.
  *
  * @author kpfalzer
  */
-public class LaolArray extends LaolBase {
+public class Array extends LaolBase {
 
-    public LaolArray() {
+    public Array() {
         m_eles = new ArrayList();
     }
 
-    public LaolArray(final Collection<? extends Laol> items) {
+    public Array(final Collection<? extends Laol> items) {
         m_eles = new ArrayList(items);
     }
 
@@ -54,7 +57,7 @@ public class LaolArray extends LaolBase {
 
     //operator []=
     public Laol set(final Laol ix, final Laol val) {
-        return set(LaolNumber.toInteger(ix).get(), val);
+        return set(Number.toInteger(ix).get(), val);
     }
 
     //operator []=
@@ -70,7 +73,7 @@ public class LaolArray extends LaolBase {
 
     //operator []
     public Laol get(final Laol ix) {
-        return get(LaolNumber.toInteger(ix).get());
+        return get(Number.toInteger(ix).get());
     }
 
     //operator []
@@ -82,15 +85,15 @@ public class LaolArray extends LaolBase {
 
     //empty?
     public Laol isEmpty() {
-        return new LaolBoolean(m_eles.isEmpty());
+        return new Boolean(m_eles.isEmpty());
     }
 
     public Laol size() {
-        return new LaolInteger(m_eles.size());
+        return new Integer(m_eles.size());
     }
 
     private int realIndex(final Laol ix) {
-        return realIndex(realIndex(LaolNumber.toInteger(ix).get()));
+        return realIndex(realIndex(Number.toInteger(ix).get()));
     }
 
     private int realIndex(int i) {
@@ -105,7 +108,7 @@ public class LaolArray extends LaolBase {
     public static class IndexException extends LaolException {
 
         public IndexException(final Laol ix) {
-            this((int)LaolNumber.toInteger(ix).get());
+            this((int)Number.toInteger(ix).get());
         }
 
         public IndexException(final int ix) {
@@ -130,7 +133,7 @@ public class LaolArray extends LaolBase {
         if (getClass() != obj.getClass()) {
             return false;
         }
-        final LaolArray other = (LaolArray) obj;
+        final Array other = (Array) obj;
         return Objects.deepEquals(this.m_eles, other.m_eles);
     }
 
@@ -138,10 +141,10 @@ public class LaolArray extends LaolBase {
         return new Slice(startIx, length);
     }
     
-    public class Slice implements ISlice {
+    public class Slice implements laol.rt.Slice {
 
         public Slice(Laol startIx, Laol length) {
-            this(LaolNumber.toInteger(startIx).get(), LaolNumber.toInteger(length).get());
+            this(Number.toInteger(startIx).get(), Number.toInteger(length).get());
         }
 
         public Slice(int startIx, int length) {
@@ -154,7 +157,7 @@ public class LaolArray extends LaolBase {
         private final int m_startIx, m_lastIx, m_length;
 
         @Override
-        public ISlice assignImpl(laol.rt.Iterator items) {
+        public laol.rt.Slice assignImpl(laol.rt.Iterator items) {
             Laol newval;
             for (int ix = m_startIx; ix < m_lastIx; ix++) {
                 newval = items.next();  //we get null (ok!) if exhausted
@@ -169,13 +172,13 @@ public class LaolArray extends LaolBase {
         }
 
         @Override
-        public LaolString toS() {
+        public String toS() {
             throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
         }
 
         @Override
-        public LaolInteger size() {
-            return new LaolInteger(m_length);
+        public Integer size() {
+            return new Integer(m_length);
         }
 
         public class Iterator implements laol.rt.Iterator {
@@ -196,12 +199,12 @@ public class LaolArray extends LaolBase {
             }
 
             @Override
-            public LaolBoolean hasNext() {
-                return new LaolBoolean(m_currIx < m_lastIx);
+            public Boolean hasNext() {
+                return new Boolean(m_currIx < m_lastIx);
             }
 
             @Override
-            public LaolString toS() {
+            public String toS() {
                 throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
             }
 

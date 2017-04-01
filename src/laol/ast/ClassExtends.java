@@ -23,6 +23,8 @@
  */
 package laol.ast;
 
+import gblib.Util;
+
 /**
  * A class can only implement.
  * @author gburdell
@@ -38,5 +40,10 @@ public class ClassExtends extends Item {
         return m_implements;
     }
 
+    @Override
+    public String toString() {
+        return Util.join(getImplements().getNames(), ", ");
+    }
+    
     private final ScopedNameList m_implements;
 }

@@ -26,45 +26,43 @@ package laol.generate.java;
 import java.io.FileNotFoundException;
 import java.io.PrintStream;
 import java.util.Collection;
+import java.util.Objects;
+import laol.ast.AccessModifier;
 import laol.generate.Util;
 
 /**
  *
  * @author gburdell
  */
-public class ClassDeclaration  {
+public class ClassDeclaration {
 
     public static void process(final laol.ast.ClassDeclaration item, final Context ctx) throws FileNotFoundException, Util.EarlyTermination {
-        //todo: final ClassDeclaration cdecl = new ClassDeclaration(item, ctx);
-        //todo: cdecl.process();
+        final ClassDeclaration cdecl = new ClassDeclaration(item, ctx);
+        cdecl.process();
     }
 
-    /*
     private void process() throws FileNotFoundException, Util.EarlyTermination {
-        //add class to current scope
-        m_clsSym = new Symbol.Class(m_decl);
-        m_ctx.getScope().add(m_clsSym);
-        //create new context
-        final boolean isTopClass = !m_ctx.hasParent();
-        //NOTE: we switch to new/our context
-        m_ctx = new Context(m_ctx);
-        if (isTopClass) {
-            m_ctx
-                    .createOS(m_clsSym.getName() + ".java")
-                    .header(m_decl)
-                    .packageAndImports();
-        }
+        m_ctx
+                .createOS(m_decl.getName() + ".java")
+                .header(m_decl)
+                .packageAndImports();
         //print declaration
-        os().printf("%s class %s %s {\n",
-                getAccessModifier(m_decl),
-                m_clsSym.getName(),
-                getExtends(m_decl)
+        os().printf("%s class %s extends LaolBase %s {\n",
+                AccessModifier.toString(m_decl.getModifiers()),
+                m_decl.getName(),
+                getExtends()
         );
         declareMembersAndAccessors();
         //todo
         os().println("}");
     }
 
+    private String getExtends() {
+        return (Objects.isNull(m_decl.getExtends())) 
+                ? ""
+                : "implements " + m_decl.getExtends().toString();
+    }
+    
     private void declareMembersAndAccessors() {
         Collection<Member> members = getMembers(m_decl);
         os().println("//{{ Member declarations\n//** All are mutable (for now)!");
@@ -84,17 +82,15 @@ public class ClassDeclaration  {
         os().println("//Member declarations }}");
     }
 
+    private PrintStream os() {
+        return m_ctx.os();
+    }
+
     private ClassDeclaration(final laol.ast.ClassDeclaration decl, final Context ctx) {
         m_decl = decl;
         m_ctx = ctx;
     }
 
-    private PrintStream os() {
-        return m_ctx.os();
-    }
-
-    private Symbol m_clsSym;
     private final laol.ast.ClassDeclaration m_decl;
     private Context m_ctx;
-*/
 }

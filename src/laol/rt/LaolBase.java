@@ -23,11 +23,12 @@
  */
 package laol.rt;
 
+import laol.rt.primitives.String;
 import gblib.Util;
 
 /**
  * Base class of all objects.
- * Basically an Object witht mutability attribute.
+ * Basically an Object with mutability attribute.
  *
  * @author kpfalzer
  */
@@ -77,8 +78,8 @@ public abstract class LaolBase implements Laol {
     }
 
     @Override
-    public LaolString toS() {
-        return new LaolString(super.toString());
+    public String toS() {
+        return new String(super.toString());
     }
 
     private boolean m_mutable = false;

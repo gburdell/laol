@@ -23,6 +23,8 @@
  */
 package laol.rt;
 
+import laol.rt.primitives.Boolean;
+
 /**
  * NOTE: We have iterator as an interface.
  * In theory, we should consider the (const_)iterator types in C++/stdlib,
@@ -40,6 +42,6 @@ public interface Iterator extends Laol {
      */
     public Laol next();
     
-    public LaolBoolean hasNext(); 
+    public Boolean hasNext(); 
 
 }

@@ -1,7 +1,12 @@
+package laol.rt;
+
+import laol.rt.primitives.Integer;
+import laol.rt.primitives.Boolean;
+
 /*
  * The MIT License
  *
- * Copyright 2017 gburdell.
+ * Copyright 2017 kpfalzer.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -21,27 +26,35 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package laol.rt;
 
 /**
- *
- * @author gburdell
+ * Methods to manipulate selected objects of a collection.
+ * 
+ * @author kpfalzer
  */
-public class LaolConsumer extends LaolBase {
-
-    @FunctionalInterface
-    public interface Consumer {
-
-        void accept(Laol ele);
+public interface Slice extends Iterable {
+    /**
+     * Assign (1:1) to slice elements.
+     * If there are fewer number of items, then null values are assigned
+     * to remaining elements in slice.
+     * If there are more number of items, then the extra assign items are unused.
+     * @param items (Iterator) new values to assign to each element of slice.
+     * @return this slice.
+     */
+    public default Slice assign(Laol items) {
+        Iterator iter = downCast(items);
+        return assignImpl(iter);
     }
 
-    public LaolConsumer(Consumer c) {
-        m_consumer = c;
+    public Slice assignImpl(Iterator items);
+    
+    /**
+     * Get number of objects in this slice.
+     * @return number of objects in this slice.
+     */
+    public Integer size();
+    
+    public default Boolean isEmpty() {
+        return new Boolean(1 > size().get());
     }
-
-    public void accept(Laol ele) {
-        m_consumer.accept(ele);
-    }
-
-    private final Consumer m_consumer;
 }

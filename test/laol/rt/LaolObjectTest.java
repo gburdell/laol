@@ -23,6 +23,7 @@
  */
 package laol.rt;
 
+import laol.rt.primitives.Character;
 import gblib.Util;
 import org.junit.Test;
 import static org.junit.Assert.*;
@@ -36,7 +37,7 @@ public class LaolObjectTest {
     public class A extends LaolBase {
 
         public Laol f1() {
-            return new LaolCharacter('A');
+            return new Character('A');
         }
     }
 
@@ -48,7 +49,7 @@ public class LaolObjectTest {
 
         @Override
         public Laol f1() {
-            return new LaolCharacter('C');
+            return new Character('C');
         }
     }
 
@@ -56,7 +57,7 @@ public class LaolObjectTest {
     public void testInheritance() {
         Laol obj1;
         Laol r1;
-        LaolCharacter c1;
+        Character c1;
         {
             obj1 = new C();
             r1 = obj1.cm("f1");

@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2016 gburdell.
+ * Copyright 2017 gburdell.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,11 +25,23 @@ package laol.rt;
 
 /**
  *
- * @author kpfalzer
+ * @author gburdell
  */
-public class LaolBoolean extends LaolBox<Boolean> {
+public class Consumer extends LaolBase {
 
-    public LaolBoolean(final Boolean val) {
-        super(val);
+    @FunctionalInterface
+    public interface Consume {
+
+        void accept(Laol ele);
     }
+
+    public Consumer(Consume c) {
+        m_consumer = c;
+    }
+
+    public void accept(Laol ele) {
+        m_consumer.accept(ele);
+    }
+
+    private final Consume m_consumer;
 }

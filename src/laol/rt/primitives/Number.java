@@ -21,10 +21,13 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package laol.rt;
+package laol.rt.primitives;
 
+import laol.rt.primitives.Double;
+import laol.rt.primitives.Integer;
 import java.util.function.DoubleBinaryOperator;
 import java.util.function.IntBinaryOperator;
+import laol.rt.Laol;
 
 /**
  * We use exact methods here to catch over/underflow. TODO: If we catch these,
@@ -32,17 +35,17 @@ import java.util.function.IntBinaryOperator;
  *
  * @author kpfalzer
  */
-public interface LaolNumber extends Laol {
+public interface Number extends Laol {
 
     /**
-     * Conversion to LaolInteger.
-     * @return conversion to 'int' as LaolInteger.
+     * Conversion to Integer.
+     * @return conversion to 'int' as Integer.
      */
     public Laol toInteger();
 
     /**
-     * Conversion to LaolDouble.
-     * @return conversion to 'double' as LaolDouble.
+     * Conversion to Double.
+     * @return conversion to 'double' as Double.
      */
     public Laol toDouble();
 
@@ -54,7 +57,7 @@ public interface LaolNumber extends Laol {
 
     public Laol divOp(Laol b);
 
-    static final Laol ONE = new LaolInteger(1);
+    static final Laol ONE = new Integer(1);
 
     default public Laol preIncrOp() {
         set(addOp(ONE));
@@ -83,30 +86,30 @@ public interface LaolNumber extends Laol {
     public Laol clone();
 
     /**
-     * Convert LaolNumber to LaolDouble. 
-     * @param o Subclass of LaolNumber to convert.
-     * @return conversion to LaolDouble.
+     * Convert Number to Double. 
+     * @param o Subclass of Number to convert.
+     * @return conversion to Double.
      */
-    public static LaolDouble toDouble(final Laol o) {
-        return LaolDouble.class.cast(LaolNumber.class.cast(o).toDouble());
+    public static Double toDouble(final Laol o) {
+        return Double.class.cast(Number.class.cast(o).toDouble());
     }
 
     /**
-     * Convert LaolNumber to LaolInteger. 
-     * @param o Subclass of LaolNumber to convert.
-     * @return conversion to LaolInteger.
+     * Convert Number to Integer. 
+     * @param o Subclass of Number to convert.
+     * @return conversion to Integer.
      */
-    public static LaolInteger toInteger(final Laol o) {
-        return LaolInteger.class.cast(LaolNumber.class.cast(o).toInteger());
+    public static Integer toInteger(final Laol o) {
+        return Integer.class.cast(Number.class.cast(o).toInteger());
     }
 
     default public Laol binaryDblOp(Laol a, Laol b, DoubleBinaryOperator op) {
         final double r = op.applyAsDouble(toDouble(a).get(), toDouble(b).get());
-        return new LaolDouble(r);
+        return new Double(r);
     }
 
     default public Laol binaryIntOp(Laol a, Laol b, IntBinaryOperator op) {
         final int r = op.applyAsInt(toInteger(a).get(), toInteger(b).get());
-        return new LaolInteger(r);
+        return new Integer(r);
     }
 }

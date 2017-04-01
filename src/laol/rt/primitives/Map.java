@@ -21,40 +21,50 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package laol.rt;
+package laol.rt.primitives;
 
+import laol.rt.primitives.Integer;
+import laol.rt.primitives.Boolean;
+import java.util.LinkedHashMap;
 import java.util.Objects;
+import laol.rt.Laol;
+import laol.rt.LaolBase;
 
 /**
- * Box types.
+ * Map implementation which uses LinkedHashMap to maintain (insertion) key
+ * order.
  *
  * @author kpfalzer
- * @param <T> primitive type to box.
  */
-public abstract class LaolBox<T> extends LaolBase implements Cloneable {
+public class Map extends LaolBase {
 
-    public LaolBox(final T val) {
-        m_val = val;
+    public Map() {
     }
 
-    public final LaolBox<T> set(final T val) {
+    //operator []=
+    public Laol set(final Laol key, final Laol val) {
         mutableCheck();
-        m_val = val;
-        return this;
+        m_map.put(key, val);
+        return val;
     }
 
-    public final T get() {
-        return m_val;  //could be null
+    //operator []
+    public Laol get(final Laol key) {
+        return m_map.get(key);
+    }
+
+    //empty?
+    public Laol isEmpty() {
+        return new Boolean(m_map.isEmpty());
+    }
+
+    public Laol size() {
+        return new Integer(m_map.size());
     }
 
     @Override
     public int hashCode() {
-        return m_val.hashCode();
-    }
-
-    @Override
-    public LaolString toS() {
-        return new LaolString(m_val.toString());
+        return m_map.hashCode();
     }
 
     @Override
@@ -62,16 +72,15 @@ public abstract class LaolBox<T> extends LaolBase implements Cloneable {
         if (this == obj) {
             return true;
         }
-        if (obj == null) {
+        if (Objects.isNull(obj)) {
             return false;
         }
         if (getClass() != obj.getClass()) {
             return false;
         }
-        final LaolBox<?> other = (LaolBox<?>) obj;
-        return Objects.equals(this.m_val, other.m_val);
+        final Map other = (Map) obj;
+        return Objects.equals(this.m_map, other.m_map);
     }
 
-    private T m_val;
-
+    private final java.util.Map<Laol, Laol> m_map = new LinkedHashMap<>();
 }

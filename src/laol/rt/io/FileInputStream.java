@@ -23,6 +23,7 @@
  */
 package laol.rt.io;
 
+import laol.rt.primitives.String;
 import gblib.Util;
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
@@ -40,7 +41,7 @@ public class FileInputStream extends LaolBase {
 
     public FileInputStream(Laol fname) {
         try {
-            m_rdr = new BufferedReader(new FileReader(Util.<LaolString>downCast(fname).get()));
+            m_rdr = new BufferedReader(new FileReader(Util.<String>downCast(fname).get()));
         } catch (FileNotFoundException ex) {
             throw new LaolException.FileNotFoundException(ex);
         }
@@ -58,15 +59,15 @@ public class FileInputStream extends LaolBase {
     }
 
     public Void eachLine(Laol cb) {
-        final LaolConsumer consumer = Util.downCast(cb);
-        String s;
+        final Consumer consumer = Util.downCast(cb);
+        java.lang.String s;
         try {
             while (true) {
                 s = m_rdr.readLine();
                 if (null == s) {
                     break;
                 }
-                consumer.accept(new LaolString(s));
+                consumer.accept(new String(s));
             }
         } catch (IOException ex) {
             throw new LaolException.IOException(ex);

@@ -90,13 +90,13 @@ public class ClassDeclaration extends Item implements IModifiers, ISymbol, ISymb
     }
 
     /**
-     * Get access privilege for ClassDeclaration. Default is private.
+     * Get access privilege for ClassDeclaration. Default is public.
      *
      * @return modifiers encoded as per java.lang.reflect.Modifier.
      */
     @Override
     public int getModifiers() {
-        return getModifiers(m_access, Modifier.PRIVATE);
+        return getModifiers(m_access, Modifier.PUBLIC);
     }
 
     @Override

@@ -23,8 +23,11 @@
  */
 package laol.rt;
 
+import laol.rt.primitives.Array;
+import laol.rt.primitives.Integer;
 import org.junit.Test;
 import static org.junit.Assert.*;
+import laol.rt.primitives.Number;
 
 /**
  *
@@ -35,19 +38,19 @@ public class LaolArrayTest {
     @Test
     public void testAdd() {
 //        {
-//            final LaolArray dut = (new LaolArray()).setMutable();
-//            dut.add(new LaolInteger(1234)).add(new LaolInteger(5678));
-//            assertEquals(new LaolInteger(2), dut.size());
+//            final Array dut = (new Array()).setMutable();
+//            dut.add(new Integer(1234)).add(new Integer(5678));
+//            assertEquals(new Integer(2), dut.size());
 //        }
         //
         //Test as code generator would be
         {
-            final Laol dut = (new LaolArray()).setMutable();
-            LaolInteger ele = new LaolInteger(1234);
+            final Laol dut = (new Array()).setMutable();
+            Integer ele = new Integer(1234);
             Laol res = dut
                     .callPublic("add", ele)
                     .callPublic("add", ele);
-            assertTrue(2 == LaolNumber.toInteger(res.callPublic("size")).get());
+            assertTrue(2 == Number.toInteger(res.callPublic("size")).get());
         }
     }
 
@@ -57,17 +60,17 @@ public class LaolArrayTest {
 
     @Test
     public void testGet() {
-//        final LaolArray dut = (new LaolArray()).setMutable();
-//        final LaolInteger vals[] = {
-//            new LaolInteger(1234),
-//            new LaolInteger(5678)
+//        final Array dut = (new Array()).setMutable();
+//        final Integer vals[] = {
+//            new Integer(1234),
+//            new Integer(5678)
 //        };
 //        dut.add(vals[0]).add(vals[1]);
-//        Laol ix = new LaolInteger(0);
-//        LaolInteger v1 = dut.get(ix);
+//        Laol ix = new Integer(0);
+//        Integer v1 = dut.get(ix);
 //        assertEquals(vals[0], v1);
 //        assertTrue(!v1.isMutable());
-//        LaolInteger v2 = dut.get(new LaolInteger(1));
+//        Integer v2 = dut.get(new Integer(1));
 //        assertEquals(vals[1], v2);
     }
 
