@@ -1,0 +1,199 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configurationDescriptor version="100">
+  <logicalFolder name="root" displayName="root" projectFiles="true" kind="ROOT">
+    <logicalFolder name="HeaderFiles"
+                   displayName="Header Files"
+                   projectFiles="true">
+      <itemPath>laol/rt/laol.hxx</itemPath>
+    </logicalFolder>
+    <logicalFolder name="ResourceFiles"
+                   displayName="Resource Files"
+                   projectFiles="true">
+    </logicalFolder>
+    <logicalFolder name="SourceFiles"
+                   displayName="Source Files"
+                   projectFiles="true">
+      <itemPath>laol/rt/laol.cxx</itemPath>
+    </logicalFolder>
+    <logicalFolder name="TestFiles"
+                   displayName="Test Files"
+                   projectFiles="false"
+                   kind="TEST_LOGICAL_FOLDER">
+      <logicalFolder name="f1"
+                     displayName="laol.rt.Number test1"
+                     projectFiles="true"
+                     kind="TEST">
+        <itemPath>laol/rt/tests/number1.cpp</itemPath>
+      </logicalFolder>
+    </logicalFolder>
+    <logicalFolder name="ExternalFiles"
+                   displayName="Important Files"
+                   projectFiles="false"
+                   kind="IMPORTANT_FILES_FOLDER">
+      <itemPath>Makefile</itemPath>
+    </logicalFolder>
+  </logicalFolder>
+  <projectmakefile>Makefile</projectmakefile>
+  <confs>
+    <conf name="Debug" type="3">
+      <toolsSet>
+        <compilerSet>CLang|CLang</compilerSet>
+        <dependencyChecking>true</dependencyChecking>
+        <rebuildPropChanged>false</rebuildPropChanged>
+      </toolsSet>
+      <compileType>
+        <ccTool>
+          <commandlineTool>g++</commandlineTool>
+          <incDir>
+            <pElem>.</pElem>
+            <pElem>../../../xyzzy/src</pElem>
+          </incDir>
+          <commandLine>-std=c++14</commandLine>
+        </ccTool>
+        <archiverTool>
+        </archiverTool>
+        <requiredProjects>
+          <makeArtifact PL="../../../xyzzy"
+                        CT="0"
+                        CN="Default"
+                        AC="true"
+                        BL="false"
+                        WD="../../../xyzzy"
+                        BC="${MAKE} -f Makefile"
+                        CC="${MAKE} -f Makefile clean"
+                        OP="">
+          </makeArtifact>
+        </requiredProjects>
+      </compileType>
+      <folder path="TestFiles">
+        <linkerTool>
+          <linkerDynSerch>
+            <pElem>.</pElem>
+            <pElem>.</pElem>
+            <pElem>.</pElem>
+            <pElem>.</pElem>
+            <pElem>.</pElem>
+            <pElem>.</pElem>
+            <pElem>.</pElem>
+            <pElem>.</pElem>
+            <pElem>.</pElem>
+          </linkerDynSerch>
+        </linkerTool>
+      </folder>
+      <folder path="TestFiles/f1">
+        <cTool>
+          <incDir>
+            <pElem>.</pElem>
+          </incDir>
+        </cTool>
+        <ccTool>
+          <incDir>
+            <pElem>.</pElem>
+          </incDir>
+        </ccTool>
+        <linkerTool>
+          <output>${TESTDIR}/TestFiles/f1</output>
+          <linkerDynSerch>
+            <pElem>.</pElem>
+            <pElem>.</pElem>
+            <pElem>.</pElem>
+            <pElem>.</pElem>
+            <pElem>.</pElem>
+          </linkerDynSerch>
+          <linkerLibItems>
+            <linkerLibFileItem>dist/Debug/gcc-4.7.4-MacOSX/liblaolrt.a</linkerLibFileItem>
+            <linkerLibFileItem>../../../xyzzy/dist/debug/MacOSX/xyzzy.a</linkerLibFileItem>
+          </linkerLibItems>
+        </linkerTool>
+      </folder>
+      <item path="laol/rt/laol.cxx" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="laol/rt/laol.hxx" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="laol/rt/tests/number1.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+    </conf>
+    <conf name="Release" type="3">
+      <toolsSet>
+        <compilerSet>default</compilerSet>
+        <dependencyChecking>true</dependencyChecking>
+        <rebuildPropChanged>false</rebuildPropChanged>
+      </toolsSet>
+      <compileType>
+        <cTool>
+          <developmentMode>5</developmentMode>
+        </cTool>
+        <ccTool>
+          <developmentMode>5</developmentMode>
+          <incDir>
+            <pElem>../../../xyzzy/src</pElem>
+          </incDir>
+          <commandLine>-std=c++11</commandLine>
+        </ccTool>
+        <fortranCompilerTool>
+          <developmentMode>5</developmentMode>
+        </fortranCompilerTool>
+        <asmTool>
+          <developmentMode>5</developmentMode>
+        </asmTool>
+        <archiverTool>
+        </archiverTool>
+        <requiredProjects>
+          <makeArtifact PL="../../../xyzzy"
+                        CT="0"
+                        CN="Default"
+                        AC="true"
+                        BL="false"
+                        WD="../../../xyzzy"
+                        BC="${MAKE} -f Makefile"
+                        CC="${MAKE} -f Makefile clean"
+                        OP="">
+          </makeArtifact>
+        </requiredProjects>
+      </compileType>
+      <folder path="TestFiles">
+        <linkerTool>
+          <linkerDynSerch>
+            <pElem>.</pElem>
+            <pElem>.</pElem>
+            <pElem>.</pElem>
+            <pElem>.</pElem>
+            <pElem>.</pElem>
+            <pElem>.</pElem>
+            <pElem>.</pElem>
+            <pElem>.</pElem>
+            <pElem>.</pElem>
+          </linkerDynSerch>
+        </linkerTool>
+      </folder>
+      <folder path="TestFiles/f1">
+        <cTool>
+          <incDir>
+            <pElem>.</pElem>
+          </incDir>
+        </cTool>
+        <ccTool>
+          <incDir>
+            <pElem>.</pElem>
+          </incDir>
+        </ccTool>
+        <linkerTool>
+          <output>${TESTDIR}/TestFiles/f1</output>
+          <linkerDynSerch>
+            <pElem>.</pElem>
+            <pElem>.</pElem>
+            <pElem>.</pElem>
+            <pElem>.</pElem>
+            <pElem>.</pElem>
+          </linkerDynSerch>
+        </linkerTool>
+      </folder>
+      <item path="laol/rt/laol.cxx" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="laol/rt/laol.hxx" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="laol/rt/tests/number1.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+    </conf>
+  </confs>
+</configurationDescriptor>
