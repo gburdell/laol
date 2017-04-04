@@ -44,6 +44,7 @@ void test1() {
     cout << "BEGIN: test1" << endl;
     TRcLaol n1 = new Int(1), n2 = new Double(1.23), n3 = new Int(10);
     TRcLaol sum = n1 + n2 * n3;
+    TRcLaol debug = sum;
 }
 
 void test2() {
