@@ -29,13 +29,14 @@
  * Created on April 1, 2017, 4:53 PM
  */
 
-#ifndef LAOL_HXX
-#define LAOL_HXX
+#ifndef _laol_rt_laol_hxx_
+#define _laol_rt_laol_hxx_
 
 #include <string>
 #include <vector>
 #include <map>
 #include <cmath>
+#include <exception>
 #include <typeinfo>
 #include "xyzzy/refcnt.hxx"
 #include "xyzzy/array.hxx"
@@ -52,6 +53,32 @@ namespace laol {
         using std::string;
         using std::round;
 
+        static string demangleName(const std::type_info& ti);
+
+        class Exception : public std::exception {
+        public:
+
+            explicit Exception(const string* reason) : m_reason(reason) {
+            }
+
+            //allow default copy constructors 
+            
+            const char* what() const override {
+                return "Exception " + m_reason;
+            }
+
+        private:
+            string m_reason;
+        };
+
+        class NoMethodException : public Exception {
+        public:
+            explicit NoMethodException(const std::type_info& obj, const string& method);
+
+            //allow default copy constructors 
+            
+        };
+        
         class Laol;
         typedef PTRcObjPtr<Laol> TRcLaol;
 
@@ -65,14 +92,29 @@ namespace laol {
 
             virtual ~Laol() = 0;
 
-            //+ - * / % ˆ & | ~ ! = < > += -= *= /= %= ˆ= &= |= << >> >>= <<= == != <= >= && || ++ -- , ->* -> ( ) [ ]
+            //todo: ~ ! = += -= *= /= %= ˆ= &= |= >>= <<= ++ -- , ->* -> ( ) [ ]
 
             virtual TRcLaol operator+(const TRcLaol& b) const;
-            //todo virtual TRcLaol operator-(const TRcLaol& b) const;
+            virtual TRcLaol operator-(const TRcLaol& b) const;
             virtual TRcLaol operator*(const TRcLaol& b) const;
-            //todo virtual TRcLaol operator/(const TRcLaol& b) const;
+            virtual TRcLaol operator/(const TRcLaol& b) const;
+            virtual TRcLaol operator%(const TRcLaol& b) const;
+            virtual TRcLaol operator^(const TRcLaol& b) const;
+            virtual TRcLaol operator&(const TRcLaol& b) const;
+            virtual TRcLaol operator|(const TRcLaol& b) const;
+            virtual TRcLaol operator<(const TRcLaol& b) const;
+            virtual TRcLaol operator>(const TRcLaol& b) const;
+            virtual TRcLaol operator<<(const TRcLaol& b) const;
+            virtual TRcLaol operator>>(const TRcLaol& b) const;
+            virtual TRcLaol operator==(const TRcLaol& b) const;
+            virtual TRcLaol operator!=(const TRcLaol& b) const;
+            virtual TRcLaol operator<=(const TRcLaol& b) const;
+            virtual TRcLaol operator>=(const TRcLaol& b) const;
+            virtual TRcLaol operator&&(const TRcLaol& b) const;
+            virtual TRcLaol operator||(const TRcLaol& b) const;
 
-            typedef TRcLaol(Laol::* TPFunc)(const TRcLaol& args); //typedef is 'TPFunc'
+            //typedef is 'TPFunc'
+            typedef TRcLaol(Laol::* TPFunc)(const TRcLaol& args);
 
             TRcLaol operator()(const string& methodNm, const TRcLaol& args);
 
@@ -83,9 +125,73 @@ namespace laol {
         inline TRcLaol operator+(const TRcLaol &a, const TRcLaol &b) {
             return a->operator+(b);
         }
-        
+
+        inline TRcLaol operator-(const TRcLaol &a, const TRcLaol &b) {
+            return a->operator-(b);
+        }
+
         inline TRcLaol operator*(const TRcLaol &a, const TRcLaol &b) {
             return a->operator*(b);
+        }
+
+        inline TRcLaol operator/(const TRcLaol &a, const TRcLaol &b) {
+            return a->operator/(b);
+        }
+
+        inline TRcLaol operator%(const TRcLaol &a, const TRcLaol &b) {
+            return a->operator%(b);
+        }
+
+        inline TRcLaol operator^(const TRcLaol &a, const TRcLaol &b) {
+            return a->operator^(b);
+        }
+
+        inline TRcLaol operator&(const TRcLaol &a, const TRcLaol &b) {
+            return a->operator&(b);
+        }
+
+        inline TRcLaol operator|(const TRcLaol &a, const TRcLaol &b) {
+            return a->operator|(b);
+        }
+
+        inline TRcLaol operator<(const TRcLaol &a, const TRcLaol &b) {
+            return a->operator<(b);
+        }
+
+        inline TRcLaol operator>(const TRcLaol &a, const TRcLaol &b) {
+            return a->operator>(b);
+        }
+
+        inline TRcLaol operator<<(const TRcLaol &a, const TRcLaol &b) {
+            return a->operator<<(b);
+        }
+
+        inline TRcLaol operator>>(const TRcLaol &a, const TRcLaol &b) {
+            return a->operator>>(b);
+        }
+
+        inline TRcLaol operator==(const TRcLaol &a, const TRcLaol &b) {
+            return a->operator==(b);
+        }
+
+        inline TRcLaol operator!=(const TRcLaol &a, const TRcLaol &b) {
+            return a->operator!=(b);
+        }
+
+        inline TRcLaol operator<=(const TRcLaol &a, const TRcLaol &b) {
+            return a->operator<=(b);
+        }
+
+        inline TRcLaol operator>=(const TRcLaol &a, const TRcLaol &b) {
+            return a->operator>=(b);
+        }
+
+        inline TRcLaol operator&&(const TRcLaol &a, const TRcLaol &b) {
+            return a->operator&&(b);
+        }
+
+        inline TRcLaol operator||(const TRcLaol &a, const TRcLaol &b) {
+            return a->operator||(b);
         }
 
         template<class T>
@@ -134,8 +240,24 @@ namespace laol {
         class Number : public virtual Laol {
         public:
             TRcLaol operator+(const TRcLaol& b) const override final;
+            TRcLaol operator-(const TRcLaol& b) const override final;
             TRcLaol operator*(const TRcLaol& b) const override final;
-            
+            TRcLaol operator/(const TRcLaol& b) const override final;
+            TRcLaol operator%(const TRcLaol& b) const override final;
+            TRcLaol operator^(const TRcLaol& b) const override final;
+            TRcLaol operator&(const TRcLaol& b) const override final;
+            TRcLaol operator|(const TRcLaol& b) const override final;
+            TRcLaol operator<(const TRcLaol& b) const override final;
+            TRcLaol operator>(const TRcLaol& b) const override final;
+            TRcLaol operator<<(const TRcLaol& b) const override final;
+            TRcLaol operator>>(const TRcLaol& b) const override final;
+            TRcLaol operator==(const TRcLaol& b) const override final;
+            TRcLaol operator!=(const TRcLaol& b) const override final;
+            TRcLaol operator<=(const TRcLaol& b) const override final;
+            TRcLaol operator>=(const TRcLaol& b) const override final;
+            TRcLaol operator&&(const TRcLaol& b) const override final;
+            TRcLaol operator||(const TRcLaol& b) const override final;
+
         protected:
 
             explicit Number() {
@@ -151,13 +273,14 @@ namespace laol {
 
             virtual bool isDouble() const = 0;
 
+        public:
             virtual int toInt() const = 0;
             virtual double toDouble() const = 0;
 
         private:
             static auto normalize(const Number* n);
             auto normalize(const TRcLaol& n) const;
-            
+
             static TRcLaol toNumber(int val);
             static TRcLaol toNumber(double val);
         };
@@ -244,5 +367,5 @@ namespace laol {
     }
 }
 
-#endif /* LAOL_HXX */
+#endif //_laol_rt_laol_hxx_
 

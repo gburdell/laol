@@ -45,14 +45,22 @@ void test1() {
     TRcLaol n1 = new Int(1), n2 = new Double(1.23), n3 = new Int(10);
     TRcLaol sum = n1 + n2 * n3;
     TRcLaol debug = sum;
+    auto p = dynamic_cast<const Number*>(debug.getPtr());
+    double dd = p->toDouble();
+    cout << "dd=" << dd << endl;
+    cout << "END: test1" << endl;
 }
 
 void test2() {
-
+    cout << "BEGIN: test2" << endl;
+    TRcLaol d1 = new Double(1.234);
+    d1 << d1;
+    cout << "END: test2" << endl;    
 }
 
 int main(int argc, char** argv) {
     test1();
+    test2();
     cout << "END: all tests" << endl;
     return (EXIT_SUCCESS);
 }

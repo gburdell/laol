@@ -22,23 +22,48 @@
  * THE SOFTWARE.
  */
 
+#include <cxxabi.h>
+#include <cstdlib> //free
+#include <cassert>
 #include "laol/rt/laol.hxx"
 
 namespace laol {
     namespace rt {
 
+        /*static*/
+        string demangleName(const std::type_info& ti) {
+            //https://gcc.gnu.org/onlinedocs/libstdc++/manual/ext_demangling.html
+            char *realname;
+            realname = abi::__cxa_demangle(ti.name(), 0, 0, &status);
+            assert(0 == status);
+            string s = realname;
+            free(realname);
+            return s;
+        }
+
+        NoMethodException::NoMethodException(const std::type_info& obj, const string& method)
+        : Exception(string("no method '") + method + "' defined for '" + demangleName(ti) + "'") {
+
+        }
+
+        template<typename T>
+        static void noOperatorMethodException(const T& m, const string& op) {
+            
+        }
+        
         Laol::~Laol() {
         }
 
         Laol::TPFunc Laol::getFunc(const string& methodNm) const {
-            return (TPFunc)0;//todo: not implemented...
+            return (TPFunc) 0; //todo: not implemented...
         }
 
         TRcLaol Laol::operator+(const TRcLaol& b) const {
-            return new Int((int)0xdeafdeef);//todo: do not implement
+            return new Int((int) 0xdeafdeef); //todo: do not implement
         }
+
         TRcLaol Laol::operator*(const TRcLaol& b) const {
-            return new Int((int)0xdeafdeef);//todo: do not implement
+            return new Int((int) 0xdeafdeef); //todo: do not implement
         }
 
         TRcLaol
@@ -60,7 +85,7 @@ namespace laol {
         auto Number::normalize(const Number* n) {
             return n->isDouble() ? n->toDouble() : n->toInt();
         }
-        
+
         auto Number::normalize(const TRcLaol& n) const {
             return normalize(dynamic_cast<const Number*> (n.getPtr()));
         }
@@ -69,9 +94,89 @@ namespace laol {
             auto zz = normalize(this) + normalize(b);
             return toNumber(zz);
         }
-        
+
+        TRcLaol Number::operator-(const TRcLaol& b) const {
+            auto zz = normalize(this) - normalize(b);
+            return toNumber(zz);
+        }
+
         TRcLaol Number::operator*(const TRcLaol& b) const {
             auto zz = normalize(this) * normalize(b);
+            return toNumber(zz);
+        }
+
+        TRcLaol Number::operator/(const TRcLaol& b) const {
+            auto zz = normalize(this) / normalize(b);
+            return toNumber(zz);
+        }
+
+        TRcLaol Number::operator%(const TRcLaol& b) const {
+            auto zz = normalize(this) % normalize(b);
+            return toNumber(zz);
+        }
+
+        TRcLaol Number::operator^(const TRcLaol& b) const {
+            auto zz = normalize(this) ^ normalize(b);
+            return toNumber(zz);
+        }
+
+        TRcLaol Number::operator&(const TRcLaol& b) const {
+            auto zz = normalize(this) & normalize(b);
+            return toNumber(zz);
+        }
+
+        TRcLaol Number::operator|(const TRcLaol& b) const {
+            auto zz = normalize(this) | normalize(b);
+            return toNumber(zz);
+        }
+
+        TRcLaol Number::operator<(const TRcLaol& b) const {
+            auto zz = normalize(this) < normalize(b);
+            return toNumber(zz);
+        }
+
+        TRcLaol Number::operator>(const TRcLaol& b) const {
+            auto zz = normalize(this) > normalize(b);
+            return toNumber(zz);
+        }
+
+        TRcLaol Number::operator<<(const TRcLaol& b) const {
+            auto zz = normalize(this) << normalize(b);
+            return toNumber(zz);
+        }
+
+        TRcLaol Number::operator>>(const TRcLaol& b) const {
+            auto zz = normalize(this) >> normalize(b);
+            return toNumber(zz);
+        }
+
+        TRcLaol Number::operator==(const TRcLaol& b) const {
+            auto zz = normalize(this) == normalize(b);
+            return toNumber(zz);
+        }
+
+        TRcLaol Number::operator!=(const TRcLaol& b) const {
+            auto zz = normalize(this) != normalize(b);
+            return toNumber(zz);
+        }
+
+        TRcLaol Number::operator<=(const TRcLaol& b) const {
+            auto zz = normalize(this) <= normalize(b);
+            return toNumber(zz);
+        }
+
+        TRcLaol Number::operator>=(const TRcLaol& b) const {
+            auto zz = normalize(this) >= normalize(b);
+            return toNumber(zz);
+        }
+
+        TRcLaol Number::operator&&(const TRcLaol& b) const {
+            auto zz = normalize(this) && normalize(b);
+            return toNumber(zz);
+        }
+
+        TRcLaol Number::operator||(const TRcLaol& b) const {
+            auto zz = normalize(this) || normalize(b);
             return toNumber(zz);
         }
 
@@ -82,7 +187,7 @@ namespace laol {
         }
 
         TRcLaol Array::operator[](const TRcLaol& ix) {
-            return new Int((int)0xdeadbeef);//todo
+            return new Int((int) 0xdeadbeef); //todo
         }
 
         Laol::TPFunc
