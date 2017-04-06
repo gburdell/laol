@@ -64,6 +64,15 @@ void test2() {
     cout << "END: test2" << endl;
 }
 
+/*
+ *  Here is laol:
+ *      a = [1,2,3]
+ *      a[-1].map{|e| e + 1}.attrOrFunc
+ *  in c++/laol/rt:
+ *      TRcLaol c = new Array(...?);
+ *      c[-1]->call("map", [](auto e){return e + 1;}).call("attrOrFunc")
+ */
+
 int main(int argc, char** argv) {
     test1();
     test2();

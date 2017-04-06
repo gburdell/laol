@@ -323,6 +323,7 @@ namespace laol {
             return new Int(~zz);
         }
         
+        //todo: need to fix these, since were slicing original Number reference counted
         TRcLaol Int::operator++() { //pre
             set(*this + 1);
             return this;
