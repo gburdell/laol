@@ -51,21 +51,28 @@ namespace laol {
         using xyzzy::PTRcObjPtr;
         using xyzzy::PTRcArray;
         using std::string;
-        using std::round;
 
-        static string demangleName(const std::type_info& ti);
+        class Laol;
+        
+        //todo: make TRcLaol real class so we can add unary ops
+        //to dont have to do (TRcLaol-obj)->operator++()
+        //
+        typedef PTRcObjPtr<Laol> TRcLaol;
+
+        string demangleName(const char* n);
+
+        template<typename T>
+        inline string getClassName(T p) {
+            return demangleName(typeid (p).name());
+        }
 
         class Exception : public std::exception {
         public:
+            explicit Exception(const string& reason);
 
-            explicit Exception(const string* reason) : m_reason(reason) {
-            }
+            //allow copy constructors
 
-            //allow default copy constructors 
-            
-            const char* what() const override {
-                return "Exception " + m_reason;
-            }
+            virtual const char* what() const noexcept;
 
         private:
             string m_reason;
@@ -73,14 +80,34 @@ namespace laol {
 
         class NoMethodException : public Exception {
         public:
-            explicit NoMethodException(const std::type_info& obj, const string& method);
 
-            //allow default copy constructors 
-            
+            explicit NoMethodException()
+            : Exception(REASON) {
+            }
+
+            explicit NoMethodException(const string& reason)
+            : Exception(reason) {
+            }
+
+            //allow copy constructors
+
+        private:
+            static const string REASON;
         };
-        
-        class Laol;
-        typedef PTRcObjPtr<Laol> TRcLaol;
+
+        class InvalidTypeException : public Exception {
+        public:
+
+            explicit InvalidTypeException(const std::type_info& found, const string& expected);
+
+            explicit InvalidTypeException(const std::type_info& found, const std::type_info& expected) : InvalidTypeException(found, demangleName(expected.name())) {
+            }
+
+            //allow copy constructors
+
+        private:
+            static const string REASON;
+        };
 
         class Laol : public TRcObj {
         public:
@@ -92,35 +119,60 @@ namespace laol {
 
             virtual ~Laol() = 0;
 
-            //todo: ~ ! = += -= *= /= %= ˆ= &= |= >>= <<= ++ -- , ->* -> ( ) [ ]
+            //operators: todo
+            //= += -= *= /= %= ˆ= &= |= >>= <<= == , ->* -> ( ) [ ]
 
+            //unary ops:
+            virtual TRcLaol operator~() const;
+            virtual TRcLaol operator!() const;
+
+            //pre/post incr/decr
+            virtual TRcLaol operator++(); //pre
+            virtual TRcLaol operator--(); //pre
+            virtual TRcLaol operator++(int); //post
+            virtual TRcLaol operator--(int); //post
+
+            //binary ops: arithmetic
             virtual TRcLaol operator+(const TRcLaol& b) const;
             virtual TRcLaol operator-(const TRcLaol& b) const;
             virtual TRcLaol operator*(const TRcLaol& b) const;
             virtual TRcLaol operator/(const TRcLaol& b) const;
             virtual TRcLaol operator%(const TRcLaol& b) const;
-            virtual TRcLaol operator^(const TRcLaol& b) const;
-            virtual TRcLaol operator&(const TRcLaol& b) const;
-            virtual TRcLaol operator|(const TRcLaol& b) const;
-            virtual TRcLaol operator<(const TRcLaol& b) const;
-            virtual TRcLaol operator>(const TRcLaol& b) const;
-            virtual TRcLaol operator<<(const TRcLaol& b) const;
-            virtual TRcLaol operator>>(const TRcLaol& b) const;
+
+            //binary ops: relational and comparison
             virtual TRcLaol operator==(const TRcLaol& b) const;
             virtual TRcLaol operator!=(const TRcLaol& b) const;
+            virtual TRcLaol operator<(const TRcLaol& b) const;
+            virtual TRcLaol operator>(const TRcLaol& b) const;
             virtual TRcLaol operator<=(const TRcLaol& b) const;
             virtual TRcLaol operator>=(const TRcLaol& b) const;
+
+            //binary ops: logical
             virtual TRcLaol operator&&(const TRcLaol& b) const;
             virtual TRcLaol operator||(const TRcLaol& b) const;
 
-            //typedef is 'TPFunc'
+            //binary ops: bitwise
+            virtual TRcLaol operator^(const TRcLaol& b) const;
+            virtual TRcLaol operator&(const TRcLaol& b) const;
+            virtual TRcLaol operator|(const TRcLaol& b) const;
+            virtual TRcLaol operator<<(const TRcLaol& b) const;
+            virtual TRcLaol operator>>(const TRcLaol& b) const;
+
+            //TPFunc	
             typedef TRcLaol(Laol::* TPFunc)(const TRcLaol& args);
 
             TRcLaol operator()(const string& methodNm, const TRcLaol& args);
 
         protected:
             virtual TPFunc getFunc(const string& methodNm) const;
+
+            TRcLaol noMethodFound(const string& methodNm) const;
+
+            TRcLaol noOperatorFound(const string& op) const;
+
         };
+
+        //create binary operations
 
         inline TRcLaol operator+(const TRcLaol &a, const TRcLaol &b) {
             return a->operator+(b);
@@ -142,16 +194,12 @@ namespace laol {
             return a->operator%(b);
         }
 
-        inline TRcLaol operator^(const TRcLaol &a, const TRcLaol &b) {
-            return a->operator^(b);
+        inline TRcLaol operator==(const TRcLaol &a, const TRcLaol &b) {
+            return a->operator==(b);
         }
 
-        inline TRcLaol operator&(const TRcLaol &a, const TRcLaol &b) {
-            return a->operator&(b);
-        }
-
-        inline TRcLaol operator|(const TRcLaol &a, const TRcLaol &b) {
-            return a->operator|(b);
+        inline TRcLaol operator!=(const TRcLaol &a, const TRcLaol &b) {
+            return a->operator!=(b);
         }
 
         inline TRcLaol operator<(const TRcLaol &a, const TRcLaol &b) {
@@ -160,22 +208,6 @@ namespace laol {
 
         inline TRcLaol operator>(const TRcLaol &a, const TRcLaol &b) {
             return a->operator>(b);
-        }
-
-        inline TRcLaol operator<<(const TRcLaol &a, const TRcLaol &b) {
-            return a->operator<<(b);
-        }
-
-        inline TRcLaol operator>>(const TRcLaol &a, const TRcLaol &b) {
-            return a->operator>>(b);
-        }
-
-        inline TRcLaol operator==(const TRcLaol &a, const TRcLaol &b) {
-            return a->operator==(b);
-        }
-
-        inline TRcLaol operator!=(const TRcLaol &a, const TRcLaol &b) {
-            return a->operator!=(b);
         }
 
         inline TRcLaol operator<=(const TRcLaol &a, const TRcLaol &b) {
@@ -194,7 +226,27 @@ namespace laol {
             return a->operator||(b);
         }
 
-        template<class T>
+        inline TRcLaol operator^(const TRcLaol &a, const TRcLaol &b) {
+            return a->operator^(b);
+        }
+
+        inline TRcLaol operator&(const TRcLaol &a, const TRcLaol &b) {
+            return a->operator&(b);
+        }
+
+        inline TRcLaol operator|(const TRcLaol &a, const TRcLaol &b) {
+            return a->operator|(b);
+        }
+
+        inline TRcLaol operator<<(const TRcLaol &a, const TRcLaol &b) {
+            return a->operator<<(b);
+        }
+
+        inline TRcLaol operator>>(const TRcLaol &a, const TRcLaol &b) {
+            return a->operator>>(b);
+        }
+
+        template<typename T>
         class Box : public virtual Laol {
         protected:
 
@@ -206,10 +258,17 @@ namespace laol {
             virtual ~Box() {
             }
 
+            //NOTE: keep conversion protected to mitigate unintended/implied conversions
+
             operator T() const {
                 return m_val;
             }
 
+            T set(const T val) {
+                m_val = val;
+                return m_val;
+            }
+            
         private:
             T m_val;
         };
@@ -227,6 +286,10 @@ namespace laol {
         };
 
         class Bool : public Box<bool> {
+        public:
+
+            TRcLaol operator~() const override final;
+            TRcLaol operator!() const override final;
 
             explicit Bool(bool val) : Box(val) {
             }
@@ -239,24 +302,25 @@ namespace laol {
 
         class Number : public virtual Laol {
         public:
+            TRcLaol operator!() const override final;
             TRcLaol operator+(const TRcLaol& b) const override final;
             TRcLaol operator-(const TRcLaol& b) const override final;
             TRcLaol operator*(const TRcLaol& b) const override final;
             TRcLaol operator/(const TRcLaol& b) const override final;
             TRcLaol operator%(const TRcLaol& b) const override final;
-            TRcLaol operator^(const TRcLaol& b) const override final;
-            TRcLaol operator&(const TRcLaol& b) const override final;
-            TRcLaol operator|(const TRcLaol& b) const override final;
-            TRcLaol operator<(const TRcLaol& b) const override final;
-            TRcLaol operator>(const TRcLaol& b) const override final;
-            TRcLaol operator<<(const TRcLaol& b) const override final;
-            TRcLaol operator>>(const TRcLaol& b) const override final;
             TRcLaol operator==(const TRcLaol& b) const override final;
             TRcLaol operator!=(const TRcLaol& b) const override final;
+            TRcLaol operator<(const TRcLaol& b) const override final;
+            TRcLaol operator>(const TRcLaol& b) const override final;
             TRcLaol operator<=(const TRcLaol& b) const override final;
             TRcLaol operator>=(const TRcLaol& b) const override final;
             TRcLaol operator&&(const TRcLaol& b) const override final;
             TRcLaol operator||(const TRcLaol& b) const override final;
+            TRcLaol operator^(const TRcLaol& b) const override final;
+            TRcLaol operator&(const TRcLaol& b) const override final;
+            TRcLaol operator|(const TRcLaol& b) const override final;
+            TRcLaol operator<<(const TRcLaol& b) const override final;
+            TRcLaol operator>>(const TRcLaol& b) const override final;
 
         protected:
 
@@ -267,11 +331,14 @@ namespace laol {
 
             virtual ~Number() = 0;
 
+            
+        public:
             virtual bool isInt() const final {
                 return !isDouble();
             }
 
             virtual bool isDouble() const = 0;
+
 
         public:
             virtual int toInt() const = 0;
@@ -280,18 +347,27 @@ namespace laol {
         private:
             static auto normalize(const Number* n);
             auto normalize(const TRcLaol& n) const;
+            static int expectInt(const Number* n);
+            int expectInt(const TRcLaol& n) const;
 
             static TRcLaol toNumber(int val);
             static TRcLaol toNumber(double val);
+                        
         };
 
         class Int : public Box<int>, Number {
         public:
 
+            TRcLaol operator~() const override final;
+            TRcLaol operator++() override final; //pre
+            TRcLaol operator--() override final; //pre
+            TRcLaol operator++(int) override final; //post
+            TRcLaol operator--(int) override final; //post
+
             explicit Int(int val) : Box(val) {
             }
 
-            explicit Int(double val) : Box(round(val)) {
+            explicit Int(double val) : Box(std::round(val)) {
             }
 
             NO_COPY_CONSTRUCTORS(Int);
@@ -318,6 +394,11 @@ namespace laol {
         class Double : public Box<double>, Number {
         public:
 
+            TRcLaol operator++() override final; //pre
+            TRcLaol operator--() override final; //pre
+            TRcLaol operator++(int) override final; //post
+            TRcLaol operator--(int) override final; //post
+
             explicit Double(double val) : Box(val) {
             }
 
@@ -332,7 +413,7 @@ namespace laol {
         protected:
 
             int toInt() const final {
-                return round(toDouble());
+                return std::round(toDouble());
             }
 
             double toDouble() const final {
@@ -367,5 +448,5 @@ namespace laol {
     }
 }
 
-#endif //_laol_rt_laol_hxx_
+#endif /* _laol_rt_laol_hxx_ */
 

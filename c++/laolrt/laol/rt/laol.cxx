@@ -23,52 +23,174 @@
  */
 
 #include <cxxabi.h>
-#include <cstdlib> //free
+#include <cstdlib>  //free
 #include <cassert>
 #include "laol/rt/laol.hxx"
 
 namespace laol {
     namespace rt {
 
-        /*static*/
-        string demangleName(const std::type_info& ti) {
+        string demangleName(const char* mangledName) {
+            int status;
             //https://gcc.gnu.org/onlinedocs/libstdc++/manual/ext_demangling.html
-            char *realname;
-            realname = abi::__cxa_demangle(ti.name(), 0, 0, &status);
+            //Since realName is malloc, we need to free.
+            char *realName = abi::__cxa_demangle(mangledName, 0, 0, &status);
             assert(0 == status);
-            string s = realname;
-            free(realname);
+            string s = realName;
+            free(realName);
             return s;
         }
-
-        NoMethodException::NoMethodException(const std::type_info& obj, const string& method)
-        : Exception(string("no method '") + method + "' defined for '" + demangleName(ti) + "'") {
-
-        }
-
-        template<typename T>
-        static void noOperatorMethodException(const T& m, const string& op) {
-            
-        }
         
+        Exception::Exception(const string& reason) {
+            m_reason = "Exception: " + reason;
+        }
+
+        const char* Exception::what() const noexcept {
+            return m_reason.c_str();
+        }
+
+        /*static*/ const string NoMethodException::REASON = "no method found";
+
+        InvalidTypeException::InvalidTypeException(const std::type_info& found, const string& expected)
+        : Exception(
+        string("found '")
+        + demangleName(found.name())
+        + "', expected '"
+        + expected
+        + "'") {
+        }
+
         Laol::~Laol() {
         }
 
         Laol::TPFunc Laol::getFunc(const string& methodNm) const {
-            return (TPFunc) 0; //todo: not implemented...
+            throw NoMethodException();
+        }
+
+        static void noOperationFound(const std::type_info &obj, const string& type, const string& op) {
+            string reason = "no " + type + " '" + op
+                    + "' found for for '"
+                    + demangleName(obj.name()) + "'";
+            throw NoMethodException(reason);
+        }
+
+        TRcLaol Laol::noMethodFound(const string& methodNm) const {
+            noOperationFound(typeid (*this), "method", methodNm);
+            return nullptr;
+        }
+
+        TRcLaol Laol::noOperatorFound(const string& op) const {
+            noOperationFound(typeid (*this), "operator", op);
+            return nullptr;
+        }
+
+        // No implementation for these typeless
+
+        TRcLaol Laol::operator~() const {
+            return noOperatorFound("~");
+        }
+
+        TRcLaol Laol::operator!() const {
+            return noOperatorFound("!");
+        }
+
+        TRcLaol Laol::operator++() {
+            return noOperatorFound("++");
+        }
+
+        TRcLaol Laol::operator--() {
+            return noOperatorFound("--");
+        }
+
+        TRcLaol Laol::operator++(int) {
+            return noOperatorFound("++(int)");
+        }
+
+        TRcLaol Laol::operator--(int) {
+            return noOperatorFound("--(int)");
         }
 
         TRcLaol Laol::operator+(const TRcLaol& b) const {
-            return new Int((int) 0xdeafdeef); //todo: do not implement
+            return noOperatorFound("+");
+        }
+
+        TRcLaol Laol::operator-(const TRcLaol& b) const {
+            return noOperatorFound("-");
         }
 
         TRcLaol Laol::operator*(const TRcLaol& b) const {
-            return new Int((int) 0xdeafdeef); //todo: do not implement
+            return noOperatorFound("*");
+        }
+
+        TRcLaol Laol::operator/(const TRcLaol& b) const {
+            return noOperatorFound("/");
+        }
+
+        TRcLaol Laol::operator%(const TRcLaol& b) const {
+            return noOperatorFound("%");
+        }
+
+        TRcLaol Laol::operator==(const TRcLaol& b) const {
+            return noOperatorFound("==");
+        }
+
+        TRcLaol Laol::operator!=(const TRcLaol& b) const {
+            return noOperatorFound("!=");
+        }
+
+        TRcLaol Laol::operator<(const TRcLaol& b) const {
+            return noOperatorFound("<");
+        }
+
+        TRcLaol Laol::operator>(const TRcLaol& b) const {
+            return noOperatorFound(">");
+        }
+
+        TRcLaol Laol::operator<=(const TRcLaol& b) const {
+            return noOperatorFound("<=");
+        }
+
+        TRcLaol Laol::operator>=(const TRcLaol& b) const {
+            return noOperatorFound(">=");
+        }
+
+        TRcLaol Laol::operator&&(const TRcLaol& b) const {
+            return noOperatorFound("&&");
+        }
+
+        TRcLaol Laol::operator||(const TRcLaol& b) const {
+            return noOperatorFound("||");
+        }
+
+        TRcLaol Laol::operator^(const TRcLaol& b) const {
+            return noOperatorFound("^");
+        }
+
+        TRcLaol Laol::operator&(const TRcLaol& b) const {
+            return noOperatorFound("&");
+        }
+
+        TRcLaol Laol::operator|(const TRcLaol& b) const {
+            return noOperatorFound("|");
+        }
+
+        TRcLaol Laol::operator<<(const TRcLaol& b) const {
+            return noOperatorFound("<<");
+        }
+
+        TRcLaol Laol::operator>>(const TRcLaol& b) const {
+            return noOperatorFound(">>");
         }
 
         TRcLaol
         Laol::operator()(const string& name, const TRcLaol& args) {
-            return (this->*getFunc(name))(args);
+            TRcLaol method = (this->*getFunc(name))(args);
+            if (method.isNull()) {
+                string msg = getClassName(this)
+                        + ": " + name + ": method not found";
+                throw NoMethodException(msg);
+            }
+            return method;
         }
 
         Number::~Number() {
@@ -88,6 +210,17 @@ namespace laol {
 
         auto Number::normalize(const TRcLaol& n) const {
             return normalize(dynamic_cast<const Number*> (n.getPtr()));
+        }
+
+        int Number::expectInt(const Number* n) {
+            if (!n->isInt()) {
+                throw InvalidTypeException(typeid (*n), typeid (Int));
+            }
+            return n->toInt();
+        }
+
+        int Number::expectInt(const TRcLaol& n) const {
+            return expectInt(dynamic_cast<const Number*> (n.getPtr()));
         }
 
         TRcLaol Number::operator+(const TRcLaol& b) const {
@@ -111,42 +244,7 @@ namespace laol {
         }
 
         TRcLaol Number::operator%(const TRcLaol& b) const {
-            auto zz = normalize(this) % normalize(b);
-            return toNumber(zz);
-        }
-
-        TRcLaol Number::operator^(const TRcLaol& b) const {
-            auto zz = normalize(this) ^ normalize(b);
-            return toNumber(zz);
-        }
-
-        TRcLaol Number::operator&(const TRcLaol& b) const {
-            auto zz = normalize(this) & normalize(b);
-            return toNumber(zz);
-        }
-
-        TRcLaol Number::operator|(const TRcLaol& b) const {
-            auto zz = normalize(this) | normalize(b);
-            return toNumber(zz);
-        }
-
-        TRcLaol Number::operator<(const TRcLaol& b) const {
-            auto zz = normalize(this) < normalize(b);
-            return toNumber(zz);
-        }
-
-        TRcLaol Number::operator>(const TRcLaol& b) const {
-            auto zz = normalize(this) > normalize(b);
-            return toNumber(zz);
-        }
-
-        TRcLaol Number::operator<<(const TRcLaol& b) const {
-            auto zz = normalize(this) << normalize(b);
-            return toNumber(zz);
-        }
-
-        TRcLaol Number::operator>>(const TRcLaol& b) const {
-            auto zz = normalize(this) >> normalize(b);
+            auto zz = expectInt(this) % expectInt(b);
             return toNumber(zz);
         }
 
@@ -157,6 +255,16 @@ namespace laol {
 
         TRcLaol Number::operator!=(const TRcLaol& b) const {
             auto zz = normalize(this) != normalize(b);
+            return toNumber(zz);
+        }
+
+        TRcLaol Number::operator<(const TRcLaol& b) const {
+            auto zz = normalize(this) < normalize(b);
+            return toNumber(zz);
+        }
+
+        TRcLaol Number::operator>(const TRcLaol& b) const {
+            auto zz = normalize(this) > normalize(b);
             return toNumber(zz);
         }
 
@@ -178,6 +286,95 @@ namespace laol {
         TRcLaol Number::operator||(const TRcLaol& b) const {
             auto zz = normalize(this) || normalize(b);
             return toNumber(zz);
+        }
+
+        TRcLaol Number::operator^(const TRcLaol& b) const {
+            auto zz = expectInt(this) ^ expectInt(b);
+            return toNumber(zz);
+        }
+
+        TRcLaol Number::operator&(const TRcLaol& b) const {
+            auto zz = expectInt(this) & expectInt(b);
+            return toNumber(zz);
+        }
+
+        TRcLaol Number::operator|(const TRcLaol& b) const {
+            auto zz = expectInt(this) | expectInt(b);
+            return toNumber(zz);
+        }
+
+        TRcLaol Number::operator<<(const TRcLaol& b) const {
+            auto zz = expectInt(this) << expectInt(b);
+            return toNumber(zz);
+        }
+
+        TRcLaol Number::operator>>(const TRcLaol& b) const {
+            auto zz = expectInt(this) >> expectInt(b);
+            return toNumber(zz);
+        }
+
+        TRcLaol Number::operator!() const {
+            auto zz = !normalize(this);
+            return new Bool(zz);
+        }
+
+        TRcLaol Int::operator~() const {
+            int zz = *this;
+            return new Int(~zz);
+        }
+        
+        TRcLaol Int::operator++() { //pre
+            set(*this + 1);
+            return this;
+        }
+
+        TRcLaol Int::operator--() { //pre
+            set(*this - 1);
+            return this;
+        }
+        
+        TRcLaol Int::operator++(int) { //post
+            TRcLaol rval = new Int((int)*this);
+            set(*this + 1);
+            return rval;
+        }
+
+        TRcLaol Int::operator--(int) { //post
+            TRcLaol rval = new Int((int)*this);
+            set(*this - 1);
+            return rval;
+        }
+
+        TRcLaol Double::operator++() { //pre
+            set(*this + 1);
+            return this;
+        }
+        
+        TRcLaol Double::operator--() { //pre
+            set(*this - 1);
+            return this;
+        }
+        
+        TRcLaol Double::operator++(int) { //post
+            TRcLaol rval = new Double((double)*this);
+            set(*this + 1);
+            return rval;
+        }
+        
+        TRcLaol Double::operator--(int) { //post
+            TRcLaol rval = new Double((double)*this);
+            set(*this - 1);
+            return rval;
+        }
+        
+        TRcLaol Bool::operator~() const {
+            bool zz = *this;
+            return new Bool(~zz);
+        }
+
+        TRcLaol Bool::operator!() const {
+            bool zz = *this;
+            return new Bool(!zz);
         }
 
         /*static*/ std::map<string, Laol::TPFunc> Array::stFuncByName;
