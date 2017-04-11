@@ -53,11 +53,40 @@ namespace laol {
         using std::string;
 
         class Laol;
-        
-        //todo: make TRcLaol real class so we can add unary ops
-        //to dont have to do (TRcLaol-obj)->operator++()
-        //
-        typedef PTRcObjPtr<Laol> TRcLaol;
+
+        class TRcLaol : public PTRcObjPtr<Laol> {
+        public:
+
+            explicit TRcLaol() {
+            }
+
+            TRcLaol(Laol* p) : PTRcObjPtr(p) {
+                setRefCnt(p);
+            }
+
+            TRcLaol(const TRcLaol& r) : PTRcObjPtr(r) {
+                setRefCnt(r.getPtr());
+            }
+
+            const TRcLaol& operator=(const TRcLaol& r) {
+                PTRcObjPtr::operator=(r);
+                setRefCnt(r.getPtr());
+                return *this;
+            }
+
+            const TRcLaol& operator=(Laol *p) {
+                PTRcObjPtr::operator=(p);
+                setRefCnt(p);
+                return *this;
+            }
+
+            virtual ~TRcLaol() {
+            }
+
+        private:
+
+            void setRefCnt(const Laol* p) const;
+        };
 
         string demangleName(const char* n);
 
@@ -65,49 +94,6 @@ namespace laol {
         inline string getClassName(T p) {
             return demangleName(typeid (p).name());
         }
-
-        class Exception : public std::exception {
-        public:
-            explicit Exception(const string& reason);
-
-            //allow copy constructors
-
-            virtual const char* what() const noexcept;
-
-        private:
-            string m_reason;
-        };
-
-        class NoMethodException : public Exception {
-        public:
-
-            explicit NoMethodException()
-            : Exception(REASON) {
-            }
-
-            explicit NoMethodException(const string& reason)
-            : Exception(reason) {
-            }
-
-            //allow copy constructors
-
-        private:
-            static const string REASON;
-        };
-
-        class InvalidTypeException : public Exception {
-        public:
-
-            explicit InvalidTypeException(const std::type_info& found, const string& expected);
-
-            explicit InvalidTypeException(const std::type_info& found, const std::type_info& expected) : InvalidTypeException(found, demangleName(expected.name())) {
-            }
-
-            //allow copy constructors
-
-        private:
-            static const string REASON;
-        };
 
         class Laol : public TRcObj {
         public:
@@ -170,6 +156,18 @@ namespace laol {
 
             TRcLaol noOperatorFound(const string& op) const;
 
+            const TRcLaol& getOwner() const {
+                return *mp_owner;
+            }
+
+        private:
+            friend class TRcLaol;
+
+            void setOwner(const TRcLaol* p) {
+                mp_owner = p;
+            }
+
+            const TRcLaol* mp_owner;
         };
 
         //create binary operations
@@ -268,7 +266,7 @@ namespace laol {
                 m_val = val;
                 return m_val;
             }
-            
+
         private:
             T m_val;
         };
@@ -331,8 +329,9 @@ namespace laol {
 
             virtual ~Number() = 0;
 
-            
+
         public:
+
             virtual bool isInt() const final {
                 return !isDouble();
             }
@@ -352,7 +351,7 @@ namespace laol {
 
             static TRcLaol toNumber(int val);
             static TRcLaol toNumber(double val);
-                        
+
         };
 
         class Int : public Box<int>, Number {
@@ -444,6 +443,49 @@ namespace laol {
             std::vector<TRcLaol> m_ar;
             static std::map<string, TPFunc> stFuncByName;
             static void initStatics(); //initialize stFuncByName.
+        };
+
+        class Exception : public std::exception {
+        public:
+            explicit Exception(const string& reason);
+
+            //allow copy constructors
+
+            virtual const char* what() const noexcept;
+
+        private:
+            string m_reason;
+        };
+
+        class NoMethodException : public Exception {
+        public:
+
+            explicit NoMethodException()
+            : Exception(REASON) {
+            }
+
+            explicit NoMethodException(const string& reason)
+            : Exception(reason) {
+            }
+
+            //allow copy constructors
+
+        private:
+            static const string REASON;
+        };
+
+        class InvalidTypeException : public Exception {
+        public:
+
+            explicit InvalidTypeException(const std::type_info& found, const string& expected);
+
+            explicit InvalidTypeException(const std::type_info& found, const std::type_info& expected) : InvalidTypeException(found, demangleName(expected.name())) {
+            }
+
+            //allow copy constructors
+
+        private:
+            static const string REASON;
         };
     }
 }

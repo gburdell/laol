@@ -40,24 +40,9 @@ namespace laol {
             free(realName);
             return s;
         }
-        
-        Exception::Exception(const string& reason) {
-            m_reason = "Exception: " + reason;
-        }
 
-        const char* Exception::what() const noexcept {
-            return m_reason.c_str();
-        }
-
-        /*static*/ const string NoMethodException::REASON = "no method found";
-
-        InvalidTypeException::InvalidTypeException(const std::type_info& found, const string& expected)
-        : Exception(
-        string("found '")
-        + demangleName(found.name())
-        + "', expected '"
-        + expected
-        + "'") {
+        void TRcLaol::setRefCnt(const Laol* p) const {
+            const_cast<Laol*>(p)->setOwner(this);
         }
 
         Laol::~Laol() {
@@ -322,52 +307,57 @@ namespace laol {
             int zz = *this;
             return new Int(~zz);
         }
-        
-        //todo: need to fix these, since were slicing original Number reference counted
+
         TRcLaol Int::operator++() { //pre
-            set(*this + 1);
-            return this;
+            set(*this +1);
+            //copy
+            return new Int((int)*this);
+            //reference object:
+            //return this->getOwner();
         }
 
         TRcLaol Int::operator--() { //pre
-            set(*this - 1);
-            return this;
+            set(*this -1);
+            return new Int((int)*this); //copy
+            //return this->getOwner();
         }
-        
+
         TRcLaol Int::operator++(int) { //post
             TRcLaol rval = new Int((int)*this);
-            set(*this + 1);
+            set(*this +1);
             return rval;
         }
 
         TRcLaol Int::operator--(int) { //post
             TRcLaol rval = new Int((int)*this);
-            set(*this - 1);
+            set(*this -1);
             return rval;
         }
 
         TRcLaol Double::operator++() { //pre
-            set(*this + 1);
-            return this;
+            set(*this +1);
+            return new Double((double)*this); //copy
+            //return this->getOwner();
         }
-        
+
         TRcLaol Double::operator--() { //pre
-            set(*this - 1);
-            return this;
+            set(*this -1);
+            return new Double((double)*this); //copy
+            //return this->getOwner();
         }
-        
+
         TRcLaol Double::operator++(int) { //post
             TRcLaol rval = new Double((double)*this);
-            set(*this + 1);
+            set(*this +1);
             return rval;
         }
-        
+
         TRcLaol Double::operator--(int) { //post
             TRcLaol rval = new Double((double)*this);
-            set(*this - 1);
+            set(*this -1);
             return rval;
         }
-        
+
         TRcLaol Bool::operator~() const {
             bool zz = *this;
             return new Bool(~zz);
@@ -393,6 +383,24 @@ namespace laol {
             return stFuncByName[name];
         }
 
+        Exception::Exception(const string& reason) {
+            m_reason = "Exception: " + reason;
+        }
+
+        const char* Exception::what() const noexcept {
+            return m_reason.c_str();
+        }
+
+        /*static*/ const string NoMethodException::REASON = "no method found";
+
+        InvalidTypeException::InvalidTypeException(const std::type_info& found, const string& expected)
+        : Exception(
+        string("found '")
+        + demangleName(found.name())
+        + "', expected '"
+        + expected
+        + "'") {
+        }
     }
 }
 

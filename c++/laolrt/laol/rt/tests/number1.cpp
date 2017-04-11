@@ -49,7 +49,11 @@ void test1() {
     TRcLaol n1 = new Int(1), n2 = new Double(1.23), n3 = new Int(10);
     TRcLaol sum = n1 + n2 * n3;
     cout << "sum=" << getVal(sum) << endl;
-    cout << "sum++=" << getVal(sum->operator++()) << endl;
+    cout << "++sum=" << getVal(++(*sum)) << endl;
+    TRcLaol sum1 = sum;
+    ++(*sum1); ++(*sum1); ++(*sum1);
+    cout << "sum++=" << getVal((*sum)++) << endl;
+    cout << "sum=" << getVal(sum) << endl;
     cout << "END: test1" << endl;
 }
 
