@@ -36,6 +36,7 @@
 using namespace std;
 using namespace laol::rt;
 
+#ifdef NOPE
 /*
  * Simple C++ Test Suite
  */
@@ -50,7 +51,10 @@ void test1() {
     TRcLaol sum = n1 + n2 * n3;
     cout << "sum=" << getVal(sum) << endl;
     cout << "++sum=" << getVal(++(*sum)) << endl;
-    TRcLaol sum1 = sum;
+    TRcLaol sum1 = sum;   //TODO: needs to be copy
+    sum1 = n2;
+    sum1 = new Int(1234);
+    TRcLaol ar1 = new Array();
     ++(*sum1); ++(*sum1); ++(*sum1);
     cout << "sum++=" << getVal((*sum)++) << endl;
     cout << "sum=" << getVal(sum) << endl;
@@ -76,7 +80,17 @@ void test2() {
  *      TRcLaol c = new Array(...?);
  *      c[-1]->call("map", [](auto e){return e + 1;}).call("attrOrFunc")
  */
+#endif //NOPE
 
+void test1() {
+    LaolRef i1 = 12 + 34;
+    LaolRef i2 = i1;
+    LaolRef ar1 = new Array();
+    i2 = ar1 << i1;
+}
+void test2() {
+    
+}
 int main(int argc, char** argv) {
     test1();
     test2();

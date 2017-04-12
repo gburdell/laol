@@ -39,7 +39,6 @@
 #include <exception>
 #include <typeinfo>
 #include "xyzzy/refcnt.hxx"
-#include "xyzzy/array.hxx"
 
 #define NO_COPY_CONSTRUCTORS(_t)            \
     _t(const _t&) = delete;                 \
@@ -49,44 +48,7 @@ namespace laol {
     namespace rt {
         using xyzzy::TRcObj;
         using xyzzy::PTRcObjPtr;
-        using xyzzy::PTRcArray;
         using std::string;
-
-        class Laol;
-
-        class TRcLaol : public PTRcObjPtr<Laol> {
-        public:
-
-            explicit TRcLaol() {
-            }
-
-            TRcLaol(Laol* p) : PTRcObjPtr(p) {
-                setRefCnt(p);
-            }
-
-            TRcLaol(const TRcLaol& r) : PTRcObjPtr(r) {
-                setRefCnt(r.getPtr());
-            }
-
-            const TRcLaol& operator=(const TRcLaol& r) {
-                PTRcObjPtr::operator=(r);
-                setRefCnt(r.getPtr());
-                return *this;
-            }
-
-            const TRcLaol& operator=(Laol *p) {
-                PTRcObjPtr::operator=(p);
-                setRefCnt(p);
-                return *this;
-            }
-
-            virtual ~TRcLaol() {
-            }
-
-        private:
-
-            void setRefCnt(const Laol* p) const;
-        };
 
         string demangleName(const char* n);
 
@@ -94,6 +56,62 @@ namespace laol {
         inline string getClassName(T p) {
             return demangleName(typeid (p).name());
         }
+
+        class Laol;
+        typedef PTRcObjPtr<Laol> TRcLaol;
+
+        class LaolRef {
+        public:
+
+            explicit LaolRef();
+
+            // LaolRef lhs = new Type(...)
+            LaolRef(Laol* val);
+            
+            LaolRef(TRcLaol& r);
+
+            // LaolRef lhs = 47;
+            LaolRef(int val);
+            LaolRef(double val);
+
+            // LaolRef rhs = ...; LaolRef lhs = rhs;
+            LaolRef(const LaolRef& rhs);
+
+            //NOTE: we're not const: since Array usage changes 'this'
+            //TODO: add a const version too?
+            LaolRef operator<<(const LaolRef& rhs);
+
+            virtual ~LaolRef();
+
+        private:
+
+            enum EType {
+                ePrc, ePstring, eInt, eDouble,
+                eUnused
+            };
+
+            EType m_type;
+
+            union {
+                TRcLaol* u_prc;
+                //string* u_pstring;
+                //char u_char;
+                int u_int;
+                //todo: unsigned int u_uint;
+                //long int u_lint;
+                //unsigned long int u_ulint;
+                //long long int u_llint;
+                //unsigned long long int u_ullint;
+                //float u_float;
+                double u_double;
+                //long double u_ldouble;
+            } m_dat;
+            
+            TRcLaol& asLaol() {
+                return *m_dat.u_prc;
+            }
+
+        };
 
         class Laol : public TRcObj {
         public:
@@ -103,325 +121,13 @@ namespace laol {
 
             NO_COPY_CONSTRUCTORS(Laol);
 
+            //http://stackoverflow.com/questions/8679089/c-official-operator-names-keywords
+            virtual LaolRef left_shift(TRcLaol& self, const LaolRef& rhs) {
+                throw std::exception();
+            }
+
             virtual ~Laol() = 0;
 
-            //operators: todo
-            //= += -= *= /= %= ˆ= &= |= >>= <<= == , ->* -> ( ) [ ]
-
-            //unary ops:
-            virtual TRcLaol operator~() const;
-            virtual TRcLaol operator!() const;
-
-            //pre/post incr/decr
-            virtual TRcLaol operator++(); //pre
-            virtual TRcLaol operator--(); //pre
-            virtual TRcLaol operator++(int); //post
-            virtual TRcLaol operator--(int); //post
-
-            //binary ops: arithmetic
-            virtual TRcLaol operator+(const TRcLaol& b) const;
-            virtual TRcLaol operator-(const TRcLaol& b) const;
-            virtual TRcLaol operator*(const TRcLaol& b) const;
-            virtual TRcLaol operator/(const TRcLaol& b) const;
-            virtual TRcLaol operator%(const TRcLaol& b) const;
-
-            //binary ops: relational and comparison
-            virtual TRcLaol operator==(const TRcLaol& b) const;
-            virtual TRcLaol operator!=(const TRcLaol& b) const;
-            virtual TRcLaol operator<(const TRcLaol& b) const;
-            virtual TRcLaol operator>(const TRcLaol& b) const;
-            virtual TRcLaol operator<=(const TRcLaol& b) const;
-            virtual TRcLaol operator>=(const TRcLaol& b) const;
-
-            //binary ops: logical
-            virtual TRcLaol operator&&(const TRcLaol& b) const;
-            virtual TRcLaol operator||(const TRcLaol& b) const;
-
-            //binary ops: bitwise
-            virtual TRcLaol operator^(const TRcLaol& b) const;
-            virtual TRcLaol operator&(const TRcLaol& b) const;
-            virtual TRcLaol operator|(const TRcLaol& b) const;
-            virtual TRcLaol operator<<(const TRcLaol& b) const;
-            virtual TRcLaol operator>>(const TRcLaol& b) const;
-
-            //TPFunc	
-            typedef TRcLaol(Laol::* TPFunc)(const TRcLaol& args);
-
-            TRcLaol operator()(const string& methodNm, const TRcLaol& args);
-
-        protected:
-            virtual TPFunc getFunc(const string& methodNm) const;
-
-            TRcLaol noMethodFound(const string& methodNm) const;
-
-            TRcLaol noOperatorFound(const string& op) const;
-
-            const TRcLaol& getOwner() const {
-                return *mp_owner;
-            }
-
-        private:
-            friend class TRcLaol;
-
-            void setOwner(const TRcLaol* p) {
-                mp_owner = p;
-            }
-
-            const TRcLaol* mp_owner;
-        };
-
-        //create binary operations
-
-        inline TRcLaol operator+(const TRcLaol &a, const TRcLaol &b) {
-            return a->operator+(b);
-        }
-
-        inline TRcLaol operator-(const TRcLaol &a, const TRcLaol &b) {
-            return a->operator-(b);
-        }
-
-        inline TRcLaol operator*(const TRcLaol &a, const TRcLaol &b) {
-            return a->operator*(b);
-        }
-
-        inline TRcLaol operator/(const TRcLaol &a, const TRcLaol &b) {
-            return a->operator/(b);
-        }
-
-        inline TRcLaol operator%(const TRcLaol &a, const TRcLaol &b) {
-            return a->operator%(b);
-        }
-
-        inline TRcLaol operator==(const TRcLaol &a, const TRcLaol &b) {
-            return a->operator==(b);
-        }
-
-        inline TRcLaol operator!=(const TRcLaol &a, const TRcLaol &b) {
-            return a->operator!=(b);
-        }
-
-        inline TRcLaol operator<(const TRcLaol &a, const TRcLaol &b) {
-            return a->operator<(b);
-        }
-
-        inline TRcLaol operator>(const TRcLaol &a, const TRcLaol &b) {
-            return a->operator>(b);
-        }
-
-        inline TRcLaol operator<=(const TRcLaol &a, const TRcLaol &b) {
-            return a->operator<=(b);
-        }
-
-        inline TRcLaol operator>=(const TRcLaol &a, const TRcLaol &b) {
-            return a->operator>=(b);
-        }
-
-        inline TRcLaol operator&&(const TRcLaol &a, const TRcLaol &b) {
-            return a->operator&&(b);
-        }
-
-        inline TRcLaol operator||(const TRcLaol &a, const TRcLaol &b) {
-            return a->operator||(b);
-        }
-
-        inline TRcLaol operator^(const TRcLaol &a, const TRcLaol &b) {
-            return a->operator^(b);
-        }
-
-        inline TRcLaol operator&(const TRcLaol &a, const TRcLaol &b) {
-            return a->operator&(b);
-        }
-
-        inline TRcLaol operator|(const TRcLaol &a, const TRcLaol &b) {
-            return a->operator|(b);
-        }
-
-        inline TRcLaol operator<<(const TRcLaol &a, const TRcLaol &b) {
-            return a->operator<<(b);
-        }
-
-        inline TRcLaol operator>>(const TRcLaol &a, const TRcLaol &b) {
-            return a->operator>>(b);
-        }
-
-        template<typename T>
-        class Box : public virtual Laol {
-        protected:
-
-            explicit Box(const T item) : m_val(item) {
-            }
-
-            NO_COPY_CONSTRUCTORS(Box);
-
-            virtual ~Box() {
-            }
-
-            //NOTE: keep conversion protected to mitigate unintended/implied conversions
-
-            operator T() const {
-                return m_val;
-            }
-
-            T set(const T val) {
-                m_val = val;
-                return m_val;
-            }
-
-        private:
-            T m_val;
-        };
-
-        class String : public Box<string> {
-        public:
-
-            explicit String(const string& val) : Box(val) {
-            }
-
-            NO_COPY_CONSTRUCTORS(String);
-
-            ~String() {
-            }
-        };
-
-        class Bool : public Box<bool> {
-        public:
-
-            TRcLaol operator~() const override final;
-            TRcLaol operator!() const override final;
-
-            explicit Bool(bool val) : Box(val) {
-            }
-
-            NO_COPY_CONSTRUCTORS(Bool);
-
-            ~Bool() {
-            }
-        };
-
-        class Number : public virtual Laol {
-        public:
-            TRcLaol operator!() const override final;
-            TRcLaol operator+(const TRcLaol& b) const override final;
-            TRcLaol operator-(const TRcLaol& b) const override final;
-            TRcLaol operator*(const TRcLaol& b) const override final;
-            TRcLaol operator/(const TRcLaol& b) const override final;
-            TRcLaol operator%(const TRcLaol& b) const override final;
-            TRcLaol operator==(const TRcLaol& b) const override final;
-            TRcLaol operator!=(const TRcLaol& b) const override final;
-            TRcLaol operator<(const TRcLaol& b) const override final;
-            TRcLaol operator>(const TRcLaol& b) const override final;
-            TRcLaol operator<=(const TRcLaol& b) const override final;
-            TRcLaol operator>=(const TRcLaol& b) const override final;
-            TRcLaol operator&&(const TRcLaol& b) const override final;
-            TRcLaol operator||(const TRcLaol& b) const override final;
-            TRcLaol operator^(const TRcLaol& b) const override final;
-            TRcLaol operator&(const TRcLaol& b) const override final;
-            TRcLaol operator|(const TRcLaol& b) const override final;
-            TRcLaol operator<<(const TRcLaol& b) const override final;
-            TRcLaol operator>>(const TRcLaol& b) const override final;
-
-        protected:
-
-            explicit Number() {
-            }
-
-            NO_COPY_CONSTRUCTORS(Number);
-
-            virtual ~Number() = 0;
-
-
-        public:
-
-            virtual bool isInt() const final {
-                return !isDouble();
-            }
-
-            virtual bool isDouble() const = 0;
-
-
-        public:
-            virtual int toInt() const = 0;
-            virtual double toDouble() const = 0;
-
-        private:
-            static auto normalize(const Number* n);
-            auto normalize(const TRcLaol& n) const;
-            static int expectInt(const Number* n);
-            int expectInt(const TRcLaol& n) const;
-
-            static TRcLaol toNumber(int val);
-            static TRcLaol toNumber(double val);
-
-        };
-
-        class Int : public Box<int>, Number {
-        public:
-
-            TRcLaol operator~() const override final;
-            TRcLaol operator++() override final; //pre
-            TRcLaol operator--() override final; //pre
-            TRcLaol operator++(int) override final; //post
-            TRcLaol operator--(int) override final; //post
-
-            explicit Int(int val) : Box(val) {
-            }
-
-            explicit Int(double val) : Box(std::round(val)) {
-            }
-
-            NO_COPY_CONSTRUCTORS(Int);
-
-            ~Int() {
-            }
-
-        protected:
-
-            int toInt() const final {
-                return this->operator int();
-            }
-
-            double toDouble() const final {
-                return toInt();
-            }
-
-            bool isDouble() const final {
-                return false;
-            }
-
-        };
-
-        class Double : public Box<double>, Number {
-        public:
-
-            TRcLaol operator++() override final; //pre
-            TRcLaol operator--() override final; //pre
-            TRcLaol operator++(int) override final; //post
-            TRcLaol operator--(int) override final; //post
-
-            explicit Double(double val) : Box(val) {
-            }
-
-            explicit Double(int val) : Box(val) {
-            }
-
-            NO_COPY_CONSTRUCTORS(Double);
-
-            ~Double() {
-            }
-
-        protected:
-
-            int toInt() const final {
-                return std::round(toDouble());
-            }
-
-            double toDouble() const final {
-                return this->operator double();
-            }
-
-            bool isDouble() const final {
-                return true;
-            }
         };
 
         class Array : public Laol {
@@ -430,63 +136,20 @@ namespace laol {
             explicit Array() {
             }
 
-            TRcLaol operator[](const TRcLaol& ix);
-
-            TPFunc getFunc(const string& name) const final;
-
             NO_COPY_CONSTRUCTORS(Array);
+
+            virtual LaolRef left_shift(TRcLaol& self, const LaolRef& rhs) override {
+                m_ar.push_back(rhs);
+                return self;
+            }
 
             virtual ~Array() {
             }
 
         private:
-            std::vector<TRcLaol> m_ar;
-            static std::map<string, TPFunc> stFuncByName;
-            static void initStatics(); //initialize stFuncByName.
+            std::vector<LaolRef> m_ar;
         };
 
-        class Exception : public std::exception {
-        public:
-            explicit Exception(const string& reason);
-
-            //allow copy constructors
-
-            virtual const char* what() const noexcept;
-
-        private:
-            string m_reason;
-        };
-
-        class NoMethodException : public Exception {
-        public:
-
-            explicit NoMethodException()
-            : Exception(REASON) {
-            }
-
-            explicit NoMethodException(const string& reason)
-            : Exception(reason) {
-            }
-
-            //allow copy constructors
-
-        private:
-            static const string REASON;
-        };
-
-        class InvalidTypeException : public Exception {
-        public:
-
-            explicit InvalidTypeException(const std::type_info& found, const string& expected);
-
-            explicit InvalidTypeException(const std::type_info& found, const std::type_info& expected) : InvalidTypeException(found, demangleName(expected.name())) {
-            }
-
-            //allow copy constructors
-
-        private:
-            static const string REASON;
-        };
     }
 }
 
