@@ -30,19 +30,8 @@
 namespace laol {
     namespace rt {
 
-        string demangleName(const char* mangledName) {
-            int status;
-            //https://gcc.gnu.org/onlinedocs/libstdc++/manual/ext_demangling.html
-            //Since realName is malloc, we need to free.
-            char *realName = abi::__cxa_demangle(mangledName, 0, 0, &status);
-            assert(0 == status);
-            string s = realName;
-            free(realName);
-            return s;
-        }
-
         LaolRef::LaolRef()
-        : m_type(eUnused) {
+        : m_type(eNull) {
         }
 
         LaolRef::LaolRef(Laol* r)
@@ -66,11 +55,21 @@ namespace laol {
             m_dat.u_double = val;
         }
 
+        LaolRef::LaolRef(bool val)
+        : m_type(eBool) {
+            m_dat.u_bool = val;
+        }
+
+        LaolRef::LaolRef(const char* s)
+        : m_type(ePstring) {
+            m_dat.u_pstring = new string(s);
+        }
+        
         LaolRef::LaolRef(const LaolRef& rhs)
         : m_type(rhs.m_type) {
             switch (m_type) {
                 case ePrc:
-                    m_dat.u_prc = &const_cast<LaolRef&>(rhs).asLaol();
+                    m_dat.u_prc = &const_cast<LaolRef&> (rhs).asLaol();
                     asLaol().incr();
                     break;
                 default:
@@ -84,6 +83,8 @@ namespace laol {
                 case ePrc:
                     rval = asLaol()->left_shift(asLaol(), rhs);
                     break;
+                case eInt:
+                    //todo: iff rhs is number
                 default:
                     break;
             }
@@ -96,6 +97,9 @@ namespace laol {
                     if (asLaol().decr()) {
                         delete m_dat.u_prc;
                     }
+                    break;
+                case ePstring:
+                    delete m_dat.u_pstring;
                     break;
                 default:
                     break;

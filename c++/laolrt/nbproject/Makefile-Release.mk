@@ -35,6 +35,8 @@ OBJECTDIR=${CND_BUILDDIR}/${CND_CONF}/${CND_PLATFORM}
 
 # Object Files
 OBJECTFILES= \
+	${OBJECTDIR}/laol/rt/common.o \
+	${OBJECTDIR}/laol/rt/exception.o \
 	${OBJECTDIR}/laol/rt/laol.o
 
 # Test Directory
@@ -74,6 +76,16 @@ ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/liblaolrt.a: ${OBJECTFILES}
 	${AR} -rv ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/liblaolrt.a ${OBJECTFILES} 
 	$(RANLIB) ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/liblaolrt.a
 
+${OBJECTDIR}/laol/rt/common.o: laol/rt/common.cxx
+	${MKDIR} -p ${OBJECTDIR}/laol/rt
+	${RM} "$@.d"
+	$(COMPILE.cc) -O2 -I../../../xyzzy/src -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/laol/rt/common.o laol/rt/common.cxx
+
+${OBJECTDIR}/laol/rt/exception.o: laol/rt/exception.cxx
+	${MKDIR} -p ${OBJECTDIR}/laol/rt
+	${RM} "$@.d"
+	$(COMPILE.cc) -O2 -I../../../xyzzy/src -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/laol/rt/exception.o laol/rt/exception.cxx
+
 ${OBJECTDIR}/laol/rt/laol.o: laol/rt/laol.cxx
 	${MKDIR} -p ${OBJECTDIR}/laol/rt
 	${RM} "$@.d"
@@ -96,6 +108,32 @@ ${TESTDIR}/laol/rt/tests/number1.o: laol/rt/tests/number1.cpp
 	${RM} "$@.d"
 	$(COMPILE.cc) -O2 -I../../../xyzzy/src -I. -MMD -MP -MF "$@.d" -o ${TESTDIR}/laol/rt/tests/number1.o laol/rt/tests/number1.cpp
 
+
+${OBJECTDIR}/laol/rt/common_nomain.o: ${OBJECTDIR}/laol/rt/common.o laol/rt/common.cxx 
+	${MKDIR} -p ${OBJECTDIR}/laol/rt
+	@NMOUTPUT=`${NM} ${OBJECTDIR}/laol/rt/common.o`; \
+	if (echo "$$NMOUTPUT" | ${GREP} '|main$$') || \
+	   (echo "$$NMOUTPUT" | ${GREP} 'T main$$') || \
+	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
+	then  \
+	    ${RM} "$@.d";\
+	    $(COMPILE.cc) -O2 -I../../../xyzzy/src -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/laol/rt/common_nomain.o laol/rt/common.cxx;\
+	else  \
+	    ${CP} ${OBJECTDIR}/laol/rt/common.o ${OBJECTDIR}/laol/rt/common_nomain.o;\
+	fi
+
+${OBJECTDIR}/laol/rt/exception_nomain.o: ${OBJECTDIR}/laol/rt/exception.o laol/rt/exception.cxx 
+	${MKDIR} -p ${OBJECTDIR}/laol/rt
+	@NMOUTPUT=`${NM} ${OBJECTDIR}/laol/rt/exception.o`; \
+	if (echo "$$NMOUTPUT" | ${GREP} '|main$$') || \
+	   (echo "$$NMOUTPUT" | ${GREP} 'T main$$') || \
+	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
+	then  \
+	    ${RM} "$@.d";\
+	    $(COMPILE.cc) -O2 -I../../../xyzzy/src -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/laol/rt/exception_nomain.o laol/rt/exception.cxx;\
+	else  \
+	    ${CP} ${OBJECTDIR}/laol/rt/exception.o ${OBJECTDIR}/laol/rt/exception_nomain.o;\
+	fi
 
 ${OBJECTDIR}/laol/rt/laol_nomain.o: ${OBJECTDIR}/laol/rt/laol.o laol/rt/laol.cxx 
 	${MKDIR} -p ${OBJECTDIR}/laol/rt

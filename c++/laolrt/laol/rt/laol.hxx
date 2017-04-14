@@ -32,13 +32,11 @@
 #ifndef _laol_rt_laol_hxx_
 #define _laol_rt_laol_hxx_
 
-#include <string>
 #include <vector>
 #include <map>
 #include <cmath>
-#include <exception>
-#include <typeinfo>
 #include "xyzzy/refcnt.hxx"
+#include "laol/rt/common.hxx"
 
 #define NO_COPY_CONSTRUCTORS(_t)            \
     _t(const _t&) = delete;                 \
@@ -48,14 +46,6 @@ namespace laol {
     namespace rt {
         using xyzzy::TRcObj;
         using xyzzy::PTRcObjPtr;
-        using std::string;
-
-        string demangleName(const char* n);
-
-        template<typename T>
-        inline string getClassName(T p) {
-            return demangleName(typeid (p).name());
-        }
 
         class Laol;
         typedef PTRcObjPtr<Laol> TRcLaol;
@@ -73,10 +63,16 @@ namespace laol {
             // LaolRef lhs = 47;
             LaolRef(int val);
             LaolRef(double val);
+            LaolRef(bool val);
+            LaolRef(const char* s);
 
             // LaolRef rhs = ...; LaolRef lhs = rhs;
             LaolRef(const LaolRef& rhs);
 
+            bool isNull() const {
+                return (eNull == m_type);
+            }
+            
             //NOTE: we're not const: since Array usage changes 'this'
             //TODO: add a const version too?
             LaolRef operator<<(const LaolRef& rhs);
@@ -86,15 +82,18 @@ namespace laol {
         private:
 
             enum EType {
-                ePrc, ePstring, eInt, eDouble,
-                eUnused
+                ePrc, 
+                ePstring, 
+                eBool, eInt, eDouble,
+                eNull
             };
 
             EType m_type;
 
             union {
                 TRcLaol* u_prc;
-                //string* u_pstring;
+                bool u_bool;
+                string* u_pstring;
                 //char u_char;
                 int u_int;
                 //todo: unsigned int u_uint;
