@@ -36,52 +36,6 @@
 using namespace std;
 using namespace laol::rt;
 
-#ifdef NOPE
-/*
- * Simple C++ Test Suite
- */
-static auto getVal(const TRcLaol& n) {
-    auto p = dynamic_cast<const Number*> (n.getPtr());
-    return p->isDouble() ? p->toDouble() : p->toInt();
-}
-
-void test1() {
-    cout << "BEGIN: test1" << endl;
-    TRcLaol n1 = new Int(1), n2 = new Double(1.23), n3 = new Int(10);
-    TRcLaol sum = n1 + n2 * n3;
-    cout << "sum=" << getVal(sum) << endl;
-    cout << "++sum=" << getVal(++(*sum)) << endl;
-    TRcLaol sum1 = sum;   //TODO: needs to be copy
-    sum1 = n2;
-    sum1 = new Int(1234);
-    TRcLaol ar1 = new Array();
-    ++(*sum1); ++(*sum1); ++(*sum1);
-    cout << "sum++=" << getVal((*sum)++) << endl;
-    cout << "sum=" << getVal(sum) << endl;
-    cout << "END: test1" << endl;
-}
-
-void test2() {
-    cout << "BEGIN: test2" << endl;
-    TRcLaol d1 = new Double(1.234);
-    try {
-        d1 << d1;
-    }    catch (const Exception& ex) {
-        cout << "Caught exception: " << ex.what() << endl;
-    }
-    cout << "END: test2" << endl;
-}
-
-/*
- *  Here is laol:
- *      a = [1,2,3]
- *      a[-1].map{|e| e + 1}.attrOrFunc
- *  in c++/laol/rt:
- *      TRcLaol c = new Array(...?);
- *      c[-1]->call("map", [](auto e){return e + 1;}).call("attrOrFunc")
- */
-#endif //NOPE
-
 void test1() {
     LaolRef i1 = 12 + 34;
     LaolRef i2 = i1;
@@ -89,6 +43,7 @@ void test1() {
     i2 = ar1 << i1 << 1234; //cool: we get 1234 to LaolRef conversion!
     i1 = "foobar";
     i1 = 7;
+    i2 = new Array();
 }
 void test2() {
     

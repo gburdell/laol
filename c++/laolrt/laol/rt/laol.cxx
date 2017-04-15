@@ -34,39 +34,41 @@ namespace laol {
         : m_type(eNull) {
         }
 
-        LaolRef::LaolRef(Laol* r)
-        : m_type(ePrc) {
-            m_dat.u_prc = new TRcLaol(r);
+        LaolRef::LaolRef(Laol* r) {
+            set(r);
         }
 
-        LaolRef::LaolRef(TRcLaol* r)
-        : m_type(ePrc) {
-            r->incr();
-            m_dat.u_prc = r;
+        LaolRef::LaolRef(TRcLaol* r) {
+            set(r);
         }
 
-        LaolRef::LaolRef(int val)
-        : m_type(eInt) {
-            m_dat.u_int = val;
+        LaolRef::LaolRef(int val) {
+            set(val);
         }
 
-        LaolRef::LaolRef(double val)
-        : m_type(eDouble) {
-            m_dat.u_double = val;
+        LaolRef::LaolRef(double val) {
+            set(val);
         }
 
-        LaolRef::LaolRef(bool val)
-        : m_type(eBool) {
-            m_dat.u_bool = val;
+        LaolRef::LaolRef(bool val) {
+            set(val);
         }
 
-        LaolRef::LaolRef(const char* s)
-        : m_type(ePstring) {
-            m_dat.u_pstring = new string(s);
+        LaolRef::LaolRef(const char* s) {
+            set(s);
         }
 
-        LaolRef::LaolRef(const LaolRef& rhs)
-        : m_type(rhs.m_type) {
+        LaolRef::LaolRef(const LaolRef& rhs) {
+            set(rhs);
+        }
+
+        const LaolRef& LaolRef::operator=(const LaolRef& rhs) {
+            cleanup();
+            return set(rhs);
+        }
+
+        const LaolRef& LaolRef::set(const LaolRef& rhs) {
+            m_type = rhs.m_type;
             switch (m_type) {
                 case ePrc:
                     m_dat.u_prc = const_cast<LaolRef&> (rhs).asTPRcLaol();
@@ -75,6 +77,50 @@ namespace laol {
                 default:
                     m_dat = rhs.m_dat;
             }
+            return *this;
+        }
+
+        const LaolRef&
+        LaolRef::set(Laol* r) {
+            m_type = ePrc;
+            m_dat.u_prc = new TRcLaol(r);
+            return *this;
+        }
+
+        const LaolRef&
+        LaolRef::set(TRcLaol* r) {
+            m_type = ePrc;
+            r->incr();
+            m_dat.u_prc = r;
+            return *this;
+        }
+
+        const LaolRef&
+        LaolRef::set(int val) {
+            m_type = eInt;
+            m_dat.u_int = val;
+            return *this;
+        }
+
+        const LaolRef&
+        LaolRef::set(double val) {
+            m_type = eDouble;
+            m_dat.u_double = val;
+            return *this;
+        }
+
+        const LaolRef&
+        LaolRef::set(bool val) {
+            m_type = eBool;
+            m_dat.u_bool = val;
+            return *this;
+        }
+
+        const LaolRef&
+        LaolRef::set(const char* s) {
+            m_type = ePstring;
+            m_dat.u_pstring = new string(s);
+            return *this;
         }
 
         LaolRef LaolRef::operator<<(const LaolRef& rhs) {
@@ -91,7 +137,7 @@ namespace laol {
             return rval;
         }
 
-        const LaolRef& LaolRef::operator=(const LaolRef& rhs) {
+        void LaolRef::cleanup() {
             switch (m_type) {
                 case ePrc:
                     if (asTPRcLaol()->decr()) {
@@ -104,31 +150,10 @@ namespace laol {
                 default:
                     break;
             }
-            m_type = rhs.m_type;
-            switch (m_type) {
-                case ePrc:
-                    m_dat.u_prc = const_cast<LaolRef&> (rhs).asTPRcLaol();
-                    asTPRcLaol()->incr();
-                    break;
-                default:
-                    m_dat = rhs.m_dat;
-            }
-            return *this;
         }
 
         LaolRef::~LaolRef() {
-            switch (m_type) {
-                case ePrc:
-                    if (asTPRcLaol()->decr()) {
-                        delete m_dat.u_prc;
-                    }
-                    break;
-                case ePstring:
-                    delete m_dat.u_pstring;
-                    break;
-                default:
-                    break;
-            }
+            cleanup();
         }
 
         TRcLaol*

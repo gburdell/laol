@@ -57,30 +57,30 @@ namespace laol {
 
             // LaolRef lhs = new Type(...)
             LaolRef(Laol* val);
-            
+
             LaolRef(TRcLaol* r);
 
+            LaolRef(bool val);
             // LaolRef lhs = 47;
             LaolRef(int val);
             LaolRef(double val);
-            LaolRef(bool val);
             LaolRef(const char* s);
 
             // LaolRef rhs = ...; LaolRef lhs = rhs;
             LaolRef(const LaolRef& rhs);
-            
+
             const LaolRef& operator=(const LaolRef& rhs);
-            
+
             template<typename T>
-            const LaolRef& operator=(const T& r) {
-                bool debug = true;
-                return *this;
+            const LaolRef& operator=(T rhs) {
+                cleanup();
+                return set(rhs);
             }
 
             bool isNull() const {
                 return (eNull == m_type);
             }
-            
+
             //NOTE: we're not const: since Array usage changes 'this'
             //TODO: add a const version too?
             LaolRef operator<<(const LaolRef& rhs);
@@ -90,8 +90,8 @@ namespace laol {
         private:
 
             enum EType {
-                ePrc, 
-                ePstring, 
+                ePrc,
+                ePstring,
                 eBool, eInt, eDouble,
                 eNull
             };
@@ -100,9 +100,9 @@ namespace laol {
 
             union {
                 TRcLaol* u_prc;
-                bool u_bool;
                 string* u_pstring;
-                //char u_char;
+                char u_char;
+                bool u_bool;
                 int u_int;
                 //todo: unsigned int u_uint;
                 //long int u_lint;
@@ -113,23 +113,33 @@ namespace laol {
                 double u_double;
                 //long double u_ldouble;
             } m_dat;
-            
+
             TRcLaol* asTPRcLaol() {
                 return m_dat.u_prc;
             }
-            
+
+            void cleanup();
+
+            const LaolRef& set(Laol* rhs);
+            const LaolRef& set(TRcLaol* r);
+            const LaolRef& set(const LaolRef& rhs);
+            const LaolRef& set(bool rhs);
+            const LaolRef& set(int rhs);
+            const LaolRef& set(double rhs);
+            const LaolRef& set(const char* rhs);
+            const LaolRef& set(char rhs);
         };
 
         class Laol : public TRcObj {
         public:
 
             explicit Laol();
-            
+
             NO_COPY_CONSTRUCTORS(Laol);
 
             //http://stackoverflow.com/questions/8679089/c-official-operator-names-keywords
             virtual TRcLaol* left_shift(TRcLaol* self, const LaolRef& rhs);
-            
+
             virtual ~Laol() = 0;
 
         };
@@ -138,13 +148,13 @@ namespace laol {
         public:
 
             explicit Array();
-            
+
             NO_COPY_CONSTRUCTORS(Array);
 
             virtual TRcLaol* left_shift(TRcLaol* self, const LaolRef& rhs) override;
-            
+
             virtual ~Array();
-            
+
         private:
             std::vector<LaolRef> m_ar;
         };
