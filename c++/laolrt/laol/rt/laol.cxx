@@ -39,10 +39,10 @@ namespace laol {
             m_dat.u_prc = new TRcLaol(r);
         }
 
-        LaolRef::LaolRef(TRcLaol& r)
+        LaolRef::LaolRef(TRcLaol* r)
         : m_type(ePrc) {
-            r.incr();
-            m_dat.u_prc = &r;
+            r->incr();
+            m_dat.u_prc = r;
         }
 
         LaolRef::LaolRef(int val)
@@ -64,13 +64,13 @@ namespace laol {
         : m_type(ePstring) {
             m_dat.u_pstring = new string(s);
         }
-        
+
         LaolRef::LaolRef(const LaolRef& rhs)
         : m_type(rhs.m_type) {
             switch (m_type) {
                 case ePrc:
-                    m_dat.u_prc = &const_cast<LaolRef&> (rhs).asLaol();
-                    asLaol().incr();
+                    m_dat.u_prc = const_cast<LaolRef&> (rhs).asTPRcLaol();
+                    asTPRcLaol()->incr();
                     break;
                 default:
                     m_dat = rhs.m_dat;
@@ -81,7 +81,7 @@ namespace laol {
             LaolRef rval;
             switch (m_type) {
                 case ePrc:
-                    rval = asLaol()->left_shift(asLaol(), rhs);
+                    rval = asTPRcLaol()->getPtr()->left_shift(asTPRcLaol(), rhs);
                     break;
                 case eInt:
                     //todo: iff rhs is number
@@ -91,10 +91,35 @@ namespace laol {
             return rval;
         }
 
+        const LaolRef& LaolRef::operator=(const LaolRef& rhs) {
+            switch (m_type) {
+                case ePrc:
+                    if (asTPRcLaol()->decr()) {
+                        delete m_dat.u_prc;
+                    }
+                    break;
+                case ePstring:
+                    delete m_dat.u_pstring;
+                    break;
+                default:
+                    break;
+            }
+            m_type = rhs.m_type;
+            switch (m_type) {
+                case ePrc:
+                    m_dat.u_prc = const_cast<LaolRef&> (rhs).asTPRcLaol();
+                    asTPRcLaol()->incr();
+                    break;
+                default:
+                    m_dat = rhs.m_dat;
+            }
+            return *this;
+        }
+
         LaolRef::~LaolRef() {
             switch (m_type) {
                 case ePrc:
-                    if (asLaol().decr()) {
+                    if (asTPRcLaol()->decr()) {
                         delete m_dat.u_prc;
                     }
                     break;
@@ -106,8 +131,29 @@ namespace laol {
             }
         }
 
+        TRcLaol*
+        Laol::left_shift(TRcLaol* self, const LaolRef& rhs) {
+            throw std::exception();
+        }
+
+        Laol::Laol() {
+        }
+
         Laol::~Laol() {
         }
+
+        Array::Array() {
+        }
+
+        Array::~Array() {
+        }
+
+        TRcLaol*
+        Array::left_shift(TRcLaol* self, const LaolRef& rhs) {
+            m_ar.push_back(rhs);
+            return self;
+        }
+
 
     }
 }

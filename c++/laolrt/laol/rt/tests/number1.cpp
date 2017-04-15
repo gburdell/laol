@@ -88,6 +88,7 @@ void test1() {
     LaolRef ar1 = new Array();
     i2 = ar1 << i1 << 1234; //cool: we get 1234 to LaolRef conversion!
     i1 = "foobar";
+    i1 = 7;
 }
 void test2() {
     

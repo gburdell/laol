@@ -10,6 +10,37 @@
 		F4F5D2111E94375B0093899C /* number1.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F4F5D2101E94375B0093899C /* number1.cpp */; };
 /* End PBXBuildFile section */
 
+/* Begin PBXContainerItemProxy section */
+		F449471B1EA15B5300EDB4A6 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = F44947171EA15B5300EDB4A6 /* xyzzy.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = F455C78B1E93F19A00F13033;
+			remoteInfo = xyzzy;
+		};
+		F44947211EA15B6A00EDB4A6 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = F449471D1EA15B6A00EDB4A6 /* laolrt.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = F455C7B91E93F6AE00F13033;
+			remoteInfo = laolrt;
+		};
+		F44947251EA15C3E00EDB4A6 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = F449471D1EA15B6A00EDB4A6 /* laolrt.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = F455C7B81E93F6AE00F13033;
+			remoteInfo = laolrt;
+		};
+		F44947291EA15C4400EDB4A6 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = F44947171EA15B5300EDB4A6 /* xyzzy.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = F455C78A1E93F19A00F13033;
+			remoteInfo = xyzzy;
+		};
+/* End PBXContainerItemProxy section */
+
 /* Begin PBXCopyFilesBuildPhase section */
 		F4F5D2041E942CC10093899C /* CopyFiles */ = {
 			isa = PBXCopyFilesBuildPhase;
@@ -23,6 +54,8 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		F44947171EA15B5300EDB4A6 /* xyzzy.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = xyzzy.xcodeproj; path = ../../../../xyzzy/xcode/xyzzy/xyzzy.xcodeproj; sourceTree = "<group>"; };
+		F449471D1EA15B6A00EDB4A6 /* laolrt.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = laolrt.xcodeproj; path = ../laolrt/laolrt.xcodeproj; sourceTree = "<group>"; };
 		F4F5D2061E942CC10093899C /* laolrt_test */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = laolrt_test; sourceTree = BUILT_PRODUCTS_DIR; };
 		F4F5D2101E94375B0093899C /* number1.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = number1.cpp; path = ../../laolrt/laol/rt/tests/number1.cpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -38,9 +71,27 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		F44947181EA15B5300EDB4A6 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				F449471C1EA15B5300EDB4A6 /* xyzzy.a */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		F449471E1EA15B6A00EDB4A6 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				F44947221EA15B6A00EDB4A6 /* laolrt.a */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
 		F4F5D1FD1E942CC10093899C = {
 			isa = PBXGroup;
 			children = (
+				F449471D1EA15B6A00EDB4A6 /* laolrt.xcodeproj */,
+				F44947171EA15B5300EDB4A6 /* xyzzy.xcodeproj */,
 				F4F5D2101E94375B0093899C /* number1.cpp */,
 				F4F5D2071E942CC10093899C /* Products */,
 			);
@@ -68,6 +119,8 @@
 			buildRules = (
 			);
 			dependencies = (
+				F449472A1EA15C4400EDB4A6 /* PBXTargetDependency */,
+				F44947261EA15C3E00EDB4A6 /* PBXTargetDependency */,
 			);
 			name = laolrt_test;
 			productName = laolrt_test;
@@ -99,12 +152,39 @@
 			mainGroup = F4F5D1FD1E942CC10093899C;
 			productRefGroup = F4F5D2071E942CC10093899C /* Products */;
 			projectDirPath = "";
+			projectReferences = (
+				{
+					ProductGroup = F449471E1EA15B6A00EDB4A6 /* Products */;
+					ProjectRef = F449471D1EA15B6A00EDB4A6 /* laolrt.xcodeproj */;
+				},
+				{
+					ProductGroup = F44947181EA15B5300EDB4A6 /* Products */;
+					ProjectRef = F44947171EA15B5300EDB4A6 /* xyzzy.xcodeproj */;
+				},
+			);
 			projectRoot = "";
 			targets = (
 				F4F5D2051E942CC10093899C /* laolrt_test */,
 			);
 		};
 /* End PBXProject section */
+
+/* Begin PBXReferenceProxy section */
+		F449471C1EA15B5300EDB4A6 /* xyzzy.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = xyzzy.a;
+			remoteRef = F449471B1EA15B5300EDB4A6 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		F44947221EA15B6A00EDB4A6 /* laolrt.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = laolrt.a;
+			remoteRef = F44947211EA15B6A00EDB4A6 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+/* End PBXReferenceProxy section */
 
 /* Begin PBXSourcesBuildPhase section */
 		F4F5D2021E942CC10093899C /* Sources */ = {
@@ -116,6 +196,19 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		F44947261EA15C3E00EDB4A6 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = laolrt;
+			targetProxy = F44947251EA15C3E00EDB4A6 /* PBXContainerItemProxy */;
+		};
+		F449472A1EA15C4400EDB4A6 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = xyzzy;
+			targetProxy = F44947291EA15C4400EDB4A6 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
 		F4F5D20B1E942CC10093899C /* Debug */ = {

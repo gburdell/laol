@@ -1,0 +1,30 @@
+{
+  "DVTSourceControlWorkspaceBlueprintPrimaryRemoteRepositoryKey" : "8071CD4E9B466D3CB5FD61B1A5BC513AC33A34E5",
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyRepositoryLocationsKey" : {
+
+  },
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyStatesKey" : {
+    "C0A65DFCE8672E0E987C58F5A99696ABF24756FA" : 9223372036854775807,
+    "8071CD4E9B466D3CB5FD61B1A5BC513AC33A34E5" : 9223372036854775807
+  },
+  "DVTSourceControlWorkspaceBlueprintIdentifierKey" : "875B2C57-CE4C-4A75-9A2D-EF290151FA80",
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyPathsKey" : {
+    "C0A65DFCE8672E0E987C58F5A99696ABF24756FA" : "xyzzy\/",
+    "8071CD4E9B466D3CB5FD61B1A5BC513AC33A34E5" : "laol\/"
+  },
+  "DVTSourceControlWorkspaceBlueprintNameKey" : "laolrt_test",
+  "DVTSourceControlWorkspaceBlueprintVersion" : 204,
+  "DVTSourceControlWorkspaceBlueprintRelativePathToProjectKey" : "c++\/xcode\/laolrt_test\/laolrt_test.xcodeproj",
+  "DVTSourceControlWorkspaceBlueprintRemoteRepositoriesKey" : [
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "github.com:gburdell\/laol.git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "8071CD4E9B466D3CB5FD61B1A5BC513AC33A34E5"
+    },
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "github.com:gburdell\/xyzzy.git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "C0A65DFCE8672E0E987C58F5A99696ABF24756FA"
+    }
+  ]
+}

@@ -58,7 +58,7 @@ namespace laol {
             // LaolRef lhs = new Type(...)
             LaolRef(Laol* val);
             
-            LaolRef(TRcLaol& r);
+            LaolRef(TRcLaol* r);
 
             // LaolRef lhs = 47;
             LaolRef(int val);
@@ -68,6 +68,14 @@ namespace laol {
 
             // LaolRef rhs = ...; LaolRef lhs = rhs;
             LaolRef(const LaolRef& rhs);
+            
+            const LaolRef& operator=(const LaolRef& rhs);
+            
+            template<typename T>
+            const LaolRef& operator=(const T& r) {
+                bool debug = true;
+                return *this;
+            }
 
             bool isNull() const {
                 return (eNull == m_type);
@@ -106,25 +114,22 @@ namespace laol {
                 //long double u_ldouble;
             } m_dat;
             
-            TRcLaol& asLaol() {
-                return *m_dat.u_prc;
+            TRcLaol* asTPRcLaol() {
+                return m_dat.u_prc;
             }
-
+            
         };
 
         class Laol : public TRcObj {
         public:
 
-            explicit Laol() {
-            }
-
+            explicit Laol();
+            
             NO_COPY_CONSTRUCTORS(Laol);
 
             //http://stackoverflow.com/questions/8679089/c-official-operator-names-keywords
-            virtual LaolRef left_shift(TRcLaol& self, const LaolRef& rhs) {
-                throw std::exception();
-            }
-
+            virtual TRcLaol* left_shift(TRcLaol* self, const LaolRef& rhs);
+            
             virtual ~Laol() = 0;
 
         };
@@ -132,19 +137,14 @@ namespace laol {
         class Array : public Laol {
         public:
 
-            explicit Array() {
-            }
-
+            explicit Array();
+            
             NO_COPY_CONSTRUCTORS(Array);
 
-            virtual LaolRef left_shift(TRcLaol& self, const LaolRef& rhs) override {
-                m_ar.push_back(rhs);
-                return self;
-            }
-
-            virtual ~Array() {
-            }
-
+            virtual TRcLaol* left_shift(TRcLaol* self, const LaolRef& rhs) override;
+            
+            virtual ~Array();
+            
         private:
             std::vector<LaolRef> m_ar;
         };
