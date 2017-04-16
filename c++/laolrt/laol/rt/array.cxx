@@ -22,24 +22,23 @@
  * THE SOFTWARE.
  */
 
-#include <cxxabi.h>
-#include <cassert>
-#include "laol/rt/common.hxx"
+#include "laol/rt/array.hxx"
 
 namespace laol {
     namespace rt {
 
-        string demangleName(const char* mangledName) {
-            int status;
-            //https://gcc.gnu.org/onlinedocs/libstdc++/manual/ext_demangling.html
-            //Since realName is malloc, we need to free.
-            char *realName = abi::__cxa_demangle(mangledName, 0, 0, &status);
-            assert(0 == status);
-            string s = realName;
-            free(realName);
-            return s;
+        Array::Array() {
         }
+
+        Array::~Array() {
+        }
+
+        TRcLaol*
+        Array::left_shift(TRcLaol* self, const LaolRef& rhs) {
+            m_ar.push_back(rhs);
+            return self;
+        }
+
 
     }
 }
-

@@ -4,8 +4,7 @@
     <logicalFolder name="HeaderFiles"
                    displayName="Header Files"
                    projectFiles="true">
-      <itemPath>laol/rt/common.hxx</itemPath>
-      <itemPath>laol/rt/exception.hxx</itemPath>
+      <itemPath>laol/rt/array.hxx</itemPath>
       <itemPath>laol/rt/laol.hxx</itemPath>
     </logicalFolder>
     <logicalFolder name="ResourceFiles"
@@ -15,8 +14,7 @@
     <logicalFolder name="SourceFiles"
                    displayName="Source Files"
                    projectFiles="true">
-      <itemPath>laol/rt/common.cxx</itemPath>
-      <itemPath>laol/rt/exception.cxx</itemPath>
+      <itemPath>laol/rt/array.cxx</itemPath>
       <itemPath>laol/rt/laol.cxx</itemPath>
     </logicalFolder>
     <logicalFolder name="TestFiles"
@@ -82,6 +80,7 @@
             <pElem>.</pElem>
             <pElem>.</pElem>
             <pElem>.</pElem>
+            <pElem>.</pElem>
           </linkerDynSerch>
         </linkerTool>
       </folder>
@@ -105,6 +104,7 @@
             <pElem>.</pElem>
             <pElem>.</pElem>
             <pElem>.</pElem>
+            <pElem>.</pElem>
           </linkerDynSerch>
           <linkerLibItems>
             <linkerLibFileItem>dist/Debug/gcc-4.7.4-MacOSX/liblaolrt.a</linkerLibFileItem>
@@ -112,13 +112,9 @@
           </linkerLibItems>
         </linkerTool>
       </folder>
-      <item path="laol/rt/common.cxx" ex="false" tool="1" flavor2="0">
+      <item path="laol/rt/array.cxx" ex="false" tool="1" flavor2="0">
       </item>
-      <item path="laol/rt/common.hxx" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="laol/rt/exception.cxx" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="laol/rt/exception.hxx" ex="false" tool="3" flavor2="0">
+      <item path="laol/rt/array.hxx" ex="false" tool="3" flavor2="0">
       </item>
       <item path="laol/rt/laol.cxx" ex="false" tool="1" flavor2="0">
       </item>
@@ -178,6 +174,7 @@
             <pElem>.</pElem>
             <pElem>.</pElem>
             <pElem>.</pElem>
+            <pElem>.</pElem>
           </linkerDynSerch>
         </linkerTool>
       </folder>
@@ -201,16 +198,13 @@
             <pElem>.</pElem>
             <pElem>.</pElem>
             <pElem>.</pElem>
+            <pElem>.</pElem>
           </linkerDynSerch>
         </linkerTool>
       </folder>
-      <item path="laol/rt/common.cxx" ex="false" tool="1" flavor2="0">
+      <item path="laol/rt/array.cxx" ex="false" tool="1" flavor2="0">
       </item>
-      <item path="laol/rt/common.hxx" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="laol/rt/exception.cxx" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="laol/rt/exception.hxx" ex="false" tool="3" flavor2="0">
+      <item path="laol/rt/array.hxx" ex="false" tool="3" flavor2="0">
       </item>
       <item path="laol/rt/laol.cxx" ex="false" tool="1" flavor2="0">
       </item>

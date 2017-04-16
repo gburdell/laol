@@ -22,43 +22,39 @@
  * THE SOFTWARE.
  */
 
-#include "laol/rt/exception.hxx"
+/* 
+ * File:   array.hxx
+ * Author: kpfalzer
+ *
+ * Created on April 16, 2017, 3:55 PM
+ */
+
+#ifndef _laol_rt_array_hxx_
+#define _laol_rt_array_hxx_
+
+#include <vector>
+#include "laol/rt/laol.hxx"
 
 namespace laol {
     namespace rt {
-        
-        Exception::Exception(const string& reason) {
-            m_reason = "Exception: " + reason;
-        }
 
-        const char* Exception::what() const noexcept {
-            return m_reason.c_str();
-        }
+        class Array : public Laol {
+        public:
 
-        /*static*/
-        const string
-        NoMethodException::REASON = "no method found";
+            explicit Array();
 
-        NoMethodException::NoMethodException(const std::type_info& obj, const string& type, const string& op)
-        : Exception(
-        string("no ")
-        + type
-        + " '"
-        + op
-        + "' found for '"
-        + demangleName(obj.name())
-        + "'"
-        ) {
-        }
+            NO_COPY_CONSTRUCTORS(Array);
 
-        InvalidTypeException::InvalidTypeException(const std::type_info& found, const string& expected)
-        : Exception(
-        string("found '")
-        + demangleName(found.name())
-        + "', expected '"
-        + expected
-        + "'") {
-        }
+            virtual TRcLaol* left_shift(TRcLaol* self, const LaolRef& rhs) override;
+
+            virtual ~Array();
+
+        private:
+            std::vector<LaolRef> m_ar;
+        };
+
     }
 }
+
+#endif /* _laol_rt_array_hxx_ */
 

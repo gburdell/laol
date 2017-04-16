@@ -30,41 +30,15 @@
 namespace laol {
     namespace rt {
 
-        LaolRef::LaolRef()
-        : m_type(eNull) {
-        }
-
-        LaolRef::LaolRef(Laol* r) {
-            set(r);
-        }
-
-        LaolRef::LaolRef(TRcLaol* r) {
-            set(r);
-        }
-
-        LaolRef::LaolRef(int val) {
-            set(val);
-        }
-
-        LaolRef::LaolRef(double val) {
-            set(val);
-        }
-
-        LaolRef::LaolRef(bool val) {
-            set(val);
-        }
-
-        LaolRef::LaolRef(const char* s) {
-            set(s);
-        }
-
-        LaolRef::LaolRef(const LaolRef& rhs) {
-            set(rhs);
-        }
-
-        const LaolRef& LaolRef::operator=(const LaolRef& rhs) {
-            cleanup();
-            return set(rhs);
+        string demangleName(const char* mangledName) {
+            int status;
+            //https://gcc.gnu.org/onlinedocs/libstdc++/manual/ext_demangling.html
+            //Since realName is malloc, we need to free.
+            char *realName = abi::__cxa_demangle(mangledName, 0, 0, &status);
+            assert(0 == status);
+            string s = realName;
+            free(realName);
+            return s;
         }
 
         const LaolRef& LaolRef::set(const LaolRef& rhs) {
@@ -77,49 +51,6 @@ namespace laol {
                 default:
                     m_dat = rhs.m_dat;
             }
-            return *this;
-        }
-
-        const LaolRef&
-        LaolRef::set(Laol* r) {
-            m_type = ePrc;
-            m_dat.u_prc = new TRcLaol(r);
-            return *this;
-        }
-
-        const LaolRef&
-        LaolRef::set(TRcLaol* r) {
-            m_type = ePrc;
-            r->incr();
-            m_dat.u_prc = r;
-            return *this;
-        }
-
-        const LaolRef&
-        LaolRef::set(int val) {
-            m_type = eInt;
-            m_dat.u_int = val;
-            return *this;
-        }
-
-        const LaolRef&
-        LaolRef::set(double val) {
-            m_type = eDouble;
-            m_dat.u_double = val;
-            return *this;
-        }
-
-        const LaolRef&
-        LaolRef::set(bool val) {
-            m_type = eBool;
-            m_dat.u_bool = val;
-            return *this;
-        }
-
-        const LaolRef&
-        LaolRef::set(const char* s) {
-            m_type = ePstring;
-            m_dat.u_pstring = new string(s);
             return *this;
         }
 
@@ -167,18 +98,38 @@ namespace laol {
         Laol::~Laol() {
         }
 
-        Array::Array() {
+        Exception::Exception(const string& reason) {
+            m_reason = "Exception: " + reason;
         }
 
-        Array::~Array() {
+        const char* Exception::what() const noexcept {
+            return m_reason.c_str();
         }
 
-        TRcLaol*
-        Array::left_shift(TRcLaol* self, const LaolRef& rhs) {
-            m_ar.push_back(rhs);
-            return self;
+        /*static*/
+        const string
+        NoMethodException::REASON = "no method found";
+
+        NoMethodException::NoMethodException(const std::type_info& obj, const string& type, const string& op)
+        : Exception(
+        string("no ")
+        + type
+        + " '"
+        + op
+        + "' found for '"
+        + demangleName(obj.name())
+        + "'"
+        ) {
         }
 
+        InvalidTypeException::InvalidTypeException(const std::type_info& found, const string& expected)
+        : Exception(
+        string("found '")
+        + demangleName(found.name())
+        + "', expected '"
+        + expected
+        + "'") {
+        }
 
     }
 }

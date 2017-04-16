@@ -7,14 +7,12 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		F423DDE01EA07E150011FB62 /* common.cxx in Sources */ = {isa = PBXBuildFile; fileRef = F423DDDE1EA07E150011FB62 /* common.cxx */; };
-		F423DDE11EA07E150011FB62 /* exception.cxx in Sources */ = {isa = PBXBuildFile; fileRef = F423DDDF1EA07E150011FB62 /* exception.cxx */; };
+		F44979591EA42F9800602268 /* array.cxx in Sources */ = {isa = PBXBuildFile; fileRef = F44979581EA42F9800602268 /* array.cxx */; };
 		F455C7C11E93F78A00F13033 /* laol.cxx in Sources */ = {isa = PBXBuildFile; fileRef = F455C7C01E93F78A00F13033 /* laol.cxx */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		F423DDDE1EA07E150011FB62 /* common.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = common.cxx; path = ../../laolrt/laol/rt/common.cxx; sourceTree = "<group>"; };
-		F423DDDF1EA07E150011FB62 /* exception.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = exception.cxx; path = ../../laolrt/laol/rt/exception.cxx; sourceTree = "<group>"; };
+		F44979581EA42F9800602268 /* array.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = array.cxx; path = ../../laolrt/laol/rt/array.cxx; sourceTree = "<group>"; };
 		F455C7B91E93F6AE00F13033 /* laolrt.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = laolrt.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		F455C7C01E93F78A00F13033 /* laol.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = laol.cxx; path = ../../laolrt/laol/rt/laol.cxx; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -33,8 +31,7 @@
 		F455C7B01E93F6AE00F13033 = {
 			isa = PBXGroup;
 			children = (
-				F423DDDE1EA07E150011FB62 /* common.cxx */,
-				F423DDDF1EA07E150011FB62 /* exception.cxx */,
+				F44979581EA42F9800602268 /* array.cxx */,
 				F455C7C01E93F78A00F13033 /* laol.cxx */,
 				F455C7BA1E93F6AE00F13033 /* Products */,
 			);
@@ -115,9 +112,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				F423DDE01EA07E150011FB62 /* common.cxx in Sources */,
-				F423DDE11EA07E150011FB62 /* exception.cxx in Sources */,
 				F455C7C11E93F78A00F13033 /* laol.cxx in Sources */,
+				F44979591EA42F9800602268 /* array.cxx in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

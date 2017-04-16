@@ -32,6 +32,7 @@
 #include <stdlib.h>
 #include <iostream>
 #include "laol/rt/laol.hxx"
+#include "laol/rt/array.hxx"
 
 using namespace std;
 using namespace laol::rt;
@@ -40,7 +41,7 @@ void test1() {
     LaolRef i1 = 12 + 34;
     LaolRef i2 = i1;
     LaolRef ar1 = new Array();
-    i2 = ar1 << i1 << 1234; //cool: we get 1234 to LaolRef conversion!
+    i2 = ar1 << i1 << (float)1234.5; //cool: we get 1234 to LaolRef conversion!
     i1 = "foobar";
     i1 = 7;
     i2 = new Array();
