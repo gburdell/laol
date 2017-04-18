@@ -27,18 +27,34 @@
 namespace laol {
     namespace rt {
 
+        //static
+        std::map<string, Array::TPMethod> Array::stMethodByName = {
+            {"empty?", static_cast<TPMethod> (&Array::isEmpty)}
+        };
+
         Array::Array() {
         }
 
         Array::~Array() {
         }
 
+        Laol::TPMethod 
+        Array::getFunc(const string& methodNm) const {
+            auto search = stMethodByName.find(methodNm);
+            auto rval = (search != stMethodByName.end()) ? search->second : nullptr;
+            return rval;
+        }
+
         TRcLaol*
-        Array::left_shift(TRcLaol* self, const LaolRef& rhs) {
+        Array::left_shift(TRcLaol* self, const LaolObj& rhs) {
             m_ar.push_back(rhs);
             return self;
         }
 
+        LaolObj
+        Array::isEmpty(TRcLaol*, Args) {
+            return m_ar.empty();
+        }
 
     }
 }

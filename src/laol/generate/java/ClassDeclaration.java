@@ -52,17 +52,18 @@ public class ClassDeclaration {
                 m_decl.getName(),
                 getExtends()
         );
-        declareMembersAndAccessors();
+        //todo declareMembersAndAccessors();
         //todo
         os().println("}");
     }
 
     private String getExtends() {
-        return (Objects.isNull(m_decl.getExtends())) 
+        return (Objects.isNull(m_decl.getExtends()))
                 ? ""
                 : "implements " + m_decl.getExtends().toString();
     }
-    
+
+    /*todo
     private void declareMembersAndAccessors() {
         Collection<Member> members = getMembers(m_decl);
         os().println("//{{ Member declarations\n//** All are mutable (for now)!");
@@ -81,7 +82,7 @@ public class ClassDeclaration {
         }
         os().println("//Member declarations }}");
     }
-
+     */
     private PrintStream os() {
         return m_ctx.os();
     }

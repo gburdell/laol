@@ -30,7 +30,8 @@
 namespace laol {
     namespace rt {
 
-        string demangleName(const char* mangledName) {
+        string 
+        demangleName(const char* mangledName) {
             int status;
             //https://gcc.gnu.org/onlinedocs/libstdc++/manual/ext_demangling.html
             //Since realName is malloc, we need to free.
@@ -41,11 +42,12 @@ namespace laol {
             return s;
         }
 
-        const LaolRef& LaolRef::set(const LaolRef& rhs) {
+        const 
+        LaolObj& LaolObj::set(const LaolObj& rhs) {
             m_type = rhs.m_type;
             switch (m_type) {
                 case ePrc:
-                    m_dat.u_prc = const_cast<LaolRef&> (rhs).asTPRcLaol();
+                    m_dat.u_prc = const_cast<LaolObj&> (rhs).asTPRcLaol();
                     asTPRcLaol()->incr();
                     break;
                 default:
@@ -54,11 +56,12 @@ namespace laol {
             return *this;
         }
 
-        LaolRef LaolRef::operator<<(const LaolRef& rhs) {
-            LaolRef rval;
+        LaolObj 
+        LaolObj::operator<<(const LaolObj& rhs) {
+            LaolObj rval;
             switch (m_type) {
                 case ePrc:
-                    rval = asTPRcLaol()->getPtr()->left_shift(asTPRcLaol(), rhs);
+                    rval = asTPRcLaol()->getPtr()->left_shift(asTPRcLaol(),{rhs});
                     break;
                 case eInt:
                     //todo: iff rhs is number
@@ -68,7 +71,8 @@ namespace laol {
             return rval;
         }
 
-        void LaolRef::cleanup() {
+        void 
+        LaolObj::cleanup() {
             switch (m_type) {
                 case ePrc:
                     if (asTPRcLaol()->decr()) {
@@ -83,13 +87,47 @@ namespace laol {
             }
         }
 
-        LaolRef::~LaolRef() {
+        LaolObj 
+        LaolObj::operator()(const string& methodNm, Args args) {
+            LaolObj rval;
+            switch (m_type) {
+                case ePrc:
+                {
+                    TRcLaol* self = asTPRcLaol();
+                    Laol* pObj = self->getPtr();
+                    TPMethod pMethod = pObj->getFunc(methodNm);
+                    if (nullptr != pMethod) {
+                        rval = (pObj->*pMethod)(self, args);
+                    } else {
+                        throw std::exception(); //not implemented
+                    }
+                }
+                    break;
+                case ePstring:
+                    break;
+                default:
+                    break;
+            }
+            return rval;
+        }
+
+        LaolObj 
+        LaolObj::operator()(const string& methodNm) {
+            return this->operator ()(methodNm, {});
+        }
+
+        LaolObj::~LaolObj() {
             cleanup();
         }
 
         TRcLaol*
-        Laol::left_shift(TRcLaol* self, const LaolRef& rhs) {
-            throw std::exception();
+        Laol::left_shift(TRcLaol* self, const LaolObj& rhs) {
+            throw std::exception(); //no implementation
+        }
+
+        Laol::TPMethod
+        Laol::getFunc(const string& methodNm) const {
+            throw std::exception(); //should normally delegate to subclass
         }
 
         Laol::Laol() {
@@ -102,7 +140,8 @@ namespace laol {
             m_reason = "Exception: " + reason;
         }
 
-        const char* Exception::what() const noexcept {
+        const char* 
+        Exception::what() const noexcept {
             return m_reason.c_str();
         }
 

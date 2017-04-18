@@ -33,6 +33,7 @@
 #define _laol_rt_array_hxx_
 
 #include <vector>
+#include <map>
 #include "laol/rt/laol.hxx"
 
 namespace laol {
@@ -45,12 +46,18 @@ namespace laol {
 
             NO_COPY_CONSTRUCTORS(Array);
 
-            virtual TRcLaol* left_shift(TRcLaol* self, const LaolRef& rhs) override;
+            virtual TRcLaol* left_shift(TRcLaol* self, const LaolObj& rhs) override;
+
+            //unique methods
+            virtual LaolObj isEmpty(TRcLaol*, Args);
+            
+            Laol::TPMethod getFunc(const string& methodNm) const override;
 
             virtual ~Array();
 
         private:
-            std::vector<LaolRef> m_ar;
+            std::vector<LaolObj> m_ar;
+            static std::map<string, TPMethod> stMethodByName;
         };
 
     }

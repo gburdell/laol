@@ -38,13 +38,14 @@ using namespace std;
 using namespace laol::rt;
 
 void test1() {
-    LaolRef i1 = 12 + 34;
-    LaolRef i2 = i1;
-    LaolRef ar1 = new Array();
+    LaolObj i1 = 12 + 34;
+    LaolObj i2 = i1;
+    LaolObj ar1 = new Array();
     i2 = ar1 << i1 << (float)1234.5; //cool: we get 1234 to LaolRef conversion!
-    i1 = "foobar";
+    i1 = ar1("empty?");
     i1 = 7;
     i2 = new Array();
+    i1 = i1("empty?");
 }
 void test2() {
     
