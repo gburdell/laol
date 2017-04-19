@@ -22,6 +22,7 @@
  * THE SOFTWARE.
  */
 
+#include <algorithm>
 #include "laol/rt/array.hxx"
 
 namespace laol {
@@ -29,7 +30,9 @@ namespace laol {
 
         //static
         std::map<string, Array::TPMethod> Array::stMethodByName = {
-            {"empty?", static_cast<TPMethod> (&Array::isEmpty)}
+            {"empty?", static_cast<TPMethod> (&Array::empty_PRED)},
+            {"reverse", static_cast<TPMethod> (&Array::reverse)},
+            {"reverse!", static_cast<TPMethod> (&Array::reverse_SELF)}
         };
 
         Array::Array() {
@@ -38,7 +41,7 @@ namespace laol {
         Array::~Array() {
         }
 
-        Laol::TPMethod 
+        Laol::TPMethod
         Array::getFunc(const string& methodNm) const {
             auto search = stMethodByName.find(methodNm);
             auto rval = (search != stMethodByName.end()) ? search->second : nullptr;
@@ -52,8 +55,21 @@ namespace laol {
         }
 
         LaolObj
-        Array::isEmpty(TRcLaol*, Args) {
+        Array::empty_PRED(TRcLaol* self, Args args) {
             return m_ar.empty();
+        }
+
+        LaolObj
+        Array::reverse(TRcLaol* self, Args args) {
+            auto p = new Array(m_ar);
+            std::reverse(std::begin(p->m_ar), std::end(p->m_ar));
+            return p;
+        }
+
+        LaolObj 
+        Array::reverse_SELF(TRcLaol* self, Args args) {
+            std::reverse(std::begin(m_ar), std::end(m_ar));
+            return self;
         }
 
     }

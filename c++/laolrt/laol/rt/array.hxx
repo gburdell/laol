@@ -44,19 +44,26 @@ namespace laol {
 
             explicit Array();
 
-            NO_COPY_CONSTRUCTORS(Array);
+            Array& operator=(const Array& r) = delete;
 
             virtual TRcLaol* left_shift(TRcLaol* self, const LaolObj& rhs) override;
 
             //unique methods
-            virtual LaolObj isEmpty(TRcLaol*, Args);
-            
+            virtual LaolObj empty_PRED(TRcLaol* self, Args args);
+            virtual LaolObj reverse(TRcLaol* self, Args args);
+            virtual LaolObj reverse_SELF(TRcLaol* self, Args args);
+
             Laol::TPMethod getFunc(const string& methodNm) const override;
 
             virtual ~Array();
 
         private:
-            std::vector<LaolObj> m_ar;
+            typedef std::vector<LaolObj> Vector;
+
+            Array(const Vector& v) : m_ar(v) {
+            }
+
+            Vector m_ar;
             static std::map<string, TPMethod> stMethodByName;
         };
 

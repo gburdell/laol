@@ -50,8 +50,13 @@ namespace laol {
                     m_dat.u_prc = const_cast<LaolObj&> (rhs).asTPRcLaol();
                     asTPRcLaol()->incr();
                     break;
+                case ePstring:
+                    //copy string contents (since we dont reference count)
+                    set(rhs.m_dat.u_pstring->c_str());
+                    break;
                 default:
                     m_dat = rhs.m_dat;
+                    break;
             }
             return *this;
         }
@@ -77,10 +82,12 @@ namespace laol {
                 case ePrc:
                     if (asTPRcLaol()->decr()) {
                         delete m_dat.u_prc;
+                        m_type = eNull;
                     }
                     break;
                 case ePstring:
                     delete m_dat.u_pstring;
+                    m_type = eNull;
                     break;
                 default:
                     break;
