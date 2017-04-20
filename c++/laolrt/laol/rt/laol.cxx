@@ -30,7 +30,7 @@
 namespace laol {
     namespace rt {
 
-        string 
+        string
         demangleName(const char* mangledName) {
             int status;
             //https://gcc.gnu.org/onlinedocs/libstdc++/manual/ext_demangling.html
@@ -42,15 +42,15 @@ namespace laol {
             return s;
         }
 
-        const 
+        const
         LaolObj& LaolObj::set(const LaolObj& rhs) {
             m_type = rhs.m_type;
             switch (m_type) {
-                case ePrc:
+                case ePRc:
                     m_dat.u_prc = const_cast<LaolObj&> (rhs).asTPRcLaol();
                     asTPRcLaol()->incr();
                     break;
-                case ePstring:
+                case ePString:
                     //copy string contents (since we dont reference count)
                     set(rhs.m_dat.u_pstring->c_str());
                     break;
@@ -61,31 +61,74 @@ namespace laol {
             return *this;
         }
 
-        LaolObj 
-        LaolObj::operator<<(const LaolObj& rhs) {
+        bool
+        LaolObj::isInt() const {
+            switch (m_type) {
+                case eInt: case eLInt: case eUInt: case eULInt:
+                    return true;
+                default:
+                    return false;
+            }
+        }
+
+        bool
+        LaolObj::isFloat() const {
+            switch (m_type) {
+                case eFloat: case eDouble:
+                    return true;
+                default:
+                    return false;
+            }
+        }
+
+        LaolObj
+        LaolObj::operator<<(const LaolObj& opB) {
             LaolObj rval;
             switch (m_type) {
-                case ePrc:
-                    rval = asTPRcLaol()->getPtr()->left_shift(asTPRcLaol(),{rhs});
+                case ePRc:
+                    rval = asTPRcLaol()->getPtr()->left_shift(asTPRcLaol(),{opB});
+                    break;
+                case ePString:
+                    ASSERT_NEVER;//todo: append?
+                    break;
+                default:
+                    if (isInt() && opB.isInt()) {
+                        rval = binaryOp(opB, [](auto a, auto b){
+                            return a << b;
+                        });
+                    } else {
+                        ASSERT_NEVER;//todo
+                    }
+                    break;
+            }
+            return rval;
+        }
+
+        LaolObj
+        LaolObj::operator>>(const LaolObj& opB) {
+            LaolObj rval;
+            switch (m_type) {
+                case ePRc:
+                    rval = asTPRcLaol()->getPtr()->right_shift(asTPRcLaol(),{opB});
                     break;
                 case eInt:
-                    //todo: iff rhs is number
+                    //todo: iff opB is number
                 default:
                     break;
             }
             return rval;
         }
 
-        void 
+        void
         LaolObj::cleanup() {
             switch (m_type) {
-                case ePrc:
+                case ePRc:
                     if (asTPRcLaol()->decr()) {
                         delete m_dat.u_prc;
                         m_type = eNull;
                     }
                     break;
-                case ePstring:
+                case ePString:
                     delete m_dat.u_pstring;
                     m_type = eNull;
                     break;
@@ -94,11 +137,11 @@ namespace laol {
             }
         }
 
-        LaolObj 
+        LaolObj
         LaolObj::operator()(const string& methodNm, Args args) {
             LaolObj rval;
             switch (m_type) {
-                case ePrc:
+                case ePRc:
                 {
                     TRcLaol* self = asTPRcLaol();
                     Laol* pObj = self->getPtr();
@@ -106,11 +149,11 @@ namespace laol {
                     if (nullptr != pMethod) {
                         rval = (pObj->*pMethod)(self, args);
                     } else {
-                        throw std::exception(); //not implemented
+                        ASSERT_NEVER; //not implemented
                     }
                 }
                     break;
-                case ePstring:
+                case ePString:
                     break;
                 default:
                     break;
@@ -118,9 +161,9 @@ namespace laol {
             return rval;
         }
 
-        LaolObj 
+        LaolObj
         LaolObj::operator()(const string& methodNm) {
-            return this->operator ()(methodNm, {});
+            return this->operator()(methodNm,{});
         }
 
         LaolObj::~LaolObj() {
@@ -128,13 +171,21 @@ namespace laol {
         }
 
         TRcLaol*
-        Laol::left_shift(TRcLaol* self, const LaolObj& rhs) {
-            throw std::exception(); //no implementation
+        Laol::left_shift(TRcLaol* self, const LaolObj& opB) {
+            ASSERT_NEVER; //no implementation
+            return self;
+        }
+
+        TRcLaol*
+        Laol::right_shift(TRcLaol* self, const LaolObj& opB) {
+            ASSERT_NEVER; //no implementation
+            return self;
         }
 
         Laol::TPMethod
         Laol::getFunc(const string& methodNm) const {
-            throw std::exception(); //should normally delegate to subclass
+            ASSERT_NEVER; //should normally delegate to subclass
+            return nullptr;
         }
 
         Laol::Laol() {
@@ -147,7 +198,7 @@ namespace laol {
             m_reason = "Exception: " + reason;
         }
 
-        const char* 
+        const char*
         Exception::what() const noexcept {
             return m_reason.c_str();
         }

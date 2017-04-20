@@ -35,6 +35,7 @@
 #include <exception>
 #include <cmath>
 #include <vector>
+#include "xyzzy/assert.hxx"
 #include "xyzzy/refcnt.hxx"
 
 #define NO_COPY_CONSTRUCTORS(_t)            \
@@ -62,7 +63,7 @@ namespace laol {
         class LaolObj;
         //Convenient type (for args) so we can pass {v1,v2,...}
         typedef const vector<LaolObj>& Args;
-        
+
         class LaolObj {
         public:
 
@@ -107,9 +108,15 @@ namespace laol {
                 return (eNull == m_type);
             }
 
+            // true if int variant
+            bool isInt() const;
+            // true if float/double variant
+            bool isFloat() const;
+
             //NOTE: we're not const: since Array usage changes 'this'
             //TODO: add a const version too?
-            LaolObj operator<<(const LaolObj& rhs);
+            LaolObj operator<<(const LaolObj& opB);
+            LaolObj operator>>(const LaolObj& opB);
 
             //TPMethod
             typedef LaolObj(Laol::* TPMethod)(TRcLaol* self, Args args);
@@ -123,24 +130,25 @@ namespace laol {
         private:
 
             enum EType {
-                ePrc,
-                ePstring,
-                eChar, eBool, eInt,
+                ePRc,
+                ePString,
+                eChar, eBool,
+                eInt, eUInt, eLInt, eULInt,
                 eFloat, eDouble,
                 eNull
             };
 
             EType m_type;
 
-            union {
+            union DatType {
                 TRcLaol* u_prc;
                 string* u_pstring;
                 char u_char;
                 bool u_bool;
                 int u_int;
-                //todo: unsigned int u_uint;
-                //long int u_lint;
-                //unsigned long int u_ulint;
+                unsigned int u_uint;
+                long int u_lint;
+                unsigned long int u_ulint;
                 //long long int u_llint;
                 //unsigned long long int u_ullint;
                 float u_float;
@@ -152,6 +160,107 @@ namespace laol {
                 return m_dat.u_prc;
             }
 
+            template<typename OP>
+            LaolObj intApply(OP op) const {
+                LaolObj rval;
+                switch (m_type) {
+                    case eInt: rval = op(m_dat.u_int);
+                        break;
+                    case eUInt: rval = op(m_dat.u_uint);
+                        break;
+                    case eLInt: rval = op(m_dat.u_lint);
+                        break;
+                    case eULInt: rval = op(m_dat.u_ulint);
+                        break;
+                    default:
+                        ASSERT_NEVER;
+                }
+                return rval;
+            }
+
+            template<typename BINOP>
+            LaolObj binaryOp(const LaolObj& opB, BINOP binop) {
+                LaolObj rval = intApply([opB, binop](auto a) {
+                    return opB.intApply([a, binop](auto b) {
+                        return binop(a, b);
+                    });
+                });
+#ifdef NOPE
+                LaolObj rval;
+                switch (opB.m_type) {
+                    case eInt: rval = binaryOpApply(opB.m_dat.u_int, binop);
+                        break;
+                    case eUInt: rval = binaryOpApply(opB.m_dat.u_uint, binop);
+                        break;
+                    case eLInt: rval = binaryOpApply(opB.m_dat.u_lint, binop);
+                        break;
+                    case eULInt: rval = binaryOpApply(opB.m_dat.u_ulint, binop);
+                        break;
+                    case eFloat: rval = binaryOpApply(opB.m_dat.u_float, binop);
+                        break;
+                    case eDouble: rval = binaryOpApply(opB.m_dat.u_double, binop);
+                        break;
+                    default:
+                        ASSERT_NEVER;
+                }
+#endif
+                return rval;
+            }
+
+#ifdef NOT_NEEDED
+
+            template<typename TB, typename BINOP>
+            LaolObj binaryOpApply(TB opB, BINOP binOp) const {
+                LaolObj rval;
+                switch (m_type) {
+                    case eInt: rval = binOp(m_dat.u_int, opB);
+                        break;
+                    case eUInt: rval = binOp(m_dat.u_uint, opB);
+                        break;
+                    case eLInt: rval = binOp(m_dat.u_lint, opB);
+                        break;
+                    case eULInt: rval = binOp(m_dat.u_ulint, opB);
+                        break;
+                    case eFloat: rval = binOp(m_dat.u_float, opB);
+                        break;
+                    case eDouble: rval = binOp(m_dat.u_double, opB);
+                        break;
+                    default:
+                        ASSERT_NEVER;
+                }
+                return rval;
+            }
+
+            template<typename NUMBEROP, typename STRINGOP>
+            LaolObj binaryOp(const LaolObj& opB, TPMethod prcOp,
+                    NUMBEROP numberOp = nullptr, STRINGOP stringOp = nullptr) {
+                LaolObj rval;
+                switch (m_type) {
+                    case ePRc:
+                        rval = (asTPRcLaol()->getPtr()->*prcOp)(asTPRcLaol(),{opB});
+                        break;
+                    case ePString:
+                        if (stringOp != nullptr) {
+                            ASSERT_NEVER; //todo: append?
+                        } else {
+                            ASSERT_NEVER; //no method
+                        }
+                        break;
+                    default:
+                        //todo: as NUMBEROP (covers int/float,...)
+                        if (isInt() && opB.isInt()) {
+                            rval = intOp(opB, [](auto a, auto b) {
+                                return a << b;
+                            });
+                        } else {
+                            ASSERT_NEVER; //todo
+                        }
+                        break;
+                }
+                return rval;
+            }
+#endif
+
             void cleanup();
 
             template<typename SF>
@@ -162,13 +271,13 @@ namespace laol {
             }
 
             const LaolObj& set(Laol* rhs) {
-                return set(ePrc, [this, rhs]() {
+                return set(ePRc, [this, rhs]() {
                     m_dat.u_prc = new TRcLaol(rhs);
                 });
             }
 
             const LaolObj& set(TRcLaol* rhs) {
-                return set(ePrc, [this, rhs]() {
+                return set(ePRc, [this, rhs]() {
                     rhs->incr();
                     m_dat.u_prc = rhs;
                 });
@@ -193,6 +302,24 @@ namespace laol {
                 });
             }
 
+            const LaolObj& set(unsigned int rhs) {
+                return set(eUInt, [this, rhs]() {
+                    m_dat.u_uint = rhs;
+                });
+            }
+
+            const LaolObj& set(long int rhs) {
+                return set(eLInt, [this, rhs]() {
+                    m_dat.u_lint = rhs;
+                });
+            }
+
+            const LaolObj& set(unsigned long int rhs) {
+                return set(eULInt, [this, rhs]() {
+                    m_dat.u_ulint = rhs;
+                });
+            }
+
             const LaolObj& set(double rhs) {
                 return set(eDouble, [this, rhs]() {
                     m_dat.u_double = rhs;
@@ -206,7 +333,7 @@ namespace laol {
             }
 
             const LaolObj& set(const char* rhs) {
-                return set(ePstring, [this, rhs]() {
+                return set(ePString, [this, rhs]() {
                     m_dat.u_pstring = new string(rhs);
                 });
             }
@@ -214,6 +341,7 @@ namespace laol {
         };
 
         // Base class for any object
+
         class Laol : public TRcObj {
         public:
 
@@ -223,7 +351,8 @@ namespace laol {
 
             //operators (mapped to mnemonic): so we can pass in 'self'
             //http://stackoverflow.com/questions/8679089/c-official-operator-names-keywords
-            virtual TRcLaol* left_shift(TRcLaol* self, const LaolObj& rhs);
+            virtual TRcLaol* left_shift(TRcLaol* self, const LaolObj& opB);
+            virtual TRcLaol* right_shift(TRcLaol* self, const LaolObj& opB);
 
             virtual ~Laol() = 0;
 
@@ -231,6 +360,18 @@ namespace laol {
 
             virtual TPMethod getFunc(const string& methodNm) const;
 
+        };
+
+        class String : virtual public Laol {
+        public:
+
+            explicit String(const char* p) : m_str(p) {
+            }
+
+            virtual ~String();
+
+        protected:
+            std::string m_str;
         };
 
         class Exception : public std::exception {

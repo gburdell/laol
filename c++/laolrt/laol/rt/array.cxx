@@ -30,6 +30,7 @@ namespace laol {
 
         //static
         std::map<string, Array::TPMethod> Array::stMethodByName = {
+            {"length", static_cast<TPMethod> (&Array::length)},
             {"empty?", static_cast<TPMethod> (&Array::empty_PRED)},
             {"reverse", static_cast<TPMethod> (&Array::reverse)},
             {"reverse!", static_cast<TPMethod> (&Array::reverse_SELF)}
@@ -49,27 +50,36 @@ namespace laol {
         }
 
         TRcLaol*
-        Array::left_shift(TRcLaol* self, const LaolObj& rhs) {
-            m_ar.push_back(rhs);
+        Array::left_shift(TRcLaol* self, const LaolObj& opB) {
+            m_ar.push_back(opB);
+            return self;
+        }
+        TRcLaol* Array::right_shift(TRcLaol* self, const LaolObj& opB) {
+            m_ar.insert(m_ar.begin(), opB);
             return self;
         }
 
         LaolObj
-        Array::empty_PRED(TRcLaol* self, Args args) {
+        Array::empty_PRED(TRcLaol*, Args) {
             return m_ar.empty();
         }
 
         LaolObj
-        Array::reverse(TRcLaol* self, Args args) {
+        Array::reverse(TRcLaol*, Args) {
             auto p = new Array(m_ar);
             std::reverse(std::begin(p->m_ar), std::end(p->m_ar));
             return p;
         }
 
-        LaolObj 
-        Array::reverse_SELF(TRcLaol* self, Args args) {
+        LaolObj
+        Array::reverse_SELF(TRcLaol* self, Args) {
             std::reverse(std::begin(m_ar), std::end(m_ar));
             return self;
+        }
+
+        LaolObj Array::length(TRcLaol*, Args) {
+            auto n = m_ar.size();
+            return n;
         }
 
     }

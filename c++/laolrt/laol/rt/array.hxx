@@ -46,12 +46,14 @@ namespace laol {
 
             Array& operator=(const Array& r) = delete;
 
-            virtual TRcLaol* left_shift(TRcLaol* self, const LaolObj& rhs) override;
+            virtual TRcLaol* left_shift(TRcLaol* self, const LaolObj& opB) override;
+            virtual TRcLaol* right_shift(TRcLaol* self, const LaolObj& opB) override;
 
             //unique methods
             virtual LaolObj empty_PRED(TRcLaol* self, Args args);
             virtual LaolObj reverse(TRcLaol* self, Args args);
             virtual LaolObj reverse_SELF(TRcLaol* self, Args args);
+            virtual LaolObj length(TRcLaol* self, Args args);
 
             Laol::TPMethod getFunc(const string& methodNm) const override;
 
