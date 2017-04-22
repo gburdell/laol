@@ -29,7 +29,7 @@ namespace laol {
     namespace rt {
 
         //static
-        std::map<string, Array::TPMethod> Array::stMethodByName = {
+        Laol::METHOD_BY_NAME Array::stMethodByName = {
             {"length", static_cast<TPMethod> (&Array::length)},
             {"empty?", static_cast<TPMethod> (&Array::empty_PRED)},
             {"reverse", static_cast<TPMethod> (&Array::reverse)},
@@ -44,17 +44,16 @@ namespace laol {
 
         Laol::TPMethod
         Array::getFunc(const string& methodNm) const {
-            auto search = stMethodByName.find(methodNm);
-            auto rval = (search != stMethodByName.end()) ? search->second : nullptr;
-            return rval;
+            return Laol::getFunc(stMethodByName, methodNm);
         }
 
-        TRcLaol*
+        LaolObj
         Array::left_shift(TRcLaol* self, const LaolObj& opB) {
             m_ar.push_back(opB);
             return self;
         }
-        TRcLaol* Array::right_shift(TRcLaol* self, const LaolObj& opB) {
+        LaolObj
+        Array::right_shift(TRcLaol* self, const LaolObj& opB) {
             m_ar.insert(m_ar.begin(), opB);
             return self;
         }

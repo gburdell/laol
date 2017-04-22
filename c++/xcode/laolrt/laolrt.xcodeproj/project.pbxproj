@@ -9,12 +9,14 @@
 /* Begin PBXBuildFile section */
 		F44979591EA42F9800602268 /* array.cxx in Sources */ = {isa = PBXBuildFile; fileRef = F44979581EA42F9800602268 /* array.cxx */; };
 		F455C7C11E93F78A00F13033 /* laol.cxx in Sources */ = {isa = PBXBuildFile; fileRef = F455C7C01E93F78A00F13033 /* laol.cxx */; };
+		F49970F91EAA8C9C00BD9B1B /* string.cxx in Sources */ = {isa = PBXBuildFile; fileRef = F49970F81EAA8C9C00BD9B1B /* string.cxx */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		F44979581EA42F9800602268 /* array.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = array.cxx; path = ../../laolrt/laol/rt/array.cxx; sourceTree = "<group>"; };
 		F455C7B91E93F6AE00F13033 /* laolrt.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = laolrt.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		F455C7C01E93F78A00F13033 /* laol.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = laol.cxx; path = ../../laolrt/laol/rt/laol.cxx; sourceTree = "<group>"; };
+		F49970F81EAA8C9C00BD9B1B /* string.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = string.cxx; path = ../../laolrt/laol/rt/string.cxx; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -31,6 +33,7 @@
 		F455C7B01E93F6AE00F13033 = {
 			isa = PBXGroup;
 			children = (
+				F49970F81EAA8C9C00BD9B1B /* string.cxx */,
 				F44979581EA42F9800602268 /* array.cxx */,
 				F455C7C01E93F78A00F13033 /* laol.cxx */,
 				F455C7BA1E93F6AE00F13033 /* Products */,
@@ -112,6 +115,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F49970F91EAA8C9C00BD9B1B /* string.cxx in Sources */,
 				F455C7C11E93F78A00F13033 /* laol.cxx in Sources */,
 				F44979591EA42F9800602268 /* array.cxx in Sources */,
 			);

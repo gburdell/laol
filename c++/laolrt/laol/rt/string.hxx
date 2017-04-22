@@ -23,54 +23,65 @@
  */
 
 /* 
- * File:   array.hxx
+ * File:   string.hxx
  * Author: kpfalzer
  *
- * Created on April 16, 2017, 3:55 PM
+ * Created on April 20, 2017, 3:55 PM
  */
 
-#ifndef _laol_rt_array_hxx_
-#define _laol_rt_array_hxx_
+#ifndef _laol_rt_string_hxx_
+#define _laol_rt_string_hxx_
 
-#include <vector>
+#include <string>
+#include <map>
 #include "laol/rt/laol.hxx"
 
 namespace laol {
     namespace rt {
 
-        class Array : public Laol {
+        class String : public Laol {
         public:
 
-            explicit Array();
+            explicit String(const char* p) : m_str(p) {
+            }
 
-            Array& operator=(const Array& r) = delete;
+            explicit String(string& s) : m_str(s) {
+            }
+
+
+            String& operator=(const String&) = delete;
 
             //operators
-            virtual LaolObj left_shift(TRcLaol* self, const LaolObj& opB) override;
-            virtual LaolObj right_shift(TRcLaol* self, const LaolObj& opB) override;
+
+            virtual LaolObj left_shift(TRcLaol* self, const LaolObj& opB) override {
+                return append_SELF(self,{opB});
+            }
+
+            virtual LaolObj right_shift(TRcLaol* self, const LaolObj& opB) override {
+                return prepend_SELF(self,{opB});
+            }
 
             //unique methods
             virtual LaolObj empty_PRED(TRcLaol* self, Args args);
             virtual LaolObj reverse(TRcLaol* self, Args args);
             virtual LaolObj reverse_SELF(TRcLaol* self, Args args);
             virtual LaolObj length(TRcLaol* self, Args args);
+            virtual LaolObj append(TRcLaol* self, Args args);
+            virtual LaolObj append_SELF(TRcLaol* self, Args args);
+            virtual LaolObj prepend(TRcLaol* self, Args args);
+            virtual LaolObj prepend_SELF(TRcLaol* self, Args args);
 
             Laol::TPMethod getFunc(const string& methodNm) const override;
 
-            virtual ~Array();
+            virtual ~String();
 
         private:
-            typedef std::vector<LaolObj> Vector;
-
-            Array(const Vector& v) : m_ar(v) {
-            }
-
-            Vector m_ar;
+            string m_str;
             static METHOD_BY_NAME stMethodByName;
         };
 
     }
 }
 
-#endif /* _laol_rt_array_hxx_ */
+#endif /* _laol_rt_string_hxx_ */
 

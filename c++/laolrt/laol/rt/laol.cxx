@@ -25,7 +25,9 @@
 #include <cxxabi.h>
 #include <cstdlib>  //free
 #include <cassert>
+#include <sstream>
 #include "laol/rt/laol.hxx"
+#include "laol/rt/string.hxx"
 
 namespace laol {
     namespace rt {
@@ -42,23 +44,50 @@ namespace laol {
             return s;
         }
 
-        const
-        LaolObj& LaolObj::set(const LaolObj& rhs) {
+        /*static*/
+        LaolObj::LAOLOBJ_METHOD_BY_NAME LaolObj::stMethodByName = {
+            {"toString", static_cast<TPLaolObjMethod> (&LaolObj::toString)},
+            {"objectId", static_cast<TPLaolObjMethod> (&LaolObj::objectId)},
+        };
+
+        LaolObj
+        LaolObj::objectId(Args) {
+            ASSERT_TRUE(!isObject());  //just for primitives
+            return toObjectId(this);
+        }
+
+        LaolObj
+        LaolObj::toString(Args) {
+            ASSERT_TRUE(!isObject());   //just for primitives
+            std::ostringstream oss;
+            LaolObj ok = numberApply<false>([&oss](auto x) {
+                oss << x;
+                return true;
+            });
+            if (ok.isNull()) {
+                ASSERT_TRUE(eBool == m_type);
+                oss << (m_dat.u_bool ? "true" : "false");
+            }
+            string s = oss.str();
+            return new String(s);
+        }
+
+        const LaolObj&
+        LaolObj::set(const LaolObj& rhs) {
             m_type = rhs.m_type;
-            switch (m_type) {
-                case ePRc:
-                    m_dat.u_prc = const_cast<LaolObj&> (rhs).asTPRcLaol();
-                    asTPRcLaol()->incr();
-                    break;
-                case ePString:
-                    //copy string contents (since we dont reference count)
-                    set(rhs.m_dat.u_pstring->c_str());
-                    break;
-                default:
-                    m_dat = rhs.m_dat;
-                    break;
+            if (isObject()) {
+                TRcLaol* p = const_cast<LaolObj&> (rhs).asTPRcLaol();
+                m_dat.u_prc = p;
+                asTPRcLaol()->incr();
+            } else {
+                m_dat = rhs.m_dat;
             }
             return *this;
+        }
+
+        const LaolObj&
+        LaolObj::set(const char* rhs) {
+            return set(new String(rhs));
         }
 
         bool
@@ -83,80 +112,65 @@ namespace laol {
 
         LaolObj
         LaolObj::operator<<(const LaolObj& opB) {
-            LaolObj rval;
-            switch (m_type) {
-                case ePRc:
-                    rval = asTPRcLaol()->getPtr()->left_shift(asTPRcLaol(),{opB});
-                    break;
-                case ePString:
-                    ASSERT_NEVER;//todo: append?
-                    break;
-                default:
-                    if (isInt() && opB.isInt()) {
-                        rval = binaryOp(opB, [](auto a, auto b){
-                            return a << b;
-                        });
-                    } else {
-                        ASSERT_NEVER;//todo
-                    }
-                    break;
-            }
-            return rval;
+            return isObject()
+                    ? asTPLaol()->left_shift(asTPRcLaol(),{opB})
+            : intBinaryOp(opB, [](auto a, auto b) {
+                return a << b;
+            });
         }
 
         LaolObj
         LaolObj::operator>>(const LaolObj& opB) {
-            LaolObj rval;
-            switch (m_type) {
-                case ePRc:
-                    rval = asTPRcLaol()->getPtr()->right_shift(asTPRcLaol(),{opB});
-                    break;
-                case eInt:
-                    //todo: iff opB is number
-                default:
-                    break;
-            }
-            return rval;
+            return isObject()
+                    ? asTPLaol()->right_shift(asTPRcLaol(),{opB})
+            : intBinaryOp(opB, [](auto a, auto b) {
+                return a >> b;
+            });
+        }
+
+        LaolObj
+        LaolObj::operator+(const LaolObj& opB) {
+            return isObject()
+                    ? asTPLaol()->add(asTPRcLaol(),{opB})
+            : numberBinaryOp(opB, [](auto a, auto b) {
+                return a + b;
+            });
         }
 
         void
         LaolObj::cleanup() {
-            switch (m_type) {
-                case ePRc:
-                    if (asTPRcLaol()->decr()) {
-                        delete m_dat.u_prc;
-                        m_type = eNull;
-                    }
-                    break;
-                case ePString:
-                    delete m_dat.u_pstring;
-                    m_type = eNull;
-                    break;
-                default:
-                    break;
+            if (isObject()) {
+                if (asTPRcLaol()->decr()) {
+                    delete m_dat.u_prc;
+                }
             }
+            m_type = eNull;
         }
 
         LaolObj
         LaolObj::operator()(const string& methodNm, Args args) {
             LaolObj rval;
-            switch (m_type) {
-                case ePRc:
-                {
-                    TRcLaol* self = asTPRcLaol();
-                    Laol* pObj = self->getPtr();
-                    TPMethod pMethod = pObj->getFunc(methodNm);
-                    if (nullptr != pMethod) {
-                        rval = (pObj->*pMethod)(self, args);
-                    } else {
-                        ASSERT_NEVER; //not implemented
-                    }
+            if (isObject()) {
+                TRcLaol* self = asTPRcLaol();
+                Laol* pObj = self->getPtr();
+                //first try subclass
+                TPMethod pMethod = pObj->getFunc(methodNm);
+                if (nullptr == pMethod) {
+                    //then try here
+                    pMethod = pObj->Laol::getFunc(methodNm);
                 }
-                    break;
-                case ePString:
-                    break;
-                default:
-                    break;
+                if (nullptr != pMethod) {
+                    rval = (pObj->*pMethod)(self, args);
+                } else {
+                    ASSERT_NEVER; //not implemented
+                }
+            } else {
+                auto found = stMethodByName.find(methodNm);
+                if (found != stMethodByName.end()) {
+                    rval = (this->*(found->second))(args);
+                } else {
+                    ASSERT_NEVER;
+                }
             }
             return rval;
         }
@@ -170,22 +184,62 @@ namespace laol {
             cleanup();
         }
 
-        TRcLaol*
+        /*static*/
+        Laol::METHOD_BY_NAME Laol::stMethodByName = {
+            {"toString", static_cast<TPMethod> (&Laol::toString)},
+            {"objectId", static_cast<TPMethod> (&Laol::objectId)},
+        };
+
+        /*static*/
+        string
+        Laol::getClassName(const TRcLaol* p) {
+            const TRcObj& q = p->asT();
+            return demangleName(typeid (q).name());
+        }
+
+        LaolObj
+        Laol::objectId(TRcLaol*, Args) {
+            LaolObj id = objectId();
+            return id;
+        }
+
+        LaolObj
+        Laol::toString(TRcLaol* self, Args) {
+            std::ostringstream oss;
+            oss << getClassName(self) << "@" << objectId();
+            auto s = oss.str();
+            return new String(s);
+        }
+
+        LaolObj
         Laol::left_shift(TRcLaol* self, const LaolObj& opB) {
             ASSERT_NEVER; //no implementation
             return self;
         }
 
-        TRcLaol*
+        LaolObj
         Laol::right_shift(TRcLaol* self, const LaolObj& opB) {
+            ASSERT_NEVER; //no implementation
+            return self;
+        }
+
+        LaolObj
+        Laol::add(TRcLaol* self, const LaolObj& opB) {
             ASSERT_NEVER; //no implementation
             return self;
         }
 
         Laol::TPMethod
         Laol::getFunc(const string& methodNm) const {
-            ASSERT_NEVER; //should normally delegate to subclass
-            return nullptr;
+            return getFunc(stMethodByName, methodNm);
+        }
+
+        /*static*/
+        Laol::TPMethod
+        Laol::getFunc(const METHOD_BY_NAME& methodByName, const string& methodNm) {
+            auto search = methodByName.find(methodNm);
+            auto rval = (search != methodByName.end()) ? search->second : nullptr;
+            return rval;
         }
 
         Laol::Laol() {

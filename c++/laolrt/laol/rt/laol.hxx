@@ -35,6 +35,8 @@
 #include <exception>
 #include <cmath>
 #include <vector>
+#include <string>
+#include <map>
 #include "xyzzy/assert.hxx"
 #include "xyzzy/refcnt.hxx"
 
@@ -44,14 +46,18 @@
 
 namespace laol {
     namespace rt {
-        using std::string;
         using std::vector;
+        using std::string;
 
         string demangleName(const char* n);
 
         template<typename T>
         inline string getClassName(T p) {
             return demangleName(typeid (p).name());
+        }
+
+        inline auto toObjectId(const void* p) {
+            return reinterpret_cast<unsigned long int> (p);
         }
 
         using xyzzy::TRcObj;
@@ -74,12 +80,6 @@ namespace laol {
 
             template<typename T>
             LaolObj(T val) {
-                set(val);
-            }
-
-            // LaolRef lhs = new Type(...)
-
-            LaolObj(Laol* val) {
                 set(val);
             }
 
@@ -113,10 +113,21 @@ namespace laol {
             // true if float/double variant
             bool isFloat() const;
 
-            //NOTE: we're not const: since Array usage changes 'this'
+            bool isObject() const {
+                return (ePRc == m_type);
+            }
+
+            //NOTE: we're not const: since some usages changes 'this'
             //TODO: add a const version too?
             LaolObj operator<<(const LaolObj& opB);
             LaolObj operator>>(const LaolObj& opB);
+            LaolObj operator+(const LaolObj& opB);
+
+            //Methods to cover primitive types.
+            //Note: We dont have a 'self' argument: since 
+            //not applicable to primitives types.
+            LaolObj toString(Args);
+            LaolObj objectId(Args);
 
             //TPMethod
             typedef LaolObj(Laol::* TPMethod)(TRcLaol* self, Args args);
@@ -131,7 +142,6 @@ namespace laol {
 
             enum EType {
                 ePRc,
-                ePString,
                 eChar, eBool,
                 eInt, eUInt, eLInt, eULInt,
                 eFloat, eDouble,
@@ -142,7 +152,6 @@ namespace laol {
 
             union DatType {
                 TRcLaol* u_prc;
-                string* u_pstring;
                 char u_char;
                 bool u_bool;
                 int u_int;
@@ -156,14 +165,20 @@ namespace laol {
                 //long double u_ldouble;
             } m_dat;
 
-            TRcLaol* asTPRcLaol() {
+            TRcLaol* asTPRcLaol() const {
                 return m_dat.u_prc;
             }
 
-            template<typename OP>
+            Laol* asTPLaol() const {
+                return asTPRcLaol()->getPtr();
+            }
+
+            template<bool DO_ASSERT = true, typename OP>
             LaolObj intApply(OP op) const {
                 LaolObj rval;
                 switch (m_type) {
+                    case eChar: rval = op(m_dat.u_char);
+                        break;
                     case eInt: rval = op(m_dat.u_int);
                         break;
                     case eUInt: rval = op(m_dat.u_uint);
@@ -173,93 +188,52 @@ namespace laol {
                     case eULInt: rval = op(m_dat.u_ulint);
                         break;
                     default:
-                        ASSERT_NEVER;
+                        if (DO_ASSERT) {
+                            ASSERT_NEVER;
+                        }
+                }
+                return rval;
+            }
+
+            template<bool DO_ASSERT = true, typename OP>
+            LaolObj numberApply(OP op) const {
+                LaolObj rval;
+                if (isInt()) {
+                    rval = intApply<false>(op);
+                } else {
+                    switch (m_type) {
+                        case eFloat: rval = op(m_dat.u_float);
+                            break;
+                        case eDouble: rval = op(m_dat.u_double);
+                            break;
+                        default:
+                            if (DO_ASSERT) {
+                                ASSERT_NEVER;
+                            }
+                    }
                 }
                 return rval;
             }
 
             template<typename BINOP>
-            LaolObj binaryOp(const LaolObj& opB, BINOP binop) {
+            LaolObj intBinaryOp(const LaolObj& opB, BINOP binop) {
                 LaolObj rval = intApply([opB, binop](auto a) {
                     return opB.intApply([a, binop](auto b) {
                         return binop(a, b);
                     });
                 });
-#ifdef NOPE
-                LaolObj rval;
-                switch (opB.m_type) {
-                    case eInt: rval = binaryOpApply(opB.m_dat.u_int, binop);
-                        break;
-                    case eUInt: rval = binaryOpApply(opB.m_dat.u_uint, binop);
-                        break;
-                    case eLInt: rval = binaryOpApply(opB.m_dat.u_lint, binop);
-                        break;
-                    case eULInt: rval = binaryOpApply(opB.m_dat.u_ulint, binop);
-                        break;
-                    case eFloat: rval = binaryOpApply(opB.m_dat.u_float, binop);
-                        break;
-                    case eDouble: rval = binaryOpApply(opB.m_dat.u_double, binop);
-                        break;
-                    default:
-                        ASSERT_NEVER;
-                }
-#endif
                 return rval;
             }
 
-#ifdef NOT_NEEDED
-
-            template<typename TB, typename BINOP>
-            LaolObj binaryOpApply(TB opB, BINOP binOp) const {
-                LaolObj rval;
-                switch (m_type) {
-                    case eInt: rval = binOp(m_dat.u_int, opB);
-                        break;
-                    case eUInt: rval = binOp(m_dat.u_uint, opB);
-                        break;
-                    case eLInt: rval = binOp(m_dat.u_lint, opB);
-                        break;
-                    case eULInt: rval = binOp(m_dat.u_ulint, opB);
-                        break;
-                    case eFloat: rval = binOp(m_dat.u_float, opB);
-                        break;
-                    case eDouble: rval = binOp(m_dat.u_double, opB);
-                        break;
-                    default:
-                        ASSERT_NEVER;
-                }
+            template<typename BINOP>
+            LaolObj numberBinaryOp(const LaolObj& opB, BINOP binop) {
+                LaolObj rval = numberApply([opB, binop](auto a) {
+                    return opB.numberApply([a, binop](auto b) {
+                        return binop(a, b);
+                    });
+                });
                 return rval;
             }
-
-            template<typename NUMBEROP, typename STRINGOP>
-            LaolObj binaryOp(const LaolObj& opB, TPMethod prcOp,
-                    NUMBEROP numberOp = nullptr, STRINGOP stringOp = nullptr) {
-                LaolObj rval;
-                switch (m_type) {
-                    case ePRc:
-                        rval = (asTPRcLaol()->getPtr()->*prcOp)(asTPRcLaol(),{opB});
-                        break;
-                    case ePString:
-                        if (stringOp != nullptr) {
-                            ASSERT_NEVER; //todo: append?
-                        } else {
-                            ASSERT_NEVER; //no method
-                        }
-                        break;
-                    default:
-                        //todo: as NUMBEROP (covers int/float,...)
-                        if (isInt() && opB.isInt()) {
-                            rval = intOp(opB, [](auto a, auto b) {
-                                return a << b;
-                            });
-                        } else {
-                            ASSERT_NEVER; //todo
-                        }
-                        break;
-                }
-                return rval;
-            }
-#endif
 
             void cleanup();
 
@@ -332,12 +306,12 @@ namespace laol {
                 });
             }
 
-            const LaolObj& set(const char* rhs) {
-                return set(ePString, [this, rhs]() {
-                    m_dat.u_pstring = new string(rhs);
-                });
-            }
+            const LaolObj& set(const char* rhs);
 
+            // For primitive operations (no 'self' here).
+            typedef LaolObj(LaolObj::* TPLaolObjMethod)(Args args);
+            typedef std::map<string, TPLaolObjMethod> LAOLOBJ_METHOD_BY_NAME;
+            static LAOLOBJ_METHOD_BY_NAME stMethodByName;
         };
 
         // Base class for any object
@@ -351,8 +325,13 @@ namespace laol {
 
             //operators (mapped to mnemonic): so we can pass in 'self'
             //http://stackoverflow.com/questions/8679089/c-official-operator-names-keywords
-            virtual TRcLaol* left_shift(TRcLaol* self, const LaolObj& opB);
-            virtual TRcLaol* right_shift(TRcLaol* self, const LaolObj& opB);
+            virtual LaolObj left_shift(TRcLaol* self, const LaolObj& opB);
+            virtual LaolObj right_shift(TRcLaol* self, const LaolObj& opB);
+            virtual LaolObj add(TRcLaol* self, const LaolObj& opB);
+
+            //Map special methods for call-by-method too
+            virtual LaolObj toString(TRcLaol*, Args);
+            virtual LaolObj objectId(TRcLaol*, Args);
 
             virtual ~Laol() = 0;
 
@@ -360,18 +339,19 @@ namespace laol {
 
             virtual TPMethod getFunc(const string& methodNm) const;
 
-        };
-
-        class String : virtual public Laol {
-        public:
-
-            explicit String(const char* p) : m_str(p) {
-            }
-
-            virtual ~String();
+            static string getClassName(const TRcLaol* p);
 
         protected:
-            std::string m_str;
+            typedef std::map<string, TPMethod> METHOD_BY_NAME;
+            static TPMethod getFunc(const METHOD_BY_NAME& methodByName, const string& methodNm);
+
+        private:
+
+            auto objectId() const {
+                return toObjectId(this);
+            }
+
+            static METHOD_BY_NAME stMethodByName;
         };
 
         class Exception : public std::exception {

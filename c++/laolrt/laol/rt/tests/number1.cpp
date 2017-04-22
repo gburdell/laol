@@ -45,14 +45,20 @@ void test1() {
     i1 = ar1("empty?");
     i1 = 7;
     i2 = new Array();
-    i1 = i1("empty?");
+    i1 = i2("empty?");
     ar1 << "foobar" << 23 << 1.234 << i2;
     i1 = ar1("reverse")("reverse");
     i2 = ar1("empty?");
+    i1 = i2("toString");
     i1 = ar1("length");
+    i1 = ar1("toString");
     i2 = 123456;
     i1 = 2;
     ar1 = i2 << i1 << i1;
+    ar1 = ar1 + 1234.5;
+    ar1 =  ar1 + 0;
+    i1 = ar1("toString");
+    i2 = 12;
 }
 void test2() {
     

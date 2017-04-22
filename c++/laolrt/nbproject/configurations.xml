@@ -6,6 +6,7 @@
                    projectFiles="true">
       <itemPath>laol/rt/array.hxx</itemPath>
       <itemPath>laol/rt/laol.hxx</itemPath>
+      <itemPath>laol/rt/string.hxx</itemPath>
     </logicalFolder>
     <logicalFolder name="ResourceFiles"
                    displayName="Resource Files"
@@ -16,6 +17,7 @@
                    projectFiles="true">
       <itemPath>laol/rt/array.cxx</itemPath>
       <itemPath>laol/rt/laol.cxx</itemPath>
+      <itemPath>laol/rt/string.cxx</itemPath>
     </logicalFolder>
     <logicalFolder name="TestFiles"
                    displayName="Test Files"
@@ -81,6 +83,7 @@
             <pElem>.</pElem>
             <pElem>.</pElem>
             <pElem>.</pElem>
+            <pElem>.</pElem>
           </linkerDynSerch>
         </linkerTool>
       </folder>
@@ -105,6 +108,7 @@
             <pElem>.</pElem>
             <pElem>.</pElem>
             <pElem>.</pElem>
+            <pElem>.</pElem>
           </linkerDynSerch>
           <linkerLibItems>
             <linkerLibFileItem>dist/Debug/gcc-4.7.4-MacOSX/liblaolrt.a</linkerLibFileItem>
@@ -119,6 +123,10 @@
       <item path="laol/rt/laol.cxx" ex="false" tool="1" flavor2="0">
       </item>
       <item path="laol/rt/laol.hxx" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="laol/rt/string.cxx" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="laol/rt/string.hxx" ex="false" tool="3" flavor2="0">
       </item>
       <item path="laol/rt/tests/number1.cpp" ex="false" tool="1" flavor2="0">
       </item>
@@ -175,6 +183,7 @@
             <pElem>.</pElem>
             <pElem>.</pElem>
             <pElem>.</pElem>
+            <pElem>.</pElem>
           </linkerDynSerch>
         </linkerTool>
       </folder>
@@ -199,6 +208,7 @@
             <pElem>.</pElem>
             <pElem>.</pElem>
             <pElem>.</pElem>
+            <pElem>.</pElem>
           </linkerDynSerch>
         </linkerTool>
       </folder>
@@ -209,6 +219,10 @@
       <item path="laol/rt/laol.cxx" ex="false" tool="1" flavor2="0">
       </item>
       <item path="laol/rt/laol.hxx" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="laol/rt/string.cxx" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="laol/rt/string.hxx" ex="false" tool="3" flavor2="0">
       </item>
       <item path="laol/rt/tests/number1.cpp" ex="false" tool="1" flavor2="0">
       </item>
