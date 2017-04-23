@@ -87,8 +87,6 @@ namespace laol {
                 set(val);
             }
 
-            // LaolRef rhs = ...; LaolRef lhs = rhs;
-
             LaolObj(const LaolObj& val) {
                 set(val);
             }
@@ -108,6 +106,10 @@ namespace laol {
                 return (eNull == m_type);
             }
 
+            bool asBool() const {
+                return (eBool == m_type) && m_dat.u_bool;
+            }
+            
             // true if int variant
             bool isInt() const;
             // true if float/double variant
@@ -123,12 +125,6 @@ namespace laol {
             LaolObj operator>>(const LaolObj& opB);
             LaolObj operator+(const LaolObj& opB);
 
-            //Methods to cover primitive types.
-            //Note: We dont have a 'self' argument: since 
-            //not applicable to primitives types.
-            LaolObj toString(Args);
-            LaolObj objectId(Args);
-
             //TPMethod
             typedef LaolObj(Laol::* TPMethod)(TRcLaol* self, Args args);
 
@@ -136,6 +132,11 @@ namespace laol {
             LaolObj operator()(const string& methodNm, Args args);
             LaolObj operator()(const string& methodNm);
 
+            template<typename T>
+            const T& asType() const {
+                return dynamic_cast<const T&>(asTPRcLaol()->asT());
+            }
+            
             virtual ~LaolObj();
 
         private:
@@ -308,11 +309,30 @@ namespace laol {
 
             const LaolObj& set(const char* rhs);
 
+            //Methods to cover primitive types.
+            //Note: We dont have a 'self' argument: since
+            //not applicable to primitives types.
+            LaolObj toString(Args);
+            LaolObj objectId(Args);
+            
             // For primitive operations (no 'self' here).
             typedef LaolObj(LaolObj::* TPLaolObjMethod)(Args args);
             typedef std::map<string, TPLaolObjMethod> LAOLOBJ_METHOD_BY_NAME;
             static LAOLOBJ_METHOD_BY_NAME stMethodByName;
         };
+        
+        // Use toBool in 'if (expr)' -> 'if (toBool(expr))' in transpiler (laol -> c++).
+        // Note: if 'operator bool()' defined, opens pandora box (of ambiguities)
+        // and breaks the more natural primitive conversions: LaolObj(T val)...
+        template<typename T>
+        inline auto toBool(const T& expr) {
+            return expr;
+        }
+        
+        template<>
+        inline auto toBool<LaolObj>(const LaolObj& expr) {
+            return expr.asBool();
+        }
 
         // Base class for any object
 

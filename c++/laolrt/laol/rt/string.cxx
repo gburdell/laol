@@ -33,9 +33,21 @@ namespace laol {
             {"empty?", static_cast<TPMethod> (&String::empty_PRED)},
             {"reverse", static_cast<TPMethod> (&String::reverse)},
             {"reverse!", static_cast<TPMethod> (&String::reverse_SELF)},
-            {"append!", static_cast<TPMethod> (&String::append_SELF)}
+            {"append", static_cast<TPMethod> (&String::append)},
+            {"append!", static_cast<TPMethod> (&String::append_SELF)},
+            {"prepend", static_cast<TPMethod> (&String::prepend)},
+            {"prepend!", static_cast<TPMethod> (&String::prepend_SELF)},
+            {"toString", static_cast<TPMethod> (&String::toString)}
         };
 
+        /*static*/
+        const string&
+        String::getString(const LaolObj& from) {
+            LaolObj x = from;
+            const String& z = x("toString").asType<String>();
+            return z.m_str;
+        }
+        
         String::~String() {
         }
 
@@ -69,27 +81,34 @@ namespace laol {
 
         LaolObj
         String::append(TRcLaol* self, Args args) {
-            //todo m_str.insert(m_str.begin(), opB);
-            return self;
+            string r = m_str + getString(args[0]);
+            return new String(r);
         }
 
         LaolObj
         String::append_SELF(TRcLaol* self, Args args) {
-            //todo m_str.insert(m_str.begin(), opB);
+            m_str += getString(args[0]);
             return self;
         }
 
         LaolObj
         String::prepend(TRcLaol* self, Args args) {
-            //todo m_str.insert(m_str.begin(), opB);
-            return self;
+            string r = getString(args[0]) + m_str;
+            return new String(r);
         }
 
         LaolObj
         String::prepend_SELF(TRcLaol* self, Args args) {
-            //todo m_str.insert(m_str.begin(), opB);
+            m_str = getString(args[0]) + m_str;
             return self;
         }
+
+        //We're already a string!
+        LaolObj 
+        String::toString(TRcLaol* self, Args) {
+            return self;
+        }
+
     }
 }
 

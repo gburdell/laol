@@ -49,6 +49,11 @@ void test1() {
     ar1 << "foobar" << 23 << 1.234 << i2;
     i1 = ar1("reverse")("reverse");
     i2 = ar1("empty?");
+    if (! toBool(i2)) {
+        if (toBool("foobar")) {
+            i2 = true;
+        }
+    }
     i1 = i2("toString");
     i1 = ar1("length");
     i1 = ar1("toString");
@@ -61,8 +66,11 @@ void test1() {
     i2 = 12;
 }
 void test2() {
-    
+    LaolObj s1 = "foo", s2 = "bar";
+    LaolObj s3 = s1 + s2 + s1 + s2 + s2;
+    LaolObj i1 = 1234 + 345 % 45;
 }
+
 int main(int argc, char** argv) {
     test1();
     test2();

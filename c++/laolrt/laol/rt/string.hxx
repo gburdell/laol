@@ -61,6 +61,10 @@ namespace laol {
                 return prepend_SELF(self,{opB});
             }
 
+            virtual LaolObj add(TRcLaol* self, const LaolObj& opB) override {
+                return append(self,{opB});
+            }
+
             //unique methods
             virtual LaolObj empty_PRED(TRcLaol* self, Args args);
             virtual LaolObj reverse(TRcLaol* self, Args args);
@@ -70,12 +74,17 @@ namespace laol {
             virtual LaolObj append_SELF(TRcLaol* self, Args args);
             virtual LaolObj prepend(TRcLaol* self, Args args);
             virtual LaolObj prepend_SELF(TRcLaol* self, Args args);
+            virtual LaolObj toString(TRcLaol* self, Args args) override;
 
             Laol::TPMethod getFunc(const string& methodNm) const override;
+
+            // Get primitive std::string from 'from'
+            static const string& getString(const LaolObj& from);
 
             virtual ~String();
 
         private:
+            
             string m_str;
             static METHOD_BY_NAME stMethodByName;
         };
