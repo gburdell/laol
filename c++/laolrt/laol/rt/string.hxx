@@ -35,6 +35,7 @@
 #include <string>
 #include <map>
 #include "laol/rt/laol.hxx"
+#include "laol/rt/iterator.hxx"
 
 namespace laol {
     namespace rt {
@@ -74,6 +75,8 @@ namespace laol {
             virtual LaolObj append_SELF(TRcLaol* self, Args args);
             virtual LaolObj prepend(TRcLaol* self, Args args);
             virtual LaolObj prepend_SELF(TRcLaol* self, Args args);
+            virtual LaolObj iterator(TRcLaol* self, Args args);
+            virtual LaolObj at(TRcLaol* self, Args args);
             virtual LaolObj toString(TRcLaol* self, Args args) override;
 
             Laol::TPMethod getFunc(const string& methodNm) const override;
@@ -83,6 +86,19 @@ namespace laol {
 
             virtual ~String();
 
+            // NOTE: this iterator works for reading/sourcing (rhs) values.
+            // TODO: modify for use in assign/lhs.
+            class Iterator : public laol::rt::Iterator {
+            public:
+                explicit Iterator(string& ref, size_t start, size_t len);
+                
+                LaolObj hasNext() const override;
+                LaolObj next() override;
+
+            private:
+                size_t  m_curr, m_len;
+                string& m_str;
+            };
         private:
             
             string m_str;

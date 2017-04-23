@@ -23,59 +23,35 @@
  */
 
 /* 
- * File:   number1.cpp
+ * File:   iterator.hxx
  * Author: kpfalzer
  *
- * Created on April 2, 2017, 7:10 PM
+ * Created on April 23, 2017, 3:55 PM
  */
 
-#include <stdlib.h>
-#include <iostream>
+#ifndef _laol_rt_iterator_hxx_
+#define _laol_rt_iterator_hxx_
+
 #include "laol/rt/laol.hxx"
-#include "laol/rt/array.hxx"
 
-using namespace std;
-using namespace laol::rt;
+namespace laol {
+    namespace rt {
+        // Iterator interface
 
-void test1() {
-    LaolObj i1 = 12 + 34;
-    LaolObj i2 = i1;
-    LaolObj ar1 = new Array();
-    i2 = ar1 << i1 << (float)1234.5; //cool: we get 1234 to LaolRef conversion!
-    i1 = ar1("empty?");
-    i1 = 7;
-    i2 = new Array();
-    i1 = i2("empty?");
-    ar1 << "foobar" << 23 << 1.234 << i2;
-    i1 = ar1("reverse")("reverse");
-    i2 = ar1("empty?");
-    if (! toBool(i2)) {
-        if (toBool("foobar")) {
-            i2 = true;
-        }
+        class Iterator : public Laol {
+        public:
+            NO_COPY_CONSTRUCTORS(Iterator);
+            
+            virtual LaolObj hasNext() const = 0;
+
+            virtual LaolObj next() = 0;
+
+            virtual ~Iterator() {};
+
+        };
+
     }
-    i1 = i2("toString");
-    i1 = ar1("length");
-    i1 = ar1("toString");
-    i2 = 123456;
-    i1 = 2;
-    ar1 = i2 << i1 << i1;
-    ar1 = ar1 + 1234.5;
-    ar1 =  ar1 + 0;
-    i1 = ar1("toString");
-    i2 = 12;
-}
-void test2() {
-    LaolObj s1 = "foo", s2 = "bar";
-    LaolObj s3 = s1 + s2 + s1 + s2 + s2;
-    LaolObj c1 = s3("at", {3});
-    LaolObj i1 = 1234 + 345 % 45;
 }
 
-int main(int argc, char** argv) {
-    test1();
-    test2();
-    cout << "END: all tests" << endl;
-    return (EXIT_SUCCESS);
-}
+#endif /* _laol_rt_iterator_hxx_ */
 

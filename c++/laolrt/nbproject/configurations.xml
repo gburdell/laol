@@ -5,6 +5,7 @@
                    displayName="Header Files"
                    projectFiles="true">
       <itemPath>laol/rt/array.hxx</itemPath>
+      <itemPath>laol/rt/iterator.hxx</itemPath>
       <itemPath>laol/rt/laol.hxx</itemPath>
       <itemPath>laol/rt/string.hxx</itemPath>
     </logicalFolder>
@@ -84,6 +85,7 @@
             <pElem>.</pElem>
             <pElem>.</pElem>
             <pElem>.</pElem>
+            <pElem>.</pElem>
           </linkerDynSerch>
         </linkerTool>
       </folder>
@@ -109,6 +111,7 @@
             <pElem>.</pElem>
             <pElem>.</pElem>
             <pElem>.</pElem>
+            <pElem>.</pElem>
           </linkerDynSerch>
           <linkerLibItems>
             <linkerLibFileItem>dist/Debug/gcc-4.7.4-MacOSX/liblaolrt.a</linkerLibFileItem>
@@ -119,6 +122,8 @@
       <item path="laol/rt/array.cxx" ex="false" tool="1" flavor2="0">
       </item>
       <item path="laol/rt/array.hxx" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="laol/rt/iterator.hxx" ex="false" tool="3" flavor2="0">
       </item>
       <item path="laol/rt/laol.cxx" ex="false" tool="1" flavor2="0">
       </item>
@@ -184,6 +189,7 @@
             <pElem>.</pElem>
             <pElem>.</pElem>
             <pElem>.</pElem>
+            <pElem>.</pElem>
           </linkerDynSerch>
         </linkerTool>
       </folder>
@@ -209,12 +215,15 @@
             <pElem>.</pElem>
             <pElem>.</pElem>
             <pElem>.</pElem>
+            <pElem>.</pElem>
           </linkerDynSerch>
         </linkerTool>
       </folder>
       <item path="laol/rt/array.cxx" ex="false" tool="1" flavor2="0">
       </item>
       <item path="laol/rt/array.hxx" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="laol/rt/iterator.hxx" ex="false" tool="3" flavor2="0">
       </item>
       <item path="laol/rt/laol.cxx" ex="false" tool="1" flavor2="0">
       </item>

@@ -110,6 +110,8 @@ namespace laol {
                 return (eBool == m_type) && m_dat.u_bool;
             }
             
+            unsigned long int asULInt() const;
+            
             // true if int variant
             bool isInt() const;
             // true if float/double variant

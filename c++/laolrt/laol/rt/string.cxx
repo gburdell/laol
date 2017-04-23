@@ -37,7 +37,8 @@ namespace laol {
             {"append!", static_cast<TPMethod> (&String::append_SELF)},
             {"prepend", static_cast<TPMethod> (&String::prepend)},
             {"prepend!", static_cast<TPMethod> (&String::prepend_SELF)},
-            {"toString", static_cast<TPMethod> (&String::toString)}
+            {"toString", static_cast<TPMethod> (&String::toString)},
+            {"at", static_cast<TPMethod> (&String::at)}
         };
 
         /*static*/
@@ -107,6 +108,10 @@ namespace laol {
         LaolObj 
         String::toString(TRcLaol* self, Args) {
             return self;
+        }
+        LaolObj String::at(TRcLaol*, Args args) {
+            //todo index-exception
+            return m_str.at(args[0].asULInt());
         }
 
     }

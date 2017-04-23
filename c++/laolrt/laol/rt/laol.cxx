@@ -52,13 +52,13 @@ namespace laol {
 
         LaolObj
         LaolObj::objectId(Args) {
-            ASSERT_TRUE(!isObject());  //just for primitives
+            ASSERT_TRUE(!isObject()); //just for primitives
             return toObjectId(this);
         }
 
         LaolObj
         LaolObj::toString(Args) {
-            ASSERT_TRUE(!isObject());   //just for primitives
+            ASSERT_TRUE(!isObject()); //just for primitives
             std::ostringstream oss;
             LaolObj ok = numberApply<false>([&oss](auto x) {
                 oss << x;
@@ -98,6 +98,17 @@ namespace laol {
                 default:
                     return false;
             }
+        }
+
+        unsigned long int
+        LaolObj::asULInt() const {
+            static const LaolObj UNUSED;
+            unsigned long int rval;
+            intApply([&rval](auto val) {
+                rval = (unsigned long int) val; 
+                return UNUSED;
+            });
+            return rval;
         }
 
         bool
