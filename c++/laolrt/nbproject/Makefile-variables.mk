@@ -15,13 +15,13 @@ CND_PACKAGE_DIR_Debug=dist/Debug/CLang-MacOSX/package
 CND_PACKAGE_NAME_Debug=laolrt.tar
 CND_PACKAGE_PATH_Debug=dist/Debug/CLang-MacOSX/package/laolrt.tar
 # Release configuration
-CND_PLATFORM_Release=GNU-MacOSX
-CND_ARTIFACT_DIR_Release=dist/Release/GNU-MacOSX
+CND_PLATFORM_Release=gcc-4.7.4-MacOSX
+CND_ARTIFACT_DIR_Release=dist/Release/gcc-4.7.4-MacOSX
 CND_ARTIFACT_NAME_Release=liblaolrt.a
-CND_ARTIFACT_PATH_Release=dist/Release/GNU-MacOSX/liblaolrt.a
-CND_PACKAGE_DIR_Release=dist/Release/GNU-MacOSX/package
+CND_ARTIFACT_PATH_Release=dist/Release/gcc-4.7.4-MacOSX/liblaolrt.a
+CND_PACKAGE_DIR_Release=dist/Release/gcc-4.7.4-MacOSX/package
 CND_PACKAGE_NAME_Release=laolrt.tar
-CND_PACKAGE_PATH_Release=dist/Release/GNU-MacOSX/package/laolrt.tar
+CND_PACKAGE_PATH_Release=dist/Release/gcc-4.7.4-MacOSX/package/laolrt.tar
 #
 # include compiler specific variables
 #

@@ -100,12 +100,23 @@ namespace laol {
             }
         }
 
+        static const LaolObj UNUSED;
+
         unsigned long int
         LaolObj::asULInt() const {
-            static const LaolObj UNUSED;
             unsigned long int rval;
             intApply([&rval](auto val) {
-                rval = (unsigned long int) val; 
+                rval = (unsigned long int) val;
+                return UNUSED;
+            });
+            return rval;
+        }
+
+        long int
+        LaolObj::asLInt() const {
+            long int rval;
+            intApply([&rval](auto val) {
+                rval = (long int) val;
                 return UNUSED;
             });
             return rval;
@@ -119,6 +130,17 @@ namespace laol {
                 default:
                     return false;
             }
+        }
+
+        const LaolObj&
+                LaolObj::operator=(const LaolObj& rhs) {
+            //if (isObject()) {
+            //    asTPLaol()->assign(asTPRcLaol(), {rhs});
+            //    return *this;
+            //} else {
+                cleanup();
+                return set(rhs);
+            //}
         }
 
         LaolObj
@@ -240,6 +262,11 @@ namespace laol {
             return self;
         }
 
+        LaolObj
+        Laol::assign(TRcLaol* self, const LaolObj& opB) {
+            return self;
+        }
+
         Laol::TPMethod
         Laol::getFunc(const string& methodNm) const {
             return getFunc(stMethodByName, methodNm);
@@ -291,6 +318,16 @@ namespace laol {
         + "', expected '"
         + expected
         + "'") {
+        }
+
+        IndexException::IndexException(const string& found, const string& expected)
+        : Exception(
+        string("invalid index.  Found '")
+        + found
+        + "', expected '"
+        + expected
+        + "'"
+        ) {
         }
 
     }

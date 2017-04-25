@@ -17,6 +17,7 @@
                    displayName="Source Files"
                    projectFiles="true">
       <itemPath>laol/rt/array.cxx</itemPath>
+      <itemPath>laol/rt/iterator.cxx</itemPath>
       <itemPath>laol/rt/laol.cxx</itemPath>
       <itemPath>laol/rt/string.cxx</itemPath>
     </logicalFolder>
@@ -86,6 +87,8 @@
             <pElem>.</pElem>
             <pElem>.</pElem>
             <pElem>.</pElem>
+            <pElem>.</pElem>
+            <pElem>.</pElem>
           </linkerDynSerch>
         </linkerTool>
       </folder>
@@ -112,9 +115,11 @@
             <pElem>.</pElem>
             <pElem>.</pElem>
             <pElem>.</pElem>
+            <pElem>.</pElem>
+            <pElem>.</pElem>
           </linkerDynSerch>
           <linkerLibItems>
-            <linkerLibFileItem>dist/Debug/gcc-4.7.4-MacOSX/liblaolrt.a</linkerLibFileItem>
+            <linkerLibFileItem>dist/Debug/CLang-MacOSX/liblaolrt.a</linkerLibFileItem>
             <linkerLibFileItem>../../../xyzzy/dist/debug/MacOSX/xyzzy.a</linkerLibFileItem>
           </linkerLibItems>
         </linkerTool>
@@ -122,6 +127,8 @@
       <item path="laol/rt/array.cxx" ex="false" tool="1" flavor2="0">
       </item>
       <item path="laol/rt/array.hxx" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="laol/rt/iterator.cxx" ex="false" tool="1" flavor2="0">
       </item>
       <item path="laol/rt/iterator.hxx" ex="false" tool="3" flavor2="0">
       </item>
@@ -190,6 +197,8 @@
             <pElem>.</pElem>
             <pElem>.</pElem>
             <pElem>.</pElem>
+            <pElem>.</pElem>
+            <pElem>.</pElem>
           </linkerDynSerch>
         </linkerTool>
       </folder>
@@ -216,12 +225,16 @@
             <pElem>.</pElem>
             <pElem>.</pElem>
             <pElem>.</pElem>
+            <pElem>.</pElem>
+            <pElem>.</pElem>
           </linkerDynSerch>
         </linkerTool>
       </folder>
       <item path="laol/rt/array.cxx" ex="false" tool="1" flavor2="0">
       </item>
       <item path="laol/rt/array.hxx" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="laol/rt/iterator.cxx" ex="false" tool="1" flavor2="0">
       </item>
       <item path="laol/rt/iterator.hxx" ex="false" tool="3" flavor2="0">
       </item>

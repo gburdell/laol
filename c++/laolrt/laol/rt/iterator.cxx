@@ -22,51 +22,33 @@
  * THE SOFTWARE.
  */
 
-/* 
- * File:   iterator.hxx
- * Author: kpfalzer
- *
- * Created on April 23, 2017, 3:55 PM
- */
-
-#ifndef _laol_rt_iterator_hxx_
-#define _laol_rt_iterator_hxx_
-
-#include "laol/rt/laol.hxx"
+#include "laol/rt/iterator.hxx"
 
 namespace laol {
     namespace rt {
-        // Iterator interface
+        //static
+        Laol::METHOD_BY_NAME Iterator::stMethodByName = {
+            {"next?", static_cast<TPMethod> (&Iterator::next_PRED)},
+            {"next", static_cast<TPMethod> (&Iterator::next)}
 
-        class Iterator : public Laol {
-        public:
-            NO_COPY_CONSTRUCTORS(Iterator);
-
-            //unique methods
-            virtual LaolObj next_PRED(TRcLaol*, Args);
-            virtual LaolObj next(TRcLaol*, Args);
-            //set current value (does not advance next)
-            virtual LaolObj set(TRcLaol*, Args);
-
-            Laol::TPMethod getFunc(const string& methodNm) const override;
-
-            virtual ~Iterator() {
-            };
-
-        protected:
-            // Implementation for builtins: String, Array, ...
-            virtual LaolObj hasNext() const = 0;
-
-            virtual LaolObj next() = 0;
-            
-            virtual LaolObj set(Args) = 0;
-
-        private:
-            static METHOD_BY_NAME stMethodByName;
         };
+
+        Laol::TPMethod 
+        Iterator::getFunc(const string& methodNm) const {
+            return Laol::getFunc(stMethodByName, methodNm);
+        }
+        LaolObj 
+        Iterator::next(TRcLaol*, Args) {
+            return next();
+        }
+        
+        LaolObj 
+        Iterator::next_PRED(TRcLaol*, Args) {
+            return hasNext();
+        }
+        LaolObj Iterator::set(TRcLaol*, Args args) {
+            return set(args);
+        }
 
     }
 }
-
-#endif /* _laol_rt_iterator_hxx_ */
-

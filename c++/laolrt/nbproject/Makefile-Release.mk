@@ -21,7 +21,7 @@ FC=gfortran
 AS=as
 
 # Macros
-CND_PLATFORM=GNU-MacOSX
+CND_PLATFORM=gcc-4.7.4-MacOSX
 CND_DLIB_EXT=dylib
 CND_CONF=Release
 CND_DISTDIR=dist
@@ -36,6 +36,7 @@ OBJECTDIR=${CND_BUILDDIR}/${CND_CONF}/${CND_PLATFORM}
 # Object Files
 OBJECTFILES= \
 	${OBJECTDIR}/laol/rt/array.o \
+	${OBJECTDIR}/laol/rt/iterator.o \
 	${OBJECTDIR}/laol/rt/laol.o \
 	${OBJECTDIR}/laol/rt/string.o
 
@@ -81,6 +82,11 @@ ${OBJECTDIR}/laol/rt/array.o: laol/rt/array.cxx
 	${RM} "$@.d"
 	$(COMPILE.cc) -O2 -I../../../xyzzy/src -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/laol/rt/array.o laol/rt/array.cxx
 
+${OBJECTDIR}/laol/rt/iterator.o: laol/rt/iterator.cxx
+	${MKDIR} -p ${OBJECTDIR}/laol/rt
+	${RM} "$@.d"
+	$(COMPILE.cc) -O2 -I../../../xyzzy/src -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/laol/rt/iterator.o laol/rt/iterator.cxx
+
 ${OBJECTDIR}/laol/rt/laol.o: laol/rt/laol.cxx
 	${MKDIR} -p ${OBJECTDIR}/laol/rt
 	${RM} "$@.d"
@@ -120,6 +126,19 @@ ${OBJECTDIR}/laol/rt/array_nomain.o: ${OBJECTDIR}/laol/rt/array.o laol/rt/array.
 	    $(COMPILE.cc) -O2 -I../../../xyzzy/src -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/laol/rt/array_nomain.o laol/rt/array.cxx;\
 	else  \
 	    ${CP} ${OBJECTDIR}/laol/rt/array.o ${OBJECTDIR}/laol/rt/array_nomain.o;\
+	fi
+
+${OBJECTDIR}/laol/rt/iterator_nomain.o: ${OBJECTDIR}/laol/rt/iterator.o laol/rt/iterator.cxx 
+	${MKDIR} -p ${OBJECTDIR}/laol/rt
+	@NMOUTPUT=`${NM} ${OBJECTDIR}/laol/rt/iterator.o`; \
+	if (echo "$$NMOUTPUT" | ${GREP} '|main$$') || \
+	   (echo "$$NMOUTPUT" | ${GREP} 'T main$$') || \
+	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
+	then  \
+	    ${RM} "$@.d";\
+	    $(COMPILE.cc) -O2 -I../../../xyzzy/src -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/laol/rt/iterator_nomain.o laol/rt/iterator.cxx;\
+	else  \
+	    ${CP} ${OBJECTDIR}/laol/rt/iterator.o ${OBJECTDIR}/laol/rt/iterator_nomain.o;\
 	fi
 
 ${OBJECTDIR}/laol/rt/laol_nomain.o: ${OBJECTDIR}/laol/rt/laol.o laol/rt/laol.cxx 

@@ -76,6 +76,7 @@ namespace laol {
             virtual LaolObj prepend(TRcLaol* self, Args args);
             virtual LaolObj prepend_SELF(TRcLaol* self, Args args);
             virtual LaolObj iterator(TRcLaol* self, Args args);
+            //at(i) can take negative index too (-n is "n" from end, as in Ruby)
             virtual LaolObj at(TRcLaol* self, Args args);
             virtual LaolObj toString(TRcLaol* self, Args args) override;
 
@@ -88,19 +89,26 @@ namespace laol {
 
             // NOTE: this iterator works for reading/sourcing (rhs) values.
             // TODO: modify for use in assign/lhs.
+
             class Iterator : public laol::rt::Iterator {
             public:
-                explicit Iterator(string& ref, size_t start, size_t len);
-                
+                explicit Iterator(string& ref, long int start, size_t len);
+
                 LaolObj hasNext() const override;
                 LaolObj next() override;
 
             private:
-                size_t  m_curr, m_len;
+                size_t m_curr, m_len;
                 string& m_str;
             };
+
         private:
-            
+            size_t actualIndex(long int ix) const throw(IndexException);
+
+            size_t length() const {
+                return m_str.length();
+            }
+
             string m_str;
             static METHOD_BY_NAME stMethodByName;
         };

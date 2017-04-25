@@ -91,10 +91,7 @@ namespace laol {
                 set(val);
             }
 
-            const LaolObj& operator=(const LaolObj& rhs) {
-                cleanup();
-                return set(rhs);
-            }
+            const LaolObj& operator=(const LaolObj& rhs);
 
             template<typename T>
             const LaolObj& operator=(T rhs) {
@@ -109,9 +106,10 @@ namespace laol {
             bool asBool() const {
                 return (eBool == m_type) && m_dat.u_bool;
             }
-            
+
             unsigned long int asULInt() const;
-            
+            long int asLInt() const;
+
             // true if int variant
             bool isInt() const;
             // true if float/double variant
@@ -136,9 +134,9 @@ namespace laol {
 
             template<typename T>
             const T& asType() const {
-                return dynamic_cast<const T&>(asTPRcLaol()->asT());
+                return dynamic_cast<const T&> (asTPRcLaol()->asT());
             }
-            
+
             virtual ~LaolObj();
 
         private:
@@ -259,6 +257,7 @@ namespace laol {
                     m_dat.u_prc = rhs;
                 });
             }
+            
             const LaolObj& set(const LaolObj& rhs);
 
             const LaolObj& set(bool rhs) {
@@ -316,21 +315,24 @@ namespace laol {
             //not applicable to primitives types.
             LaolObj toString(Args);
             LaolObj objectId(Args);
-            
+
             // For primitive operations (no 'self' here).
             typedef LaolObj(LaolObj::* TPLaolObjMethod)(Args args);
             typedef std::map<string, TPLaolObjMethod> LAOLOBJ_METHOD_BY_NAME;
             static LAOLOBJ_METHOD_BY_NAME stMethodByName;
+            
+            friend class Laol;  //to optimize operator=()
         };
-        
+
         // Use toBool in 'if (expr)' -> 'if (toBool(expr))' in transpiler (laol -> c++).
         // Note: if 'operator bool()' defined, opens pandora box (of ambiguities)
         // and breaks the more natural primitive conversions: LaolObj(T val)...
+
         template<typename T>
         inline auto toBool(const T& expr) {
             return expr;
         }
-        
+
         template<>
         inline auto toBool<LaolObj>(const LaolObj& expr) {
             return expr.asBool();
@@ -350,6 +352,7 @@ namespace laol {
             virtual LaolObj left_shift(TRcLaol* self, const LaolObj& opB);
             virtual LaolObj right_shift(TRcLaol* self, const LaolObj& opB);
             virtual LaolObj add(TRcLaol* self, const LaolObj& opB);
+            virtual LaolObj assign(TRcLaol* self, const LaolObj& opB);
 
             //Map special methods for call-by-method too
             virtual LaolObj toString(TRcLaol*, Args);
@@ -432,6 +435,13 @@ namespace laol {
             //allow copy constructors
         };
 
+        class IndexException : public Exception {
+        public:
+
+            explicit IndexException(const string& found, const string& expected);
+
+            //allow copy constructors
+        };
     }
 }
 

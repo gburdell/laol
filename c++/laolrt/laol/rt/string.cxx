@@ -26,6 +26,7 @@
 
 namespace laol {
     namespace rt {
+        using std::to_string;
 
         //static
         Laol::METHOD_BY_NAME String::stMethodByName = {
@@ -38,7 +39,8 @@ namespace laol {
             {"prepend", static_cast<TPMethod> (&String::prepend)},
             {"prepend!", static_cast<TPMethod> (&String::prepend_SELF)},
             {"toString", static_cast<TPMethod> (&String::toString)},
-            {"at", static_cast<TPMethod> (&String::at)}
+            {"at", static_cast<TPMethod> (&String::at)},
+            {"iterator", static_cast<TPMethod> (&String::at)}
         };
 
         /*static*/
@@ -48,7 +50,7 @@ namespace laol {
             const String& z = x("toString").asType<String>();
             return z.m_str;
         }
-        
+
         String::~String() {
         }
 
@@ -58,7 +60,7 @@ namespace laol {
         }
 
         LaolObj String::length(TRcLaol*, Args) {
-            auto n = m_str.size();
+            auto n = length();
             return n;
         }
 
@@ -105,13 +107,33 @@ namespace laol {
         }
 
         //We're already a string!
-        LaolObj 
+
+        LaolObj
         String::toString(TRcLaol* self, Args) {
             return self;
         }
-        LaolObj String::at(TRcLaol*, Args args) {
+
+        LaolObj
+        String::at(TRcLaol*, Args args) {
             //todo index-exception
-            return m_str.at(args[0].asULInt());
+            return m_str.at(actualIndex(args[0].asLInt()));
+        }
+
+        LaolObj
+        String::iterator(TRcLaol* self, Args args) {
+            return self; //todo
+        }
+
+        size_t
+        String::actualIndex(long int ix) const throw (IndexException) {
+            long int actual = (0 <= ix) ? ix : (length() + ix);
+            if ((actual >= length()) || (0 > actual)) {
+                const auto n = length() - 1;
+                throw IndexException(
+                        to_string(ix),
+                        "[" + to_string(-n) + ".." + to_string(n) + "]");
+            }
+            return actual;
         }
 
     }
