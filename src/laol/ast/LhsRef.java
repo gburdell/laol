@@ -72,10 +72,10 @@ public class LhsRef extends Item {
         private final ParamExpressionList m_parms;
     }
 
-    public static class Index extends ArraySelectExpression {
+    public static class Index extends SelectExpression {
 
         private Index(final Acceptor expr) {
-            super((laol.parser.apfe.ArraySelectExpression) expr);
+            super((laol.parser.apfe.SelectExpression) expr);
         }
     }
 

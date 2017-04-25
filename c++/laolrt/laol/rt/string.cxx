@@ -59,49 +59,49 @@ namespace laol {
             return Laol::getFunc(stMethodByName, methodNm);
         }
 
-        LaolObj String::length(TRcLaol*, Args) {
+        LaolObj String::length(LaolObj&, Args) {
             auto n = length();
             return n;
         }
 
         LaolObj
-        String::empty_PRED(TRcLaol*, Args) {
+        String::empty_PRED(LaolObj&, Args) {
             return m_str.empty();
         }
 
         LaolObj
-        String::reverse(TRcLaol*, Args) {
+        String::reverse(LaolObj&, Args) {
             auto p = new String(m_str);
             std::reverse(std::begin(p->m_str), std::end(p->m_str));
             return p;
         }
 
         LaolObj
-        String::reverse_SELF(TRcLaol* self, Args) {
+        String::reverse_SELF(LaolObj& self, Args) {
             std::reverse(std::begin(m_str), std::end(m_str));
             return self;
         }
 
         LaolObj
-        String::append(TRcLaol* self, Args args) {
+        String::append(LaolObj& self, Args args) {
             string r = m_str + getString(args[0]);
             return new String(r);
         }
 
         LaolObj
-        String::append_SELF(TRcLaol* self, Args args) {
+        String::append_SELF(LaolObj& self, Args args) {
             m_str += getString(args[0]);
             return self;
         }
 
         LaolObj
-        String::prepend(TRcLaol* self, Args args) {
+        String::prepend(LaolObj& self, Args args) {
             string r = getString(args[0]) + m_str;
             return new String(r);
         }
 
         LaolObj
-        String::prepend_SELF(TRcLaol* self, Args args) {
+        String::prepend_SELF(LaolObj& self, Args args) {
             m_str = getString(args[0]) + m_str;
             return self;
         }
@@ -109,18 +109,18 @@ namespace laol {
         //We're already a string!
 
         LaolObj
-        String::toString(TRcLaol* self, Args) {
+        String::toString(LaolObj& self, Args) {
             return self;
         }
 
         LaolObj
-        String::at(TRcLaol*, Args args) {
+        String::at(LaolObj&, Args args) {
             //todo index-exception
             return m_str.at(actualIndex(args[0].asLInt()));
         }
 
         LaolObj
-        String::iterator(TRcLaol* self, Args args) {
+        String::iterator(LaolObj& self, Args args) {
             return self; //todo
         }
 

@@ -31,6 +31,7 @@
 
 #include <stdlib.h>
 #include <iostream>
+#include <array>
 #include "laol/rt/laol.hxx"
 #include "laol/rt/array.hxx"
 
@@ -70,11 +71,18 @@ void test2() {
     LaolObj s3 = s1 + s2 + s1 + s2 + s2;
     LaolObj c1 = s3("at", {3});
     LaolObj i1 = 1234 + 345 % 45;
+    i1 = c1 = i1;
+}
+void test3() {
+    //subscript
+    LaolObj a1 = std::array<LaolObj,2>{23,34};
+    LaolObj a2 = std::vector<LaolObj>{56,78};
 }
 
 int main(int argc, char** argv) {
     test1();
     test2();
+    test3();
     cout << "END: all tests" << endl;
     return (EXIT_SUCCESS);
 }

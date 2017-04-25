@@ -48,35 +48,35 @@ namespace laol {
         }
 
         LaolObj
-        Array::left_shift(TRcLaol* self, const LaolObj& opB) {
+        Array::left_shift(LaolObj& self, const LaolObj& opB) {
             m_ar.push_back(opB);
             return self;
         }
         LaolObj
-        Array::right_shift(TRcLaol* self, const LaolObj& opB) {
+        Array::right_shift(LaolObj& self, const LaolObj& opB) {
             m_ar.insert(m_ar.begin(), opB);
             return self;
         }
 
         LaolObj
-        Array::empty_PRED(TRcLaol*, Args) {
+        Array::empty_PRED(LaolObj&, Args) {
             return m_ar.empty();
         }
 
         LaolObj
-        Array::reverse(TRcLaol*, Args) {
+        Array::reverse(LaolObj&, Args) {
             auto p = new Array(m_ar);
             std::reverse(std::begin(p->m_ar), std::end(p->m_ar));
             return p;
         }
 
         LaolObj
-        Array::reverse_SELF(TRcLaol* self, Args) {
+        Array::reverse_SELF(LaolObj& self, Args) {
             std::reverse(std::begin(m_ar), std::end(m_ar));
             return self;
         }
 
-        LaolObj Array::length(TRcLaol*, Args) {
+        LaolObj Array::length(LaolObj&, Args) {
             auto n = m_ar.size();
             return n;
         }

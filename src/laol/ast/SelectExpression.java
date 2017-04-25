@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2017 kpfalzer.
+ * Copyright 2016 gburdell.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -21,52 +21,15 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
+package laol.ast;
 
-/* 
- * File:   iterator.hxx
- * Author: kpfalzer
+/**
  *
- * Created on April 23, 2017, 3:55 PM
+ * @author gburdell
  */
-
-#ifndef _laol_rt_iterator_hxx_
-#define _laol_rt_iterator_hxx_
-
-#include "laol/rt/laol.hxx"
-
-namespace laol {
-    namespace rt {
-        // Iterator interface
-
-        class Iterator : public Laol {
-        public:
-            //allow copy constructors
-
-            //unique methods
-            virtual LaolObj next_PRED(LaolObj&, Args);
-            virtual LaolObj next(LaolObj&, Args);
-            //set current value (does not advance next)
-            virtual LaolObj set(LaolObj&, Args);
-
-            Laol::TPMethod getFunc(const string& methodNm) const override;
-
-            virtual ~Iterator() {
-            };
-
-        protected:
-            // Implementation for builtins: String, Array, ...
-            virtual LaolObj hasNext() const = 0;
-
-            virtual LaolObj next() = 0;
-            
-            virtual LaolObj set(Args) = 0;
-
-        private:
-            static METHOD_BY_NAME stMethodByName;
-        };
-
+public class SelectExpression extends ExpressionList {
+    public SelectExpression(final laol.parser.apfe.SelectExpression decl) {
+        super(decl.getBaseAccepted());
     }
+    
 }
-
-#endif /* _laol_rt_iterator_hxx_ */
-

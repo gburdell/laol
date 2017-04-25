@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2017 kpfalzer.
+ * Copyright 2016 kpfalzer.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -21,52 +21,37 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
+package laol.ast;
 
-/* 
- * File:   iterator.hxx
- * Author: kpfalzer
+import apfe.runtime.Acceptor;
+import laol.test.TestRunner;
+import org.junit.Test;
+
+/**
  *
- * Created on April 23, 2017, 3:55 PM
+ * @author kpfalzer
  */
+public class SelectExpressionTest extends TestRunner {
 
-#ifndef _laol_rt_iterator_hxx_
-#define _laol_rt_iterator_hxx_
+    private final String TESTS[] = {
+        "123",
+        "456..789"
+    };
 
-#include "laol/rt/laol.hxx"
-
-namespace laol {
-    namespace rt {
-        // Iterator interface
-
-        class Iterator : public Laol {
-        public:
-            //allow copy constructors
-
-            //unique methods
-            virtual LaolObj next_PRED(LaolObj&, Args);
-            virtual LaolObj next(LaolObj&, Args);
-            //set current value (does not advance next)
-            virtual LaolObj set(LaolObj&, Args);
-
-            Laol::TPMethod getFunc(const string& methodNm) const override;
-
-            virtual ~Iterator() {
-            };
-
-        protected:
-            // Implementation for builtins: String, Array, ...
-            virtual LaolObj hasNext() const = 0;
-
-            virtual LaolObj next() = 0;
-            
-            virtual LaolObj set(Args) = 0;
-
-        private:
-            static METHOD_BY_NAME stMethodByName;
-        };
-
+    @Override
+    public Acceptor getGrammar() {
+        return new laol.parser.apfe.SelectExpression();
     }
+
+    @Override
+    public void generateAndTestAst(Acceptor parsed) {
+        laol.ast.SelectExpression dut = new laol.ast.SelectExpression((laol.parser.apfe.SelectExpression) parsed);
+    }
+
+    @Test
+    public void testArraySelectExpression() {
+        TestRunner runner = new SelectExpressionTest();
+        runner.runTests(TESTS);
+    }
+
 }
-
-#endif /* _laol_rt_iterator_hxx_ */
-

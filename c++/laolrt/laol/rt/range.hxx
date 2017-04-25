@@ -23,54 +23,46 @@
  */
 
 /* 
- * File:   array.hxx
+ * File:   range.hxx
  * Author: kpfalzer
  *
- * Created on April 16, 2017, 3:55 PM
+ * Created on April 25, 2017, 11:19 AM
  */
 
-#ifndef _laol_rt_array_hxx_
-#define _laol_rt_array_hxx_
+#ifndef _laol_rt_range_hxx_
+#define _laol_rt_range_hxx_
 
-#include <vector>
 #include "laol/rt/laol.hxx"
 
 namespace laol {
     namespace rt {
 
-        class Array : public Laol {
+        /*
+         * An interface with iterator: low to high range.
+         */
+        class Range : public Laol {
         public:
-
-            explicit Array();
-
-            Array(Args v) : m_ar(v) {
-            }
-
-            Array& operator=(const Array& r) = delete;
-
-            //operators
-            virtual LaolObj left_shift(LaolObj& self, const LaolObj& opB) override;
-            virtual LaolObj right_shift(LaolObj& self, const LaolObj& opB) override;
-
-            //unique methods
-            virtual LaolObj empty_PRED(LaolObj& self, Args args);
-            virtual LaolObj reverse(LaolObj& self, Args args);
-            virtual LaolObj reverse_SELF(LaolObj& self, Args args);
-            virtual LaolObj length(LaolObj& self, Args args);
+            Range(Args args);
+            
+            virtual LaolObj iterator(LaolObj&, Args) = 0;
 
             Laol::TPMethod getFunc(const string& methodNm) const override;
 
-            virtual ~Array();
+            virtual ~Range() {
+            }
+
+        protected:
+            const LaolObj m_lo, m_hi;
+            
+            //access to optimized for builtins...
+            virtual LaolObj iterator() = 0;
 
         private:
-            typedef std::vector<LaolObj> Vector;
-
-            Vector m_ar;
             static METHOD_BY_NAME stMethodByName;
-        };
 
+        };
     }
 }
 
-#endif /* _laol_rt_array_hxx_ */
+#endif /* _laol_rt_range_hxx_ */
 

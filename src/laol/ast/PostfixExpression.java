@@ -82,11 +82,11 @@ public class PostfixExpression extends Item {
             m_expr = createItem(m_seq, 1);
         }
 
-        public ArraySelectExpression getExpr() {
+        public SelectExpression getExpr() {
             return m_expr;
         }
 
-        private final ArraySelectExpression m_expr;
+        private final SelectExpression m_expr;
     }
 
     public static class PrimExprList extends ItemWithBlock {

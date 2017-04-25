@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2016 gburdell.
+ * Copyright 2017 kpfalzer.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -21,15 +21,25 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package laol.ast;
 
-/**
- *
- * @author gburdell
- */
-public class ArraySelectExpression extends ExpressionList {
-    public ArraySelectExpression(final laol.parser.apfe.ArraySelectExpression decl) {
-        super(decl.getBaseAccepted());
+#include "laol/rt/range.hxx"
+
+namespace laol {
+    namespace rt {
+        //static
+        Laol::METHOD_BY_NAME Range::stMethodByName = {
+            {"length", static_cast<TPMethod> (&Range::iterator)}
+        };
+
+        Range::Range(Args args)
+        : m_lo(args[0]), m_hi(args[(1 < args.size()) ? 1 : 0]) {
+            ASSERT_TRUE(m_lo <= m_hi); //even works for -3..-1 (from end)
+        }
+
+        Laol::TPMethod
+        Range::getFunc(const string& methodNm) const {
+            return Laol::getFunc(stMethodByName, methodNm);
+        }
+
     }
-    
 }

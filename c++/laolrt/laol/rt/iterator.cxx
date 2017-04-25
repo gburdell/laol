@@ -33,20 +33,22 @@ namespace laol {
 
         };
 
-        Laol::TPMethod 
+        Laol::TPMethod
         Iterator::getFunc(const string& methodNm) const {
             return Laol::getFunc(stMethodByName, methodNm);
         }
-        LaolObj 
-        Iterator::next(TRcLaol*, Args) {
+
+        LaolObj
+        Iterator::next(LaolObj&, Args) {
             return next();
         }
-        
-        LaolObj 
-        Iterator::next_PRED(TRcLaol*, Args) {
+
+        LaolObj
+        Iterator::next_PRED(LaolObj&, Args) {
             return hasNext();
         }
-        LaolObj Iterator::set(TRcLaol*, Args args) {
+
+        LaolObj Iterator::set(LaolObj&, Args args) {
             return set(args);
         }
 

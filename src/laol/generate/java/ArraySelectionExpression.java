@@ -31,7 +31,7 @@ import laol.ast.Item;
  * @author gburdell
  */
 public class ArraySelectionExpression {
-    public static void process(final laol.ast.ArraySelectExpression item, final Context ctx) {
+    public static void process(final laol.ast.SelectExpression item, final Context ctx) {
         List<laol.ast.Expression> exprs = item.getExpressions();
         //todo: 
     }

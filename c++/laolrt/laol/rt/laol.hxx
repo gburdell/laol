@@ -35,6 +35,7 @@
 #include <exception>
 #include <cmath>
 #include <vector>
+#include <array>
 #include <string>
 #include <map>
 #include "xyzzy/assert.hxx"
@@ -48,6 +49,7 @@ namespace laol {
     namespace rt {
         using std::vector;
         using std::string;
+        using std::array;
 
         string demangleName(const char* n);
 
@@ -78,6 +80,20 @@ namespace laol {
 
             // Primitive: LaolRef lhs = val...
 
+            // LaolObj a1 = std::array<LaolObj,2>{23,34};
+
+            template<std::size_t N>
+            LaolObj(const array<LaolObj, N>& r) {
+                auto debug = N;
+                ASSERT_NEVER; //not implemented yet
+            }
+
+            // LaolObj v1 = std::vector<LaolObj>{56,78};
+
+            LaolObj(Args r) {
+                set(r);
+            }
+
             template<typename T>
             LaolObj(T val) {
                 set(val);
@@ -91,7 +107,7 @@ namespace laol {
                 set(val);
             }
 
-            const LaolObj& operator=(const LaolObj& rhs);
+            LaolObj operator=(const LaolObj& rhs);
 
             template<typename T>
             const LaolObj& operator=(T rhs) {
@@ -124,9 +140,40 @@ namespace laol {
             LaolObj operator<<(const LaolObj& opB);
             LaolObj operator>>(const LaolObj& opB);
             LaolObj operator+(const LaolObj& opB);
+            LaolObj operator[](const LaolObj& opB);
+            //
+            // baseline comparators.
+            // (others are generated as function of these).
+            //
+            LaolObj operator==(const LaolObj& opB);
+            LaolObj operator>(const LaolObj& opB);
+            LaolObj operator<(const LaolObj& opB);
+
+            //
+            // generate comparators
+            //            
+
+            LaolObj operator!=(const LaolObj& opB) {
+                return !(*this == opB);
+            }
+
+            LaolObj operator<=(const LaolObj& opB) {
+                return (*this < opB) || (*this == opB);
+            }
+
+            LaolObj operator>=(const LaolObj& opB) {
+                return (*this > opB) || (*this == opB);
+            }
+
+            //
+            // logical
+            //
+            LaolObj operator!(const LaolObj& opB);
+            LaolObj operator||(const LaolObj& opB);
+            LaolObj operator&&(const LaolObj& opB);
 
             //TPMethod
-            typedef LaolObj(Laol::* TPMethod)(TRcLaol* self, Args args);
+            typedef LaolObj(Laol::* TPMethod)(LaolObj& self, Args args);
 
             //call method
             LaolObj operator()(const string& methodNm, Args args);
@@ -245,6 +292,8 @@ namespace laol {
                 return *this;
             }
 
+            const LaolObj& set(Args args);
+
             const LaolObj& set(Laol* rhs) {
                 return set(ePRc, [this, rhs]() {
                     m_dat.u_prc = new TRcLaol(rhs);
@@ -257,7 +306,7 @@ namespace laol {
                     m_dat.u_prc = rhs;
                 });
             }
-            
+
             const LaolObj& set(const LaolObj& rhs);
 
             const LaolObj& set(bool rhs) {
@@ -320,8 +369,8 @@ namespace laol {
             typedef LaolObj(LaolObj::* TPLaolObjMethod)(Args args);
             typedef std::map<string, TPLaolObjMethod> LAOLOBJ_METHOD_BY_NAME;
             static LAOLOBJ_METHOD_BY_NAME stMethodByName;
-            
-            friend class Laol;  //to optimize operator=()
+
+            friend class Laol; //to optimize operator=()
         };
 
         // Use toBool in 'if (expr)' -> 'if (toBool(expr))' in transpiler (laol -> c++).
@@ -349,14 +398,21 @@ namespace laol {
 
             //operators (mapped to mnemonic): so we can pass in 'self'
             //http://stackoverflow.com/questions/8679089/c-official-operator-names-keywords
-            virtual LaolObj left_shift(TRcLaol* self, const LaolObj& opB);
-            virtual LaolObj right_shift(TRcLaol* self, const LaolObj& opB);
-            virtual LaolObj add(TRcLaol* self, const LaolObj& opB);
-            virtual LaolObj assign(TRcLaol* self, const LaolObj& opB);
-
+            /* << */ virtual LaolObj left_shift(LaolObj& self, const LaolObj& opB);
+            /* >> */ virtual LaolObj right_shift(LaolObj& self, const LaolObj& opB);
+            /* +  */ virtual LaolObj add(LaolObj& self, const LaolObj& opB);
+            /* =  */ virtual LaolObj assign(LaolObj& self, const LaolObj& opB);
+            /* [] */ virtual LaolObj subscript(LaolObj& self, const LaolObj& opB);
+            /* == */ virtual LaolObj equal(LaolObj& self, const LaolObj& opB);
+            /* <  */ virtual LaolObj less(LaolObj& self, const LaolObj& opB);
+            /* >  */ virtual LaolObj greater(LaolObj& self, const LaolObj& opB);
+            /* !  */ virtual LaolObj negate(LaolObj& self, const LaolObj& opB);
+            /* || */ virtual LaolObj logical_or(LaolObj& self, const LaolObj& opB);
+            /* && */ virtual LaolObj logical_and(LaolObj& self, const LaolObj& opB);
+            
             //Map special methods for call-by-method too
-            virtual LaolObj toString(TRcLaol*, Args);
-            virtual LaolObj objectId(TRcLaol*, Args);
+            virtual LaolObj toString(LaolObj&, Args);
+            virtual LaolObj objectId(LaolObj&, Args);
 
             virtual ~Laol() = 0;
 
@@ -364,7 +420,7 @@ namespace laol {
 
             virtual TPMethod getFunc(const string& methodNm) const;
 
-            static string getClassName(const TRcLaol* p);
+            static string getClassName(const LaolObj& r);
 
         protected:
             typedef std::map<string, TPMethod> METHOD_BY_NAME;

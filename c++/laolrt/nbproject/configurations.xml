@@ -7,6 +7,8 @@
       <itemPath>laol/rt/array.hxx</itemPath>
       <itemPath>laol/rt/iterator.hxx</itemPath>
       <itemPath>laol/rt/laol.hxx</itemPath>
+      <itemPath>laol/rt/range.hxx</itemPath>
+      <itemPath>laol/rt/selector.hxx</itemPath>
       <itemPath>laol/rt/string.hxx</itemPath>
     </logicalFolder>
     <logicalFolder name="ResourceFiles"
@@ -19,6 +21,7 @@
       <itemPath>laol/rt/array.cxx</itemPath>
       <itemPath>laol/rt/iterator.cxx</itemPath>
       <itemPath>laol/rt/laol.cxx</itemPath>
+      <itemPath>laol/rt/range.cxx</itemPath>
       <itemPath>laol/rt/string.cxx</itemPath>
     </logicalFolder>
     <logicalFolder name="TestFiles"
@@ -89,6 +92,8 @@
             <pElem>.</pElem>
             <pElem>.</pElem>
             <pElem>.</pElem>
+            <pElem>.</pElem>
+            <pElem>.</pElem>
           </linkerDynSerch>
         </linkerTool>
       </folder>
@@ -106,6 +111,8 @@
         <linkerTool>
           <output>${TESTDIR}/TestFiles/f1</output>
           <linkerDynSerch>
+            <pElem>.</pElem>
+            <pElem>.</pElem>
             <pElem>.</pElem>
             <pElem>.</pElem>
             <pElem>.</pElem>
@@ -135,6 +142,12 @@
       <item path="laol/rt/laol.cxx" ex="false" tool="1" flavor2="0">
       </item>
       <item path="laol/rt/laol.hxx" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="laol/rt/range.cxx" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="laol/rt/range.hxx" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="laol/rt/selector.hxx" ex="false" tool="3" flavor2="0">
       </item>
       <item path="laol/rt/string.cxx" ex="false" tool="1" flavor2="0">
       </item>
@@ -199,6 +212,8 @@
             <pElem>.</pElem>
             <pElem>.</pElem>
             <pElem>.</pElem>
+            <pElem>.</pElem>
+            <pElem>.</pElem>
           </linkerDynSerch>
         </linkerTool>
       </folder>
@@ -227,6 +242,8 @@
             <pElem>.</pElem>
             <pElem>.</pElem>
             <pElem>.</pElem>
+            <pElem>.</pElem>
+            <pElem>.</pElem>
           </linkerDynSerch>
         </linkerTool>
       </folder>
@@ -241,6 +258,12 @@
       <item path="laol/rt/laol.cxx" ex="false" tool="1" flavor2="0">
       </item>
       <item path="laol/rt/laol.hxx" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="laol/rt/range.cxx" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="laol/rt/range.hxx" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="laol/rt/selector.hxx" ex="false" tool="3" flavor2="0">
       </item>
       <item path="laol/rt/string.cxx" ex="false" tool="1" flavor2="0">
       </item>

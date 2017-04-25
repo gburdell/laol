@@ -38,6 +38,7 @@ OBJECTFILES= \
 	${OBJECTDIR}/laol/rt/array.o \
 	${OBJECTDIR}/laol/rt/iterator.o \
 	${OBJECTDIR}/laol/rt/laol.o \
+	${OBJECTDIR}/laol/rt/range.o \
 	${OBJECTDIR}/laol/rt/string.o
 
 # Test Directory
@@ -91,6 +92,11 @@ ${OBJECTDIR}/laol/rt/laol.o: laol/rt/laol.cxx
 	${MKDIR} -p ${OBJECTDIR}/laol/rt
 	${RM} "$@.d"
 	$(COMPILE.cc) -O2 -I../../../xyzzy/src -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/laol/rt/laol.o laol/rt/laol.cxx
+
+${OBJECTDIR}/laol/rt/range.o: laol/rt/range.cxx
+	${MKDIR} -p ${OBJECTDIR}/laol/rt
+	${RM} "$@.d"
+	$(COMPILE.cc) -O2 -I../../../xyzzy/src -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/laol/rt/range.o laol/rt/range.cxx
 
 ${OBJECTDIR}/laol/rt/string.o: laol/rt/string.cxx
 	${MKDIR} -p ${OBJECTDIR}/laol/rt
@@ -152,6 +158,19 @@ ${OBJECTDIR}/laol/rt/laol_nomain.o: ${OBJECTDIR}/laol/rt/laol.o laol/rt/laol.cxx
 	    $(COMPILE.cc) -O2 -I../../../xyzzy/src -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/laol/rt/laol_nomain.o laol/rt/laol.cxx;\
 	else  \
 	    ${CP} ${OBJECTDIR}/laol/rt/laol.o ${OBJECTDIR}/laol/rt/laol_nomain.o;\
+	fi
+
+${OBJECTDIR}/laol/rt/range_nomain.o: ${OBJECTDIR}/laol/rt/range.o laol/rt/range.cxx 
+	${MKDIR} -p ${OBJECTDIR}/laol/rt
+	@NMOUTPUT=`${NM} ${OBJECTDIR}/laol/rt/range.o`; \
+	if (echo "$$NMOUTPUT" | ${GREP} '|main$$') || \
+	   (echo "$$NMOUTPUT" | ${GREP} 'T main$$') || \
+	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
+	then  \
+	    ${RM} "$@.d";\
+	    $(COMPILE.cc) -O2 -I../../../xyzzy/src -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/laol/rt/range_nomain.o laol/rt/range.cxx;\
+	else  \
+	    ${CP} ${OBJECTDIR}/laol/rt/range.o ${OBJECTDIR}/laol/rt/range_nomain.o;\
 	fi
 
 ${OBJECTDIR}/laol/rt/string_nomain.o: ${OBJECTDIR}/laol/rt/string.o laol/rt/string.cxx 

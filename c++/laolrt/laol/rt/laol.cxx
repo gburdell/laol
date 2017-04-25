@@ -28,6 +28,7 @@
 #include <sstream>
 #include "laol/rt/laol.hxx"
 #include "laol/rt/string.hxx"
+#include "laol/rt/array.hxx"
 
 namespace laol {
     namespace rt {
@@ -70,6 +71,11 @@ namespace laol {
             }
             string s = oss.str();
             return new String(s);
+        }
+
+        const LaolObj&
+        LaolObj::set(Args args) {
+            return set(new Array(args));
         }
 
         const LaolObj&
@@ -132,21 +138,45 @@ namespace laol {
             }
         }
 
-        const LaolObj&
-                LaolObj::operator=(const LaolObj& rhs) {
-            //if (isObject()) {
-            //    asTPLaol()->assign(asTPRcLaol(), {rhs});
-            //    return *this;
-            //} else {
+        /*
+         * TODO: consider:
+         * irb(main):001:0> a = [1,2,3,4]
+         * => [1, 2, 3, 4]
+         * irb(main):007:0> b = a[1..2] = %w{a b}
+         * => ["a", "b"]
+         * irb(main):008:0> b
+         * => ["a", "b"]
+         * irb(main):009:0> a
+         * => [1, "a", "b", 4]
+         *
+         * NOTES:
+         * 1) don't forget initializer constructor: 'LaolObj a = b[1..2]'
+         *    where rhs is slice/iterator
+         * 2) Consider soln: a class with iterator also has method
+         *    called slice which returns value after applying iterator.
+         * 3) proxy, as in: http://stackoverflow.com/questions/5762042/const-overloaded-operator-function-and-its-invocation
+         * 4) Remember: rhs as slice/iterator evaluates to (const) value
+         * 5) lhs as slice/iterator applies rhs could be slice/iterator or NOT/composite);
+         *    but then lhs value could be chained (i.e., evaluated), as in:
+         *    a = b[1..2] = c[3..4]
+         * 6) perhaps as simple as defining 'operator LaolObj()' on iterator, to get its value?
+         */
+        LaolObj
+        LaolObj::operator=(const LaolObj& rhs) {
+            if (isObject()) {
+                asTPLaol()->assign(*this,{rhs});
+                //TODO: see consider above.  'return *this' is NOT correct!
+                return *this;
+            } else {
                 cleanup();
                 return set(rhs);
-            //}
+            }
         }
 
         LaolObj
         LaolObj::operator<<(const LaolObj& opB) {
             return isObject()
-                    ? asTPLaol()->left_shift(asTPRcLaol(),{opB})
+                    ? asTPLaol()->left_shift(*this,{opB})
             : intBinaryOp(opB, [](auto a, auto b) {
                 return a << b;
             });
@@ -155,7 +185,7 @@ namespace laol {
         LaolObj
         LaolObj::operator>>(const LaolObj& opB) {
             return isObject()
-                    ? asTPLaol()->right_shift(asTPRcLaol(),{opB})
+                    ? asTPLaol()->right_shift(*this,{opB})
             : intBinaryOp(opB, [](auto a, auto b) {
                 return a >> b;
             });
@@ -164,10 +194,15 @@ namespace laol {
         LaolObj
         LaolObj::operator+(const LaolObj& opB) {
             return isObject()
-                    ? asTPLaol()->add(asTPRcLaol(),{opB})
+                    ? asTPLaol()->add(*this,{opB})
             : numberBinaryOp(opB, [](auto a, auto b) {
                 return a + b;
             });
+        }
+
+        LaolObj LaolObj::operator[](const LaolObj& opB) {
+            ASSERT_TRUE(isObject());
+            return asTPLaol()->subscript(*this,{opB});
         }
 
         void
@@ -184,8 +219,7 @@ namespace laol {
         LaolObj::operator()(const string& methodNm, Args args) {
             LaolObj rval;
             if (isObject()) {
-                TRcLaol* self = asTPRcLaol();
-                Laol* pObj = self->getPtr();
+                Laol* pObj = asTPRcLaol()->getPtr();
                 //first try subclass
                 TPMethod pMethod = pObj->getFunc(methodNm);
                 if (nullptr == pMethod) {
@@ -193,7 +227,7 @@ namespace laol {
                     pMethod = pObj->Laol::getFunc(methodNm);
                 }
                 if (nullptr != pMethod) {
-                    rval = (pObj->*pMethod)(self, args);
+                    rval = (pObj->*pMethod)(*this, args);
                 } else {
                     ASSERT_NEVER; //not implemented
                 }
@@ -225,19 +259,19 @@ namespace laol {
 
         /*static*/
         string
-        Laol::getClassName(const TRcLaol* p) {
-            const TRcObj& q = p->asT();
+        Laol::getClassName(const LaolObj& r) {
+            const TRcObj& q = r.asTPRcLaol()->asT();
             return demangleName(typeid (q).name());
         }
 
         LaolObj
-        Laol::objectId(TRcLaol*, Args) {
+        Laol::objectId(LaolObj&, Args) {
             LaolObj id = objectId();
             return id;
         }
 
         LaolObj
-        Laol::toString(TRcLaol* self, Args) {
+        Laol::toString(LaolObj& self, Args) {
             std::ostringstream oss;
             oss << getClassName(self) << "@" << objectId();
             auto s = oss.str();
@@ -245,28 +279,67 @@ namespace laol {
         }
 
         LaolObj
-        Laol::left_shift(TRcLaol* self, const LaolObj& opB) {
+        Laol::left_shift(LaolObj& self, const LaolObj& opB) {
             ASSERT_NEVER; //no implementation
             return self;
         }
 
         LaolObj
-        Laol::right_shift(TRcLaol* self, const LaolObj& opB) {
+        Laol::right_shift(LaolObj& self, const LaolObj& opB) {
             ASSERT_NEVER; //no implementation
             return self;
         }
 
         LaolObj
-        Laol::add(TRcLaol* self, const LaolObj& opB) {
+        Laol::add(LaolObj& self, const LaolObj& opB) {
             ASSERT_NEVER; //no implementation
             return self;
         }
 
         LaolObj
-        Laol::assign(TRcLaol* self, const LaolObj& opB) {
+        Laol::assign(LaolObj& self, const LaolObj& opB) {
+            self.cleanup();
+            self.set(opB);
             return self;
         }
 
+        LaolObj
+        Laol::subscript(LaolObj& self, const LaolObj& opB) {
+            ASSERT_NEVER; //no implementation
+            return self;
+        }
+
+        LaolObj
+        Laol::equal(LaolObj& self, const LaolObj& opB) {
+            ASSERT_NEVER; //no implementation
+            return self;
+        }
+
+        LaolObj
+        Laol::less(LaolObj& self, const LaolObj& opB) {
+            ASSERT_NEVER; //no implementation
+            return self;
+        }
+
+        LaolObj
+        Laol::greater(LaolObj& self, const LaolObj& opB) {
+            ASSERT_NEVER; //no implementation
+            return self;
+        }
+
+        LaolObj
+        Laol::negate(LaolObj& self, const LaolObj& opB) {
+            ASSERT_NEVER; //no implementation
+            return self;
+        }
+
+#define DEFINE_NO_IMPL (LaolObj&, const LaolObj& self) {ASSERT_NEVER; return self;}
+
+        LaolObj Laol::logical_and DEFINE_NO_IMPL
+        LaolObj Laol::logical_or  DEFINE_NO_IMPL
+        
+#undef DEFINE_NO_IMPL
+        
         Laol::TPMethod
         Laol::getFunc(const string& methodNm) const {
             return getFunc(stMethodByName, methodNm);

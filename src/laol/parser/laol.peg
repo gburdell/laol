@@ -125,7 +125,7 @@ primary_expression <-
 scoped_name <- IDENTNK
 
 postfix_expression <-
-    postfix_expression LBRACK array_select_expression RBRACK block?
+    postfix_expression LBRACK select_expression RBRACK block?
 /   postfix_expression LPAREN param_expression_list? RPAREN block?
 /   postfix_expression dot_suffix block?
 /   postfix_expression (PLUS2 / MINUS2) 
@@ -226,7 +226,7 @@ param_ele <-
 
 param_expression_list <- param_ele (COMMA param_ele)*
 
-array_select_expression <- expression_list
+select_expression <- expression_list
 
 var_decl_statement <- 
     mut_type_decl scoped_name 
@@ -244,7 +244,7 @@ mut_type_decl <- access_modifier? K_STATIC? mutability (type_name &scoped_name)?
 type_decl <- access_modifier? K_STATIC? mutability? (type_name &scoped_name)?
 
 lhs_ref <-
-    lhs_ref LBRACK array_select_expression RBRACK
+    lhs_ref LBRACK select_expression RBRACK
 /   lhs_ref LPAREN param_expression_list? RPAREN
 /   lhs_ref access_op IDENTNK
 /   lhs_ref (PLUS2 / MINUS2) 
