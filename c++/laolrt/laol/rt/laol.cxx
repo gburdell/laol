@@ -22,29 +22,17 @@
  * THE SOFTWARE.
  */
 
-#include <cxxabi.h>
-#include <cstdlib>  //free
 #include <cassert>
 #include <sstream>
 #include "laol/rt/laol.hxx"
 #include "laol/rt/string.hxx"
 #include "laol/rt/array.hxx"
+#include "laol/rt/exception.hxx"
 
 namespace laol {
     namespace rt {
-
-        string
-        demangleName(const char* mangledName) {
-            int status;
-            //https://gcc.gnu.org/onlinedocs/libstdc++/manual/ext_demangling.html
-            //Since realName is malloc, we need to free.
-            char *realName = abi::__cxa_demangle(mangledName, 0, 0, &status);
-            assert(0 == status);
-            string s = realName;
-            free(realName);
-            return s;
-        }
-
+        using std::to_string;
+        
         /*static*/
         LaolObj::LAOLOBJ_METHOD_BY_NAME LaolObj::stMethodByName = {
             {"toString", static_cast<TPLaolObjMethod> (&LaolObj::toString)},
@@ -109,7 +97,7 @@ namespace laol {
         static const LaolObj UNUSED;
 
         unsigned long int
-        LaolObj::asULInt() const {
+        LaolObj::toULInt() const {
             unsigned long int rval;
             intApply([&rval](auto val) {
                 rval = (unsigned long int) val;
@@ -119,7 +107,7 @@ namespace laol {
         }
 
         long int
-        LaolObj::asLInt() const {
+        LaolObj::toLInt() const {
             long int rval;
             intApply([&rval](auto val) {
                 rval = (long int) val;
@@ -138,35 +126,10 @@ namespace laol {
             }
         }
 
-        /*
-         * TODO: consider:
-         * irb(main):001:0> a = [1,2,3,4]
-         * => [1, 2, 3, 4]
-         * irb(main):007:0> b = a[1..2] = %w{a b}
-         * => ["a", "b"]
-         * irb(main):008:0> b
-         * => ["a", "b"]
-         * irb(main):009:0> a
-         * => [1, "a", "b", 4]
-         *
-         * NOTES:
-         * 1) don't forget initializer constructor: 'LaolObj a = b[1..2]'
-         *    where rhs is slice/iterator
-         * 2) Consider soln: a class with iterator also has method
-         *    called slice which returns value after applying iterator.
-         * 3) proxy, as in: http://stackoverflow.com/questions/5762042/const-overloaded-operator-function-and-its-invocation
-         * 4) Remember: rhs as slice/iterator evaluates to (const) value
-         * 5) lhs as slice/iterator applies rhs could be slice/iterator or NOT/composite);
-         *    but then lhs value could be chained (i.e., evaluated), as in:
-         *    a = b[1..2] = c[3..4]
-         * 6) perhaps as simple as defining 'operator LaolObj()' on iterator, to get its value?
-         */
         LaolObj
         LaolObj::operator=(const LaolObj& rhs) {
             if (isObject()) {
-                asTPLaol()->assign(*this,{rhs});
-                //TODO: see consider above.  'return *this' is NOT correct!
-                return *this;
+                return asTPLaol()->assign(*this,{rhs});
             } else {
                 cleanup();
                 return set(rhs);
@@ -200,7 +163,7 @@ namespace laol {
             });
         }
 
-        LaolObj LaolObj::operator[](const LaolObj& opB) {
+        LaolObj LaolObj::operator[](const LaolObj& opB) const {
             ASSERT_TRUE(isObject());
             return asTPLaol()->subscript(*this,{opB});
         }
@@ -279,67 +242,28 @@ namespace laol {
         }
 
         LaolObj
-        Laol::left_shift(LaolObj& self, const LaolObj& opB) {
-            ASSERT_NEVER; //no implementation
-            return self;
-        }
-
-        LaolObj
-        Laol::right_shift(LaolObj& self, const LaolObj& opB) {
-            ASSERT_NEVER; //no implementation
-            return self;
-        }
-
-        LaolObj
-        Laol::add(LaolObj& self, const LaolObj& opB) {
-            ASSERT_NEVER; //no implementation
-            return self;
-        }
-
-        LaolObj
         Laol::assign(LaolObj& self, const LaolObj& opB) {
             self.cleanup();
             self.set(opB);
             return self;
         }
 
-        LaolObj
-        Laol::subscript(LaolObj& self, const LaolObj& opB) {
-            ASSERT_NEVER; //no implementation
-            return self;
-        }
-
-        LaolObj
-        Laol::equal(LaolObj& self, const LaolObj& opB) {
-            ASSERT_NEVER; //no implementation
-            return self;
-        }
-
-        LaolObj
-        Laol::less(LaolObj& self, const LaolObj& opB) {
-            ASSERT_NEVER; //no implementation
-            return self;
-        }
-
-        LaolObj
-        Laol::greater(LaolObj& self, const LaolObj& opB) {
-            ASSERT_NEVER; //no implementation
-            return self;
-        }
-
-        LaolObj
-        Laol::negate(LaolObj& self, const LaolObj& opB) {
-            ASSERT_NEVER; //no implementation
-            return self;
-        }
-
 #define DEFINE_NO_IMPL (LaolObj&, const LaolObj& self) {ASSERT_NEVER; return self;}
 
+        LaolObj Laol::left_shift DEFINE_NO_IMPL
+        LaolObj Laol::right_shift DEFINE_NO_IMPL
+        LaolObj Laol::add DEFINE_NO_IMPL
+        LaolObj Laol::subscript DEFINE_NO_IMPL
+        LaolObj Laol::equal DEFINE_NO_IMPL
+        LaolObj Laol::less DEFINE_NO_IMPL
+        LaolObj Laol::greater DEFINE_NO_IMPL
+        LaolObj Laol::negate DEFINE_NO_IMPL
         LaolObj Laol::logical_and DEFINE_NO_IMPL
-        LaolObj Laol::logical_or  DEFINE_NO_IMPL
-        
+        LaolObj Laol::logical_or DEFINE_NO_IMPL
+        LaolObj Laol::subscript_assign DEFINE_NO_IMPL
+
 #undef DEFINE_NO_IMPL
-        
+
         Laol::TPMethod
         Laol::getFunc(const string& methodNm) const {
             return getFunc(stMethodByName, methodNm);
@@ -353,56 +277,27 @@ namespace laol {
             return rval;
         }
 
+        size_t
+        Laol::actualIndex(long int ix) const {
+            long int actual = (0 <= ix) ? ix : (length() + ix);
+            if ((actual >= length()) || (0 > actual)) {
+                const auto n = length() - 1;
+                throw IndexException(
+                        to_string(ix),
+                        "[" + to_string(-n) + ".." + to_string(n) + "]");
+            }
+            return actual;
+        }
+        size_t Laol::length() const {
+            ASSERT_NEVER;
+            return -1;
+        }
+
         Laol::Laol() {
         }
 
         Laol::~Laol() {
         }
-
-        Exception::Exception(const string& reason) {
-            m_reason = "Exception: " + reason;
-        }
-
-        const char*
-        Exception::what() const noexcept {
-            return m_reason.c_str();
-        }
-
-        /*static*/
-        const string
-        NoMethodException::REASON = "no method found";
-
-        NoMethodException::NoMethodException(const std::type_info& obj, const string& type, const string& op)
-        : Exception(
-        string("no ")
-        + type
-        + " '"
-        + op
-        + "' found for '"
-        + demangleName(obj.name())
-        + "'"
-        ) {
-        }
-
-        InvalidTypeException::InvalidTypeException(const std::type_info& found, const string& expected)
-        : Exception(
-        string("found '")
-        + demangleName(found.name())
-        + "', expected '"
-        + expected
-        + "'") {
-        }
-
-        IndexException::IndexException(const string& found, const string& expected)
-        : Exception(
-        string("invalid index.  Found '")
-        + found
-        + "', expected '"
-        + expected
-        + "'"
-        ) {
-        }
-
     }
 }
 

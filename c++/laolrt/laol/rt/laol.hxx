@@ -32,7 +32,6 @@
 #ifndef _laol_rt_laol_hxx_
 #define _laol_rt_laol_hxx_
 
-#include <exception>
 #include <cmath>
 #include <vector>
 #include <array>
@@ -40,6 +39,7 @@
 #include <map>
 #include "xyzzy/assert.hxx"
 #include "xyzzy/refcnt.hxx"
+#include "laol/rt/exception.hxx"
 
 #define NO_COPY_CONSTRUCTORS(_t)            \
     _t(const _t&) = delete;                 \
@@ -50,8 +50,6 @@ namespace laol {
         using std::vector;
         using std::string;
         using std::array;
-
-        string demangleName(const char* n);
 
         template<typename T>
         inline string getClassName(T p) {
@@ -119,12 +117,12 @@ namespace laol {
                 return (eNull == m_type);
             }
 
-            bool asBool() const {
+            bool toBool() const {
                 return (eBool == m_type) && m_dat.u_bool;
             }
 
-            unsigned long int asULInt() const;
-            long int asLInt() const;
+            unsigned long int toULInt() const;
+            long int toLInt() const;
 
             // true if int variant
             bool isInt() const;
@@ -168,7 +166,7 @@ namespace laol {
             //
             // logical
             //
-            LaolObj operator!(const LaolObj& opB);
+            LaolObj operator!();
             LaolObj operator||(const LaolObj& opB);
             LaolObj operator&&(const LaolObj& opB);
 
@@ -184,6 +182,11 @@ namespace laol {
                 return dynamic_cast<const T&> (asTPRcLaol()->asT());
             }
 
+            template<typename T>
+            bool isA() const {
+                return typeid(asTPLaol()) == typeid(T*);
+            }
+            
             virtual ~LaolObj();
 
         private:
@@ -373,6 +376,53 @@ namespace laol {
             friend class Laol; //to optimize operator=()
         };
 
+#ifdef BINARY_OPS
+
+        LaolObj operator<<(LaolObj& opA, const LaolObj& opB) {
+            return opA.operator<<(opB);
+        }
+
+        LaolObj operator>>(LaolObj& opA, const LaolObj& opB) {
+            return opA.operator>>(opB);
+        }
+
+        LaolObj operator+(LaolObj& opA, const LaolObj& opB) {
+            return opA.operator+(opB);
+        }
+
+        LaolObj operator==(LaolObj& opA, const LaolObj& opB) {
+            return opA.operator==(opB);
+        }
+
+        LaolObj operator>(LaolObj& opA, const LaolObj& opB) {
+            return opA.operator>(opB);
+        }
+
+        LaolObj operator<(LaolObj& opA, const LaolObj& opB) {
+            return opA.operator<(opB);
+        }
+
+        LaolObj operator!=(LaolObj& opA, const LaolObj& opB) {
+            return opA.operator!=(opB);
+        }
+
+        LaolObj operator<=(LaolObj& opA, const LaolObj& opB) {
+            return opA.operator<=(opB);
+        }
+
+        LaolObj operator>=(LaolObj& opA, const LaolObj& opB) {
+            return opA.operator>=(opB);
+        }
+
+        LaolObj operator||(LaolObj& opA, const LaolObj& opB) {
+            return opA.operator||(opB);
+        }
+
+        LaolObj operator&&(LaolObj& opA, const LaolObj& opB) {
+            return opA.operator&&(opB);
+        }
+#endif //BINARY_OPS
+
         // Use toBool in 'if (expr)' -> 'if (toBool(expr))' in transpiler (laol -> c++).
         // Note: if 'operator bool()' defined, opens pandora box (of ambiguities)
         // and breaks the more natural primitive conversions: LaolObj(T val)...
@@ -384,7 +434,7 @@ namespace laol {
 
         template<>
         inline auto toBool<LaolObj>(const LaolObj& expr) {
-            return expr.asBool();
+            return expr.toBool();
         }
 
         // Base class for any object
@@ -406,10 +456,11 @@ namespace laol {
             /* == */ virtual LaolObj equal(LaolObj& self, const LaolObj& opB);
             /* <  */ virtual LaolObj less(LaolObj& self, const LaolObj& opB);
             /* >  */ virtual LaolObj greater(LaolObj& self, const LaolObj& opB);
-            /* !  */ virtual LaolObj negate(LaolObj& self, const LaolObj& opB);
+            /* !  */ virtual LaolObj negate(LaolObj& self, const LaolObj&);
             /* || */ virtual LaolObj logical_or(LaolObj& self, const LaolObj& opB);
             /* && */ virtual LaolObj logical_and(LaolObj& self, const LaolObj& opB);
-            
+            /*[]= */ virtual LaolObj subscript_assign(LaolObj& self, const LaolObj& opB);
+
             //Map special methods for call-by-method too
             virtual LaolObj toString(LaolObj&, Args);
             virtual LaolObj objectId(LaolObj&, Args);
@@ -426,6 +477,12 @@ namespace laol {
             typedef std::map<string, TPMethod> METHOD_BY_NAME;
             static TPMethod getFunc(const METHOD_BY_NAME& methodByName, const string& methodNm);
 
+            //useful for sized subclass
+            size_t actualIndex(long int ix) const;
+
+            virtual size_t length() const;
+
+
         private:
 
             auto objectId() const {
@@ -433,70 +490,6 @@ namespace laol {
             }
 
             static METHOD_BY_NAME stMethodByName;
-        };
-
-        class Exception : public std::exception {
-        public:
-            explicit Exception(const string& reason);
-
-            //allow copy constructors
-
-            virtual const char* what() const noexcept;
-
-        private:
-            string m_reason;
-        };
-
-        class NoMethodException : public Exception {
-        public:
-
-            explicit NoMethodException()
-            : Exception(REASON) {
-            }
-
-            explicit NoMethodException(const string& reason)
-            : Exception(reason) {
-            }
-
-            explicit NoMethodException(const std::type_info &obj, const string& type, const string& op);
-
-            explicit NoMethodException(const std::type_info &obj, const string& op)
-            : NoMethodException(obj, "method", op) {
-            }
-
-            //allow copy constructors
-
-        private:
-            static const string REASON;
-        };
-
-        class NoOperatorException : public NoMethodException {
-        public:
-
-            explicit NoOperatorException(const std::type_info &obj, const string& op)
-            : NoMethodException(obj, "operator", op) {
-            }
-
-            //allow copy constructors
-        };
-
-        class InvalidTypeException : public Exception {
-        public:
-
-            explicit InvalidTypeException(const std::type_info& found, const string& expected);
-
-            explicit InvalidTypeException(const std::type_info& found, const std::type_info& expected) : InvalidTypeException(found, demangleName(expected.name())) {
-            }
-
-            //allow copy constructors
-        };
-
-        class IndexException : public Exception {
-        public:
-
-            explicit IndexException(const string& found, const string& expected);
-
-            //allow copy constructors
         };
     }
 }

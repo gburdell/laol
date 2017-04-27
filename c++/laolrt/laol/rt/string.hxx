@@ -105,9 +105,7 @@ namespace laol {
             };
 
         private:
-            size_t actualIndex(long int ix) const throw(IndexException);
-
-            size_t length() const {
+            size_t length() const override {
                 return m_str.length();
             }
 

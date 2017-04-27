@@ -116,26 +116,13 @@ namespace laol {
         LaolObj
         String::at(LaolObj&, Args args) {
             //todo index-exception
-            return m_str.at(actualIndex(args[0].asLInt()));
+            return m_str.at(actualIndex(args[0].toLInt()));
         }
 
         LaolObj
         String::iterator(LaolObj& self, Args args) {
             return self; //todo
         }
-
-        size_t
-        String::actualIndex(long int ix) const throw (IndexException) {
-            long int actual = (0 <= ix) ? ix : (length() + ix);
-            if ((actual >= length()) || (0 > actual)) {
-                const auto n = length() - 1;
-                throw IndexException(
-                        to_string(ix),
-                        "[" + to_string(-n) + ".." + to_string(n) + "]");
-            }
-            return actual;
-        }
-
     }
 }
 

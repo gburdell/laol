@@ -24,6 +24,7 @@
 
 #include <algorithm>
 #include "laol/rt/array.hxx"
+#include "laol/rt/range.hxx"
 
 namespace laol {
     namespace rt {
@@ -52,6 +53,7 @@ namespace laol {
             m_ar.push_back(opB);
             return self;
         }
+
         LaolObj
         Array::right_shift(LaolObj& self, const LaolObj& opB) {
             m_ar.insert(m_ar.begin(), opB);
@@ -77,9 +79,28 @@ namespace laol {
         }
 
         LaolObj Array::length(LaolObj&, Args) {
-            auto n = m_ar.size();
-            return n;
+            return length();
         }
 
+        /*
+         * args : Range or scalar...
+         */
+        LaolObj Array::subscript(LaolObj& self, Args args) {
+            Vector here;
+            for (const LaolObj& sub : args) {
+                if (sub.isInt()) {
+                    here.push_back(m_ar[actualIndex(sub.toLInt())]);
+                } else if (sub.isObject() && sub.isA<Range>()) {
+                    
+                } else {
+                    ASSERT_NEVER; //todo: error
+                }
+            }
+            return new Array(here);
+        }
+
+        LaolObj Array::subscript_assign(LaolObj& self, Args args) {
+            return self;
+        }
     }
 }

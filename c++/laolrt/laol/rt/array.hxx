@@ -34,6 +34,7 @@
 
 #include <vector>
 #include "laol/rt/laol.hxx"
+#include "laol/rt/exception.hxx"    
 
 namespace laol {
     namespace rt {
@@ -57,12 +58,18 @@ namespace laol {
             virtual LaolObj reverse(LaolObj& self, Args args);
             virtual LaolObj reverse_SELF(LaolObj& self, Args args);
             virtual LaolObj length(LaolObj& self, Args args);
+            virtual LaolObj subscript(LaolObj& self, Args args);
+            virtual LaolObj subscript_assign(LaolObj& self, Args args);
 
             Laol::TPMethod getFunc(const string& methodNm) const override;
 
             virtual ~Array();
 
         private:
+            size_t length() const override {
+                return m_ar.size();
+            }
+
             typedef std::vector<LaolObj> Vector;
 
             Vector m_ar;

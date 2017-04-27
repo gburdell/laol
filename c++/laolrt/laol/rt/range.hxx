@@ -38,29 +38,36 @@ namespace laol {
     namespace rt {
 
         /*
-         * An interface with iterator: low to high range.
+         * An interface with iterator: low to high range: 'lo..hi' (inclusive).
          */
         class Range : public Laol {
         public:
             Range(Args args);
-            
-            virtual LaolObj iterator(LaolObj&, Args) = 0;
 
             Laol::TPMethod getFunc(const string& methodNm) const override;
 
             virtual ~Range() {
             }
 
-        protected:
+            LaolObj lo() const {
+                return m_lo;
+            }
+
+            LaolObj hi() const {
+                return m_hi;
+            }
+
+        private:
+            const bool m_precondition;
             const LaolObj m_lo, m_hi;
-            
-            //access to optimized for builtins...
-            virtual LaolObj iterator() = 0;
 
         private:
             static METHOD_BY_NAME stMethodByName;
 
+            static bool check(Args args);
+
         };
+
     }
 }
 

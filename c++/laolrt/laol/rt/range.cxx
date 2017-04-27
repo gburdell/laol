@@ -28,12 +28,21 @@ namespace laol {
     namespace rt {
         //static
         Laol::METHOD_BY_NAME Range::stMethodByName = {
-            {"length", static_cast<TPMethod> (&Range::iterator)}
+            //todo
         };
 
+        bool
+        Range::check(Args args) {
+            if ((1 > args.size()) && (2 < args.size())) {
+                throw ArityException(args.size(), "1 or 2");
+            }
+            return true;
+        }
+
         Range::Range(Args args)
-        : m_lo(args[0]), m_hi(args[(1 < args.size()) ? 1 : 0]) {
-            ASSERT_TRUE(m_lo <= m_hi); //even works for -3..-1 (from end)
+        : m_precondition(check(args))
+        , m_lo(args[0]), m_hi(args[(1 == args.size()) ? 0 : 1]) {
+            ASSERT_TRUE(toBool(lo() <= hi())); //even works for -3..-1 (from end)
         }
 
         Laol::TPMethod
