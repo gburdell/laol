@@ -11,6 +11,7 @@
 		F455C7C11E93F78A00F13033 /* laol.cxx in Sources */ = {isa = PBXBuildFile; fileRef = F455C7C01E93F78A00F13033 /* laol.cxx */; };
 		F46A07641EAFD63F00324003 /* iterator.cxx in Sources */ = {isa = PBXBuildFile; fileRef = F46A07621EAFD63F00324003 /* iterator.cxx */; };
 		F46A07651EAFD63F00324003 /* range.cxx in Sources */ = {isa = PBXBuildFile; fileRef = F46A07631EAFD63F00324003 /* range.cxx */; };
+		F48290AD1EB177D9006280AF /* exception.cxx in Sources */ = {isa = PBXBuildFile; fileRef = F48290AC1EB177D9006280AF /* exception.cxx */; };
 		F49970F91EAA8C9C00BD9B1B /* string.cxx in Sources */ = {isa = PBXBuildFile; fileRef = F49970F81EAA8C9C00BD9B1B /* string.cxx */; };
 /* End PBXBuildFile section */
 
@@ -20,6 +21,7 @@
 		F455C7C01E93F78A00F13033 /* laol.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = laol.cxx; path = ../../laolrt/laol/rt/laol.cxx; sourceTree = "<group>"; };
 		F46A07621EAFD63F00324003 /* iterator.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = iterator.cxx; path = ../../laolrt/laol/rt/iterator.cxx; sourceTree = "<group>"; };
 		F46A07631EAFD63F00324003 /* range.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = range.cxx; path = ../../laolrt/laol/rt/range.cxx; sourceTree = "<group>"; };
+		F48290AC1EB177D9006280AF /* exception.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = exception.cxx; path = ../../laolrt/laol/rt/exception.cxx; sourceTree = "<group>"; };
 		F49970F81EAA8C9C00BD9B1B /* string.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = string.cxx; path = ../../laolrt/laol/rt/string.cxx; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -37,6 +39,7 @@
 		F455C7B01E93F6AE00F13033 = {
 			isa = PBXGroup;
 			children = (
+				F48290AC1EB177D9006280AF /* exception.cxx */,
 				F46A07621EAFD63F00324003 /* iterator.cxx */,
 				F46A07631EAFD63F00324003 /* range.cxx */,
 				F49970F81EAA8C9C00BD9B1B /* string.cxx */,
@@ -126,6 +129,7 @@
 				F455C7C11E93F78A00F13033 /* laol.cxx in Sources */,
 				F44979591EA42F9800602268 /* array.cxx in Sources */,
 				F46A07641EAFD63F00324003 /* iterator.cxx in Sources */,
+				F48290AD1EB177D9006280AF /* exception.cxx in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

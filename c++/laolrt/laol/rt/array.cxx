@@ -34,7 +34,8 @@ namespace laol {
             {"length", static_cast<TPMethod> (&Array::length)},
             {"empty?", static_cast<TPMethod> (&Array::empty_PRED)},
             {"reverse", static_cast<TPMethod> (&Array::reverse)},
-            {"reverse!", static_cast<TPMethod> (&Array::reverse_SELF)}
+            {"reverse!", static_cast<TPMethod> (&Array::reverse_SELF)},
+            {"subscript", static_cast<TPMethod> (&Array::subscript)}
         };
 
         Array::Array() {
@@ -49,49 +50,28 @@ namespace laol {
         }
 
         LaolObj
-        Array::left_shift(LaolObj& self, const LaolObj& opB) {
-            m_ar.push_back(opB);
+        Array::left_shift(const LaolObj& self, const LaolObj& opB) const {
+            unconst(this)->m_ar.push_back(opB);
             return self;
         }
 
         LaolObj
-        Array::right_shift(LaolObj& self, const LaolObj& opB) {
-            m_ar.insert(m_ar.begin(), opB);
+        Array::right_shift(const LaolObj& self, const LaolObj& opB) const {
+            unconst(this)->m_ar.insert(m_ar.begin(), opB);
             return self;
-        }
-
-        LaolObj
-        Array::empty_PRED(LaolObj&, Args) {
-            return m_ar.empty();
-        }
-
-        LaolObj
-        Array::reverse(LaolObj&, Args) {
-            auto p = new Array(m_ar);
-            std::reverse(std::begin(p->m_ar), std::end(p->m_ar));
-            return p;
-        }
-
-        LaolObj
-        Array::reverse_SELF(LaolObj& self, Args) {
-            std::reverse(std::begin(m_ar), std::end(m_ar));
-            return self;
-        }
-
-        LaolObj Array::length(LaolObj&, Args) {
-            return length();
         }
 
         /*
-         * args : Range or scalar...
+         * args : scalar or Array of vals...
          */
-        LaolObj Array::subscript(LaolObj& self, Args args) {
+        LaolObj
+        Array::subscript(const LaolObj& self, const LaolObj& args) const {
             Vector here;
             for (const LaolObj& sub : args) {
                 if (sub.isInt()) {
                     here.push_back(m_ar[actualIndex(sub.toLInt())]);
                 } else if (sub.isObject() && sub.isA<Range>()) {
-                    
+                    bool debug = true;
                 } else {
                     ASSERT_NEVER; //todo: error
                 }
@@ -99,7 +79,31 @@ namespace laol {
             return new Array(here);
         }
 
-        LaolObj Array::subscript_assign(LaolObj& self, Args args) {
+        LaolObj
+        Array::empty_PRED(const LaolObj&, Args) const {
+            return m_ar.empty();
+        }
+
+        LaolObj
+        Array::reverse(const LaolObj&, Args) const {
+            auto p = new Array(m_ar);
+            std::reverse(std::begin(p->m_ar), std::end(p->m_ar));
+            return p;
+        }
+
+        LaolObj
+        Array::reverse_SELF(const LaolObj& self, Args) const {
+            std::reverse(std::begin(unconst(this)->m_ar), std::end(unconst(this)->m_ar));
+            return self;
+        }
+
+        LaolObj 
+        Array::length(const LaolObj&, Args) const {
+            return length();
+        }
+
+
+        LaolObj Array::subscript_assign(const LaolObj& self, Args args) const {
             return self;
         }
     }

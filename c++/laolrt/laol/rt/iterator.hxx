@@ -43,10 +43,10 @@ namespace laol {
             //allow copy constructors
 
             //unique methods
-            virtual LaolObj next_PRED(LaolObj&, Args);
-            virtual LaolObj next(LaolObj&, Args);
+            virtual LaolObj next_PRED(const LaolObj&, Args) const;
+            virtual LaolObj next(const LaolObj&, Args) const;
             //set current value (does not advance next)
-            virtual LaolObj set(LaolObj&, Args);
+            virtual LaolObj set(const LaolObj&, Args) const;
 
             Laol::TPMethod getFunc(const string& methodNm) const override;
 

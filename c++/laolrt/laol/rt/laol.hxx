@@ -82,8 +82,9 @@ namespace laol {
 
             template<std::size_t N>
             LaolObj(const array<LaolObj, N>& r) {
-                auto debug = N;
-                ASSERT_NEVER; //not implemented yet
+                vector<LaolObj> tmp;
+                tmp.insert(tmp.begin(), r.begin(), r.end());
+                set(tmp);
             }
 
             // LaolObj v1 = std::vector<LaolObj>{56,78};
@@ -133,45 +134,45 @@ namespace laol {
                 return (ePRc == m_type);
             }
 
-            //NOTE: we're not const: since some usages changes 'this'
-            //TODO: add a const version too?
-            LaolObj operator<<(const LaolObj& opB);
-            LaolObj operator>>(const LaolObj& opB);
-            LaolObj operator+(const LaolObj& opB);
-            LaolObj operator[](const LaolObj& opB);
+            // Majority of operators are const, so we'll mark all
+            // as const and unconst as necessary in Laol subclass.
+            LaolObj operator<<(const LaolObj& opB) const;
+            LaolObj operator>>(const LaolObj& opB) const;
+            LaolObj operator+(const LaolObj& opB) const;
+            LaolObj operator[](const LaolObj& opB) const;
             //
             // baseline comparators.
             // (others are generated as function of these).
             //
-            LaolObj operator==(const LaolObj& opB);
-            LaolObj operator>(const LaolObj& opB);
-            LaolObj operator<(const LaolObj& opB);
+            LaolObj operator==(const LaolObj& opB) const;
+            LaolObj operator>(const LaolObj& opB) const;
+            LaolObj operator<(const LaolObj& opB) const;
 
             //
             // generate comparators
             //            
 
-            LaolObj operator!=(const LaolObj& opB) {
+            LaolObj operator!=(const LaolObj& opB) const {
                 return !(*this == opB);
             }
 
-            LaolObj operator<=(const LaolObj& opB) {
+            LaolObj operator<=(const LaolObj& opB) const {
                 return (*this < opB) || (*this == opB);
             }
 
-            LaolObj operator>=(const LaolObj& opB) {
+            LaolObj operator>=(const LaolObj& opB) const {
                 return (*this > opB) || (*this == opB);
             }
 
             //
             // logical
             //
-            LaolObj operator!();
-            LaolObj operator||(const LaolObj& opB);
-            LaolObj operator&&(const LaolObj& opB);
+            LaolObj operator!() const;
+            LaolObj operator||(const LaolObj& opB) const;
+            LaolObj operator&&(const LaolObj& opB) const;
 
             //TPMethod
-            typedef LaolObj(Laol::* TPMethod)(LaolObj& self, Args args);
+            typedef LaolObj(Laol::* TPMethod)(const LaolObj& self, Args args) const;
 
             //call method
             LaolObj operator()(const string& methodNm, Args args);
@@ -184,9 +185,9 @@ namespace laol {
 
             template<typename T>
             bool isA() const {
-                return typeid(asTPLaol()) == typeid(T*);
+                return typeid (asTPLaol()) == typeid (T*);
             }
-            
+
             virtual ~LaolObj();
 
         private:
@@ -266,8 +267,24 @@ namespace laol {
                 return rval;
             }
 
+            template<typename OP>
+            LaolObj primitiveApply(OP op) const {
+                LaolObj rval = numberApply<false>(op);
+                if (rval.isNull()) {
+                    switch (m_type) {
+                        case eChar: rval = op(m_dat.u_char);
+                            break;
+                        case eBool: rval = op(m_dat.u_bool);
+                            break;
+                        default:
+                            ASSERT_NEVER;
+                    }
+                }
+                return rval;
+            }
+
             template<typename BINOP>
-            LaolObj intBinaryOp(const LaolObj& opB, BINOP binop) {
+            LaolObj intBinaryOp(const LaolObj& opB, BINOP binop) const {
                 LaolObj rval = intApply([opB, binop](auto a) {
                     return opB.intApply([a, binop](auto b) {
                         return binop(a, b);
@@ -277,9 +294,19 @@ namespace laol {
             }
 
             template<typename BINOP>
-            LaolObj numberBinaryOp(const LaolObj& opB, BINOP binop) {
+            LaolObj numberBinaryOp(const LaolObj& opB, BINOP binop) const {
                 LaolObj rval = numberApply([opB, binop](auto a) {
                     return opB.numberApply([a, binop](auto b) {
+                        return binop(a, b);
+                    });
+                });
+                return rval;
+            }
+
+            template<typename BINOP>
+            LaolObj primitiveBinaryOp(const LaolObj& opB, BINOP binop) const {
+                LaolObj rval = primitiveApply([opB, binop](auto a) {
+                    return opB.primitiveApply([a, binop](auto b) {
                         return binop(a, b);
                     });
                 });
@@ -365,11 +392,11 @@ namespace laol {
             //Methods to cover primitive types.
             //Note: We dont have a 'self' argument: since
             //not applicable to primitives types.
-            LaolObj toString(Args);
-            LaolObj objectId(Args);
+            LaolObj toString(Args) const;
+            LaolObj objectId(Args) const;
 
             // For primitive operations (no 'self' here).
-            typedef LaolObj(LaolObj::* TPLaolObjMethod)(Args args);
+            typedef LaolObj(LaolObj::* TPLaolObjMethod)(Args args) const;
             typedef std::map<string, TPLaolObjMethod> LAOLOBJ_METHOD_BY_NAME;
             static LAOLOBJ_METHOD_BY_NAME stMethodByName;
 
@@ -378,47 +405,47 @@ namespace laol {
 
 #ifdef BINARY_OPS
 
-        LaolObj operator<<(LaolObj& opA, const LaolObj& opB) {
+        LaolObj operator<<(const LaolObj& opA, const LaolObj& opB) {
             return opA.operator<<(opB);
         }
 
-        LaolObj operator>>(LaolObj& opA, const LaolObj& opB) {
+        LaolObj operator>>(const LaolObj& opA, const LaolObj& opB) {
             return opA.operator>>(opB);
         }
 
-        LaolObj operator+(LaolObj& opA, const LaolObj& opB) {
+        LaolObj operator+(const LaolObj& opA, const LaolObj& opB) {
             return opA.operator+(opB);
         }
 
-        LaolObj operator==(LaolObj& opA, const LaolObj& opB) {
+        LaolObj operator==(const LaolObj& opA, const LaolObj& opB) {
             return opA.operator==(opB);
         }
 
-        LaolObj operator>(LaolObj& opA, const LaolObj& opB) {
+        LaolObj operator>(const LaolObj& opA, const LaolObj& opB) {
             return opA.operator>(opB);
         }
 
-        LaolObj operator<(LaolObj& opA, const LaolObj& opB) {
+        LaolObj operator<(const LaolObj& opA, const LaolObj& opB) {
             return opA.operator<(opB);
         }
 
-        LaolObj operator!=(LaolObj& opA, const LaolObj& opB) {
+        LaolObj operator!=(const LaolObj& opA, const LaolObj& opB) {
             return opA.operator!=(opB);
         }
 
-        LaolObj operator<=(LaolObj& opA, const LaolObj& opB) {
+        LaolObj operator<=(const LaolObj& opA, const LaolObj& opB) {
             return opA.operator<=(opB);
         }
 
-        LaolObj operator>=(LaolObj& opA, const LaolObj& opB) {
+        LaolObj operator>=(const LaolObj& opA, const LaolObj& opB) {
             return opA.operator>=(opB);
         }
 
-        LaolObj operator||(LaolObj& opA, const LaolObj& opB) {
+        LaolObj operator||(const LaolObj& opA, const LaolObj& opB) {
             return opA.operator||(opB);
         }
 
-        LaolObj operator&&(LaolObj& opA, const LaolObj& opB) {
+        LaolObj operator&&(const LaolObj& opA, const LaolObj& opB) {
             return opA.operator&&(opB);
         }
 #endif //BINARY_OPS
@@ -437,6 +464,15 @@ namespace laol {
             return expr.toBool();
         }
 
+        template<typename T>
+        inline T* unconst(const T* p) {
+            return const_cast<T*> (p);
+        }
+
+        inline LaolObj& unconst(const LaolObj& self) {
+            return const_cast<LaolObj&> (self);
+        }
+
         // Base class for any object
 
         class Laol : public TRcObj {
@@ -448,22 +484,22 @@ namespace laol {
 
             //operators (mapped to mnemonic): so we can pass in 'self'
             //http://stackoverflow.com/questions/8679089/c-official-operator-names-keywords
-            /* << */ virtual LaolObj left_shift(LaolObj& self, const LaolObj& opB);
-            /* >> */ virtual LaolObj right_shift(LaolObj& self, const LaolObj& opB);
-            /* +  */ virtual LaolObj add(LaolObj& self, const LaolObj& opB);
-            /* =  */ virtual LaolObj assign(LaolObj& self, const LaolObj& opB);
-            /* [] */ virtual LaolObj subscript(LaolObj& self, const LaolObj& opB);
-            /* == */ virtual LaolObj equal(LaolObj& self, const LaolObj& opB);
-            /* <  */ virtual LaolObj less(LaolObj& self, const LaolObj& opB);
-            /* >  */ virtual LaolObj greater(LaolObj& self, const LaolObj& opB);
-            /* !  */ virtual LaolObj negate(LaolObj& self, const LaolObj&);
-            /* || */ virtual LaolObj logical_or(LaolObj& self, const LaolObj& opB);
-            /* && */ virtual LaolObj logical_and(LaolObj& self, const LaolObj& opB);
-            /*[]= */ virtual LaolObj subscript_assign(LaolObj& self, const LaolObj& opB);
+            /* << */ virtual LaolObj left_shift(const LaolObj& self, const LaolObj& opB) const;
+            /* >> */ virtual LaolObj right_shift(const LaolObj& self, const LaolObj& opB) const;
+            /* +  */ virtual LaolObj add(const LaolObj& self, const LaolObj& opB) const;
+            /* =  */ virtual LaolObj assign(const LaolObj& self, const LaolObj& opB) const;
+            /* [] */ virtual LaolObj subscript(const LaolObj& self, const LaolObj& opB) const;
+            /* == */ virtual LaolObj equal(const LaolObj& self, const LaolObj& opB) const;
+            /* <  */ virtual LaolObj less(const LaolObj& self, const LaolObj& opB) const;
+            /* >  */ virtual LaolObj greater(const LaolObj& self, const LaolObj& opB) const;
+            /* !  */ virtual LaolObj negate(const LaolObj& self, const LaolObj&) const;
+            /* || */ virtual LaolObj logical_or(const LaolObj& self, const LaolObj& opB) const;
+            /* && */ virtual LaolObj logical_and(const LaolObj& self, const LaolObj& opB) const;
+            /*[]= */ virtual LaolObj subscript_assign(const LaolObj& self, const LaolObj& opB) const;
 
             //Map special methods for call-by-method too
-            virtual LaolObj toString(LaolObj&, Args);
-            virtual LaolObj objectId(LaolObj&, Args);
+            virtual LaolObj toString(const LaolObj&, Args) const;
+            virtual LaolObj objectId(const LaolObj&, Args) const;
 
             virtual ~Laol() = 0;
 

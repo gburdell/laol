@@ -59,68 +59,68 @@ namespace laol {
             return Laol::getFunc(stMethodByName, methodNm);
         }
 
-        LaolObj String::length(LaolObj&, Args) {
+        LaolObj String::length(const LaolObj&, Args) const {
             auto n = length();
             return n;
         }
 
         LaolObj
-        String::empty_PRED(LaolObj&, Args) {
+        String::empty_PRED(const LaolObj&, Args) const {
             return m_str.empty();
         }
 
         LaolObj
-        String::reverse(LaolObj&, Args) {
+        String::reverse(const LaolObj&, Args) const {
             auto p = new String(m_str);
             std::reverse(std::begin(p->m_str), std::end(p->m_str));
             return p;
         }
 
         LaolObj
-        String::reverse_SELF(LaolObj& self, Args) {
-            std::reverse(std::begin(m_str), std::end(m_str));
+        String::reverse_SELF(const LaolObj& self, Args) const {
+            std::reverse(std::begin(unconst(this)->m_str), std::end(unconst(this)->m_str));
             return self;
         }
 
         LaolObj
-        String::append(LaolObj& self, Args args) {
+        String::append(const LaolObj& self, Args args) const {
             string r = m_str + getString(args[0]);
             return new String(r);
         }
 
         LaolObj
-        String::append_SELF(LaolObj& self, Args args) {
-            m_str += getString(args[0]);
+        String::append_SELF(const LaolObj& self, Args args) const {
+            unconst(this)->m_str += getString(args[0]);
             return self;
         }
 
         LaolObj
-        String::prepend(LaolObj& self, Args args) {
+        String::prepend(const LaolObj& self, Args args) const {
             string r = getString(args[0]) + m_str;
             return new String(r);
         }
 
         LaolObj
-        String::prepend_SELF(LaolObj& self, Args args) {
-            m_str = getString(args[0]) + m_str;
+        String::prepend_SELF(const LaolObj& self, Args args) const {
+            unconst(this)->m_str = getString(args[0]) + m_str;
             return self;
         }
 
         //We're already a string!
 
         LaolObj
-        String::toString(LaolObj& self, Args) {
+        String::toString(const LaolObj& self, Args) const {
             return self;
         }
 
         LaolObj
-        String::at(LaolObj&, Args args) {
+        String::at(const LaolObj&, Args args) const {
             //todo index-exception
             return m_str.at(actualIndex(args[0].toLInt()));
         }
 
         LaolObj
-        String::iterator(LaolObj& self, Args args) {
+        String::iterator(const LaolObj& self, Args args) const {
             return self; //todo
         }
     }

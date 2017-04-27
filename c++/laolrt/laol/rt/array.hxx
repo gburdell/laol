@@ -50,16 +50,16 @@ namespace laol {
             Array& operator=(const Array& r) = delete;
 
             //operators
-            virtual LaolObj left_shift(LaolObj& self, const LaolObj& opB) override;
-            virtual LaolObj right_shift(LaolObj& self, const LaolObj& opB) override;
+            virtual LaolObj left_shift(const LaolObj& self, const LaolObj& opB) const override;
+            virtual LaolObj right_shift(const LaolObj& self, const LaolObj& opB) const override;
+            virtual LaolObj subscript(const LaolObj& self, const LaolObj& opB) const override;
 
             //unique methods
-            virtual LaolObj empty_PRED(LaolObj& self, Args args);
-            virtual LaolObj reverse(LaolObj& self, Args args);
-            virtual LaolObj reverse_SELF(LaolObj& self, Args args);
-            virtual LaolObj length(LaolObj& self, Args args);
-            virtual LaolObj subscript(LaolObj& self, Args args);
-            virtual LaolObj subscript_assign(LaolObj& self, Args args);
+            virtual LaolObj empty_PRED(const LaolObj& self, Args args) const;
+            virtual LaolObj reverse(const LaolObj& self, Args args) const;
+            virtual LaolObj reverse_SELF(const LaolObj& self, Args args) const;
+            virtual LaolObj length(const LaolObj& self, Args args) const;
+            virtual LaolObj subscript_assign(const LaolObj& self, Args args) const;
 
             Laol::TPMethod getFunc(const string& methodNm) const override;
 

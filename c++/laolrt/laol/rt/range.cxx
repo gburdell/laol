@@ -42,7 +42,7 @@ namespace laol {
         Range::Range(Args args)
         : m_precondition(check(args))
         , m_lo(args[0]), m_hi(args[(1 == args.size()) ? 0 : 1]) {
-            ASSERT_TRUE(toBool(lo() <= hi())); //even works for -3..-1 (from end)
+            ASSERT_TRUE(toBool(m_lo <= m_hi)); //even works for -3..-1 (from end)
         }
 
         Laol::TPMethod

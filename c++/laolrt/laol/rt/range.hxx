@@ -49,19 +49,10 @@ namespace laol {
             virtual ~Range() {
             }
 
-            LaolObj lo() const {
-                return m_lo;
-            }
-
-            LaolObj hi() const {
-                return m_hi;
-            }
-
-        private:
-            const bool m_precondition;
             const LaolObj m_lo, m_hi;
 
         private:
+            const bool m_precondition;
             static METHOD_BY_NAME stMethodByName;
 
             static bool check(Args args);

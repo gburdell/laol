@@ -46,7 +46,7 @@ namespace laol {
             explicit String(const char* p) : m_str(p) {
             }
 
-            explicit String(string& s) : m_str(s) {
+            explicit String(const string& s) : m_str(s) {
             }
 
 
@@ -54,31 +54,31 @@ namespace laol {
 
             //operators
 
-            virtual LaolObj left_shift(LaolObj& self, const LaolObj& opB) override {
+            virtual LaolObj left_shift(const LaolObj& self, const LaolObj& opB) const override {
                 return append_SELF(self,{opB});
             }
 
-            virtual LaolObj right_shift(LaolObj& self, const LaolObj& opB) override {
+            virtual LaolObj right_shift(const LaolObj& self, const LaolObj& opB) const override {
                 return prepend_SELF(self,{opB});
             }
 
-            virtual LaolObj add(LaolObj& self, const LaolObj& opB) override {
+            virtual LaolObj add(const LaolObj& self, const LaolObj& opB) const override {
                 return append(self,{opB});
             }
 
             //unique methods
-            virtual LaolObj empty_PRED(LaolObj& self, Args args);
-            virtual LaolObj reverse(LaolObj& self, Args args);
-            virtual LaolObj reverse_SELF(LaolObj& self, Args args);
-            virtual LaolObj length(LaolObj& self, Args args);
-            virtual LaolObj append(LaolObj& self, Args args);
-            virtual LaolObj append_SELF(LaolObj& self, Args args);
-            virtual LaolObj prepend(LaolObj& self, Args args);
-            virtual LaolObj prepend_SELF(LaolObj& self, Args args);
-            virtual LaolObj iterator(LaolObj& self, Args args);
+            virtual LaolObj empty_PRED(const LaolObj& self, Args args) const;
+            virtual LaolObj reverse(const LaolObj& self, Args args) const;
+            virtual LaolObj reverse_SELF(const LaolObj& self, Args args) const;
+            virtual LaolObj length(const LaolObj& self, Args args) const;
+            virtual LaolObj append(const LaolObj& self, Args args) const;
+            virtual LaolObj append_SELF(const LaolObj& self, Args args) const;
+            virtual LaolObj prepend(const LaolObj& self, Args args) const;
+            virtual LaolObj prepend_SELF(const LaolObj& self, Args args) const;
+            virtual LaolObj iterator(const LaolObj& self, Args args) const;
             //at(i) can take negative index too (-n is "n" from end, as in Ruby)
-            virtual LaolObj at(LaolObj& self, Args args);
-            virtual LaolObj toString(LaolObj& self, Args args) override;
+            virtual LaolObj at(const LaolObj& self, Args args) const;
+            virtual LaolObj toString(const LaolObj& self, Args args) const override;
 
             Laol::TPMethod getFunc(const string& methodNm) const override;
 

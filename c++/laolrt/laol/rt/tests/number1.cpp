@@ -77,6 +77,7 @@ void test3() {
     //subscript
     LaolObj a1 = std::array<LaolObj,2>{23,34};
     LaolObj a2 = std::vector<LaolObj>{56,78};
+    LaolObj v1 = a1[0];
 }
 
 int main(int argc, char** argv) {
