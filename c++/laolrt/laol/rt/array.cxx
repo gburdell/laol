@@ -61,18 +61,17 @@ namespace laol {
         }
 
         /*
-         * args : Array of vals...
+         * opB : scalar or Array of vals...
          */
         LaolObj
         Array::subscript(const LaolObj& self, const LaolObj& opB) const {
-            ASSERT_TRUE(opB.isA<Array>());
-            const Vector& args = opB.toType<Array>().m_ar;
+            const Vector& args = opB.isA<Array>() ? opB.toType<Array>().m_ar : toV(opB);
             Vector here;
             for (const LaolObj& sub : args) {
                 if (sub.isInt()) {
                     here.push_back(m_ar[actualIndex(sub.toLInt())]);
                 } else if (sub.isObject() && sub.isA<Range>()) {
-                    bool debug = true;
+                    auto debug = "todo";
                 } else {
                     ASSERT_NEVER; //todo: error
                 }
@@ -81,30 +80,31 @@ namespace laol {
         }
 
         LaolObj
-        Array::empty_PRED(const LaolObj&, Args) const {
+        Array::empty_PRED(const LaolObj&, const LaolObj&) const {
             return m_ar.empty();
         }
 
         LaolObj
-        Array::reverse(const LaolObj&, Args) const {
+        Array::reverse(const LaolObj&, const LaolObj&) const {
             auto p = new Array(m_ar);
             std::reverse(std::begin(p->m_ar), std::end(p->m_ar));
             return p;
         }
 
         LaolObj
-        Array::reverse_SELF(const LaolObj& self, Args) const {
+        Array::reverse_SELF(const LaolObj& self, const LaolObj&) const {
             std::reverse(std::begin(unconst(this)->m_ar), std::end(unconst(this)->m_ar));
             return self;
         }
 
         LaolObj 
-        Array::length(const LaolObj&, Args) const {
+        Array::length(const LaolObj&, const LaolObj&) const {
             return length();
         }
 
 
-        LaolObj Array::subscript_assign(const LaolObj& self, Args args) const {
+        LaolObj 
+        Array::subscript_assign(const LaolObj& self, const LaolObj& args) const {
             return self;
         }
     }

@@ -39,16 +39,16 @@ namespace laol {
         }
 
         LaolObj
-        Iterator::next(const LaolObj&, Args) const {
+        Iterator::next(const LaolObj&, const LaolObj&) const {
             return unconst(this)->next();
         }
 
         LaolObj
-        Iterator::next_PRED(const LaolObj&, Args) const {
+        Iterator::next_PRED(const LaolObj&, const LaolObj&) const {
             return hasNext();
         }
 
-        LaolObj Iterator::set(const LaolObj&, Args args) const {
+        LaolObj Iterator::set(const LaolObj&, const LaolObj& args) const {
             return unconst(this)->set(args);
         }
 

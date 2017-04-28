@@ -67,7 +67,7 @@ namespace laol {
         typedef PTRcObjPtr<Laol> TRcLaol;
 
         class LaolObj;
-        
+
         //Convenient type (for args) so we can pass {v1,v2,...}
         typedef const vector<LaolObj>& Args;
 
@@ -173,13 +173,14 @@ namespace laol {
             LaolObj operator&&(const LaolObj& opB) const;
 
             //TPMethod
-            typedef LaolObj(Laol::* TPMethod)(const LaolObj& self, Args args) const;
+            typedef LaolObj(Laol::* TPMethod)(const LaolObj& self, const LaolObj& args) const;
 
             //call method
-            LaolObj operator()(const string& methodNm, Args args);
+            LaolObj operator()(const string& methodNm, const LaolObj& args);
             LaolObj operator()(const string& methodNm);
 
             //cast as subclass of Laol.
+
             template<typename T>
             const T& toType() const {
                 return dynamic_cast<const T&> (asTPRcLaol()->asT());
@@ -188,7 +189,7 @@ namespace laol {
             template<typename T>
             bool isA() const {
                 ASSERT_TRUE(isObject());
-                return (0 != dynamic_cast<const T*>(asTPLaol()));
+                return (0 != dynamic_cast<const T*> (asTPLaol()));
             }
 
             virtual ~LaolObj();
@@ -395,11 +396,11 @@ namespace laol {
             //Methods to cover primitive types.
             //Note: We dont have a 'self' argument: since
             //not applicable to primitives types.
-            LaolObj toString(Args) const;
-            LaolObj objectId(Args) const;
+            LaolObj toString(const LaolObj&) const;
+            LaolObj objectId(const LaolObj&) const;
 
             // For primitive operations (no 'self' here).
-            typedef LaolObj(LaolObj::* TPLaolObjMethod)(Args args) const;
+            typedef LaolObj(LaolObj::* TPLaolObjMethod)(const LaolObj& args) const;
             typedef std::map<string, TPLaolObjMethod> LAOLOBJ_METHOD_BY_NAME;
             static LAOLOBJ_METHOD_BY_NAME stMethodByName;
 
@@ -476,6 +477,23 @@ namespace laol {
             return const_cast<LaolObj&> (self);
         }
 
+        // Create vector via toV(obj1, obj2, ...)
+        template<typename T>
+        vector<LaolObj>
+        toV(T r) {
+            std::vector<LaolObj> sv;
+            sv.push_back(r);
+            return sv;
+        }
+
+        template<typename T, typename... Args>
+        vector<LaolObj>
+        toV(T first, Args... args) {
+            auto r = toV(args...);
+            r.insert(r.begin(), first);
+            return r;
+        }
+
         // Base class for any object
 
         class Laol : public TRcObj {
@@ -501,8 +519,8 @@ namespace laol {
             /*[]= */ virtual LaolObj subscript_assign(const LaolObj& self, const LaolObj& opB) const;
 
             //Map special methods for call-by-method too
-            virtual LaolObj toString(const LaolObj&, Args) const;
-            virtual LaolObj objectId(const LaolObj&, Args) const;
+            virtual LaolObj toString(const LaolObj&, const LaolObj&) const;
+            virtual LaolObj objectId(const LaolObj&, const LaolObj&) const;
 
             virtual ~Laol() = 0;
 

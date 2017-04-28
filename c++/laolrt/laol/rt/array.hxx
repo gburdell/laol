@@ -55,11 +55,11 @@ namespace laol {
             virtual LaolObj subscript(const LaolObj& self, const LaolObj& opB) const override;
 
             //unique methods
-            virtual LaolObj empty_PRED(const LaolObj& self, Args args) const;
-            virtual LaolObj reverse(const LaolObj& self, Args args) const;
-            virtual LaolObj reverse_SELF(const LaolObj& self, Args args) const;
-            virtual LaolObj length(const LaolObj& self, Args args) const;
-            virtual LaolObj subscript_assign(const LaolObj& self, Args args) const;
+            virtual LaolObj empty_PRED(const LaolObj& self, const LaolObj& args) const;
+            virtual LaolObj reverse(const LaolObj& self, const LaolObj& args) const;
+            virtual LaolObj reverse_SELF(const LaolObj& self, const LaolObj& args) const;
+            virtual LaolObj length(const LaolObj& self, const LaolObj& args) const;
+            virtual LaolObj subscript_assign(const LaolObj& self, const LaolObj& args) const override;
 
             Laol::TPMethod getFunc(const string& methodNm) const override;
 
