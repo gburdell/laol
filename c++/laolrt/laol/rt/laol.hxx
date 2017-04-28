@@ -67,6 +67,7 @@ namespace laol {
         typedef PTRcObjPtr<Laol> TRcLaol;
 
         class LaolObj;
+        
         //Convenient type (for args) so we can pass {v1,v2,...}
         typedef const vector<LaolObj>& Args;
 
@@ -178,14 +179,16 @@ namespace laol {
             LaolObj operator()(const string& methodNm, Args args);
             LaolObj operator()(const string& methodNm);
 
+            //cast as subclass of Laol.
             template<typename T>
-            const T& asType() const {
+            const T& toType() const {
                 return dynamic_cast<const T&> (asTPRcLaol()->asT());
             }
 
             template<typename T>
             bool isA() const {
-                return typeid (asTPLaol()) == typeid (T*);
+                ASSERT_TRUE(isObject());
+                return (0 != dynamic_cast<const T*>(asTPLaol()));
             }
 
             virtual ~LaolObj();

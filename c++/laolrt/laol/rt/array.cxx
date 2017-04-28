@@ -34,8 +34,7 @@ namespace laol {
             {"length", static_cast<TPMethod> (&Array::length)},
             {"empty?", static_cast<TPMethod> (&Array::empty_PRED)},
             {"reverse", static_cast<TPMethod> (&Array::reverse)},
-            {"reverse!", static_cast<TPMethod> (&Array::reverse_SELF)},
-            {"subscript", static_cast<TPMethod> (&Array::subscript)}
+            {"reverse!", static_cast<TPMethod> (&Array::reverse_SELF)}
         };
 
         Array::Array() {
@@ -62,10 +61,12 @@ namespace laol {
         }
 
         /*
-         * args : scalar or Array of vals...
+         * args : Array of vals...
          */
         LaolObj
-        Array::subscript(const LaolObj& self, const LaolObj& args) const {
+        Array::subscript(const LaolObj& self, const LaolObj& opB) const {
+            ASSERT_TRUE(opB.isA<Array>());
+            const Vector& args = opB.toType<Array>().m_ar;
             Vector here;
             for (const LaolObj& sub : args) {
                 if (sub.isInt()) {
@@ -76,7 +77,7 @@ namespace laol {
                     ASSERT_NEVER; //todo: error
                 }
             }
-            return new Array(here);
+            return (1 < here.size()) ? new Array(here) : here[0];
         }
 
         LaolObj

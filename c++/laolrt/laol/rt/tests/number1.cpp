@@ -34,6 +34,7 @@
 #include <array>
 #include "laol/rt/laol.hxx"
 #include "laol/rt/array.hxx"
+#include "laol/rt/range.hxx"
 
 using namespace std;
 using namespace laol::rt;
@@ -73,11 +74,37 @@ void test2() {
     LaolObj i1 = 1234 + 345 % 45;
     i1 = c1 = i1;
 }
+
+template<typename T>
+std::vector<LaolObj> 
+vv(T r) {
+    std::vector<LaolObj> sv;
+    sv.push_back(r);
+    return sv;
+}
+
+template<typename T, typename... Args>
+std::vector<LaolObj>  
+vv(T first, Args... args) {
+  auto r = vv(args...);
+  r.insert(r.begin(), first);
+  return r;
+}
+
 void test3() {
     //subscript
     LaolObj a1 = std::array<LaolObj,2>{23,34};
+    ASSERT_TRUE(a1.isA<laol::rt::Array>());
     LaolObj a2 = std::vector<LaolObj>{56,78};
-    LaolObj v1 = a1[0];
+    LaolObj v1 = a1[std::vector<LaolObj>{0}];
+    ASSERT_TRUE(23 == v1.toLInt());
+    LaolObj o1({1,2,3});
+    a1 << 56 << 78;
+    LaolObj rng1 = new Range({0,2});
+    LaolObj rng2({rng1});
+    LaolObj vv1 = vv(1,2,3);
+    LaolObj sub1 = a1[rng2];
+    ASSERT_TRUE(78 == sub1[-1].toLInt());
 }
 
 int main(int argc, char** argv) {

@@ -47,7 +47,7 @@ namespace laol {
         const string&
         String::getString(const LaolObj& from) {
             LaolObj x = from;
-            const String& z = x("toString").asType<String>();
+            const String& z = x("toString").toType<String>();
             return z.m_str;
         }
 
