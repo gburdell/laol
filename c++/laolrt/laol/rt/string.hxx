@@ -83,7 +83,7 @@ namespace laol {
             Laol::TPMethod getFunc(const string& methodNm) const override;
 
             // Get primitive std::string from 'from'
-            static string getString(const LaolObj& from);
+            static string toStdString(const LaolObj& from);
 
             virtual ~String();
 

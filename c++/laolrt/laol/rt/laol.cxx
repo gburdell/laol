@@ -33,7 +33,7 @@ namespace laol {
     namespace rt {
         using std::to_string;
 
-        static const LaolObj NULLOBJ;
+        /*extern*/ const LaolObj NULLOBJ;
 
         /*static*/
         LaolObj::LAOLOBJ_METHOD_BY_NAME LaolObj::stMethodByName = {
@@ -139,8 +139,8 @@ namespace laol {
                 return set(rhs);
             }
         }
-        
-        LaolObj 
+
+        LaolObj
         LaolObj::subscript_assign(const LaolObj& subscript, const LaolObj& rhs) {
             ASSERT_TRUE(isObject());
             return asTPLaol()->subscript_assign(*this, toV(subscript, rhs));
@@ -241,7 +241,7 @@ namespace laol {
         }
 
         LaolObj
-        LaolObj::operator()(const string& methodNm, const LaolObj& args) {
+        LaolObj::operator()(const string& methodNm, const LaolObj& args, bool mustFind) {
             LaolObj rval;
             if (isObject()) {
                 Laol* pObj = asTPRcLaol()->getPtr();
@@ -253,15 +253,14 @@ namespace laol {
                 }
                 if (nullptr != pMethod) {
                     rval = (pObj->*pMethod)(*this, args);
-                } else {
+                } else if (mustFind) {
                     ASSERT_NEVER; //not implemented
                 }
             } else {
                 auto found = stMethodByName.find(methodNm);
                 if (found != stMethodByName.end()) {
                     rval = (this->*(found->second))(args);
-                } else {
-
+                } else if (mustFind) {
                     ASSERT_NEVER;
                 }
             }
@@ -270,13 +269,11 @@ namespace laol {
 
         LaolObj
         LaolObj::operator()(const string& methodNm) {
-
             return this->operator()(methodNm, NULLOBJ);
         }
 
         bool
         LaolObj::isSameObject(const LaolObj& other) const {
-
             return (this == &other)
                     || ((isObject() && other.isObject())
                     && (asTPLaol() == other.asTPLaol()))
@@ -284,7 +281,6 @@ namespace laol {
         }
 
         LaolObj::~LaolObj() {
-
             cleanup();
         }
 

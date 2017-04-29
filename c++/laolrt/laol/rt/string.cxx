@@ -45,7 +45,7 @@ namespace laol {
 
         /*static*/
         string
-        String::getString(const LaolObj& from) {
+        String::toStdString(const LaolObj& from) {
             LaolObj x = from;
             LaolObj z = x("toString");
             const String& s = z.toType<String>();
@@ -86,25 +86,25 @@ namespace laol {
 
         LaolObj
         String::append(const LaolObj& self, const LaolObj& args) const {
-            string r = m_str + getString(args);
+            string r = m_str + toStdString(args);
             return new String(r);
         }
 
         LaolObj
         String::append_SELF(const LaolObj& self, const LaolObj& args) const {
-            unconst(this)->m_str += getString(args);
+            unconst(this)->m_str += toStdString(args);
             return self;
         }
 
         LaolObj
         String::prepend(const LaolObj& self, const LaolObj& args) const {
-            string r = getString(args) + m_str;
+            string r = toStdString(args) + m_str;
             return new String(r);
         }
 
         LaolObj
         String::prepend_SELF(const LaolObj& self, const LaolObj& args) const {
-            unconst(this)->m_str = getString(args) + m_str;
+            unconst(this)->m_str = toStdString(args) + m_str;
             return self;
         }
 

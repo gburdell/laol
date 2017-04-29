@@ -39,6 +39,7 @@ OBJECTFILES= \
 	${OBJECTDIR}/laol/rt/exception.o \
 	${OBJECTDIR}/laol/rt/iterator.o \
 	${OBJECTDIR}/laol/rt/laol.o \
+	${OBJECTDIR}/laol/rt/ostream.o \
 	${OBJECTDIR}/laol/rt/range.o \
 	${OBJECTDIR}/laol/rt/string.o
 
@@ -98,6 +99,11 @@ ${OBJECTDIR}/laol/rt/laol.o: laol/rt/laol.cxx
 	${MKDIR} -p ${OBJECTDIR}/laol/rt
 	${RM} "$@.d"
 	$(COMPILE.cc) -g -I. -I../../../xyzzy/src -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/laol/rt/laol.o laol/rt/laol.cxx
+
+${OBJECTDIR}/laol/rt/ostream.o: laol/rt/ostream.cxx
+	${MKDIR} -p ${OBJECTDIR}/laol/rt
+	${RM} "$@.d"
+	$(COMPILE.cc) -g -I. -I../../../xyzzy/src -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/laol/rt/ostream.o laol/rt/ostream.cxx
 
 ${OBJECTDIR}/laol/rt/range.o: laol/rt/range.cxx
 	${MKDIR} -p ${OBJECTDIR}/laol/rt
@@ -177,6 +183,19 @@ ${OBJECTDIR}/laol/rt/laol_nomain.o: ${OBJECTDIR}/laol/rt/laol.o laol/rt/laol.cxx
 	    $(COMPILE.cc) -g -I. -I../../../xyzzy/src -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/laol/rt/laol_nomain.o laol/rt/laol.cxx;\
 	else  \
 	    ${CP} ${OBJECTDIR}/laol/rt/laol.o ${OBJECTDIR}/laol/rt/laol_nomain.o;\
+	fi
+
+${OBJECTDIR}/laol/rt/ostream_nomain.o: ${OBJECTDIR}/laol/rt/ostream.o laol/rt/ostream.cxx 
+	${MKDIR} -p ${OBJECTDIR}/laol/rt
+	@NMOUTPUT=`${NM} ${OBJECTDIR}/laol/rt/ostream.o`; \
+	if (echo "$$NMOUTPUT" | ${GREP} '|main$$') || \
+	   (echo "$$NMOUTPUT" | ${GREP} 'T main$$') || \
+	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
+	then  \
+	    ${RM} "$@.d";\
+	    $(COMPILE.cc) -g -I. -I../../../xyzzy/src -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/laol/rt/ostream_nomain.o laol/rt/ostream.cxx;\
+	else  \
+	    ${CP} ${OBJECTDIR}/laol/rt/ostream.o ${OBJECTDIR}/laol/rt/ostream_nomain.o;\
 	fi
 
 ${OBJECTDIR}/laol/rt/range_nomain.o: ${OBJECTDIR}/laol/rt/range.o laol/rt/range.cxx 

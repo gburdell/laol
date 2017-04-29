@@ -68,6 +68,11 @@ namespace laol {
 
         class LaolObj;
 
+        // prefix with 'l' to not confuse with cout/cerr, endl
+        extern const LaolObj lcerr;
+        extern const LaolObj lcout;
+        extern const LaolObj lendl; //newline and flush
+
         //Convenient type (for args) so we can pass {v1,v2,...}
         typedef const vector<LaolObj>& Args;
 
@@ -108,7 +113,7 @@ namespace laol {
             }
 
             LaolObj operator=(const LaolObj& rhs);
-            
+
             // []=
             LaolObj subscript_assign(const LaolObj& subscript, const LaolObj& rhs);
 
@@ -179,10 +184,15 @@ namespace laol {
             typedef LaolObj(Laol::* TPMethod)(const LaolObj& self, const LaolObj& args) const;
 
             //call method
-            LaolObj operator()(const string& methodNm, const LaolObj& args);
+            LaolObj operator()(const string& methodNm, const LaolObj& args, bool mustFind = true);
             LaolObj operator()(const string& methodNm);
+            
+            //call method if it exists (no error: as operator() does).
+            LaolObj ifMethod(const string& methodNm, const LaolObj& args) {
+                return (*this)(methodNm, args, false);
+            }
 
-            //cast as subclass of Laol.
+            //cast as subclass of Laol
 
             template<typename T>
             const T& toType() const {
@@ -195,7 +205,23 @@ namespace laol {
             }
 
             bool isSameObject(const LaolObj& other) const;
-            
+
+            template<typename OP>
+            LaolObj primitiveApply(OP op) const {
+                LaolObj rval = numberApply<false>(op);
+                if (rval.isNull()) {
+                    switch (m_type) {
+                        case eChar: rval = op(m_dat.u_char);
+                            break;
+                        case eBool: rval = op(m_dat.u_bool);
+                            break;
+                        default:
+                            ASSERT_NEVER;
+                    }
+                }
+                return rval;
+            }
+
             virtual ~LaolObj();
 
         private:
@@ -270,22 +296,6 @@ namespace laol {
                             if (DO_ASSERT) {
                                 ASSERT_NEVER;
                             }
-                    }
-                }
-                return rval;
-            }
-
-            template<typename OP>
-            LaolObj primitiveApply(OP op) const {
-                LaolObj rval = numberApply<false>(op);
-                if (rval.isNull()) {
-                    switch (m_type) {
-                        case eChar: rval = op(m_dat.u_char);
-                            break;
-                        case eBool: rval = op(m_dat.u_bool);
-                            break;
-                        default:
-                            ASSERT_NEVER;
                     }
                 }
                 return rval;
@@ -411,52 +421,7 @@ namespace laol {
             friend class Laol; //to optimize operator=()
         };
 
-#ifdef BINARY_OPS
-
-        LaolObj operator<<(const LaolObj& opA, const LaolObj& opB) {
-            return opA.operator<<(opB);
-        }
-
-        LaolObj operator>>(const LaolObj& opA, const LaolObj& opB) {
-            return opA.operator>>(opB);
-        }
-
-        LaolObj operator+(const LaolObj& opA, const LaolObj& opB) {
-            return opA.operator+(opB);
-        }
-
-        LaolObj operator==(const LaolObj& opA, const LaolObj& opB) {
-            return opA.operator==(opB);
-        }
-
-        LaolObj operator>(const LaolObj& opA, const LaolObj& opB) {
-            return opA.operator>(opB);
-        }
-
-        LaolObj operator<(const LaolObj& opA, const LaolObj& opB) {
-            return opA.operator<(opB);
-        }
-
-        LaolObj operator!=(const LaolObj& opA, const LaolObj& opB) {
-            return opA.operator!=(opB);
-        }
-
-        LaolObj operator<=(const LaolObj& opA, const LaolObj& opB) {
-            return opA.operator<=(opB);
-        }
-
-        LaolObj operator>=(const LaolObj& opA, const LaolObj& opB) {
-            return opA.operator>=(opB);
-        }
-
-        LaolObj operator||(const LaolObj& opA, const LaolObj& opB) {
-            return opA.operator||(opB);
-        }
-
-        LaolObj operator&&(const LaolObj& opA, const LaolObj& opB) {
-            return opA.operator&&(opB);
-        }
-#endif //BINARY_OPS
+        extern const LaolObj NULLOBJ;
 
         // Use toBool in 'if (expr)' -> 'if (toBool(expr))' in transpiler (laol -> c++).
         // Note: if 'operator bool()' defined, opens pandora box (of ambiguities)
@@ -482,6 +447,7 @@ namespace laol {
         }
 
         // Create vector via toV(obj1, obj2, ...)
+
         template<typename T>
         vector<LaolObj>
         toV(T r) {

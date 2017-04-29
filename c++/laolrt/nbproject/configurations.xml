@@ -8,6 +8,7 @@
       <itemPath>laol/rt/exception.hxx</itemPath>
       <itemPath>laol/rt/iterator.hxx</itemPath>
       <itemPath>laol/rt/laol.hxx</itemPath>
+      <itemPath>laol/rt/ostream.hxx</itemPath>
       <itemPath>laol/rt/range.hxx</itemPath>
       <itemPath>laol/rt/string.hxx</itemPath>
     </logicalFolder>
@@ -22,6 +23,7 @@
       <itemPath>laol/rt/exception.cxx</itemPath>
       <itemPath>laol/rt/iterator.cxx</itemPath>
       <itemPath>laol/rt/laol.cxx</itemPath>
+      <itemPath>laol/rt/ostream.cxx</itemPath>
       <itemPath>laol/rt/range.cxx</itemPath>
       <itemPath>laol/rt/string.cxx</itemPath>
     </logicalFolder>
@@ -97,6 +99,7 @@
             <pElem>.</pElem>
             <pElem>.</pElem>
             <pElem>.</pElem>
+            <pElem>.</pElem>
           </linkerDynSerch>
         </linkerTool>
       </folder>
@@ -114,6 +117,7 @@
         <linkerTool>
           <output>${TESTDIR}/TestFiles/f1</output>
           <linkerDynSerch>
+            <pElem>.</pElem>
             <pElem>.</pElem>
             <pElem>.</pElem>
             <pElem>.</pElem>
@@ -151,6 +155,10 @@
       <item path="laol/rt/laol.cxx" ex="false" tool="1" flavor2="0">
       </item>
       <item path="laol/rt/laol.hxx" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="laol/rt/ostream.cxx" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="laol/rt/ostream.hxx" ex="false" tool="3" flavor2="0">
       </item>
       <item path="laol/rt/range.cxx" ex="false" tool="1" flavor2="0">
       </item>
@@ -223,6 +231,7 @@
             <pElem>.</pElem>
             <pElem>.</pElem>
             <pElem>.</pElem>
+            <pElem>.</pElem>
           </linkerDynSerch>
         </linkerTool>
       </folder>
@@ -240,6 +249,7 @@
         <linkerTool>
           <output>${TESTDIR}/TestFiles/f1</output>
           <linkerDynSerch>
+            <pElem>.</pElem>
             <pElem>.</pElem>
             <pElem>.</pElem>
             <pElem>.</pElem>
@@ -273,6 +283,10 @@
       <item path="laol/rt/laol.cxx" ex="false" tool="1" flavor2="0">
       </item>
       <item path="laol/rt/laol.hxx" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="laol/rt/ostream.cxx" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="laol/rt/ostream.hxx" ex="false" tool="3" flavor2="0">
       </item>
       <item path="laol/rt/range.cxx" ex="false" tool="1" flavor2="0">
       </item>

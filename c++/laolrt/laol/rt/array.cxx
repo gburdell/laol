@@ -93,7 +93,7 @@ namespace laol {
                 if (doComma) {
                     oss << ", ";
                 }
-                const string& s = String::getString(ele);
+                const string& s = String::toStdString(ele);
                 if (ele.isA<String>()) {
                     oss << '"' << s << '"';
                 } else {

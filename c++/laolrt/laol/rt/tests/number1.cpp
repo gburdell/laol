@@ -1,4 +1,4 @@
-/*
+    /*
  * The MIT License
  *
  * Copyright 2017 kpfalzer.
@@ -98,8 +98,9 @@ void test3() {
     vv1 = toV(11,22,33,44,55,66,77,88,99);
     ASSERT_TRUE(9 == vv1("length").toLInt());
     vv1.subscript_assign(toV(-1,-2,-3), toV('a','b','c'));
-    string s = String::getString(vv1);
+    string s = String::toStdString(vv1);
     s += "";
+    lcout << vv1 << lendl << 1234 << lendl;
 }
 
 int main(int argc, char** argv) {
