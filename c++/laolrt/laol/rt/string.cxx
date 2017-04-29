@@ -1,4 +1,4 @@
-/*
+ /*
  * The MIT License
  *
  * Copyright 2017 kpfalzer.
@@ -44,11 +44,13 @@ namespace laol {
         };
 
         /*static*/
-        const string&
+        string
         String::getString(const LaolObj& from) {
             LaolObj x = from;
-            const String& z = x("toString").toType<String>();
-            return z.m_str;
+            LaolObj z = x("toString");
+            const String& s = z.toType<String>();
+            string ss = s.m_str;
+            return ss;
         }
 
         String::~String() {

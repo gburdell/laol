@@ -87,7 +87,7 @@ namespace laol {
         ) {
         }
 
-        ArityException::ArityException(unsigned int found, const string& expected) 
+        ArityException::ArityException(long int found, const string& expected) 
         : Exception(
         string("invalid # of arguments.  Found ")
         + to_string(found)

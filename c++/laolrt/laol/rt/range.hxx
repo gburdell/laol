@@ -38,7 +38,8 @@ namespace laol {
     namespace rt {
 
         /*
-         * An interface with iterator: low to high range: 'lo..hi' (inclusive).
+         * Bounded, inclusive range: [begin..end].
+         * No restriction on domain or order: begin>end or begin<end.
          */
         class Range : public Laol {
         public:
@@ -49,7 +50,7 @@ namespace laol {
             virtual ~Range() {
             }
 
-            const LaolObj m_lo, m_hi;
+            const LaolObj m_begin, m_end;
 
         private:
             const bool m_precondition;

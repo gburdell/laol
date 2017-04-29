@@ -45,9 +45,7 @@ namespace laol {
             //unique methods
             virtual LaolObj next_PRED(const LaolObj&, const LaolObj&) const;
             virtual LaolObj next(const LaolObj&, const LaolObj&) const;
-            //set current value (does not advance next)
-            virtual LaolObj set(const LaolObj&, const LaolObj&) const;
-
+            
             Laol::TPMethod getFunc(const string& methodNm) const override;
 
             virtual ~Iterator() {
@@ -58,8 +56,6 @@ namespace laol {
             virtual LaolObj hasNext() const = 0;
 
             virtual LaolObj next() = 0;
-            
-            virtual LaolObj set(const LaolObj&) = 0;
 
         private:
             static METHOD_BY_NAME stMethodByName;

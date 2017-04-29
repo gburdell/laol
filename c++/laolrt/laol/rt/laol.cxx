@@ -56,8 +56,12 @@ namespace laol {
                 return true;
             });
             if (ok.isNull()) {
-                ASSERT_TRUE(eBool == m_type);
-                oss << (m_dat.u_bool ? "true" : "false");
+                if (eBool == m_type) {
+                    oss << (m_dat.u_bool ? "true" : "false");
+                } else {
+                    ASSERT_TRUE(eChar == m_type);
+                    oss << '\'' << m_dat.u_char << '\'';
+                }
             }
             string s = oss.str();
             return new String(s);
@@ -129,11 +133,17 @@ namespace laol {
         LaolObj
         LaolObj::operator=(const LaolObj& rhs) {
             if (isObject()) {
-                return asTPLaol()->assign(*this,{rhs});
+                return asTPLaol()->assign(*this, rhs);
             } else {
                 cleanup();
                 return set(rhs);
             }
+        }
+        
+        LaolObj 
+        LaolObj::subscript_assign(const LaolObj& subscript, const LaolObj& rhs) {
+            ASSERT_TRUE(isObject());
+            return asTPLaol()->subscript_assign(*this, toV(subscript, rhs));
         }
 
         LaolObj
@@ -165,7 +175,6 @@ namespace laol {
 
         LaolObj
         LaolObj::operator[](const LaolObj& opB) const {
-            ASSERT_TRUE(isObject());
             return asTPLaol()->subscript(*this, opB);
         }
 
@@ -210,6 +219,9 @@ namespace laol {
 
         LaolObj
         LaolObj::operator==(const LaolObj& opB) const {
+            if (isSameObject(opB)) {
+                return true;
+            }
             return isObject()
                     ? asTPLaol()->equal(*this, opB)
                     : primitiveBinaryOp(opB, [](auto a, auto b) {
@@ -221,6 +233,7 @@ namespace laol {
         LaolObj::cleanup() {
             if (isObject()) {
                 if (asTPRcLaol()->decr()) {
+
                     delete m_dat.u_prc;
                 }
             }
@@ -248,6 +261,7 @@ namespace laol {
                 if (found != stMethodByName.end()) {
                     rval = (this->*(found->second))(args);
                 } else {
+
                     ASSERT_NEVER;
                 }
             }
@@ -256,10 +270,21 @@ namespace laol {
 
         LaolObj
         LaolObj::operator()(const string& methodNm) {
+
             return this->operator()(methodNm, NULLOBJ);
         }
 
+        bool
+        LaolObj::isSameObject(const LaolObj& other) const {
+
+            return (this == &other)
+                    || ((isObject() && other.isObject())
+                    && (asTPLaol() == other.asTPLaol()))
+                    ;
+        }
+
         LaolObj::~LaolObj() {
+
             cleanup();
         }
 
@@ -273,12 +298,14 @@ namespace laol {
         string
         Laol::getClassName(const LaolObj& r) {
             const TRcObj& q = r.asTPRcLaol()->asT();
+
             return demangleName(typeid (q).name());
         }
 
         LaolObj
         Laol::objectId(const LaolObj&, const LaolObj&) const {
             LaolObj id = objectId();
+
             return id;
         }
 
@@ -287,6 +314,7 @@ namespace laol {
             std::ostringstream oss;
             oss << getClassName(self) << "@" << objectId();
             auto s = oss.str();
+
             return new String(s);
         }
 
@@ -294,6 +322,7 @@ namespace laol {
         Laol::assign(const LaolObj& self, const LaolObj& opB) const {
             unconst(self).cleanup();
             unconst(self).set(opB);
+
             return self;
         }
 
@@ -315,6 +344,7 @@ namespace laol {
 
         Laol::TPMethod
         Laol::getFunc(const string& methodNm) const {
+
             return getFunc(stMethodByName, methodNm);
         }
 
@@ -323,6 +353,7 @@ namespace laol {
         Laol::getFunc(const METHOD_BY_NAME& methodByName, const string& methodNm) {
             auto search = methodByName.find(methodNm);
             auto rval = (search != methodByName.end()) ? search->second : nullptr;
+
             return rval;
         }
 
@@ -330,6 +361,7 @@ namespace laol {
         Laol::actualIndex(long int ix) const {
             long int actual = (0 <= ix) ? ix : (length() + ix);
             if ((actual >= length()) || (0 > actual)) {
+
                 const auto n = length() - 1;
                 throw IndexException(
                         to_string(ix),
@@ -340,6 +372,7 @@ namespace laol {
 
         size_t Laol::length() const {
             ASSERT_NEVER;
+
             return -1;
         }
 

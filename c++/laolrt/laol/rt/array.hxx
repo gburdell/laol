@@ -53,6 +53,7 @@ namespace laol {
             virtual LaolObj left_shift(const LaolObj& self, const LaolObj& opB) const override;
             virtual LaolObj right_shift(const LaolObj& self, const LaolObj& opB) const override;
             virtual LaolObj subscript(const LaolObj& self, const LaolObj& opB) const override;
+            virtual LaolObj equal(const LaolObj& self, const LaolObj& opB) const override;
 
             //unique methods
             virtual LaolObj empty_PRED(const LaolObj& self, const LaolObj& args) const;
@@ -60,6 +61,7 @@ namespace laol {
             virtual LaolObj reverse_SELF(const LaolObj& self, const LaolObj& args) const;
             virtual LaolObj length(const LaolObj& self, const LaolObj& args) const;
             virtual LaolObj subscript_assign(const LaolObj& self, const LaolObj& args) const override;
+            virtual LaolObj toString(const LaolObj& self, const LaolObj& args) const override;
 
             Laol::TPMethod getFunc(const string& methodNm) const override;
 

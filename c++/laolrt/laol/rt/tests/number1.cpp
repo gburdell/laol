@@ -35,6 +35,7 @@
 #include "laol/rt/laol.hxx"
 #include "laol/rt/array.hxx"
 #include "laol/rt/range.hxx"
+#include "laol/rt/string.hxx"
 
 using namespace std;
 using namespace laol::rt;
@@ -85,10 +86,20 @@ void test3() {
     LaolObj o1({1,2,3});
     a1 << 56 << 78;
     LaolObj rng1 = new Range({0,2});
-    LaolObj rng2({rng1});
+    LaolObj rng2(rng1);
     LaolObj vv1 = toV(1,2,3);
     LaolObj sub1 = a1[rng2];
-    ASSERT_TRUE(78 == sub1[-1].toLInt());
+    ASSERT_TRUE(56 == sub1[-1].toLInt());
+    LaolObj isEq = (sub1 == sub1);
+    ASSERT_TRUE(isEq.toBool());
+    ASSERT_TRUE(3 == vv1("length").toLInt());
+    a1 = vv1.subscript_assign(0, 666);
+    ASSERT_TRUE((a1 == toV(666,2,3)).toBool());
+    vv1 = toV(11,22,33,44,55,66,77,88,99);
+    ASSERT_TRUE(9 == vv1("length").toLInt());
+    vv1.subscript_assign(toV(-1,-2,-3), toV('a','b','c'));
+    string s = String::getString(vv1);
+    s += "";
 }
 
 int main(int argc, char** argv) {

@@ -108,7 +108,7 @@ namespace laol {
         
         class ArityException : public Exception {
         public:
-            explicit ArityException(unsigned int found, const string& expected);
+            explicit ArityException(long int found, const string& expected);
             
             //allow copy constructors
         };

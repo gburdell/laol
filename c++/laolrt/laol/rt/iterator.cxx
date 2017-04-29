@@ -48,9 +48,5 @@ namespace laol {
             return hasNext();
         }
 
-        LaolObj Iterator::set(const LaolObj&, const LaolObj& args) const {
-            return unconst(this)->set(args);
-        }
-
     }
 }

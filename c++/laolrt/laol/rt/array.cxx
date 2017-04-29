@@ -23,8 +23,11 @@
  */
 
 #include <algorithm>
+#include <sstream>
 #include "laol/rt/array.hxx"
 #include "laol/rt/range.hxx"
+#include "laol/rt/string.hxx"
+
 
 namespace laol {
     namespace rt {
@@ -59,24 +62,82 @@ namespace laol {
             unconst(this)->m_ar.insert(m_ar.begin(), opB);
             return self;
         }
+       
+        LaolObj 
+        Array::equal(const LaolObj& self, const LaolObj& opB) const {
+            LaolObj isEqual = false;
+            if (opB.isA<Array>()) {
+                const Vector& other = opB.toType<Array>().m_ar;
+                //we cannot use std::vector== since requires 'bool LaolObj==LaolObj'
+                //and we have 'LaolObj a==b' (without bool cast/operator).
+                //adding bool opens pandora box for ambiguity etc...
+                const auto N = m_ar.size();
+                if (N == other.size()) {
+                    for (auto i = 0; i < N; i++) {
+                        if ((m_ar[i] != other[i]).toBool()) {
+                            return false;
+                        }
+                    }
+                    isEqual = true;
+                }
+            }
+            return isEqual;
+        }
 
+        LaolObj
+        Array::toString(const LaolObj& self, const LaolObj&) const {
+            std::ostringstream oss;
+            oss << "[";
+            bool doComma = false;
+            for (const LaolObj& ele : m_ar) {
+                if (doComma) {
+                    oss << ", ";
+                }
+                const string& s = String::getString(ele);
+                if (ele.isA<String>()) {
+                    oss << '"' << s << '"';
+                } else {
+                    oss << s;
+                }
+                doComma = true;
+            }
+            oss << "]";
+            return new String(oss.str());
+        }
+
+        // Local iterator over int range
+        template<typename FUNC>
+        void iterate(const Range& rng, FUNC forEach) {
+            auto i = rng.m_begin.toLInt(), end = rng.m_end.toLInt();
+            const auto incr = (end > i) ? 1 : -1;
+            while (true) {
+                forEach(i);
+                if (i == end) {
+                    return;
+                }
+                i += incr;
+            }
+        } 
+        
         /*
          * opB : scalar or Array of vals...
          */
         LaolObj
         Array::subscript(const LaolObj& self, const LaolObj& opB) const {
             const Vector& args = opB.isA<Array>() ? opB.toType<Array>().m_ar : toV(opB);
-            Vector here;
+            Vector val;
             for (const LaolObj& sub : args) {
                 if (sub.isInt()) {
-                    here.push_back(m_ar[actualIndex(sub.toLInt())]);
+                    val.push_back(m_ar[actualIndex(sub.toLInt())]);
                 } else if (sub.isObject() && sub.isA<Range>()) {
-                    auto debug = "todo";
+                    iterate(sub.toType<Range>(), [this, &val](auto i){
+                        val.push_back(this->m_ar[actualIndex(i)]);
+                    });
                 } else {
                     ASSERT_NEVER; //todo: error
                 }
             }
-            return (1 < here.size()) ? new Array(here) : here[0];
+            return (1 < val.size()) ? new Array(val) : val[0];
         }
 
         LaolObj
@@ -102,9 +163,40 @@ namespace laol {
             return length();
         }
 
-
         LaolObj 
         Array::subscript_assign(const LaolObj& self, const LaolObj& args) const {
+            ASSERT_TRUE(args.isA<Array>());
+            const Vector& vargs = args.toType<Array>().m_ar;
+            if (2 != vargs.size()) {
+                throw ArityException(vargs.size(), "2");
+            }
+            LaolObj rhs = vargs[1];
+            //make index into array for easier walk
+            const Vector& index = vargs[0].isA<Array>() ? vargs[0].toType<Array>().m_ar : toV(vargs[0]);
+            //flatten
+            vector<size_t> actualIndices;
+            for (const LaolObj& sub : index) {
+                if (sub.isInt()) {
+                    actualIndices.push_back(actualIndex(sub.toLInt()));
+                } else if (sub.isObject() && sub.isA<Range>()) {
+                    iterate(sub.toType<Range>(), [this, &actualIndices](auto i){
+                        actualIndices.push_back(actualIndex(i));
+                    });
+                } else {
+                    ASSERT_NEVER; //todo: error
+                }
+            }
+            Array* ucthis = unconst(this); //unconst
+            const auto N = actualIndices.size();
+            if (1 == N) {
+                ucthis->m_ar[actualIndices[0]] = rhs;
+            } else {
+                const Vector& rhsVals = rhs.toType<Array>().m_ar;
+                ASSERT_TRUE(N == rhsVals.size());
+                for (auto i = 0; i < N; i++) {
+                    ucthis->m_ar[actualIndices[i]] = rhsVals[i];
+                }
+            }
             return self;
         }
     }

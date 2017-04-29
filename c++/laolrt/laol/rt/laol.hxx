@@ -108,6 +108,9 @@ namespace laol {
             }
 
             LaolObj operator=(const LaolObj& rhs);
+            
+            // []=
+            LaolObj subscript_assign(const LaolObj& subscript, const LaolObj& rhs);
 
             template<typename T>
             const LaolObj& operator=(T rhs) {
@@ -188,10 +191,11 @@ namespace laol {
 
             template<typename T>
             bool isA() const {
-                ASSERT_TRUE(isObject());
-                return (0 != dynamic_cast<const T*> (asTPLaol()));
+                return isObject() && (0 != dynamic_cast<const T*> (asTPLaol()));
             }
 
+            bool isSameObject(const LaolObj& other) const;
+            
             virtual ~LaolObj();
 
         private:
