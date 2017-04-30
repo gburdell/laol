@@ -1,4 +1,4 @@
- /*
+/*
  * The MIT License
  *
  * Copyright 2017 kpfalzer.
@@ -29,7 +29,8 @@ namespace laol {
         using std::to_string;
 
         //static
-        Laol::METHOD_BY_NAME String::stMethodByName = {
+        Laol::METHOD_BY_NAME
+        String::stMethodByName = {
             {"length", static_cast<TPMethod> (&String::length)},
             {"empty?", static_cast<TPMethod> (&String::empty_PRED)},
             {"reverse", static_cast<TPMethod> (&String::reverse)},

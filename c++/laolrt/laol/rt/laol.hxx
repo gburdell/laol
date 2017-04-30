@@ -67,6 +67,7 @@ namespace laol {
         typedef PTRcObjPtr<Laol> TRcLaol;
 
         class LaolObj;
+        extern const LaolObj NULLOBJ;
 
         // prefix with 'l' to not confuse with cout/cerr, endl
         extern const LaolObj lcerr;
@@ -186,8 +187,9 @@ namespace laol {
             //call method
             LaolObj operator()(const string& methodNm, const LaolObj& args, bool mustFind = true);
             LaolObj operator()(const string& methodNm);
-            
+
             //call method if it exists (no error: as operator() does).
+
             LaolObj ifMethod(const string& methodNm, const LaolObj& args) {
                 return (*this)(methodNm, args, false);
             }
@@ -413,6 +415,10 @@ namespace laol {
             LaolObj toString(const LaolObj&) const;
             LaolObj objectId(const LaolObj&) const;
 
+            LaolObj hashCode(const LaolObj&) const {
+                return objectId(NULLOBJ);
+            }
+
             // For primitive operations (no 'self' here).
             typedef LaolObj(LaolObj::* TPLaolObjMethod)(const LaolObj& args) const;
             typedef std::map<string, TPLaolObjMethod> LAOLOBJ_METHOD_BY_NAME;
@@ -421,7 +427,14 @@ namespace laol {
             friend class Laol; //to optimize operator=()
         };
 
-        extern const LaolObj NULLOBJ;
+        template<typename T>
+        inline T* unconst(const T* p) {
+            return const_cast<T*> (p);
+        }
+
+        inline LaolObj& unconst(const LaolObj& self) {
+            return const_cast<LaolObj&> (self);
+        }
 
         // Use toBool in 'if (expr)' -> 'if (toBool(expr))' in transpiler (laol -> c++).
         // Note: if 'operator bool()' defined, opens pandora box (of ambiguities)
@@ -435,15 +448,6 @@ namespace laol {
         template<>
         inline auto toBool<LaolObj>(const LaolObj& expr) {
             return expr.toBool();
-        }
-
-        template<typename T>
-        inline T* unconst(const T* p) {
-            return const_cast<T*> (p);
-        }
-
-        inline LaolObj& unconst(const LaolObj& self) {
-            return const_cast<LaolObj&> (self);
         }
 
         // Create vector via toV(obj1, obj2, ...)
@@ -491,6 +495,7 @@ namespace laol {
             //Map special methods for call-by-method too
             virtual LaolObj toString(const LaolObj&, const LaolObj&) const;
             virtual LaolObj objectId(const LaolObj&, const LaolObj&) const;
+            virtual LaolObj hashCode(const LaolObj&, const LaolObj&) const;
 
             virtual ~Laol() = 0;
 
@@ -520,6 +525,21 @@ namespace laol {
         };
     }
 }
+
+namespace std {
+    using laol::rt::LaolObj;
+    using laol::rt::NULLOBJ;
+    
+    template<>
+    struct hash<LaolObj> {
+
+        size_t operator()(const LaolObj& r) const {
+            return unconst(r)("hashCode", NULLOBJ).toLInt();
+        }
+    };
+};
+
+
 
 #endif /* _laol_rt_laol_hxx_ */
 

@@ -36,6 +36,8 @@
 #include "laol/rt/array.hxx"
 #include "laol/rt/range.hxx"
 #include "laol/rt/string.hxx"
+#include "laol/rt/map.hxx"
+
 
 using namespace std;
 using namespace laol::rt;
@@ -103,10 +105,17 @@ void test3() {
     lcout << vv1 << lendl << 1234 << lendl;
 }
 
+void test4() {
+    LaolObj m1 = new Map({
+        {"a", 123}
+    });
+}
+
 int main(int argc, char** argv) {
     test1();
     test2();
     test3();
+    test4();
     cout << "END: all tests" << endl;
     return (EXIT_SUCCESS);
 }

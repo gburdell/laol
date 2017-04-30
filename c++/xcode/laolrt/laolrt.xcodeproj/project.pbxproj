@@ -14,6 +14,7 @@
 		F46A07651EAFD63F00324003 /* range.cxx in Sources */ = {isa = PBXBuildFile; fileRef = F46A07631EAFD63F00324003 /* range.cxx */; };
 		F48290AD1EB177D9006280AF /* exception.cxx in Sources */ = {isa = PBXBuildFile; fileRef = F48290AC1EB177D9006280AF /* exception.cxx */; };
 		F49970F91EAA8C9C00BD9B1B /* string.cxx in Sources */ = {isa = PBXBuildFile; fileRef = F49970F81EAA8C9C00BD9B1B /* string.cxx */; };
+		F4DF09031EB6659800A05C58 /* map.cxx in Sources */ = {isa = PBXBuildFile; fileRef = F4DF09021EB6659800A05C58 /* map.cxx */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -25,6 +26,7 @@
 		F46A07631EAFD63F00324003 /* range.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = range.cxx; path = ../../laolrt/laol/rt/range.cxx; sourceTree = "<group>"; };
 		F48290AC1EB177D9006280AF /* exception.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = exception.cxx; path = ../../laolrt/laol/rt/exception.cxx; sourceTree = "<group>"; };
 		F49970F81EAA8C9C00BD9B1B /* string.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = string.cxx; path = ../../laolrt/laol/rt/string.cxx; sourceTree = "<group>"; };
+		F4DF09021EB6659800A05C58 /* map.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = map.cxx; path = ../../laolrt/laol/rt/map.cxx; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -41,6 +43,7 @@
 		F455C7B01E93F6AE00F13033 = {
 			isa = PBXGroup;
 			children = (
+				F4DF09021EB6659800A05C58 /* map.cxx */,
 				F455DF871EB436A2009B4FEE /* ostream.cxx */,
 				F48290AC1EB177D9006280AF /* exception.cxx */,
 				F46A07621EAFD63F00324003 /* iterator.cxx */,
@@ -133,6 +136,7 @@
 				F44979591EA42F9800602268 /* array.cxx in Sources */,
 				F46A07641EAFD63F00324003 /* iterator.cxx in Sources */,
 				F455DF881EB436A2009B4FEE /* ostream.cxx in Sources */,
+				F4DF09031EB6659800A05C58 /* map.cxx in Sources */,
 				F48290AD1EB177D9006280AF /* exception.cxx in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

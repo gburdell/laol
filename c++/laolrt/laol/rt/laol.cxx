@@ -39,6 +39,7 @@ namespace laol {
         LaolObj::LAOLOBJ_METHOD_BY_NAME LaolObj::stMethodByName = {
             {"toString", static_cast<TPLaolObjMethod> (&LaolObj::toString)},
             {"objectId", static_cast<TPLaolObjMethod> (&LaolObj::objectId)},
+            {"hashCode", static_cast<TPLaolObjMethod> (&LaolObj::hashCode)}
         };
 
         LaolObj
@@ -288,20 +289,19 @@ namespace laol {
         Laol::METHOD_BY_NAME Laol::stMethodByName = {
             {"toString", static_cast<TPMethod> (&Laol::toString)},
             {"objectId", static_cast<TPMethod> (&Laol::objectId)},
+            {"hashCode", static_cast<TPMethod> (&Laol::objectId)}
         };
 
         /*static*/
         string
         Laol::getClassName(const LaolObj& r) {
             const TRcObj& q = r.asTPRcLaol()->asT();
-
             return demangleName(typeid (q).name());
         }
 
         LaolObj
         Laol::objectId(const LaolObj&, const LaolObj&) const {
             LaolObj id = objectId();
-
             return id;
         }
 
@@ -310,15 +310,18 @@ namespace laol {
             std::ostringstream oss;
             oss << getClassName(self) << "@" << objectId();
             auto s = oss.str();
-
             return new String(s);
+        }
+
+        LaolObj
+        Laol::hashCode(const LaolObj&, const LaolObj&) const {
+            return objectId(NULLOBJ, NULLOBJ);
         }
 
         LaolObj
         Laol::assign(const LaolObj& self, const LaolObj& opB) const {
             unconst(self).cleanup();
             unconst(self).set(opB);
-
             return self;
         }
 
