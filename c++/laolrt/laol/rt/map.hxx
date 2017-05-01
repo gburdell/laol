@@ -38,46 +38,6 @@
 namespace laol {
     namespace rt {
 
-        struct LaolObjKey : public LaolObj {
-
-            template<typename T>
-            LaolObjKey(T obj) : LaolObj(obj) {
-            }
-
-            size_t hashCode() const {
-                return unconst(*this)("hashCode", NULLOBJ).toLInt();
-            }
-
-            //allow copy constructors
-
-            bool operator==(const LaolObjKey& other) const {
-                return LaolObj::operator==(other).toBool();
-            }
-        };
-    }
-}
-
-inline
-bool operator==(const laol::rt::LaolObjKey& opA, const laol::rt::LaolObjKey& opB) {
-    return opA.operator==(opB);
-}
-
-namespace std {
-    using laol::rt::LaolObjKey;
-    using laol::rt::NULLOBJ;
-
-    template<>
-    struct hash<LaolObjKey> {
-
-        size_t operator()(const LaolObjKey& r) const {
-            return r.hashCode();
-        }
-    };
-};
-
-namespace laol {
-    namespace rt {
-
         class Map : public Laol {
         public:
             typedef std::unordered_map<LaolObjKey, LaolObj> MAP;
@@ -91,6 +51,12 @@ namespace laol {
             virtual LaolObj add(const LaolObj& self, const LaolObj& opB) const override {
                 return merge(self, opB);
             }
+
+            virtual LaolObj subscript(const LaolObj& self, const LaolObj& opB) const override {
+                return find(self, opB);
+            }
+
+            virtual LaolObj toString(const LaolObj& self, const LaolObj& args) const override;
 
             //unique methods
 
@@ -106,6 +72,10 @@ namespace laol {
             LaolObj insert_SELF(const LaolObj& self, const LaolObj& args) const;
 
             LaolObj empty_PRED(const LaolObj& self, const LaolObj& args) const;
+
+            LaolObj key_PRED(const LaolObj& self, const LaolObj& args) const;
+
+            LaolObj find(const LaolObj& self, const LaolObj& args) const;
 
             Laol::TPMethod getFunc(const string& methodNm) const override;
 

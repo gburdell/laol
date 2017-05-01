@@ -71,6 +71,7 @@ namespace laol {
                 //we cannot use std::vector== since requires 'bool LaolObj==LaolObj'
                 //and we have 'LaolObj a==b' (without bool cast/operator).
                 //adding bool opens pandora box for ambiguity etc...
+                //TODO: could use LaolObjKey: but requires some thorough rewrite.
                 const auto N = m_ar.size();
                 if (N == other.size()) {
                     for (auto i = 0; i < N; i++) {
@@ -93,12 +94,8 @@ namespace laol {
                 if (doComma) {
                     oss << ", ";
                 }
-                const string& s = String::toStdString(ele);
-                if (ele.isA<String>()) {
-                    oss << '"' << s << '"';
-                } else {
-                    oss << s;
-                }
+                const string& s = ele.toQString();
+                oss << ele.toQString();
                 doComma = true;
             }
             oss << "]";

@@ -100,9 +100,51 @@ namespace laol {
                 set(r);
             }
 
-            template<typename T>
-            LaolObj(T val) {
-                set(val);
+            /*
+template<typename T>
+LaolObj(T val) {
+    set(val);
+}
+             */
+
+            LaolObj(Laol* rhs) {
+                set(rhs);
+            }
+
+            LaolObj(bool rhs) {
+                set(rhs);
+            }
+
+            LaolObj(char rhs) {
+                set(rhs);
+            }
+
+            LaolObj(int rhs) {
+                set(rhs);
+            }
+
+            LaolObj(unsigned int rhs) {
+                set(rhs);
+            }
+
+            LaolObj(long int rhs) {
+                set(rhs);
+            }
+
+            LaolObj(unsigned long int rhs) {
+                set(rhs);
+            }
+
+            LaolObj(double rhs) {
+                set(rhs);
+            }
+
+            LaolObj(float rhs) {
+                set(rhs);
+            }
+
+            LaolObj(const char* rhs) {
+                set(rhs);
             }
 
             LaolObj(TRcLaol* val) {
@@ -223,6 +265,9 @@ namespace laol {
                 }
                 return rval;
             }
+
+            // Convert to std::string with quoted string
+            string toQString() const;
 
             virtual ~LaolObj();
 
@@ -415,9 +460,13 @@ namespace laol {
             LaolObj toString(const LaolObj&) const;
             LaolObj objectId(const LaolObj&) const;
 
+            string toStdString() const;
+            
             LaolObj hashCode(const LaolObj&) const {
                 return objectId(NULLOBJ);
             }
+
+            size_t hashCode() const;
 
             // For primitive operations (no 'self' here).
             typedef LaolObj(LaolObj::* TPLaolObjMethod)(const LaolObj& args) const;
@@ -425,6 +474,7 @@ namespace laol {
             static LAOLOBJ_METHOD_BY_NAME stMethodByName;
 
             friend class Laol; //to optimize operator=()
+            friend struct LaolObjKey;
         };
 
         template<typename T>
@@ -435,6 +485,46 @@ namespace laol {
         inline LaolObj& unconst(const LaolObj& self) {
             return const_cast<LaolObj&> (self);
         }
+
+        // LaolObj-like but with natural compare methods
+
+        struct LaolObjKey : public LaolObj {
+
+            template<typename T>
+            LaolObjKey(T obj) : LaolObj(obj) {
+            }
+
+            size_t hashCode() const {
+                return LaolObj::hashCode();
+            }
+
+            //allow copy constructors
+
+            bool operator==(const LaolObjKey& other) const {
+                return LaolObj::operator==(other).toBool();
+            }
+
+            bool operator<(const LaolObjKey& other) const {
+                return LaolObj::operator<(other).toBool();
+            }
+
+            bool operator>(const LaolObjKey& other) const {
+                return LaolObj::operator>(other).toBool();
+            }
+
+            bool operator!=(const LaolObjKey& other) const {
+                return !operator==(other);
+            }
+
+            bool operator<=(const LaolObjKey& other) const {
+                return operator<(other) || operator==(other);
+            }
+
+            bool operator>=(const LaolObjKey& other) const {
+                return operator>(other) || operator==(other);
+            }
+
+        };
 
         // Use toBool in 'if (expr)' -> 'if (toBool(expr))' in transpiler (laol -> c++).
         // Note: if 'operator bool()' defined, opens pandora box (of ambiguities)
@@ -514,7 +604,6 @@ namespace laol {
 
             virtual size_t length() const;
 
-
         private:
 
             auto objectId() const {
@@ -527,19 +616,16 @@ namespace laol {
 }
 
 namespace std {
-    using laol::rt::LaolObj;
-    using laol::rt::NULLOBJ;
-    
-    template<>
-    struct hash<LaolObj> {
+    using laol::rt::LaolObjKey;
 
-        size_t operator()(const LaolObj& r) const {
-            return unconst(r)("hashCode", NULLOBJ).toLInt();
+    template<>
+    struct hash<LaolObjKey> {
+
+        size_t operator()(const LaolObjKey& r) const {
+            return r.hashCode();
         }
     };
-};
-
-
+}
 
 #endif /* _laol_rt_laol_hxx_ */
 

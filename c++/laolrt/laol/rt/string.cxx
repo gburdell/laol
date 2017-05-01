@@ -41,16 +41,22 @@ namespace laol {
             {"prepend!", static_cast<TPMethod> (&String::prepend_SELF)},
             {"toString", static_cast<TPMethod> (&String::toString)},
             {"at", static_cast<TPMethod> (&String::at)},
-            {"iterator", static_cast<TPMethod> (&String::at)}
+            {"iterator", static_cast<TPMethod> (&String::at)},
+            {"equal", static_cast<TPMethod> (&String::equal)},
+            {"less", static_cast<TPMethod> (&String::less)},
+            {"greater", static_cast<TPMethod> (&String::greater)}
         };
 
         /*static*/
         string
-        String::toStdString(const LaolObj& from) {
+        String::toStdString(const LaolObj& from, bool quote) {
             LaolObj x = from;
             LaolObj z = x("toString");
             const String& s = z.toType<String>();
             string ss = s.m_str;
+            if (quote && from.isA<String>()) {
+                ss = '"' + ss + '"';
+            }
             return ss;
         }
 

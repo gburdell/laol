@@ -54,6 +54,18 @@ namespace laol {
 
             //operators
 
+            virtual LaolObj equal(const LaolObj&, const LaolObj& opB) const override {
+                return m_str == toStdString(opB);
+            }
+
+            virtual LaolObj less(const LaolObj&, const LaolObj& opB) const override {
+                return m_str < toStdString(opB);
+            }
+
+            virtual LaolObj greater(const LaolObj&, const LaolObj& opB) const override {
+                return m_str > toStdString(opB);
+            }
+
             virtual LaolObj left_shift(const LaolObj& self, const LaolObj& opB) const override {
                 return append_SELF(self, opB);
             }
@@ -83,7 +95,7 @@ namespace laol {
             Laol::TPMethod getFunc(const string& methodNm) const override;
 
             // Get primitive std::string from 'from'
-            static string toStdString(const LaolObj& from);
+            static string toStdString(const LaolObj& from, bool quote= false);
 
             virtual ~String();
 

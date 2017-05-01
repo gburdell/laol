@@ -107,8 +107,13 @@ void test3() {
 
 void test4() {
     LaolObj m1 = new Map({
-        {"a", 123}
+        {"a", 123},
+        {"b", toV('c', 'd')},
+        {"c", new Map({{1,2},{3,4}})}
     });
+    LaolObj v1 = m1["a"];
+    ASSERT_TRUE((v1 == 123).toBool());
+    lcout << m1 << lendl;
 }
 
 int main(int argc, char** argv) {

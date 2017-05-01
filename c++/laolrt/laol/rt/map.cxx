@@ -22,7 +22,10 @@
  * THE SOFTWARE.
  */
 
+#include <sstream>
+#include "laol/rt/string.hxx"
 #include "laol/rt/map.hxx"
+
 
 namespace laol {
     namespace rt {
@@ -33,12 +36,30 @@ namespace laol {
             {"empty?", static_cast<TPMethod> (&Map::empty_PRED)},
             {"insert!", static_cast<TPMethod> (&Map::insert_SELF)},
             {"merge", static_cast<TPMethod> (&Map::merge)},
-            {"merge!", static_cast<TPMethod> (&Map::merge_SELF)}
+            {"merge!", static_cast<TPMethod> (&Map::merge_SELF)},
+            {"key?", static_cast<TPMethod> (&Map::key_PRED)},
+            {"find", static_cast<TPMethod> (&Map::find)},
         };
 
         Map::Map(std::initializer_list<MAP::value_type> init)
         : m_map(init) {
 
+        }
+
+        LaolObj
+        Map::toString(const LaolObj&, const LaolObj&) const {
+            std::ostringstream oss;
+            oss << "{";
+            bool doComma = false;
+            for (auto& ele : m_map) {
+                if (doComma) {
+                    oss << ", ";
+                }
+                oss << ele.first.toQString() << ": " << ele.second.toQString() ;
+                doComma = true;
+            }
+            oss << "}";
+            return new String(oss.str());
         }
 
         LaolObj
@@ -61,12 +82,24 @@ namespace laol {
             return self;
         }
 
-        Laol::TPMethod 
+        LaolObj
+        Map::key_PRED(const LaolObj& self, const LaolObj& args) const {
+            return (m_map.end() != m_map.find(args));
+        }
+
+        LaolObj
+        Map::find(const LaolObj& self, const LaolObj& args) const {
+            auto it = m_map.find(args);
+            return (it != m_map.end()) ? it->second : NULLOBJ;
+        }
+
+        Laol::TPMethod
         Map::getFunc(const string& methodNm) const {
             return Laol::getFunc(stMethodByName, methodNm);
 
         }
-        
-        Map::~Map() {}
+
+        Map::~Map() {
+        }
     }
 }

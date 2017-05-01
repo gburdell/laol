@@ -47,10 +47,11 @@ namespace laol {
             ASSERT_TRUE(!isObject()); //just for primitives
             return toObjectId(this);
         }
-
-        LaolObj
-        LaolObj::toString(const LaolObj&) const {
-            ASSERT_TRUE(!isObject()); //just for primitives
+        
+        //TODO: string stuff seems a bit convoluted/complicated!
+        
+        string 
+        LaolObj::toStdString() const {
             std::ostringstream oss;
             LaolObj ok = numberApply<false>([&oss](auto x) {
                 oss << x;
@@ -64,8 +65,18 @@ namespace laol {
                     oss << '\'' << m_dat.u_char << '\'';
                 }
             }
-            string s = oss.str();
-            return new String(s);
+            return oss.str();
+        }
+
+        LaolObj
+        LaolObj::toString(const LaolObj&) const {
+            ASSERT_TRUE(!isObject()); //just for primitives
+            return new String(toStdString());
+        }
+
+        string 
+        LaolObj::toQString() const {
+            return isObject() ? String::toStdString(*this, true) : toStdString();
         }
 
         const LaolObj&
@@ -129,6 +140,14 @@ namespace laol {
                 default:
                     return false;
             }
+        }
+
+        size_t
+        LaolObj::hashCode() const {
+            auto hc = isObject()
+                    ? asTPLaol()->hashCode(*this, NULLOBJ)
+                    : hashCode(NULLOBJ);
+            return hc.toBool();
         }
 
         LaolObj
