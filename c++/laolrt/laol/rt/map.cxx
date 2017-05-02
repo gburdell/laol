@@ -24,6 +24,7 @@
 
 #include <sstream>
 #include "laol/rt/string.hxx"
+#include "laol/rt/array.hxx"
 #include "laol/rt/map.hxx"
 
 
@@ -34,16 +35,35 @@ namespace laol {
         Map::stMethodByName = {
             {"size", static_cast<TPMethod> (&Map::size)},
             {"empty?", static_cast<TPMethod> (&Map::empty_PRED)},
-            {"insert!", static_cast<TPMethod> (&Map::insert_SELF)},
             {"merge", static_cast<TPMethod> (&Map::merge)},
             {"merge!", static_cast<TPMethod> (&Map::merge_SELF)},
             {"key?", static_cast<TPMethod> (&Map::key_PRED)},
             {"find", static_cast<TPMethod> (&Map::find)},
+            {"subscript_assign", static_cast<TPMethod> (&Map::subscript_assign)},
         };
 
         Map::Map(std::initializer_list<MAP::value_type> init)
         : m_map(init) {
 
+        }
+
+        Map::Map(const Map& from) {
+            for (auto& ele : from.m_map) {
+                m_map[ele.first] = ele.second;
+            }
+        }
+
+        LaolObj 
+        Map::subscript_assign(const LaolObj& self, const LaolObj& args) const {
+            ASSERT_TRUE(args.isA<Array>());
+            const Array& vargs = args.toType<Array>();
+            const auto N = vargs.length(args, NULLOBJ).toLInt();
+            if (2 != N) {
+                throw ArityException(N, "2");
+            }
+            LaolObj key = vargs[0], val = vargs[1];
+            unconst(this)->m_map[key] = val;
+            return self;
         }
 
         LaolObj
@@ -55,7 +75,7 @@ namespace laol {
                 if (doComma) {
                     oss << ", ";
                 }
-                oss << ele.first.toQString() << ": " << ele.second.toQString() ;
+                oss << ele.first.toQString() << ": " << ele.second.toQString();
                 doComma = true;
             }
             oss << "}";
@@ -68,18 +88,18 @@ namespace laol {
         }
 
         LaolObj
-        Map::insert_SELF(const LaolObj& self, const LaolObj& args) const {
+        Map::merge_SELF(const LaolObj& self, const LaolObj& args) const {
+            const Map& from = args.toType<Map>();
+            for (auto& ele : from.m_map) {
+                unconst(this)->m_map[ele.first] = ele.second;
+            }
             return self;
         }
 
         LaolObj
         Map::merge(const LaolObj& self, const LaolObj& args) const {
-            return self;
-        }
-
-        LaolObj
-        Map::merge_SELF(const LaolObj& self, const LaolObj& args) const {
-            return self;
+            LaolObj copy = new Map(*this);
+            return copy.toType<Map>().merge_SELF(copy, args);
         }
 
         LaolObj

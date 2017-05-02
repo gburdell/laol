@@ -37,7 +37,8 @@ namespace laol {
             {"length", static_cast<TPMethod> (&Array::length)},
             {"empty?", static_cast<TPMethod> (&Array::empty_PRED)},
             {"reverse", static_cast<TPMethod> (&Array::reverse)},
-            {"reverse!", static_cast<TPMethod> (&Array::reverse_SELF)}
+            {"reverse!", static_cast<TPMethod> (&Array::reverse_SELF)},
+            {"subscript_assign", static_cast<TPMethod> (&Array::subscript_assign)}
         };
 
         Array::Array() {
@@ -120,7 +121,7 @@ namespace laol {
          * opB : scalar or Array of vals...
          */
         LaolObj
-        Array::subscript(const LaolObj& self, const LaolObj& opB) const {
+        Array::subscript(const LaolObj&, const LaolObj& opB) const {
             const Vector& args = opB.isA<Array>() ? opB.toType<Array>().m_ar : toV(opB);
             Vector val;
             for (const LaolObj& sub : args) {

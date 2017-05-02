@@ -74,7 +74,7 @@ namespace laol {
             }
 
             LaolObj append_SELF(const LaolObj& self, const LaolObj& args) const override {
-                if (args.isObject()) {
+                if (args.isObject() || args.isBool()) {
                     m_os << String::toStdString(args);
                     unconst(args).ifMethod("call", self);
                 } else {

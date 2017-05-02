@@ -149,6 +149,10 @@ namespace laol {
                     : hashCode(NULLOBJ);
             return hc.toBool();
         }
+        
+        void LaolObj::decrRefCnt() {
+            unconst(this)->asTPRcLaol()->decr();
+        }
 
         LaolObj
         LaolObj::operator=(const LaolObj& rhs) {

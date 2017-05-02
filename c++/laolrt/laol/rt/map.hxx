@@ -58,18 +58,18 @@ namespace laol {
 
             virtual LaolObj toString(const LaolObj& self, const LaolObj& args) const override;
 
+            virtual LaolObj subscript_assign(const LaolObj& self, const LaolObj& args) const override;
+
             //unique methods
 
             LaolObj size(const LaolObj& self, const LaolObj& args) const {
                 return size();
             }
 
+            // args is Map: i.e., {key,val}
             LaolObj merge(const LaolObj& self, const LaolObj& args) const;
 
             LaolObj merge_SELF(const LaolObj& self, const LaolObj& args) const;
-
-            // args is Map: i.e., {key,val}
-            LaolObj insert_SELF(const LaolObj& self, const LaolObj& args) const;
 
             LaolObj empty_PRED(const LaolObj& self, const LaolObj& args) const;
 
@@ -79,11 +79,12 @@ namespace laol {
 
             Laol::TPMethod getFunc(const string& methodNm) const override;
 
-            NO_COPY_CONSTRUCTORS(Map);
+            Map& operator=(const Map&) = delete;
 
             virtual ~Map();
 
         private:
+            Map(const Map& from); //clone
 
             size_t size() const {
                 return m_map.size();

@@ -100,15 +100,12 @@ namespace laol {
                 set(r);
             }
 
-            /*
-template<typename T>
-LaolObj(T val) {
-    set(val);
-}
-             */
-
             LaolObj(Laol* rhs) {
                 set(rhs);
+            }
+
+            LaolObj(const Laol* rhs) {
+                ASSERT_NEVER;
             }
 
             LaolObj(bool rhs) {
@@ -181,6 +178,10 @@ LaolObj(T val) {
             bool isInt() const;
             // true if float/double variant
             bool isFloat() const;
+
+            bool isBool() const {
+                return (eBool == m_type);
+            }
 
             bool isObject() const {
                 return (ePRc == m_type);
@@ -461,12 +462,14 @@ LaolObj(T val) {
             LaolObj objectId(const LaolObj&) const;
 
             string toStdString() const;
-            
+
             LaolObj hashCode(const LaolObj&) const {
                 return objectId(NULLOBJ);
             }
 
             size_t hashCode() const;
+
+            void decrRefCnt();
 
             // For primitive operations (no 'self' here).
             typedef LaolObj(LaolObj::* TPLaolObjMethod)(const LaolObj& args) const;
@@ -475,6 +478,7 @@ LaolObj(T val) {
 
             friend class Laol; //to optimize operator=()
             friend struct LaolObjKey;
+            friend class Symbol; //decrRefCnt()
         };
 
         template<typename T>

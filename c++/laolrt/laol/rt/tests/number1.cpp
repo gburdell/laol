@@ -1,4 +1,4 @@
-    /*
+/*
  * The MIT License
  *
  * Copyright 2017 kpfalzer.
@@ -37,6 +37,7 @@
 #include "laol/rt/range.hxx"
 #include "laol/rt/string.hxx"
 #include "laol/rt/map.hxx"
+#include "laol/rt/symbol.hxx"
 
 
 using namespace std;
@@ -46,7 +47,7 @@ void test1() {
     LaolObj i1 = 12 + 34;
     LaolObj i2 = i1;
     LaolObj ar1 = new Array();
-    i2 = ar1 << i1 << (float)1234.5; //cool: we get 1234 to LaolRef conversion!
+    i2 = ar1 << i1 << (float) 1234.5; //cool: we get 1234 to LaolRef conversion!
     i1 = ar1("empty?");
     i1 = 7;
     i2 = new Array();
@@ -54,7 +55,7 @@ void test1() {
     ar1 << "foobar" << 23 << 1.234 << i2;
     i1 = ar1("reverse")("reverse");
     i2 = ar1("empty?");
-    if (! toBool(i2)) {
+    if (!toBool(i2)) {
         if (toBool("foobar")) {
             i2 = true;
         }
@@ -66,10 +67,11 @@ void test1() {
     i1 = 2;
     ar1 = i2 << i1 << i1;
     ar1 = ar1 + 1234.5;
-    ar1 =  ar1 + 0;
+    ar1 = ar1 + 0;
     i1 = ar1("toString");
     i2 = 12;
 }
+
 void test2() {
     LaolObj s1 = "foo", s2 = "bar";
     LaolObj s3 = s1 + s2 + s1 + s2 + s2;
@@ -80,26 +82,27 @@ void test2() {
 
 void test3() {
     //subscript
-    LaolObj a1 = std::array<LaolObj,2>{23,34};
+    LaolObj a1 = std::array<LaolObj, 2>{23, 34};
     ASSERT_TRUE(a1.isA<laol::rt::Array>());
-    LaolObj a2 = std::vector<LaolObj>{56,78};
-    LaolObj v1 = a1[std::vector<LaolObj>{0}];
+    LaolObj a2 = std::vector<LaolObj>{56, 78};
+    LaolObj v1 = a1[std::vector<LaolObj>{0}
+    ];
     ASSERT_TRUE(23 == v1.toLInt());
-    LaolObj o1({1,2,3});
+    LaolObj o1({1, 2, 3});
     a1 << 56 << 78;
-    LaolObj rng1 = new Range({0,2});
+    LaolObj rng1 = new Range({0, 2});
     LaolObj rng2(rng1);
-    LaolObj vv1 = toV(1,2,3);
+    LaolObj vv1 = toV(1, 2, 3);
     LaolObj sub1 = a1[rng2];
     ASSERT_TRUE(56 == sub1[-1].toLInt());
     LaolObj isEq = (sub1 == sub1);
     ASSERT_TRUE(isEq.toBool());
     ASSERT_TRUE(3 == vv1("length").toLInt());
     a1 = vv1.subscript_assign(0, 666);
-    ASSERT_TRUE((a1 == toV(666,2,3)).toBool());
-    vv1 = toV(11,22,33,44,55,66,77,88,99);
+    ASSERT_TRUE((a1 == toV(666, 2, 3)).toBool());
+    vv1 = toV(11, 22, 33, 44, 55, 66, 77, 88, 99);
     ASSERT_TRUE(9 == vv1("length").toLInt());
-    vv1.subscript_assign(toV(-1,-2,-3), toV('a','b','c'));
+    vv1.subscript_assign(toV(-1, -2, -3), toV('a', 'b', 'c'));
     string s = String::toStdString(vv1);
     s += "";
     lcout << vv1 << lendl << 1234 << lendl;
@@ -109,11 +112,40 @@ void test4() {
     LaolObj m1 = new Map({
         {"a", 123},
         {"b", toV('c', 'd')},
-        {"c", new Map({{1,2},{3,4}})}
+        {"c", new Map(
+            {
+                {1, 2},
+                {3, 4}})}
     });
     LaolObj v1 = m1["a"];
     ASSERT_TRUE((v1 == 123).toBool());
     lcout << m1 << lendl;
+    m1("merge!", new Map({
+        {"c", toV(1, 2, 3, 4)}
+    }));
+    lcout << "after m1.merge!: " << m1 << lendl;
+    LaolObj m2 = m1("merge", new Map({
+        {"e", 8967.345},
+        {"foobar", "abcdef"}}));
+    lcout << "after m1.merge" << lendl << "m1: " << m1 << lendl << "m2: " << m2 << lendl;
+    LaolObj m3 = m1 + m2;
+    lcout << "m3.size=" << m3("size") << lendl;
+    m3("subscript_assign", toV("e", "was float: now abcdef"));
+    lcout << "m3: " << m3 << lendl;
+}
+
+void test5() {
+    {
+        LaolObj sym1 = Symbol::sym("foobar");
+        LaolObj sym2 = Symbol::sym("foobar");
+    }
+    LaolObj sym3 = Symbol::sym("foobar");
+    LaolObj ar1 = new Array();
+    lcout << "sym3: " << sym3 << lendl;
+    for (auto i = 0; i < 1000000; i++) {
+        ar1 << sym3;
+    }
+    lcout << "ar1[123] == ar1[678]: " << (ar1[123] == ar1[678]) << lendl;
 }
 
 int main(int argc, char** argv) {
@@ -121,6 +153,7 @@ int main(int argc, char** argv) {
     test2();
     test3();
     test4();
+    test5();
     cout << "END: all tests" << endl;
     return (EXIT_SUCCESS);
 }

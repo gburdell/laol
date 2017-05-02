@@ -63,6 +63,11 @@ namespace laol {
             virtual LaolObj reverse_SELF(const LaolObj& self, const LaolObj& args) const;
             virtual LaolObj length(const LaolObj& self, const LaolObj& args) const;
 
+            //useful for internal use
+            LaolObj operator[](const LaolObj& ix) const {
+                return subscript(NULLOBJ, ix);
+            }
+            
             Laol::TPMethod getFunc(const string& methodNm) const override;
 
             virtual ~Array();

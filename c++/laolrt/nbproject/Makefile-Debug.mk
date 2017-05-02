@@ -42,7 +42,8 @@ OBJECTFILES= \
 	${OBJECTDIR}/laol/rt/map.o \
 	${OBJECTDIR}/laol/rt/ostream.o \
 	${OBJECTDIR}/laol/rt/range.o \
-	${OBJECTDIR}/laol/rt/string.o
+	${OBJECTDIR}/laol/rt/string.o \
+	${OBJECTDIR}/laol/rt/symbol.o
 
 # Test Directory
 TESTDIR=${CND_BUILDDIR}/${CND_CONF}/${CND_PLATFORM}/tests
@@ -120,6 +121,11 @@ ${OBJECTDIR}/laol/rt/string.o: laol/rt/string.cxx
 	${MKDIR} -p ${OBJECTDIR}/laol/rt
 	${RM} "$@.d"
 	$(COMPILE.cc) -g -I. -I../../../xyzzy/src -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/laol/rt/string.o laol/rt/string.cxx
+
+${OBJECTDIR}/laol/rt/symbol.o: laol/rt/symbol.cxx
+	${MKDIR} -p ${OBJECTDIR}/laol/rt
+	${RM} "$@.d"
+	$(COMPILE.cc) -g -I. -I../../../xyzzy/src -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/laol/rt/symbol.o laol/rt/symbol.cxx
 
 # Subprojects
 .build-subprojects:
@@ -241,6 +247,19 @@ ${OBJECTDIR}/laol/rt/string_nomain.o: ${OBJECTDIR}/laol/rt/string.o laol/rt/stri
 	    $(COMPILE.cc) -g -I. -I../../../xyzzy/src -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/laol/rt/string_nomain.o laol/rt/string.cxx;\
 	else  \
 	    ${CP} ${OBJECTDIR}/laol/rt/string.o ${OBJECTDIR}/laol/rt/string_nomain.o;\
+	fi
+
+${OBJECTDIR}/laol/rt/symbol_nomain.o: ${OBJECTDIR}/laol/rt/symbol.o laol/rt/symbol.cxx 
+	${MKDIR} -p ${OBJECTDIR}/laol/rt
+	@NMOUTPUT=`${NM} ${OBJECTDIR}/laol/rt/symbol.o`; \
+	if (echo "$$NMOUTPUT" | ${GREP} '|main$$') || \
+	   (echo "$$NMOUTPUT" | ${GREP} 'T main$$') || \
+	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
+	then  \
+	    ${RM} "$@.d";\
+	    $(COMPILE.cc) -g -I. -I../../../xyzzy/src -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/laol/rt/symbol_nomain.o laol/rt/symbol.cxx;\
+	else  \
+	    ${CP} ${OBJECTDIR}/laol/rt/symbol.o ${OBJECTDIR}/laol/rt/symbol_nomain.o;\
 	fi
 
 # Run Test Targets
