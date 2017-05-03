@@ -37,7 +37,9 @@ OBJECTDIR=${CND_BUILDDIR}/${CND_CONF}/${CND_PLATFORM}
 OBJECTFILES= \
 	${OBJECTDIR}/laol/rt/array.o \
 	${OBJECTDIR}/laol/rt/exception.o \
+	${OBJECTDIR}/laol/rt/istream.o \
 	${OBJECTDIR}/laol/rt/iterator.o \
+	${OBJECTDIR}/laol/rt/lambda.o \
 	${OBJECTDIR}/laol/rt/laol.o \
 	${OBJECTDIR}/laol/rt/map.o \
 	${OBJECTDIR}/laol/rt/ostream.o \
@@ -92,10 +94,20 @@ ${OBJECTDIR}/laol/rt/exception.o: laol/rt/exception.cxx
 	${RM} "$@.d"
 	$(COMPILE.cc) -O2 -I../../../xyzzy/src -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/laol/rt/exception.o laol/rt/exception.cxx
 
+${OBJECTDIR}/laol/rt/istream.o: laol/rt/istream.cxx
+	${MKDIR} -p ${OBJECTDIR}/laol/rt
+	${RM} "$@.d"
+	$(COMPILE.cc) -O2 -I../../../xyzzy/src -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/laol/rt/istream.o laol/rt/istream.cxx
+
 ${OBJECTDIR}/laol/rt/iterator.o: laol/rt/iterator.cxx
 	${MKDIR} -p ${OBJECTDIR}/laol/rt
 	${RM} "$@.d"
 	$(COMPILE.cc) -O2 -I../../../xyzzy/src -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/laol/rt/iterator.o laol/rt/iterator.cxx
+
+${OBJECTDIR}/laol/rt/lambda.o: laol/rt/lambda.cxx
+	${MKDIR} -p ${OBJECTDIR}/laol/rt
+	${RM} "$@.d"
+	$(COMPILE.cc) -O2 -I../../../xyzzy/src -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/laol/rt/lambda.o laol/rt/lambda.cxx
 
 ${OBJECTDIR}/laol/rt/laol.o: laol/rt/laol.cxx
 	${MKDIR} -p ${OBJECTDIR}/laol/rt
@@ -171,6 +183,19 @@ ${OBJECTDIR}/laol/rt/exception_nomain.o: ${OBJECTDIR}/laol/rt/exception.o laol/r
 	    ${CP} ${OBJECTDIR}/laol/rt/exception.o ${OBJECTDIR}/laol/rt/exception_nomain.o;\
 	fi
 
+${OBJECTDIR}/laol/rt/istream_nomain.o: ${OBJECTDIR}/laol/rt/istream.o laol/rt/istream.cxx 
+	${MKDIR} -p ${OBJECTDIR}/laol/rt
+	@NMOUTPUT=`${NM} ${OBJECTDIR}/laol/rt/istream.o`; \
+	if (echo "$$NMOUTPUT" | ${GREP} '|main$$') || \
+	   (echo "$$NMOUTPUT" | ${GREP} 'T main$$') || \
+	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
+	then  \
+	    ${RM} "$@.d";\
+	    $(COMPILE.cc) -O2 -I../../../xyzzy/src -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/laol/rt/istream_nomain.o laol/rt/istream.cxx;\
+	else  \
+	    ${CP} ${OBJECTDIR}/laol/rt/istream.o ${OBJECTDIR}/laol/rt/istream_nomain.o;\
+	fi
+
 ${OBJECTDIR}/laol/rt/iterator_nomain.o: ${OBJECTDIR}/laol/rt/iterator.o laol/rt/iterator.cxx 
 	${MKDIR} -p ${OBJECTDIR}/laol/rt
 	@NMOUTPUT=`${NM} ${OBJECTDIR}/laol/rt/iterator.o`; \
@@ -182,6 +207,19 @@ ${OBJECTDIR}/laol/rt/iterator_nomain.o: ${OBJECTDIR}/laol/rt/iterator.o laol/rt/
 	    $(COMPILE.cc) -O2 -I../../../xyzzy/src -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/laol/rt/iterator_nomain.o laol/rt/iterator.cxx;\
 	else  \
 	    ${CP} ${OBJECTDIR}/laol/rt/iterator.o ${OBJECTDIR}/laol/rt/iterator_nomain.o;\
+	fi
+
+${OBJECTDIR}/laol/rt/lambda_nomain.o: ${OBJECTDIR}/laol/rt/lambda.o laol/rt/lambda.cxx 
+	${MKDIR} -p ${OBJECTDIR}/laol/rt
+	@NMOUTPUT=`${NM} ${OBJECTDIR}/laol/rt/lambda.o`; \
+	if (echo "$$NMOUTPUT" | ${GREP} '|main$$') || \
+	   (echo "$$NMOUTPUT" | ${GREP} 'T main$$') || \
+	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
+	then  \
+	    ${RM} "$@.d";\
+	    $(COMPILE.cc) -O2 -I../../../xyzzy/src -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/laol/rt/lambda_nomain.o laol/rt/lambda.cxx;\
+	else  \
+	    ${CP} ${OBJECTDIR}/laol/rt/lambda.o ${OBJECTDIR}/laol/rt/lambda_nomain.o;\
 	fi
 
 ${OBJECTDIR}/laol/rt/laol_nomain.o: ${OBJECTDIR}/laol/rt/laol.o laol/rt/laol.cxx 

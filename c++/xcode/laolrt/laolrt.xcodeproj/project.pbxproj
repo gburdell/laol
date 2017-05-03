@@ -15,6 +15,8 @@
 		F4824C7F1EB7EE4B00E6D3F2 /* symbol.cxx in Sources */ = {isa = PBXBuildFile; fileRef = F4824C7E1EB7EE4B00E6D3F2 /* symbol.cxx */; };
 		F48290AD1EB177D9006280AF /* exception.cxx in Sources */ = {isa = PBXBuildFile; fileRef = F48290AC1EB177D9006280AF /* exception.cxx */; };
 		F49970F91EAA8C9C00BD9B1B /* string.cxx in Sources */ = {isa = PBXBuildFile; fileRef = F49970F81EAA8C9C00BD9B1B /* string.cxx */; };
+		F49F96761EBA61C00068AD40 /* istream.cxx in Sources */ = {isa = PBXBuildFile; fileRef = F49F96751EBA61C00068AD40 /* istream.cxx */; };
+		F49F96781EBA7CFC0068AD40 /* lambda.cxx in Sources */ = {isa = PBXBuildFile; fileRef = F49F96771EBA7CFC0068AD40 /* lambda.cxx */; };
 		F4DF09031EB6659800A05C58 /* map.cxx in Sources */ = {isa = PBXBuildFile; fileRef = F4DF09021EB6659800A05C58 /* map.cxx */; };
 /* End PBXBuildFile section */
 
@@ -28,6 +30,8 @@
 		F4824C7E1EB7EE4B00E6D3F2 /* symbol.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = symbol.cxx; path = ../../laolrt/laol/rt/symbol.cxx; sourceTree = "<group>"; };
 		F48290AC1EB177D9006280AF /* exception.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = exception.cxx; path = ../../laolrt/laol/rt/exception.cxx; sourceTree = "<group>"; };
 		F49970F81EAA8C9C00BD9B1B /* string.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = string.cxx; path = ../../laolrt/laol/rt/string.cxx; sourceTree = "<group>"; };
+		F49F96751EBA61C00068AD40 /* istream.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = istream.cxx; path = ../../laolrt/laol/rt/istream.cxx; sourceTree = "<group>"; };
+		F49F96771EBA7CFC0068AD40 /* lambda.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = lambda.cxx; path = ../../laolrt/laol/rt/lambda.cxx; sourceTree = "<group>"; };
 		F4DF09021EB6659800A05C58 /* map.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = map.cxx; path = ../../laolrt/laol/rt/map.cxx; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -45,6 +49,8 @@
 		F455C7B01E93F6AE00F13033 = {
 			isa = PBXGroup;
 			children = (
+				F49F96771EBA7CFC0068AD40 /* lambda.cxx */,
+				F49F96751EBA61C00068AD40 /* istream.cxx */,
 				F4824C7E1EB7EE4B00E6D3F2 /* symbol.cxx */,
 				F4DF09021EB6659800A05C58 /* map.cxx */,
 				F455DF871EB436A2009B4FEE /* ostream.cxx */,
@@ -138,10 +144,12 @@
 				F4824C7F1EB7EE4B00E6D3F2 /* symbol.cxx in Sources */,
 				F455C7C11E93F78A00F13033 /* laol.cxx in Sources */,
 				F44979591EA42F9800602268 /* array.cxx in Sources */,
+				F49F96781EBA7CFC0068AD40 /* lambda.cxx in Sources */,
 				F46A07641EAFD63F00324003 /* iterator.cxx in Sources */,
 				F455DF881EB436A2009B4FEE /* ostream.cxx in Sources */,
 				F4DF09031EB6659800A05C58 /* map.cxx in Sources */,
 				F48290AD1EB177D9006280AF /* exception.cxx in Sources */,
+				F49F96761EBA61C00068AD40 /* istream.cxx in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

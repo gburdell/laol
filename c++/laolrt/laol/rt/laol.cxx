@@ -47,10 +47,10 @@ namespace laol {
             ASSERT_TRUE(!isObject()); //just for primitives
             return toObjectId(this);
         }
-        
+
         //TODO: string stuff seems a bit convoluted/complicated!
-        
-        string 
+
+        string
         LaolObj::toStdString() const {
             std::ostringstream oss;
             LaolObj ok = numberApply<false>([&oss](auto x) {
@@ -74,7 +74,7 @@ namespace laol {
             return new String(toStdString());
         }
 
-        string 
+        string
         LaolObj::toQString() const {
             return isObject() ? String::toStdString(*this, true) : toStdString();
         }
@@ -149,7 +149,7 @@ namespace laol {
                     : hashCode(NULLOBJ);
             return hc.toBool();
         }
-        
+
         void LaolObj::decrRefCnt() {
             unconst(this)->asTPRcLaol()->decr();
         }
@@ -207,6 +207,15 @@ namespace laol {
             return isObject()
                     ? asTPLaol()->negate(*this, NULLOBJ)
                     : !toBool();
+        }
+
+        LaolObj
+        LaolObj::operator++(int) const { //post-increment
+            return isObject()
+                    ? asTPLaol()->post_increment(*this, NULLOBJ)
+                    : unconst(this)->intApply([](auto& a) {
+                        return a++;
+                    });
         }
 
         LaolObj
@@ -361,7 +370,8 @@ namespace laol {
         LaolObj Laol::logical_and DEFINE_NO_IMPL
         LaolObj Laol::logical_or DEFINE_NO_IMPL
         LaolObj Laol::subscript_assign DEFINE_NO_IMPL
-
+        LaolObj Laol::post_increment DEFINE_NO_IMPL
+        
 #undef DEFINE_NO_IMPL
 
         Laol::TPMethod

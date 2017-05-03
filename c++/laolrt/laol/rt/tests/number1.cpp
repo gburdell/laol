@@ -38,6 +38,8 @@
 #include "laol/rt/string.hxx"
 #include "laol/rt/map.hxx"
 #include "laol/rt/symbol.hxx"
+#include "laol/rt/istream.hxx"
+#include "laol/rt/lambda.hxx"
 
 
 using namespace std;
@@ -115,7 +117,8 @@ void test4() {
         {"c", new Map(
             {
                 {1, 2},
-                {3, 4}})}
+                {3, 4}
+            })}
     });
     LaolObj v1 = m1["a"];
     ASSERT_TRUE((v1 == 123).toBool());
@@ -126,7 +129,8 @@ void test4() {
     lcout << "after m1.merge!: " << m1 << lendl;
     LaolObj m2 = m1("merge", new Map({
         {"e", 8967.345},
-        {"foobar", "abcdef"}}));
+        {"foobar", "abcdef"}
+    }));
     lcout << "after m1.merge" << lendl << "m1: " << m1 << lendl << "m2: " << m2 << lendl;
     LaolObj m3 = m1 + m2;
     lcout << "m3.size=" << m3("size") << lendl;
@@ -142,10 +146,84 @@ void test5() {
     LaolObj sym3 = Symbol::sym("foobar");
     LaolObj ar1 = new Array();
     lcout << "sym3: " << sym3 << lendl;
-    for (auto i = 0; i < 1000000; i++) {
+    for (auto i = 0; i < 1000; i++) {
         ar1 << sym3;
     }
     lcout << "ar1[123] == ar1[678]: " << (ar1[123] == ar1[678]) << lendl;
+}
+
+void test6() {
+    LaolObj fis = new FileInputStream("/Users/kpfalzer/projects/laol/test/data/t1.laol");
+    lcout << "fis.fail?: " << fis("fail?") << lendl;
+    LaolObj rval;
+    bool empty;
+    LaolObj lineCount = 0;
+    fis("eachLine", new Lambda([&](auto v) {
+        rval = v;
+        empty = toBool(rval("empty?"));
+        if (!toBool(empty)) {
+            lineCount++;
+        }
+    }));
+    fis("close");
+}
+
+/* An Example
+ *  Laol                || C++
+ * ===================================================
+ *  c1 = C1.new(v1,v2)  || LaolObj c1 = new C1(v2,v2);
+ *  a = c1.a1           || LaolObj a = c1("a1");
+ *  b = c1.a2 = [1,2,3] || LaolObj b = c1("a2=", toV(1,2,3));
+ *  c1.a2[-1] = 123      || c1("a2")("subscript_assign", toV(-1, 123));
+ */
+class C1 : public Laol {
+public:
+
+    explicit C1(const LaolObj& a1, const LaolObj& a2)
+    : m_a1(a1), m_a2(a2) {
+    }
+
+    LaolObj a1(const LaolObj& self, const LaolObj& args) const {
+        return m_a1;
+    }
+
+    LaolObj a1_assign(const LaolObj& self, const LaolObj& args) const {
+        return unconst(this)->m_a1 = args;
+    }
+    
+    LaolObj a2(const LaolObj& self, const LaolObj& args) const {
+        return m_a2;
+    }
+
+    LaolObj a2_assign(const LaolObj& self, const LaolObj& args) const {
+        return unconst(this)->m_a2 = args;
+    }
+    
+    Laol::TPMethod
+    getFunc(const string& methodNm) const {
+        return Laol::getFunc(stMethodByName, methodNm);
+    }
+
+private:
+    static METHOD_BY_NAME stMethodByName;
+    LaolObj m_a1, m_a2;
+};
+
+//static
+Laol::METHOD_BY_NAME
+C1::stMethodByName = {
+    {"a1", static_cast<TPMethod> (&C1::a1)},
+    {"a1=", static_cast<TPMethod> (&C1::a1_assign)},
+    {"a2", static_cast<TPMethod> (&C1::a2)},
+    {"a2=", static_cast<TPMethod> (&C1::a2_assign)}
+};
+
+void test7() {
+    LaolObj c1 = new C1(123,345);
+    LaolObj a = c1("a1");
+    LaolObj b = c1("a2=", toV(1,2,3));
+    c1("a2")("subscript_assign", toV(-1, 123));
+    lcout << "test7: c1.a2=" << c1("a2") << lendl;
 }
 
 int main(int argc, char** argv) {
@@ -154,6 +232,8 @@ int main(int argc, char** argv) {
     test3();
     test4();
     test5();
+    test6();
+    test7();
     cout << "END: all tests" << endl;
     return (EXIT_SUCCESS);
 }

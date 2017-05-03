@@ -6,7 +6,9 @@
                    projectFiles="true">
       <itemPath>laol/rt/array.hxx</itemPath>
       <itemPath>laol/rt/exception.hxx</itemPath>
+      <itemPath>laol/rt/istream.hxx</itemPath>
       <itemPath>laol/rt/iterator.hxx</itemPath>
+      <itemPath>laol/rt/lambda.hxx</itemPath>
       <itemPath>laol/rt/laol.hxx</itemPath>
       <itemPath>laol/rt/map.hxx</itemPath>
       <itemPath>laol/rt/ostream.hxx</itemPath>
@@ -23,7 +25,9 @@
                    projectFiles="true">
       <itemPath>laol/rt/array.cxx</itemPath>
       <itemPath>laol/rt/exception.cxx</itemPath>
+      <itemPath>laol/rt/istream.cxx</itemPath>
       <itemPath>laol/rt/iterator.cxx</itemPath>
+      <itemPath>laol/rt/lambda.cxx</itemPath>
       <itemPath>laol/rt/laol.cxx</itemPath>
       <itemPath>laol/rt/map.cxx</itemPath>
       <itemPath>laol/rt/ostream.cxx</itemPath>
@@ -106,6 +110,8 @@
             <pElem>.</pElem>
             <pElem>.</pElem>
             <pElem>.</pElem>
+            <pElem>.</pElem>
+            <pElem>.</pElem>
           </linkerDynSerch>
         </linkerTool>
       </folder>
@@ -141,6 +147,8 @@
             <pElem>.</pElem>
             <pElem>.</pElem>
             <pElem>.</pElem>
+            <pElem>.</pElem>
+            <pElem>.</pElem>
           </linkerDynSerch>
           <linkerLibItems>
             <linkerLibFileItem>dist/Debug/CLang-MacOSX/liblaolrt.a</linkerLibFileItem>
@@ -156,9 +164,17 @@
       </item>
       <item path="laol/rt/exception.hxx" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="laol/rt/istream.cxx" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="laol/rt/istream.hxx" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="laol/rt/iterator.cxx" ex="false" tool="1" flavor2="0">
       </item>
       <item path="laol/rt/iterator.hxx" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="laol/rt/lambda.cxx" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="laol/rt/lambda.hxx" ex="false" tool="3" flavor2="0">
       </item>
       <item path="laol/rt/laol.cxx" ex="false" tool="1" flavor2="0">
       </item>
@@ -250,6 +266,8 @@
             <pElem>.</pElem>
             <pElem>.</pElem>
             <pElem>.</pElem>
+            <pElem>.</pElem>
+            <pElem>.</pElem>
           </linkerDynSerch>
         </linkerTool>
       </folder>
@@ -285,6 +303,8 @@
             <pElem>.</pElem>
             <pElem>.</pElem>
             <pElem>.</pElem>
+            <pElem>.</pElem>
+            <pElem>.</pElem>
           </linkerDynSerch>
         </linkerTool>
       </folder>
@@ -296,9 +316,17 @@
       </item>
       <item path="laol/rt/exception.hxx" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="laol/rt/istream.cxx" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="laol/rt/istream.hxx" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="laol/rt/iterator.cxx" ex="false" tool="1" flavor2="0">
       </item>
       <item path="laol/rt/iterator.hxx" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="laol/rt/lambda.cxx" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="laol/rt/lambda.hxx" ex="false" tool="3" flavor2="0">
       </item>
       <item path="laol/rt/laol.cxx" ex="false" tool="1" flavor2="0">
       </item>

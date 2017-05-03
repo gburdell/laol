@@ -217,6 +217,9 @@ namespace laol {
                 return (*this > opB) || (*this == opB);
             }
 
+            // incr/decr
+            LaolObj operator++(int) const; //post
+            
             //
             // logical
             //
@@ -307,27 +310,34 @@ namespace laol {
                 return asTPRcLaol()->getPtr();
             }
 
-            template<bool DO_ASSERT = true, typename OP>
-            LaolObj intApply(OP op) const {
-                LaolObj rval;
-                switch (m_type) {
-                    case eChar: rval = op(m_dat.u_char);
-                        break;
-                    case eInt: rval = op(m_dat.u_int);
-                        break;
-                    case eUInt: rval = op(m_dat.u_uint);
-                        break;
-                    case eLInt: rval = op(m_dat.u_lint);
-                        break;
-                    case eULInt: rval = op(m_dat.u_ulint);
-                        break;
-                    default:
-                        if (DO_ASSERT) {
-                            ASSERT_NEVER;
-                        }
-                }
-                return rval;
+            // Need a const and unconst version of intApply
+#define DEFINE_INT_APPLY(_const) \
+            template<bool DO_ASSERT = true, typename OP> \
+            LaolObj intApply(OP op) _const { \
+                LaolObj rval; \
+                switch (m_type) { \
+                    case eChar: rval = op(m_dat.u_char); \
+                        break; \
+                    case eInt: rval = op(m_dat.u_int); \
+                        break; \
+                    case eUInt: rval = op(m_dat.u_uint); \
+                        break; \
+                    case eLInt: rval = op(m_dat.u_lint); \
+                        break; \
+                    case eULInt: rval = op(m_dat.u_ulint); \
+                        break; \
+                    default: \
+                        if (DO_ASSERT) { \
+                            ASSERT_NEVER; \
+                        } \
+                } \
+                return rval; \
             }
+
+DEFINE_INT_APPLY(const)
+DEFINE_INT_APPLY()
+
+#undef DEFINE_INT_APPLY
 
             template<bool DO_ASSERT = true, typename OP>
             LaolObj numberApply(OP op) const {
@@ -585,6 +595,7 @@ namespace laol {
             /* || */ virtual LaolObj logical_or(const LaolObj& self, const LaolObj& opB) const;
             /* && */ virtual LaolObj logical_and(const LaolObj& self, const LaolObj& opB) const;
             /*[]= */ virtual LaolObj subscript_assign(const LaolObj& self, const LaolObj& opB) const;
+            /*++(int) */ virtual LaolObj post_increment(const LaolObj& self, const LaolObj& opB) const;
 
             //Map special methods for call-by-method too
             virtual LaolObj toString(const LaolObj&, const LaolObj&) const;
