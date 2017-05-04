@@ -42,6 +42,12 @@ namespace laol {
             {"subscript_assign", static_cast<TPMethod> (&Map::subscript_assign)},
         };
 
+        Laol::TPMethod
+        Map::getFunc(const string& methodNm) const {
+            return Laol::getFunc(stMethodByName, methodNm);
+
+        }
+
         Map::Map(std::initializer_list<MAP::value_type> init)
         : m_map(init) {
 
@@ -54,20 +60,20 @@ namespace laol {
         }
 
         LaolObj 
-        Map::subscript_assign(const LaolObj& self, const LaolObj& args) const {
+        Map::subscript_assign(LaolObj& self, LaolObj& args) {
             ASSERT_TRUE(args.isA<Array>());
-            const Array& vargs = args.toType<Array>();
+            Array& vargs = args.toType<Array>();
             const auto N = vargs.length(args, NULLOBJ).toLInt();
             if (2 != N) {
                 throw ArityException(N, "2");
             }
             LaolObj key = vargs[0], val = vargs[1];
-            unconst(this)->m_map[key] = val;
+            m_map[key] = val;
             return self;
         }
 
         LaolObj
-        Map::toString(const LaolObj&, const LaolObj&) const {
+        Map::toString(LaolObj&, LaolObj&) {
             std::ostringstream oss;
             oss << "{";
             bool doComma = false;
@@ -75,7 +81,7 @@ namespace laol {
                 if (doComma) {
                     oss << ", ";
                 }
-                oss << ele.first.toQString() << ": " << ele.second.toQString();
+                oss << unconst(ele.first).toQString() << ": " << unconst(ele.second).toQString();
                 doComma = true;
             }
             oss << "}";
@@ -83,40 +89,34 @@ namespace laol {
         }
 
         LaolObj
-        Map::empty_PRED(const LaolObj& self, const LaolObj& args) const {
+        Map::empty_PRED(LaolObj& self, LaolObj& args) {
             return m_map.empty();
         }
 
         LaolObj
-        Map::merge_SELF(const LaolObj& self, const LaolObj& args) const {
-            const Map& from = args.toType<Map>();
+        Map::merge_SELF(LaolObj& self, LaolObj& args) {
+            Map& from = args.toType<Map>();
             for (auto& ele : from.m_map) {
-                unconst(this)->m_map[ele.first] = ele.second;
+                m_map[ele.first] = ele.second;
             }
             return self;
         }
 
         LaolObj
-        Map::merge(const LaolObj& self, const LaolObj& args) const {
+        Map::merge(LaolObj& self, LaolObj& args) {
             LaolObj copy = new Map(*this);
             return copy.toType<Map>().merge_SELF(copy, args);
         }
 
         LaolObj
-        Map::key_PRED(const LaolObj& self, const LaolObj& args) const {
+        Map::key_PRED(LaolObj& self, LaolObj& args) {
             return (m_map.end() != m_map.find(args));
         }
 
         LaolObj
-        Map::find(const LaolObj& self, const LaolObj& args) const {
+        Map::find(LaolObj& self, LaolObj& args) {
             auto it = m_map.find(args);
             return (it != m_map.end()) ? it->second : NULLOBJ;
-        }
-
-        Laol::TPMethod
-        Map::getFunc(const string& methodNm) const {
-            return Laol::getFunc(stMethodByName, methodNm);
-
         }
 
         Map::~Map() {

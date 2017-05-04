@@ -40,11 +40,11 @@ namespace laol {
 
         class Lambda : public Laol {
         public:
-            typedef std::function<void(const LaolObj&) > FUNC;
+            typedef std::function<void(LaolObj&) > FUNC;
 
             explicit Lambda(FUNC fn);
 
-            virtual LaolObj call(const LaolObj& self, const LaolObj& args) const;
+            virtual LaolObj call(LaolObj& self, LaolObj& args) ;
 
             NO_COPY_CONSTRUCTORS(Lambda);
 

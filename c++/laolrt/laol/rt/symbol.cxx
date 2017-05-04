@@ -54,12 +54,12 @@ namespace laol {
         }
 
         LaolObj
-        Symbol::toString(const LaolObj&, const LaolObj&) const {
+        Symbol::toString(LaolObj&, LaolObj&) {
             return new String(":" + toString());
         }
 
         LaolObj
-        Symbol::equal(const LaolObj&, const LaolObj& opB) const {
+        Symbol::equal(LaolObj&, LaolObj& opB) {
             /* we never get here: since LaolObj default == checks for
              * objects same: which we will have.
              * Anyway, we'll put in the code but preface w/ assert to see if 

@@ -33,7 +33,7 @@ namespace laol {
     namespace rt {
         using std::to_string;
 
-        /*extern*/ const LaolObj NULLOBJ;
+        /*extern*/ /*const*/ LaolObj NULLOBJ;
 
         /*static*/
         LaolObj::LAOLOBJ_METHOD_BY_NAME LaolObj::stMethodByName = {
@@ -43,7 +43,7 @@ namespace laol {
         };
 
         LaolObj
-        LaolObj::objectId(const LaolObj&) const {
+        LaolObj::objectId(LaolObj&) {
             ASSERT_TRUE(!isObject()); //just for primitives
             return toObjectId(this);
         }
@@ -51,7 +51,7 @@ namespace laol {
         //TODO: string stuff seems a bit convoluted/complicated!
 
         string
-        LaolObj::toStdString() const {
+        LaolObj::toStdString() {
             std::ostringstream oss;
             LaolObj ok = numberApply<false>([&oss](auto x) {
                 oss << x;
@@ -69,13 +69,13 @@ namespace laol {
         }
 
         LaolObj
-        LaolObj::toString(const LaolObj&) const {
+        LaolObj::toString( LaolObj&) {
             ASSERT_TRUE(!isObject()); //just for primitives
             return new String(toStdString());
         }
 
         string
-        LaolObj::toQString() const {
+        LaolObj::toQString() {
             return isObject() ? String::toStdString(*this, true) : toStdString();
         }
 
@@ -103,7 +103,7 @@ namespace laol {
         }
 
         bool
-        LaolObj::isInt() const {
+        LaolObj::isInt() {
             switch (m_type) {
                 case eInt: case eLInt: case eUInt: case eULInt:
                     return true;
@@ -113,7 +113,7 @@ namespace laol {
         }
 
         unsigned long int
-        LaolObj::toULInt() const {
+        LaolObj::toULInt()  {
             unsigned long int rval;
             intApply([&rval](auto val) {
                 rval = (unsigned long int) val;
@@ -123,7 +123,7 @@ namespace laol {
         }
 
         long int
-        LaolObj::toLInt() const {
+        LaolObj::toLInt()  {
             long int rval;
             intApply([&rval](auto val) {
                 rval = (long int) val;
@@ -133,7 +133,7 @@ namespace laol {
         }
 
         bool
-        LaolObj::isFloat() const {
+        LaolObj::isFloat()  {
             switch (m_type) {
                 case eFloat: case eDouble:
                     return true;
@@ -143,7 +143,7 @@ namespace laol {
         }
 
         size_t
-        LaolObj::hashCode() const {
+        LaolObj::hashCode()  {
             auto hc = isObject()
                     ? asTPLaol()->hashCode(*this, NULLOBJ)
                     : hashCode(NULLOBJ);
@@ -151,13 +151,13 @@ namespace laol {
         }
 
         void LaolObj::decrRefCnt() {
-            unconst(this)->asTPRcLaol()->decr();
+            asTPRcLaol()->decr();
         }
 
         LaolObj
         LaolObj::operator=(const LaolObj& rhs) {
             if (isObject()) {
-                return asTPLaol()->assign(*this, rhs);
+                return asTPLaol()->assign(*this, const_cast<LaolObj&>(rhs));
             } else {
                 cleanup();
                 return set(rhs);
@@ -165,13 +165,14 @@ namespace laol {
         }
 
         LaolObj
-        LaolObj::subscript_assign(const LaolObj& subscript, const LaolObj& rhs) {
+        LaolObj::subscript_assign(LaolObj& subscript, LaolObj& rhs) {
             ASSERT_TRUE(isObject());
-            return asTPLaol()->subscript_assign(*this, toV(subscript, rhs));
+            LaolObj tmp = toV(subscript, rhs);
+            return asTPLaol()->subscript_assign(*this, tmp);
         }
 
         LaolObj
-        LaolObj::operator<<(const LaolObj& opB) const {
+        LaolObj::operator<<(LaolObj& opB) {
             return isObject()
                     ? asTPLaol()->left_shift(*this, opB)
                     : intBinaryOp(opB, [](auto a, auto b) {
@@ -180,7 +181,7 @@ namespace laol {
         }
 
         LaolObj
-        LaolObj::operator>>(const LaolObj& opB) const {
+        LaolObj::operator>>(LaolObj& opB) {
             return isObject()
                     ? asTPLaol()->right_shift(*this, opB)
                     : intBinaryOp(opB, [](auto a, auto b) {
@@ -189,7 +190,7 @@ namespace laol {
         }
 
         LaolObj
-        LaolObj::operator+(const LaolObj& opB) const {
+        LaolObj::operator+(LaolObj& opB) {
             return isObject()
                     ? asTPLaol()->add(*this, opB)
                     : numberBinaryOp(opB, [](auto a, auto b) {
@@ -198,42 +199,42 @@ namespace laol {
         }
 
         LaolObj
-        LaolObj::operator[](const LaolObj& opB) const {
+        LaolObj::operator[](LaolObj& opB) {
             return asTPLaol()->subscript(*this, opB);
         }
 
         LaolObj
-        LaolObj::operator!() const {
+        LaolObj::operator!() {
             return isObject()
                     ? asTPLaol()->negate(*this, NULLOBJ)
                     : !toBool();
         }
 
         LaolObj
-        LaolObj::operator++(int) const { //post-increment
+        LaolObj::operator++(int) { //post-increment
             return isObject()
                     ? asTPLaol()->post_increment(*this, NULLOBJ)
-                    : unconst(this)->intApply([](auto& a) {
+                    : intApply([](auto& a) {
                         return a++;
                     });
         }
 
         LaolObj
-        LaolObj::operator&&(const LaolObj& opB) const {
+        LaolObj::operator&&(LaolObj& opB) {
             return isObject()
                     ? asTPLaol()->logical_and(*this, NULLOBJ)
                     : (toBool() && opB.toBool());
         }
 
         LaolObj
-        LaolObj::operator||(const LaolObj& opB) const {
+        LaolObj::operator||(LaolObj& opB) {
             return isObject()
                     ? asTPLaol()->logical_or(*this, NULLOBJ)
                     : (toBool() || opB.toBool());
         }
 
         LaolObj
-        LaolObj::operator<(const LaolObj& opB) const {
+        LaolObj::operator<(LaolObj& opB) {
             return isObject()
                     ? asTPLaol()->less(*this, opB)
                     : primitiveBinaryOp(opB, [](auto a, auto b) {
@@ -242,7 +243,7 @@ namespace laol {
         }
 
         LaolObj
-        LaolObj::operator>(const LaolObj& opB) const {
+        LaolObj::operator>(LaolObj& opB) {
             return isObject()
                     ? asTPLaol()->greater(*this, opB)
                     : primitiveBinaryOp(opB, [](auto a, auto b) {
@@ -251,7 +252,7 @@ namespace laol {
         }
 
         LaolObj
-        LaolObj::operator==(const LaolObj& opB) const {
+        LaolObj::operator==(LaolObj& opB) {
             if (isSameObject(opB)) {
                 return true;
             }
@@ -274,7 +275,7 @@ namespace laol {
         }
 
         LaolObj
-        LaolObj::operator()(const string& methodNm, const LaolObj& args, bool mustFind) {
+        LaolObj::operator()(const string& methodNm, LaolObj& args, bool mustFind) {
             LaolObj rval;
             if (isObject()) {
                 Laol* pObj = asTPRcLaol()->getPtr();
@@ -306,7 +307,7 @@ namespace laol {
         }
 
         bool
-        LaolObj::isSameObject(const LaolObj& other) const {
+        LaolObj::isSameObject( LaolObj& other)  {
             return (this == &other)
                     || ((isObject() && other.isObject())
                     && (asTPLaol() == other.asTPLaol()))
@@ -332,13 +333,13 @@ namespace laol {
         }
 
         LaolObj
-        Laol::objectId(const LaolObj&, const LaolObj&) const {
+        Laol::objectId(LaolObj&, LaolObj&) {
             LaolObj id = objectId();
             return id;
         }
 
         LaolObj
-        Laol::toString(const LaolObj& self, const LaolObj&) const {
+        Laol::toString(LaolObj& self, LaolObj&) {
             std::ostringstream oss;
             oss << getClassName(self) << "@" << objectId();
             auto s = oss.str();
@@ -346,18 +347,18 @@ namespace laol {
         }
 
         LaolObj
-        Laol::hashCode(const LaolObj&, const LaolObj&) const {
+        Laol::hashCode(LaolObj&, LaolObj&) {
             return objectId(NULLOBJ, NULLOBJ);
         }
 
         LaolObj
-        Laol::assign(const LaolObj& self, const LaolObj& opB) const {
-            unconst(self).cleanup();
-            unconst(self).set(opB);
+        Laol::assign(LaolObj& self, LaolObj& opB) {
+            self.cleanup();
+            self.set(opB);
             return self;
         }
 
-#define DEFINE_NO_IMPL (const LaolObj&, const LaolObj& self) const {ASSERT_NEVER; return self;}
+#define DEFINE_NO_IMPL (LaolObj&, LaolObj& self) {ASSERT_NEVER; return self;}
 
         LaolObj Laol::left_shift DEFINE_NO_IMPL
         LaolObj Laol::right_shift DEFINE_NO_IMPL

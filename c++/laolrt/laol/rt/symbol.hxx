@@ -53,9 +53,9 @@ namespace laol {
             // Return existing symbol; or create new one.
             static LaolObj sym(const string& s);
 
-            virtual LaolObj toString(const LaolObj& self, const LaolObj& args) const override;
+            virtual LaolObj toString(LaolObj& self, LaolObj& args) override;
             
-            virtual LaolObj equal(const LaolObj& self, const LaolObj& opB) const override;
+            virtual LaolObj equal(LaolObj& self, LaolObj& opB) override;
             
             Laol::TPMethod getFunc(const string& methodNm) const override;
 

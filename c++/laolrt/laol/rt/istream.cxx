@@ -55,7 +55,7 @@ namespace laol {
             //todo: error on fail() ??
         }
 
-        static void lineDone(const LaolObj& self, vector<char>& buf, const Lambda& lambda) {
+        static void lineDone(LaolObj& self, vector<char>& buf, Lambda& lambda) {
             string s(buf.begin(), buf.end());
             LaolObj parm(s.c_str());
             lambda.call(self, parm);
@@ -63,12 +63,12 @@ namespace laol {
         }
 
         LaolObj
-        FileInputStream::eachLine(const LaolObj& self, const LaolObj& args) const {
-            const Lambda& lambda = args.toType<Lambda>();
+        FileInputStream::eachLine(LaolObj& self, LaolObj& args) {
+            Lambda& lambda = args.toType<Lambda>();
             vector<char> buf;
             char ch;
             while (! m_ifs.eof()) {
-                unconst(this)->m_ifs.get(ch);
+                m_ifs.get(ch);
                 if (ch != '\n') {
                     buf.push_back(ch);
                 } else {
@@ -78,23 +78,23 @@ namespace laol {
             if (! buf.empty()) {
                 lineDone(self, buf, lambda);
             }
-            unconst(this)->close();
+            close();
             return self;
         }
 
         LaolObj
-        FileInputStream::empty_PRED(const LaolObj& self, const LaolObj& args) const {
+        FileInputStream::empty_PRED(LaolObj& self, LaolObj& args) {
             return self; //todo
         }
 
         LaolObj
-        FileInputStream::fail_PRED(const LaolObj& self, const LaolObj& args) const {
+        FileInputStream::fail_PRED(LaolObj& self, LaolObj& args) {
             return m_ifs.fail();
         }
 
         LaolObj
-        FileInputStream::close(const LaolObj& self, const LaolObj& args) const {
-            unconst(this)->close();
+        FileInputStream::close(LaolObj& self, LaolObj& args) {
+            close();
             return self;
         }
 

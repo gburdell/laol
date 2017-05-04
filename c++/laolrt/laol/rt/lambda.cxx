@@ -32,18 +32,18 @@ namespace laol {
             {"call", static_cast<TPMethod> (&Lambda::call)},
         };
 
+        Laol::TPMethod
+        Lambda::getFunc(const string& methodNm) const {
+            return Laol::getFunc(stMethodByName, methodNm);
+        }
+
         Lambda::Lambda(FUNC fn) : m_fn(fn) {
         }
 
         LaolObj
-        Lambda::call(const LaolObj& self, const LaolObj& args) const {
+        Lambda::call(LaolObj& self, LaolObj& args) {
             m_fn(args);
             return self;
-        }
-
-        Laol::TPMethod
-        Lambda::getFunc(const string& methodNm) const {
-            return Laol::getFunc(stMethodByName, methodNm);
         }
 
         Lambda::~Lambda() {

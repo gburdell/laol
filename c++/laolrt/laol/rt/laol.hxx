@@ -67,7 +67,8 @@ namespace laol {
         typedef PTRcObjPtr<Laol> TRcLaol;
 
         class LaolObj;
-        extern const LaolObj NULLOBJ;
+        //todo: wrap LaolObj -> ConstLaolObj for here...
+        extern LaolObj NULLOBJ;
 
         // prefix with 'l' to not confuse with cout/cerr, endl
         extern const LaolObj lcerr;
@@ -155,7 +156,7 @@ namespace laol {
             LaolObj operator=(const LaolObj& rhs);
 
             // []=
-            LaolObj subscript_assign(const LaolObj& subscript, const LaolObj& rhs);
+            LaolObj subscript_assign(LaolObj& subscript, LaolObj& rhs);
 
             template<typename T>
             const LaolObj& operator=(T rhs) {
@@ -163,99 +164,99 @@ namespace laol {
                 return set(rhs);
             }
 
-            bool isNull() const {
+            bool isNull()  {
                 return (eNull == m_type);
             }
 
-            bool toBool() const {
+            bool toBool()  {
                 return (eBool == m_type) && m_dat.u_bool;
             }
 
-            unsigned long int toULInt() const;
-            long int toLInt() const;
+            unsigned long int toULInt() ;
+            long int toLInt() ;
 
             // true if int variant
-            bool isInt() const;
+            bool isInt() ;
             // true if float/double variant
-            bool isFloat() const;
+            bool isFloat() ;
 
-            bool isBool() const {
+            bool isBool()  {
                 return (eBool == m_type);
             }
 
-            bool isObject() const {
+            bool isObject()  {
                 return (ePRc == m_type);
             }
 
-            // Majority of operators are const, so we'll mark all
-            // as const and unconst as necessary in Laol subclass.
-            LaolObj operator<<(const LaolObj& opB) const;
-            LaolObj operator>>(const LaolObj& opB) const;
-            LaolObj operator+(const LaolObj& opB) const;
-            LaolObj operator[](const LaolObj& opB) const;
+            // TODO: all the ops/methods are non-const to make it easier
+            // to generate code from laol.
+            LaolObj operator<<(LaolObj& opB) ;
+            LaolObj operator>>(LaolObj& opB) ;
+            LaolObj operator+(LaolObj& opB) ;
+            LaolObj operator[](LaolObj& opB) ;
             //
             // baseline comparators.
             // (others are generated as function of these).
             //
-            LaolObj operator==(const LaolObj& opB) const;
-            LaolObj operator>(const LaolObj& opB) const;
-            LaolObj operator<(const LaolObj& opB) const;
+            LaolObj operator==(LaolObj& opB) ;
+            LaolObj operator>(LaolObj& opB) ;
+            LaolObj operator<(LaolObj& opB) ;
 
             //
             // generate comparators
             //            
 
-            LaolObj operator!=(const LaolObj& opB) const {
+            LaolObj operator!=(LaolObj& opB) {
                 return !(*this == opB);
             }
 
-            LaolObj operator<=(const LaolObj& opB) const {
-                return (*this < opB) || (*this == opB);
+            LaolObj operator<=(LaolObj& opB) {
+                return (*this < opB).toBool() || (*this == opB).toBool();
             }
 
-            LaolObj operator>=(const LaolObj& opB) const {
-                return (*this > opB) || (*this == opB);
+            LaolObj operator>=(LaolObj& opB) {
+                return (*this > opB).toBool() || (*this == opB).toBool();
             }
 
             // incr/decr
-            LaolObj operator++(int) const; //post
+            LaolObj operator++(int) ; //post
             
             //
             // logical
             //
-            LaolObj operator!() const;
-            LaolObj operator||(const LaolObj& opB) const;
-            LaolObj operator&&(const LaolObj& opB) const;
+            LaolObj operator!() ;
+            LaolObj operator||(LaolObj& opB) ;
+            LaolObj operator&&(LaolObj& opB) ;
 
             //TPMethod
-            typedef LaolObj(Laol::* TPMethod)(const LaolObj& self, const LaolObj& args) const;
+            typedef LaolObj(Laol::* TPMethod)(LaolObj& self, LaolObj& args) ;
 
             //call method
-            LaolObj operator()(const string& methodNm, const LaolObj& args, bool mustFind = true);
+            LaolObj operator()(const string& methodNm, LaolObj& args, bool mustFind = true);
             LaolObj operator()(const string& methodNm);
 
             //call method if it exists (no error: as operator() does).
 
-            LaolObj ifMethod(const string& methodNm, const LaolObj& args) {
+            LaolObj ifMethod(const string& methodNm, LaolObj& args) {
                 return (*this)(methodNm, args, false);
             }
 
             //cast as subclass of Laol
 
             template<typename T>
-            const T& toType() const {
-                return dynamic_cast<const T&> (asTPRcLaol()->asT());
+            T& toType() {
+                return dynamic_cast<T&> (asTPRcLaol()->asT());
             }
 
             template<typename T>
-            bool isA() const {
+            bool isA() {
                 return isObject() && (0 != dynamic_cast<const T*> (asTPLaol()));
             }
 
-            bool isSameObject(const LaolObj& other) const;
+            bool isSameObject( LaolObj& other);
 
             template<typename OP>
-            LaolObj primitiveApply(OP op) const {
+            LaolObj primitiveApply(OP op) {
                 LaolObj rval = numberApply<false>(op);
                 if (rval.isNull()) {
                     switch (m_type) {
@@ -271,7 +272,7 @@ namespace laol {
             }
 
             // Convert to std::string with quoted string
-            string toQString() const;
+            string toQString() ;
 
             virtual ~LaolObj();
 
@@ -310,37 +311,30 @@ namespace laol {
                 return asTPRcLaol()->getPtr();
             }
 
-            // Need a const and unconst version of intApply
-#define DEFINE_INT_APPLY(_const) \
-            template<bool DO_ASSERT = true, typename OP> \
-            LaolObj intApply(OP op) _const { \
-                LaolObj rval; \
-                switch (m_type) { \
-                    case eChar: rval = op(m_dat.u_char); \
-                        break; \
-                    case eInt: rval = op(m_dat.u_int); \
-                        break; \
-                    case eUInt: rval = op(m_dat.u_uint); \
-                        break; \
-                    case eLInt: rval = op(m_dat.u_lint); \
-                        break; \
-                    case eULInt: rval = op(m_dat.u_ulint); \
-                        break; \
-                    default: \
-                        if (DO_ASSERT) { \
-                            ASSERT_NEVER; \
-                        } \
-                } \
-                return rval; \
+            template<bool DO_ASSERT = true, typename OP> 
+            LaolObj intApply(OP op) { 
+                LaolObj rval; 
+                switch (m_type) { 
+                    case eChar: rval = op(m_dat.u_char); 
+                        break; 
+                    case eInt: rval = op(m_dat.u_int); 
+                        break; 
+                    case eUInt: rval = op(m_dat.u_uint); 
+                        break; 
+                    case eLInt: rval = op(m_dat.u_lint); 
+                        break; 
+                    case eULInt: rval = op(m_dat.u_ulint); 
+                        break; 
+                    default: 
+                        if (DO_ASSERT) { 
+                            ASSERT_NEVER; 
+                        } 
+                } 
+                return rval; 
             }
 
-DEFINE_INT_APPLY(const)
-DEFINE_INT_APPLY()
-
-#undef DEFINE_INT_APPLY
-
             template<bool DO_ASSERT = true, typename OP>
-            LaolObj numberApply(OP op) const {
+            LaolObj numberApply(OP op) {
                 LaolObj rval;
                 if (isInt()) {
                     rval = intApply<false>(op);
@@ -360,7 +354,7 @@ DEFINE_INT_APPLY()
             }
 
             template<typename BINOP>
-            LaolObj intBinaryOp(const LaolObj& opB, BINOP binop) const {
+            LaolObj intBinaryOp(LaolObj& opB, BINOP binop) {
                 LaolObj rval = intApply([opB, binop](auto a) {
                     return opB.intApply([a, binop](auto b) {
                         return binop(a, b);
@@ -370,7 +364,7 @@ DEFINE_INT_APPLY()
             }
 
             template<typename BINOP>
-            LaolObj numberBinaryOp(const LaolObj& opB, BINOP binop) const {
+            LaolObj numberBinaryOp(LaolObj& opB, BINOP binop) {
                 LaolObj rval = numberApply([opB, binop](auto a) {
                     return opB.numberApply([a, binop](auto b) {
                         return binop(a, b);
@@ -380,7 +374,7 @@ DEFINE_INT_APPLY()
             }
 
             template<typename BINOP>
-            LaolObj primitiveBinaryOp(const LaolObj& opB, BINOP binop) const {
+            LaolObj primitiveBinaryOp(LaolObj& opB, BINOP binop) {
                 LaolObj rval = primitiveApply([opB, binop](auto a) {
                     return opB.primitiveApply([a, binop](auto b) {
                         return binop(a, b);
@@ -468,21 +462,21 @@ DEFINE_INT_APPLY()
             //Methods to cover primitive types.
             //Note: We dont have a 'self' argument: since
             //not applicable to primitives types.
-            LaolObj toString(const LaolObj&) const;
-            LaolObj objectId(const LaolObj&) const;
+            LaolObj toString( LaolObj&) ;
+            LaolObj objectId( LaolObj&) ;
 
-            string toStdString() const;
+            string toStdString() ;
 
-            LaolObj hashCode(const LaolObj&) const {
+            LaolObj hashCode( LaolObj&)  {
                 return objectId(NULLOBJ);
             }
 
-            size_t hashCode() const;
+            size_t hashCode();
 
             void decrRefCnt();
 
             // For primitive operations (no 'self' here).
-            typedef LaolObj(LaolObj::* TPLaolObjMethod)(const LaolObj& args) const;
+            typedef LaolObj(LaolObj::* TPLaolObjMethod)(LaolObj& args) ;
             typedef std::map<string, TPLaolObjMethod> LAOLOBJ_METHOD_BY_NAME;
             static LAOLOBJ_METHOD_BY_NAME stMethodByName;
 
@@ -508,33 +502,33 @@ DEFINE_INT_APPLY()
             LaolObjKey(T obj) : LaolObj(obj) {
             }
 
-            size_t hashCode() const {
+            size_t hashCode() {
                 return LaolObj::hashCode();
             }
 
             //allow copy constructors
 
-            bool operator==(const LaolObjKey& other) const {
+            bool operator==(LaolObjKey& other) {
                 return LaolObj::operator==(other).toBool();
             }
 
-            bool operator<(const LaolObjKey& other) const {
+            bool operator<(LaolObjKey& other) {
                 return LaolObj::operator<(other).toBool();
             }
 
-            bool operator>(const LaolObjKey& other) const {
+            bool operator>(LaolObjKey& other) {
                 return LaolObj::operator>(other).toBool();
             }
 
-            bool operator!=(const LaolObjKey& other) const {
+            bool operator!=(LaolObjKey& other) {
                 return !operator==(other);
             }
 
-            bool operator<=(const LaolObjKey& other) const {
+            bool operator<=(LaolObjKey& other) {
                 return operator<(other) || operator==(other);
             }
 
-            bool operator>=(const LaolObjKey& other) const {
+            bool operator>=(LaolObjKey& other) {
                 return operator>(other) || operator==(other);
             }
 
@@ -545,12 +539,12 @@ DEFINE_INT_APPLY()
         // and breaks the more natural primitive conversions: LaolObj(T val)...
 
         template<typename T>
-        inline auto toBool(const T& expr) {
+        inline auto toBool( T& expr) {
             return expr;
         }
 
         template<>
-        inline auto toBool<LaolObj>(const LaolObj& expr) {
+        inline auto toBool<LaolObj>( LaolObj& expr) {
             return expr.toBool();
         }
 
@@ -583,24 +577,24 @@ DEFINE_INT_APPLY()
 
             //operators (mapped to mnemonic): so we can pass in 'self'
             //http://stackoverflow.com/questions/8679089/c-official-operator-names-keywords
-            /* << */ virtual LaolObj left_shift(const LaolObj& self, const LaolObj& opB) const;
-            /* >> */ virtual LaolObj right_shift(const LaolObj& self, const LaolObj& opB) const;
-            /* +  */ virtual LaolObj add(const LaolObj& self, const LaolObj& opB) const;
-            /* =  */ virtual LaolObj assign(const LaolObj& self, const LaolObj& opB) const;
-            /* [] */ virtual LaolObj subscript(const LaolObj& self, const LaolObj& opB) const;
-            /* == */ virtual LaolObj equal(const LaolObj& self, const LaolObj& opB) const;
-            /* <  */ virtual LaolObj less(const LaolObj& self, const LaolObj& opB) const;
-            /* >  */ virtual LaolObj greater(const LaolObj& self, const LaolObj& opB) const;
-            /* !  */ virtual LaolObj negate(const LaolObj& self, const LaolObj&) const;
-            /* || */ virtual LaolObj logical_or(const LaolObj& self, const LaolObj& opB) const;
-            /* && */ virtual LaolObj logical_and(const LaolObj& self, const LaolObj& opB) const;
-            /*[]= */ virtual LaolObj subscript_assign(const LaolObj& self, const LaolObj& opB) const;
-            /*++(int) */ virtual LaolObj post_increment(const LaolObj& self, const LaolObj& opB) const;
+            /* << */ virtual LaolObj left_shift(LaolObj& self, LaolObj& opB) ;
+            /* >> */ virtual LaolObj right_shift(LaolObj& self, LaolObj& opB) ;
+            /* +  */ virtual LaolObj add(LaolObj& self, LaolObj& opB) ;
+            /* =  */ virtual LaolObj assign(LaolObj& self, LaolObj& opB) ;
+            /* [] */ virtual LaolObj subscript(LaolObj& self, LaolObj& opB) ;
+            /* == */ virtual LaolObj equal(LaolObj& self, LaolObj& opB) ;
+            /* <  */ virtual LaolObj less(LaolObj& self, LaolObj& opB) ;
+            /* >  */ virtual LaolObj greater(LaolObj& self, LaolObj& opB) ;
+            /* !  */ virtual LaolObj negate(LaolObj& self, LaolObj&) ;
+            /* || */ virtual LaolObj logical_or(LaolObj& self, LaolObj& opB) ;
+            /* && */ virtual LaolObj logical_and(LaolObj& self, LaolObj& opB) ;
+            /*[]= */ virtual LaolObj subscript_assign(LaolObj& self, LaolObj& opB) ;
+            /*++(int) */ virtual LaolObj post_increment(LaolObj& self, LaolObj& opB) ;
 
             //Map special methods for call-by-method too
-            virtual LaolObj toString(const LaolObj&, const LaolObj&) const;
-            virtual LaolObj objectId(const LaolObj&, const LaolObj&) const;
-            virtual LaolObj hashCode(const LaolObj&, const LaolObj&) const;
+            virtual LaolObj toString(LaolObj&, LaolObj&) ;
+            virtual LaolObj objectId(LaolObj&, LaolObj&) ;
+            virtual LaolObj hashCode(LaolObj&, LaolObj&) ;
 
             virtual ~Laol() = 0;
 
@@ -637,7 +631,7 @@ namespace std {
     struct hash<LaolObjKey> {
 
         size_t operator()(const LaolObjKey& r) const {
-            return r.hashCode();
+            return laol::rt::unconst<LaolObjKey>(&r)->hashCode();
         }
     };
 }

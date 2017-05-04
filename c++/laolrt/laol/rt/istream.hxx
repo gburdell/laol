@@ -42,10 +42,10 @@ namespace laol {
         class IStream : public Laol {
         public:
 
-            virtual LaolObj empty_PRED(const LaolObj& self, const LaolObj& args) const = 0;
-            virtual LaolObj fail_PRED(const LaolObj& self, const LaolObj& args) const = 0;
-            virtual LaolObj eachLine(const LaolObj& self, const LaolObj& args) const = 0;
-            virtual LaolObj close(const LaolObj& self, const LaolObj& args) const = 0;
+            virtual LaolObj empty_PRED(LaolObj& self, LaolObj& args) = 0;
+            virtual LaolObj fail_PRED(LaolObj& self, LaolObj& args) = 0;
+            virtual LaolObj eachLine(LaolObj& self, LaolObj& args) = 0;
+            virtual LaolObj close(LaolObj& self, LaolObj& args) = 0;
 
             NO_COPY_CONSTRUCTORS(IStream);
 
@@ -66,10 +66,10 @@ namespace laol {
         public:
             explicit FileInputStream(const LaolObj& fileName);
 
-            virtual LaolObj empty_PRED(const LaolObj& self, const LaolObj& args) const override;
-            virtual LaolObj eachLine(const LaolObj& self, const LaolObj& args) const override;
-            virtual LaolObj fail_PRED(const LaolObj& self, const LaolObj& args) const override;
-            virtual LaolObj close(const LaolObj& self, const LaolObj& args) const override;
+            virtual LaolObj empty_PRED(LaolObj& self, LaolObj& args) override;
+            virtual LaolObj eachLine(LaolObj& self, LaolObj& args) override;
+            virtual LaolObj fail_PRED(LaolObj& self, LaolObj& args) override;
+            virtual LaolObj close(LaolObj& self, LaolObj& args) override;
 
             NO_COPY_CONSTRUCTORS(FileInputStream);
 

@@ -50,22 +50,22 @@ namespace laol {
             Array& operator=(const Array& r) = delete;
 
             //operators
-            virtual LaolObj left_shift(const LaolObj& self, const LaolObj& opB) const override;
-            virtual LaolObj right_shift(const LaolObj& self, const LaolObj& opB) const override;
-            virtual LaolObj subscript(const LaolObj& self, const LaolObj& opB) const override;
-            virtual LaolObj equal(const LaolObj& self, const LaolObj& opB) const override;
-            virtual LaolObj toString(const LaolObj& self, const LaolObj& args) const override;
-            virtual LaolObj subscript_assign(const LaolObj& self, const LaolObj& args) const override;
+            virtual LaolObj left_shift(LaolObj& self, LaolObj& opB) override;
+            virtual LaolObj right_shift(LaolObj& self, LaolObj& opB) override;
+            virtual LaolObj subscript(LaolObj& self, LaolObj& opB) override;
+            virtual LaolObj equal(LaolObj& self, LaolObj& opB) override;
+            virtual LaolObj toString(LaolObj& self, LaolObj& args) override;
+            virtual LaolObj subscript_assign(LaolObj& self, LaolObj& args) override;
 
             //unique methods
-            virtual LaolObj empty_PRED(const LaolObj& self, const LaolObj& args) const;
-            virtual LaolObj reverse(const LaolObj& self, const LaolObj& args) const;
-            virtual LaolObj reverse_SELF(const LaolObj& self, const LaolObj& args) const;
-            virtual LaolObj length(const LaolObj& self, const LaolObj& args) const;
+            virtual LaolObj empty_PRED(LaolObj& self, LaolObj& args) ;
+            virtual LaolObj reverse(LaolObj& self, LaolObj& args) ;
+            virtual LaolObj reverse_SELF(LaolObj& self, LaolObj& args) ;
+            virtual LaolObj length(LaolObj& self, LaolObj& args) ;
 
             //useful for internal use
             LaolObj operator[](const LaolObj& ix) const {
-                return subscript(NULLOBJ, ix);
+                return unconst(this)->subscript(NULLOBJ, unconst(ix));
             }
             
             Laol::TPMethod getFunc(const string& methodNm) const override;

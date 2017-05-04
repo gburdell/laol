@@ -36,17 +36,19 @@ namespace laol {
 
             static const LaolObj NL;
 
-            LaolObj call(const LaolObj& self, const LaolObj& args) const {
-                return unconst(args).operator()("flush", NULLOBJ);
-            }
-
-            LaolObj toString(const LaolObj& self, const LaolObj& args) const override {
-                return NL;
-            }
-
             Laol::TPMethod
             getFunc(const string& methodNm) const override {
                 return Laol::getFunc(stMethodByName, methodNm);
+            }
+
+            LaolObj
+            call(LaolObj& self, LaolObj& args) {
+                return args("flush", NULLOBJ);
+            }
+
+            LaolObj
+            toString(LaolObj& self, LaolObj& args) override {
+                return NL;
             }
 
             NO_COPY_CONSTRUCTORS(Endl);
@@ -73,7 +75,7 @@ namespace laol {
             : m_os(os) {
             }
 
-            LaolObj append_SELF(const LaolObj& self, const LaolObj& args) const override {
+            LaolObj append_SELF(LaolObj& self, LaolObj& args) override {
                 if (args.isObject() || args.isBool()) {
                     m_os << String::toStdString(args);
                     unconst(args).ifMethod("call", self);
@@ -87,7 +89,7 @@ namespace laol {
             }
 
             LaolObj
-            flush(const LaolObj& self, const LaolObj&) const override {
+            flush(LaolObj& self, LaolObj&) override {
                 flush();
                 return self;
             }
@@ -128,7 +130,7 @@ namespace laol {
         };
 
         LaolObj
-        OStream::flush(const LaolObj& self, const LaolObj&) const {
+        OStream::flush(LaolObj& self, LaolObj&) {
             return self;
         }
 

@@ -48,34 +48,34 @@ namespace laol {
 
             // + Add another map to this one to produce a new Map.
 
-            virtual LaolObj add(const LaolObj& self, const LaolObj& opB) const override {
+            virtual LaolObj add(LaolObj& self, LaolObj& opB) override {
                 return merge(self, opB);
             }
 
-            virtual LaolObj subscript(const LaolObj& self, const LaolObj& opB) const override {
+            virtual LaolObj subscript(LaolObj& self, LaolObj& opB) override {
                 return find(self, opB);
             }
 
-            virtual LaolObj toString(const LaolObj& self, const LaolObj& args) const override;
+            virtual LaolObj toString(LaolObj& self, LaolObj& args) override;
 
-            virtual LaolObj subscript_assign(const LaolObj& self, const LaolObj& args) const override;
+            virtual LaolObj subscript_assign(LaolObj& self, LaolObj& args) override;
 
             //unique methods
 
-            LaolObj size(const LaolObj& self, const LaolObj& args) const {
+            LaolObj size(LaolObj& self, LaolObj& args) {
                 return size();
             }
 
             // args is Map: i.e., {key,val}
-            LaolObj merge(const LaolObj& self, const LaolObj& args) const;
+            LaolObj merge(LaolObj& self, LaolObj& args) ;
 
-            LaolObj merge_SELF(const LaolObj& self, const LaolObj& args) const;
+            LaolObj merge_SELF(LaolObj& self, LaolObj& args) ;
 
-            LaolObj empty_PRED(const LaolObj& self, const LaolObj& args) const;
+            LaolObj empty_PRED(LaolObj& self, LaolObj& args) ;
 
-            LaolObj key_PRED(const LaolObj& self, const LaolObj& args) const;
+            LaolObj key_PRED(LaolObj& self, LaolObj& args) ;
 
-            LaolObj find(const LaolObj& self, const LaolObj& args) const;
+            LaolObj find(LaolObj& self, LaolObj& args) ;
 
             Laol::TPMethod getFunc(const string& methodNm) const override;
 

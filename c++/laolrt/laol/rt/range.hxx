@@ -50,7 +50,7 @@ namespace laol {
             virtual ~Range() {
             }
 
-            const LaolObj m_begin, m_end;
+            LaolObj m_begin, m_end;
 
         private:
             const bool m_precondition;

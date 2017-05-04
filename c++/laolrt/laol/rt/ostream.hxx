@@ -46,13 +46,13 @@ namespace laol {
 
             //operators
 
-            virtual LaolObj left_shift(const LaolObj& self, const LaolObj& opB) const override {
+            virtual LaolObj left_shift(LaolObj& self, LaolObj& opB) override {
                 return append_SELF(self, opB);
             }
 
             //unique methods
-            virtual LaolObj append_SELF(const LaolObj& self, const LaolObj& args) const = 0;
-            virtual LaolObj flush(const LaolObj& self, const LaolObj& args) const;
+            virtual LaolObj append_SELF(LaolObj& self, LaolObj& args) = 0;
+            virtual LaolObj flush(LaolObj& self, LaolObj& args) ;
 
             Laol::TPMethod getFunc(const string& methodNm) const override;
 
