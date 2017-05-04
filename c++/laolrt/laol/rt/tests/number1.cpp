@@ -190,7 +190,7 @@ public:
     LaolObj a1_assign(const LaolObj& self, const LaolObj& args) const {
         return unconst(this)->m_a1 = args;
     }
-    
+
     LaolObj a2(const LaolObj& self, const LaolObj& args) const {
         return m_a2;
     }
@@ -198,7 +198,7 @@ public:
     LaolObj a2_assign(const LaolObj& self, const LaolObj& args) const {
         return unconst(this)->m_a2 = args;
     }
-    
+
     Laol::TPMethod
     getFunc(const string& methodNm) const {
         return Laol::getFunc(stMethodByName, methodNm);
@@ -219,14 +219,29 @@ C1::stMethodByName = {
 };
 
 void test7() {
-    LaolObj c1 = new C1(123,345);
+    LaolObj c1 = new C1(123, 345);
     LaolObj a = c1("a1");
-    LaolObj b = c1("a2=", toV(1,2,3));
+    LaolObj b = c1("a2=", toV(1, 2, 3));
     c1("a2")("subscript_assign", toV(-1, 123));
     lcout << "test7: c1.a2=" << c1("a2") << lendl;
 }
 
+struct S1 {
+    std::array<int, 4> m_ar;
+
+    const int& operator[](int i) const {
+        return m_ar[i];
+    }
+
+    int& operator[](int i) {
+        return m_ar[i];
+    }
+};
+
 int main(int argc, char** argv) {
+    S1 s1;
+    s1[0] = 1234;
+    int x = s1[0];
     test1();
     test2();
     test3();
