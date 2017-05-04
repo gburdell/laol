@@ -22,6 +22,7 @@
  * THE SOFTWARE.
  */
 
+#include <algorithm>
 #include "laol/rt/string.hxx"
 
 namespace laol {

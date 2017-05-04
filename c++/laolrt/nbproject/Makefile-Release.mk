@@ -35,17 +35,9 @@ OBJECTDIR=${CND_BUILDDIR}/${CND_CONF}/${CND_PLATFORM}
 
 # Object Files
 OBJECTFILES= \
-	${OBJECTDIR}/laol/rt/array.o \
+	${OBJECTDIR}/laol/rt/common.o \
 	${OBJECTDIR}/laol/rt/exception.o \
-	${OBJECTDIR}/laol/rt/istream.o \
-	${OBJECTDIR}/laol/rt/iterator.o \
-	${OBJECTDIR}/laol/rt/lambda.o \
-	${OBJECTDIR}/laol/rt/laol.o \
-	${OBJECTDIR}/laol/rt/map.o \
-	${OBJECTDIR}/laol/rt/ostream.o \
-	${OBJECTDIR}/laol/rt/range.o \
-	${OBJECTDIR}/laol/rt/string.o \
-	${OBJECTDIR}/laol/rt/symbol.o
+	${OBJECTDIR}/laol/rt/laol.o
 
 # Test Directory
 TESTDIR=${CND_BUILDDIR}/${CND_CONF}/${CND_PLATFORM}/tests
@@ -84,60 +76,20 @@ ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/liblaolrt.a: ${OBJECTFILES}
 	${AR} -rv ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/liblaolrt.a ${OBJECTFILES} 
 	$(RANLIB) ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/liblaolrt.a
 
-${OBJECTDIR}/laol/rt/array.o: laol/rt/array.cxx
+${OBJECTDIR}/laol/rt/common.o: laol/rt/common.cxx
 	${MKDIR} -p ${OBJECTDIR}/laol/rt
 	${RM} "$@.d"
-	$(COMPILE.cc) -O2 -I../../../xyzzy/src -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/laol/rt/array.o laol/rt/array.cxx
+	$(COMPILE.cc) -O2 -I../../../xyzzy/src -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/laol/rt/common.o laol/rt/common.cxx
 
 ${OBJECTDIR}/laol/rt/exception.o: laol/rt/exception.cxx
 	${MKDIR} -p ${OBJECTDIR}/laol/rt
 	${RM} "$@.d"
 	$(COMPILE.cc) -O2 -I../../../xyzzy/src -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/laol/rt/exception.o laol/rt/exception.cxx
 
-${OBJECTDIR}/laol/rt/istream.o: laol/rt/istream.cxx
-	${MKDIR} -p ${OBJECTDIR}/laol/rt
-	${RM} "$@.d"
-	$(COMPILE.cc) -O2 -I../../../xyzzy/src -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/laol/rt/istream.o laol/rt/istream.cxx
-
-${OBJECTDIR}/laol/rt/iterator.o: laol/rt/iterator.cxx
-	${MKDIR} -p ${OBJECTDIR}/laol/rt
-	${RM} "$@.d"
-	$(COMPILE.cc) -O2 -I../../../xyzzy/src -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/laol/rt/iterator.o laol/rt/iterator.cxx
-
-${OBJECTDIR}/laol/rt/lambda.o: laol/rt/lambda.cxx
-	${MKDIR} -p ${OBJECTDIR}/laol/rt
-	${RM} "$@.d"
-	$(COMPILE.cc) -O2 -I../../../xyzzy/src -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/laol/rt/lambda.o laol/rt/lambda.cxx
-
 ${OBJECTDIR}/laol/rt/laol.o: laol/rt/laol.cxx
 	${MKDIR} -p ${OBJECTDIR}/laol/rt
 	${RM} "$@.d"
 	$(COMPILE.cc) -O2 -I../../../xyzzy/src -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/laol/rt/laol.o laol/rt/laol.cxx
-
-${OBJECTDIR}/laol/rt/map.o: laol/rt/map.cxx
-	${MKDIR} -p ${OBJECTDIR}/laol/rt
-	${RM} "$@.d"
-	$(COMPILE.cc) -O2 -I../../../xyzzy/src -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/laol/rt/map.o laol/rt/map.cxx
-
-${OBJECTDIR}/laol/rt/ostream.o: laol/rt/ostream.cxx
-	${MKDIR} -p ${OBJECTDIR}/laol/rt
-	${RM} "$@.d"
-	$(COMPILE.cc) -O2 -I../../../xyzzy/src -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/laol/rt/ostream.o laol/rt/ostream.cxx
-
-${OBJECTDIR}/laol/rt/range.o: laol/rt/range.cxx
-	${MKDIR} -p ${OBJECTDIR}/laol/rt
-	${RM} "$@.d"
-	$(COMPILE.cc) -O2 -I../../../xyzzy/src -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/laol/rt/range.o laol/rt/range.cxx
-
-${OBJECTDIR}/laol/rt/string.o: laol/rt/string.cxx
-	${MKDIR} -p ${OBJECTDIR}/laol/rt
-	${RM} "$@.d"
-	$(COMPILE.cc) -O2 -I../../../xyzzy/src -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/laol/rt/string.o laol/rt/string.cxx
-
-${OBJECTDIR}/laol/rt/symbol.o: laol/rt/symbol.cxx
-	${MKDIR} -p ${OBJECTDIR}/laol/rt
-	${RM} "$@.d"
-	$(COMPILE.cc) -O2 -I../../../xyzzy/src -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/laol/rt/symbol.o laol/rt/symbol.cxx
 
 # Subprojects
 .build-subprojects:
@@ -157,17 +109,17 @@ ${TESTDIR}/laol/rt/tests/number1.o: laol/rt/tests/number1.cpp
 	$(COMPILE.cc) -O2 -I../../../xyzzy/src -I. -MMD -MP -MF "$@.d" -o ${TESTDIR}/laol/rt/tests/number1.o laol/rt/tests/number1.cpp
 
 
-${OBJECTDIR}/laol/rt/array_nomain.o: ${OBJECTDIR}/laol/rt/array.o laol/rt/array.cxx 
+${OBJECTDIR}/laol/rt/common_nomain.o: ${OBJECTDIR}/laol/rt/common.o laol/rt/common.cxx 
 	${MKDIR} -p ${OBJECTDIR}/laol/rt
-	@NMOUTPUT=`${NM} ${OBJECTDIR}/laol/rt/array.o`; \
+	@NMOUTPUT=`${NM} ${OBJECTDIR}/laol/rt/common.o`; \
 	if (echo "$$NMOUTPUT" | ${GREP} '|main$$') || \
 	   (echo "$$NMOUTPUT" | ${GREP} 'T main$$') || \
 	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
 	then  \
 	    ${RM} "$@.d";\
-	    $(COMPILE.cc) -O2 -I../../../xyzzy/src -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/laol/rt/array_nomain.o laol/rt/array.cxx;\
+	    $(COMPILE.cc) -O2 -I../../../xyzzy/src -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/laol/rt/common_nomain.o laol/rt/common.cxx;\
 	else  \
-	    ${CP} ${OBJECTDIR}/laol/rt/array.o ${OBJECTDIR}/laol/rt/array_nomain.o;\
+	    ${CP} ${OBJECTDIR}/laol/rt/common.o ${OBJECTDIR}/laol/rt/common_nomain.o;\
 	fi
 
 ${OBJECTDIR}/laol/rt/exception_nomain.o: ${OBJECTDIR}/laol/rt/exception.o laol/rt/exception.cxx 
@@ -183,45 +135,6 @@ ${OBJECTDIR}/laol/rt/exception_nomain.o: ${OBJECTDIR}/laol/rt/exception.o laol/r
 	    ${CP} ${OBJECTDIR}/laol/rt/exception.o ${OBJECTDIR}/laol/rt/exception_nomain.o;\
 	fi
 
-${OBJECTDIR}/laol/rt/istream_nomain.o: ${OBJECTDIR}/laol/rt/istream.o laol/rt/istream.cxx 
-	${MKDIR} -p ${OBJECTDIR}/laol/rt
-	@NMOUTPUT=`${NM} ${OBJECTDIR}/laol/rt/istream.o`; \
-	if (echo "$$NMOUTPUT" | ${GREP} '|main$$') || \
-	   (echo "$$NMOUTPUT" | ${GREP} 'T main$$') || \
-	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
-	then  \
-	    ${RM} "$@.d";\
-	    $(COMPILE.cc) -O2 -I../../../xyzzy/src -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/laol/rt/istream_nomain.o laol/rt/istream.cxx;\
-	else  \
-	    ${CP} ${OBJECTDIR}/laol/rt/istream.o ${OBJECTDIR}/laol/rt/istream_nomain.o;\
-	fi
-
-${OBJECTDIR}/laol/rt/iterator_nomain.o: ${OBJECTDIR}/laol/rt/iterator.o laol/rt/iterator.cxx 
-	${MKDIR} -p ${OBJECTDIR}/laol/rt
-	@NMOUTPUT=`${NM} ${OBJECTDIR}/laol/rt/iterator.o`; \
-	if (echo "$$NMOUTPUT" | ${GREP} '|main$$') || \
-	   (echo "$$NMOUTPUT" | ${GREP} 'T main$$') || \
-	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
-	then  \
-	    ${RM} "$@.d";\
-	    $(COMPILE.cc) -O2 -I../../../xyzzy/src -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/laol/rt/iterator_nomain.o laol/rt/iterator.cxx;\
-	else  \
-	    ${CP} ${OBJECTDIR}/laol/rt/iterator.o ${OBJECTDIR}/laol/rt/iterator_nomain.o;\
-	fi
-
-${OBJECTDIR}/laol/rt/lambda_nomain.o: ${OBJECTDIR}/laol/rt/lambda.o laol/rt/lambda.cxx 
-	${MKDIR} -p ${OBJECTDIR}/laol/rt
-	@NMOUTPUT=`${NM} ${OBJECTDIR}/laol/rt/lambda.o`; \
-	if (echo "$$NMOUTPUT" | ${GREP} '|main$$') || \
-	   (echo "$$NMOUTPUT" | ${GREP} 'T main$$') || \
-	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
-	then  \
-	    ${RM} "$@.d";\
-	    $(COMPILE.cc) -O2 -I../../../xyzzy/src -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/laol/rt/lambda_nomain.o laol/rt/lambda.cxx;\
-	else  \
-	    ${CP} ${OBJECTDIR}/laol/rt/lambda.o ${OBJECTDIR}/laol/rt/lambda_nomain.o;\
-	fi
-
 ${OBJECTDIR}/laol/rt/laol_nomain.o: ${OBJECTDIR}/laol/rt/laol.o laol/rt/laol.cxx 
 	${MKDIR} -p ${OBJECTDIR}/laol/rt
 	@NMOUTPUT=`${NM} ${OBJECTDIR}/laol/rt/laol.o`; \
@@ -233,71 +146,6 @@ ${OBJECTDIR}/laol/rt/laol_nomain.o: ${OBJECTDIR}/laol/rt/laol.o laol/rt/laol.cxx
 	    $(COMPILE.cc) -O2 -I../../../xyzzy/src -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/laol/rt/laol_nomain.o laol/rt/laol.cxx;\
 	else  \
 	    ${CP} ${OBJECTDIR}/laol/rt/laol.o ${OBJECTDIR}/laol/rt/laol_nomain.o;\
-	fi
-
-${OBJECTDIR}/laol/rt/map_nomain.o: ${OBJECTDIR}/laol/rt/map.o laol/rt/map.cxx 
-	${MKDIR} -p ${OBJECTDIR}/laol/rt
-	@NMOUTPUT=`${NM} ${OBJECTDIR}/laol/rt/map.o`; \
-	if (echo "$$NMOUTPUT" | ${GREP} '|main$$') || \
-	   (echo "$$NMOUTPUT" | ${GREP} 'T main$$') || \
-	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
-	then  \
-	    ${RM} "$@.d";\
-	    $(COMPILE.cc) -O2 -I../../../xyzzy/src -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/laol/rt/map_nomain.o laol/rt/map.cxx;\
-	else  \
-	    ${CP} ${OBJECTDIR}/laol/rt/map.o ${OBJECTDIR}/laol/rt/map_nomain.o;\
-	fi
-
-${OBJECTDIR}/laol/rt/ostream_nomain.o: ${OBJECTDIR}/laol/rt/ostream.o laol/rt/ostream.cxx 
-	${MKDIR} -p ${OBJECTDIR}/laol/rt
-	@NMOUTPUT=`${NM} ${OBJECTDIR}/laol/rt/ostream.o`; \
-	if (echo "$$NMOUTPUT" | ${GREP} '|main$$') || \
-	   (echo "$$NMOUTPUT" | ${GREP} 'T main$$') || \
-	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
-	then  \
-	    ${RM} "$@.d";\
-	    $(COMPILE.cc) -O2 -I../../../xyzzy/src -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/laol/rt/ostream_nomain.o laol/rt/ostream.cxx;\
-	else  \
-	    ${CP} ${OBJECTDIR}/laol/rt/ostream.o ${OBJECTDIR}/laol/rt/ostream_nomain.o;\
-	fi
-
-${OBJECTDIR}/laol/rt/range_nomain.o: ${OBJECTDIR}/laol/rt/range.o laol/rt/range.cxx 
-	${MKDIR} -p ${OBJECTDIR}/laol/rt
-	@NMOUTPUT=`${NM} ${OBJECTDIR}/laol/rt/range.o`; \
-	if (echo "$$NMOUTPUT" | ${GREP} '|main$$') || \
-	   (echo "$$NMOUTPUT" | ${GREP} 'T main$$') || \
-	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
-	then  \
-	    ${RM} "$@.d";\
-	    $(COMPILE.cc) -O2 -I../../../xyzzy/src -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/laol/rt/range_nomain.o laol/rt/range.cxx;\
-	else  \
-	    ${CP} ${OBJECTDIR}/laol/rt/range.o ${OBJECTDIR}/laol/rt/range_nomain.o;\
-	fi
-
-${OBJECTDIR}/laol/rt/string_nomain.o: ${OBJECTDIR}/laol/rt/string.o laol/rt/string.cxx 
-	${MKDIR} -p ${OBJECTDIR}/laol/rt
-	@NMOUTPUT=`${NM} ${OBJECTDIR}/laol/rt/string.o`; \
-	if (echo "$$NMOUTPUT" | ${GREP} '|main$$') || \
-	   (echo "$$NMOUTPUT" | ${GREP} 'T main$$') || \
-	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
-	then  \
-	    ${RM} "$@.d";\
-	    $(COMPILE.cc) -O2 -I../../../xyzzy/src -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/laol/rt/string_nomain.o laol/rt/string.cxx;\
-	else  \
-	    ${CP} ${OBJECTDIR}/laol/rt/string.o ${OBJECTDIR}/laol/rt/string_nomain.o;\
-	fi
-
-${OBJECTDIR}/laol/rt/symbol_nomain.o: ${OBJECTDIR}/laol/rt/symbol.o laol/rt/symbol.cxx 
-	${MKDIR} -p ${OBJECTDIR}/laol/rt
-	@NMOUTPUT=`${NM} ${OBJECTDIR}/laol/rt/symbol.o`; \
-	if (echo "$$NMOUTPUT" | ${GREP} '|main$$') || \
-	   (echo "$$NMOUTPUT" | ${GREP} 'T main$$') || \
-	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
-	then  \
-	    ${RM} "$@.d";\
-	    $(COMPILE.cc) -O2 -I../../../xyzzy/src -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/laol/rt/symbol_nomain.o laol/rt/symbol.cxx;\
-	else  \
-	    ${CP} ${OBJECTDIR}/laol/rt/symbol.o ${OBJECTDIR}/laol/rt/symbol_nomain.o;\
 	fi
 
 # Run Test Targets

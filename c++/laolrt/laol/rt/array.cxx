@@ -95,7 +95,6 @@ namespace laol {
                 if (doComma) {
                     oss << ", ";
                 }
-                const string& s = ele.toQString();
                 oss << ele.toQString();
                 doComma = true;
             }
@@ -129,7 +128,8 @@ namespace laol {
                     val.push_back(m_ar[actualIndex(sub.toLInt())]);
                 } else if (sub.isObject() && sub.isA<Range>()) {
                     iterate(sub.toType<Range>(), [this, &val](auto i){
-                        val.push_back(this->m_ar[actualIndex(i)]);
+                        //this-> work around gcc 5.1.0 bug
+                        val.push_back(m_ar[this->actualIndex(i)]);
                     });
                 } else {
                     ASSERT_NEVER; //todo: error
@@ -178,7 +178,8 @@ namespace laol {
                     actualIndices.push_back(actualIndex(sub.toLInt()));
                 } else if (sub.isObject() && sub.isA<Range>()) {
                     iterate(sub.toType<Range>(), [this, &actualIndices](auto i){
-                        actualIndices.push_back(actualIndex(i));
+                        //this-> work around gcc 5.1.0 bug
+                        actualIndices.push_back(this->actualIndex(i));
                     });
                 } else {
                     ASSERT_NEVER; //todo: error

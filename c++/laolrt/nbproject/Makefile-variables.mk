@@ -7,13 +7,13 @@ CND_BASEDIR=`pwd`
 CND_BUILDDIR=build
 CND_DISTDIR=dist
 # Debug configuration
-CND_PLATFORM_Debug=CLang-MacOSX
-CND_ARTIFACT_DIR_Debug=dist/Debug/CLang-MacOSX
+CND_PLATFORM_Debug=GNU-Linux
+CND_ARTIFACT_DIR_Debug=dist/Debug/GNU-Linux
 CND_ARTIFACT_NAME_Debug=liblaolrt.a
-CND_ARTIFACT_PATH_Debug=dist/Debug/CLang-MacOSX/liblaolrt.a
-CND_PACKAGE_DIR_Debug=dist/Debug/CLang-MacOSX/package
+CND_ARTIFACT_PATH_Debug=dist/Debug/GNU-Linux/liblaolrt.a
+CND_PACKAGE_DIR_Debug=dist/Debug/GNU-Linux/package
 CND_PACKAGE_NAME_Debug=laolrt.tar
-CND_PACKAGE_PATH_Debug=dist/Debug/CLang-MacOSX/package/laolrt.tar
+CND_PACKAGE_PATH_Debug=dist/Debug/GNU-Linux/package/laolrt.tar
 # Release configuration
 CND_PLATFORM_Release=gcc-4.7.4-MacOSX
 CND_ARTIFACT_DIR_Release=dist/Release/gcc-4.7.4-MacOSX

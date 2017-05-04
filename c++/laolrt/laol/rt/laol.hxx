@@ -32,6 +32,7 @@
 #ifndef _laol_rt_laol_hxx_
 #define _laol_rt_laol_hxx_
 
+#include <typeinfo>
 #include <cmath>
 #include <vector>
 #include <array>

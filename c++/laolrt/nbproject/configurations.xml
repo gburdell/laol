@@ -57,12 +57,13 @@
   <confs>
     <conf name="Debug" type="3">
       <toolsSet>
-        <compilerSet>CLang|CLang</compilerSet>
+        <compilerSet>default</compilerSet>
         <dependencyChecking>true</dependencyChecking>
         <rebuildPropChanged>false</rebuildPropChanged>
       </toolsSet>
       <compileType>
         <ccTool>
+          <standard>11</standard>
           <commandlineTool>g++</commandlineTool>
           <incDir>
             <pElem>.</pElem>
@@ -98,20 +99,6 @@
             <pElem>.</pElem>
             <pElem>.</pElem>
             <pElem>.</pElem>
-            <pElem>.</pElem>
-            <pElem>.</pElem>
-            <pElem>.</pElem>
-            <pElem>.</pElem>
-            <pElem>.</pElem>
-            <pElem>.</pElem>
-            <pElem>.</pElem>
-            <pElem>.</pElem>
-            <pElem>.</pElem>
-            <pElem>.</pElem>
-            <pElem>.</pElem>
-            <pElem>.</pElem>
-            <pElem>.</pElem>
-            <pElem>.</pElem>
           </linkerDynSerch>
         </linkerTool>
       </folder>
@@ -135,25 +122,12 @@
             <pElem>.</pElem>
             <pElem>.</pElem>
             <pElem>.</pElem>
-            <pElem>.</pElem>
-            <pElem>.</pElem>
-            <pElem>.</pElem>
-            <pElem>.</pElem>
-            <pElem>.</pElem>
-            <pElem>.</pElem>
-            <pElem>.</pElem>
-            <pElem>.</pElem>
-            <pElem>.</pElem>
-            <pElem>.</pElem>
-            <pElem>.</pElem>
-            <pElem>.</pElem>
-            <pElem>.</pElem>
-            <pElem>.</pElem>
           </linkerDynSerch>
           <linkerLibItems>
-            <linkerLibFileItem>dist/Debug/CLang-MacOSX/liblaolrt.a</linkerLibFileItem>
-            <linkerLibFileItem>../../../xyzzy/dist/debug/MacOSX/xyzzy.a</linkerLibFileItem>
+            <linkerLibFileItem>dist/Debug/GNU-Linux/liblaolrt.a</linkerLibFileItem>
+            <linkerLibFileItem>../../../xyzzy/dist/debug/linux/xyzzy.a</linkerLibFileItem>
           </linkerLibItems>
+          <commandLine>-Wl,-rpath -Wl,/usr/local/lib64</commandLine>
         </linkerTool>
       </folder>
       <item path="laol/rt/array.cxx" ex="false" tool="1" flavor2="0">
@@ -254,20 +228,6 @@
             <pElem>.</pElem>
             <pElem>.</pElem>
             <pElem>.</pElem>
-            <pElem>.</pElem>
-            <pElem>.</pElem>
-            <pElem>.</pElem>
-            <pElem>.</pElem>
-            <pElem>.</pElem>
-            <pElem>.</pElem>
-            <pElem>.</pElem>
-            <pElem>.</pElem>
-            <pElem>.</pElem>
-            <pElem>.</pElem>
-            <pElem>.</pElem>
-            <pElem>.</pElem>
-            <pElem>.</pElem>
-            <pElem>.</pElem>
           </linkerDynSerch>
         </linkerTool>
       </folder>
@@ -285,20 +245,6 @@
         <linkerTool>
           <output>${TESTDIR}/TestFiles/f1</output>
           <linkerDynSerch>
-            <pElem>.</pElem>
-            <pElem>.</pElem>
-            <pElem>.</pElem>
-            <pElem>.</pElem>
-            <pElem>.</pElem>
-            <pElem>.</pElem>
-            <pElem>.</pElem>
-            <pElem>.</pElem>
-            <pElem>.</pElem>
-            <pElem>.</pElem>
-            <pElem>.</pElem>
-            <pElem>.</pElem>
-            <pElem>.</pElem>
-            <pElem>.</pElem>
             <pElem>.</pElem>
             <pElem>.</pElem>
             <pElem>.</pElem>
