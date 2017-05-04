@@ -231,8 +231,8 @@ namespace laol {
             typedef LaolObj(Laol::* TPMethod)(const LaolObj& self, const LaolObj& args) const;
 
             //call method
-            LaolObj operator()(const string& methodNm, const LaolObj& args, bool mustFind = true);
-            LaolObj operator()(const string& methodNm);
+            LaolObj operator()(const string& methodNm, const LaolObj& args, bool mustFind = true) const;
+            LaolObj operator()(const string& methodNm) const;
 
             //call method if it exists (no error: as operator() does).
 

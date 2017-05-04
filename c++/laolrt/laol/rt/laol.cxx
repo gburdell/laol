@@ -274,7 +274,7 @@ namespace laol {
         }
 
         LaolObj
-        LaolObj::operator()(const string& methodNm, const LaolObj& args, bool mustFind) {
+        LaolObj::operator()(const string& methodNm, const LaolObj& args, bool mustFind) const {
             LaolObj rval;
             if (isObject()) {
                 Laol* pObj = asTPRcLaol()->getPtr();
@@ -301,7 +301,7 @@ namespace laol {
         }
 
         LaolObj
-        LaolObj::operator()(const string& methodNm) {
+        LaolObj::operator()(const string& methodNm) const {
             return this->operator()(methodNm, NULLOBJ);
         }
 

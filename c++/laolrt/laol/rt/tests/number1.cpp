@@ -175,6 +175,7 @@ void test6() {
  *  a = c1.a1           || LaolObj a = c1("a1");
  *  b = c1.a2 = [1,2,3] || LaolObj b = c1("a2=", toV(1,2,3));
  *  c1.a2[-1] = 123      || c1("a2")("subscript_assign", toV(-1, 123));
+ *  def incr() {...} .   || ...
  */
 class C1 : public Laol {
 public:
@@ -199,6 +200,13 @@ public:
         return unconst(this)->m_a2 = args;
     }
 
+    /*
+     * def incr {return a1 = a1 + 1}
+     */
+    LaolObj incr(const LaolObj& self, const LaolObj& args) const {
+        return self("a1=", self("a1") + 1);
+    }
+    
     Laol::TPMethod
     getFunc(const string& methodNm) const {
         return Laol::getFunc(stMethodByName, methodNm);
@@ -215,7 +223,8 @@ C1::stMethodByName = {
     {"a1", static_cast<TPMethod> (&C1::a1)},
     {"a1=", static_cast<TPMethod> (&C1::a1_assign)},
     {"a2", static_cast<TPMethod> (&C1::a2)},
-    {"a2=", static_cast<TPMethod> (&C1::a2_assign)}
+    {"a2=", static_cast<TPMethod> (&C1::a2_assign)},
+    {"incr", static_cast<TPMethod> (&C1::incr)}
 };
 
 void test7() {
@@ -223,25 +232,13 @@ void test7() {
     LaolObj a = c1("a1");
     LaolObj b = c1("a2=", toV(1, 2, 3));
     c1("a2")("subscript_assign", toV(-1, 123));
-    lcout << "test7: c1.a2=" << c1("a2") << lendl;
+    lcout << "test7: c1.a2=" << c1("a2") << lendl
+            << "test7: c1.incr: " << c1("incr") << lendl
+            << "test7: c1.incr: " << c1("incr") << lendl;
+
 }
 
-struct S1 {
-    std::array<int, 4> m_ar;
-
-    const int& operator[](int i) const {
-        return m_ar[i];
-    }
-
-    int& operator[](int i) {
-        return m_ar[i];
-    }
-};
-
 int main(int argc, char** argv) {
-    S1 s1;
-    s1[0] = 1234;
-    int x = s1[0];
     test1();
     test2();
     test3();

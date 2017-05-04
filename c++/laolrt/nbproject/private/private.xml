@@ -9,12 +9,12 @@
             <url>laol/rt/laol.cxx</url>
             <bookmark id="2">
                 <name/>
-                <line>169</line>
+                <line>170</line>
                 <key/>
             </bookmark>
             <bookmark id="4">
                 <name/>
-                <line>170</line>
+                <line>171</line>
                 <key/>
             </bookmark>
         </file>
@@ -23,13 +23,7 @@
         <group>
             <file>file:/Users/kpfalzer/projects/laol/c++/laolrt/laol/rt/tests/number1.cpp</file>
             <file>file:/Users/kpfalzer/projects/laol/c++/laolrt/laol/rt/laol.cxx</file>
-            <file>file:/Users/kpfalzer/projects/laol/c++/laolrt/laol/rt/istream.cxx</file>
-            <file>file:/Users/kpfalzer/projects/laol/c++/laolrt/laol/rt/lambda.hxx</file>
-            <file>file:/Users/kpfalzer/projects/laol/c++/laolrt/laol/rt/iterator.hxx</file>
             <file>file:/Users/kpfalzer/projects/laol/c++/laolrt/laol/rt/laol.hxx</file>
-            <file>file:/Users/kpfalzer/projects/laol/c++/laolrt/laol/rt/istream.hxx</file>
-            <file>file:/Users/kpfalzer/projects/laol/c++/laolrt/laol/rt/lambda.cxx</file>
-            <file>file:/Users/kpfalzer/projects/laol/c++/laolrt/laol/rt/iterator.cxx</file>
         </group>
     </open-files>
 </project-private>
