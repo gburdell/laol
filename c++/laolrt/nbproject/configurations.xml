@@ -69,7 +69,9 @@
             <pElem>.</pElem>
             <pElem>../../../xyzzy/src</pElem>
           </incDir>
-          <commandLine>-std=c++14</commandLine>
+          <preprocessorList>
+            <Elem>DEBUG</Elem>
+          </preprocessorList>
         </ccTool>
         <archiverTool>
         </archiverTool>

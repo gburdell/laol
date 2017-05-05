@@ -67,7 +67,7 @@ namespace laol {
             const Lambda& lambda = args.toType<Lambda>();
             vector<char> buf;
             char ch;
-            while (! m_ifs.eof()) {
+            while (!m_ifs.fail() && !m_ifs.eof()) {
                 unconst(this)->m_ifs.get(ch);
                 if (ch != '\n') {
                     buf.push_back(ch);
