@@ -32,6 +32,7 @@
 #ifndef _laol_rt_ostream_hxx_
 #define _laol_rt_ostream_hxx_
 
+#include <fstream>
 #include "laol/rt/laol.hxx"
 
 namespace laol {
@@ -40,7 +41,7 @@ namespace laol {
 
         // newline and flush (as in std::endl)
         extern const LaolObj lendl;
-        
+
         class OStream : public Laol {
         public:
 
@@ -57,15 +58,41 @@ namespace laol {
             Laol::TPMethod getFunc(const string& methodNm) const override;
 
             NO_COPY_CONSTRUCTORS(OStream);
-            
+
             virtual ~OStream() = 0;
-            
+
         protected:
-            OStream() {}
+
+            OStream() {
+            }
 
         private:
             static METHOD_BY_NAME stMethodByName;
 
+        };
+
+        class FileOutputStream : public OStream {
+        public:
+            explicit FileOutputStream(const LaolObj& fileName);
+
+            virtual LaolObj fail_PRED(const LaolObj& self, const LaolObj& args) const ;
+            virtual LaolObj close(const LaolObj& self, const LaolObj& args) const ;
+            virtual LaolObj append_SELF(const LaolObj& self, const LaolObj& args) const override;
+            virtual LaolObj flush(const LaolObj& self, const LaolObj& args) const override;
+
+            NO_COPY_CONSTRUCTORS(FileOutputStream);
+
+            virtual ~FileOutputStream();
+
+            Laol::TPMethod getFunc(const string& methodNm) const override;
+
+        private:
+            void close();
+
+            const string m_fileName;
+            std::ofstream m_ofs;
+
+            static METHOD_BY_NAME stMethodByName;
         };
     }
 }

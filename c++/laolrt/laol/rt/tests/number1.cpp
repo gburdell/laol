@@ -32,15 +32,7 @@
 #include <stdlib.h>
 #include <iostream>
 #include <array>
-#include "laol/rt/laol.hxx"
-#include "laol/rt/array.hxx"
-#include "laol/rt/range.hxx"
-#include "laol/rt/string.hxx"
-#include "laol/rt/map.hxx"
-#include "laol/rt/symbol.hxx"
-#include "laol/rt/istream.hxx"
-#include "laol/rt/lambda.hxx"
-
+#include "laol/rt/runtime.hxx"
 
 using namespace std;
 using namespace laol::rt;

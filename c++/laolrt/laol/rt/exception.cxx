@@ -30,7 +30,7 @@
 namespace laol {
     namespace rt {
         using std::to_string;
-        
+
         string
         demangleName(const char* mangledName) {
             int status;
@@ -87,15 +87,22 @@ namespace laol {
         ) {
         }
 
-        ArityException::ArityException(long int found, const string& expected) 
+        ArityException::ArityException(long int found, const string& expected)
         : Exception(
         string("invalid # of arguments.  Found ")
         + to_string(found)
         + ", expected "
         + expected
-        ){
+        ) {
         }
 
+        FileException::FileException(const string& fileName, const string& detail) 
+        : Exception(
+        string(fileName)
+        + ": "
+        + detail
+        ) {
+        }
 
     }
 }

@@ -26,6 +26,7 @@
 #include "laol/rt/string.hxx"
 #include "laol/rt/lambda.hxx"
 #include "laol/rt/istream.hxx"
+#include "laol/rt/exception.hxx"
 
 namespace laol {
     namespace rt {
@@ -52,7 +53,9 @@ namespace laol {
         FileInputStream::FileInputStream(const LaolObj& fileName)
         : m_fileName(String::toStdString(fileName)),
         m_ifs(m_fileName) {
-            //todo: error on fail() ??
+            if (m_ifs.fail()) {
+                throw FileException(m_fileName, "could not open file for read");
+            }
         }
 
         static void lineDone(const LaolObj& self, vector<char>& buf, const Lambda& lambda) {
@@ -84,7 +87,7 @@ namespace laol {
 
         LaolObj
         FileInputStream::empty_PRED(const LaolObj& self, const LaolObj& args) const {
-            return self; //todo
+            return m_ifs.eof();
         }
 
         LaolObj

@@ -112,6 +112,13 @@ namespace laol {
             
             //allow copy constructors
         };
+        
+        class FileException : public Exception {
+        public:
+            explicit FileException(const string& fileName, const string& detail);
+            
+            //allow copy constructors
+        };
     }
 }
 

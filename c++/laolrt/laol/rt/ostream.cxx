@@ -25,6 +25,7 @@
 #include <iostream>
 #include "laol/rt/ostream.hxx"
 #include "laol/rt/string.hxx"
+#include "laol/rt/exception.hxx"
 
 namespace laol {
     namespace rt {
@@ -93,7 +94,7 @@ namespace laol {
             }
 
             void flush() const {
-                unconst(this)->m_os.flush();
+                m_os.flush();
             }
 
             NO_COPY_CONSTRUCTORS(StdOStream);
@@ -119,7 +120,6 @@ namespace laol {
         /*extern*/ const LaolObj lcerr = new StdOStream(std::cerr);
         /*extern*/ const LaolObj lendl = new Endl();
 
-
         //static
         Laol::METHOD_BY_NAME
         OStream::stMethodByName = {
@@ -139,6 +139,66 @@ namespace laol {
 
         OStream::~OStream() {
 
+        }
+
+        //static
+        Laol::METHOD_BY_NAME
+        FileOutputStream::stMethodByName = {
+            {"close", static_cast<TPMethod> (&FileOutputStream::close)},
+            {"fail_PRED", static_cast<TPMethod> (&FileOutputStream::fail_PRED)}
+        };
+
+        Laol::TPMethod
+        FileOutputStream::getFunc(const string& methodNm) const {
+            return Laol::getFunc(stMethodByName, methodNm);
+        }
+
+        FileOutputStream::FileOutputStream(const LaolObj& fileName)
+        : m_fileName(String::toStdString(fileName)),
+        m_ofs(m_fileName) {
+            if (m_ofs.fail()) {
+                throw FileException(m_fileName, "could not open file for write");
+            }
+        }
+
+        LaolObj 
+        FileOutputStream::append_SELF(const LaolObj& self, const LaolObj& args) const {
+                if (args.isObject() || args.isBool()) {
+                    unconst(this)->m_ofs << String::toStdString(args);
+                    unconst(args).ifMethod("call", self);
+                } else {
+                    args.primitiveApply([this](auto val) {
+                        unconst(this)->m_ofs << val;
+                        return val;
+                    });
+                }
+                return self;
+        }
+
+        LaolObj 
+        FileOutputStream::close(const LaolObj& self, const LaolObj&) const {
+            unconst(this)->close();
+            return self;
+        }
+
+        LaolObj 
+        FileOutputStream::fail_PRED(const LaolObj&, const LaolObj&) const {
+            return m_ofs.fail();
+        }
+
+        LaolObj 
+        FileOutputStream::flush(const LaolObj& self, const LaolObj&) const {
+            unconst(this)->m_ofs.flush();
+            return self;
+        }
+
+        void
+        FileOutputStream::close() {
+            m_ofs.close();
+        }
+
+        FileOutputStream::~FileOutputStream() {
+            close();
         }
 
     }
