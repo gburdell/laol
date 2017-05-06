@@ -52,9 +52,9 @@ namespace laol {
 
             virtual ~Lambda();
 
+            static METHOD_BY_NAME stMethodByName;
         private:
             const FUNC m_fn;
-            static METHOD_BY_NAME stMethodByName;
         };
     }
 }

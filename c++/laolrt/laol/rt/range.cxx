@@ -27,9 +27,7 @@
 namespace laol {
     namespace rt {
         //static
-        Laol::METHOD_BY_NAME Range::stMethodByName = {
-            //todo
-        };
+        Laol::METHOD_BY_NAME Range::stMethodByName;
 
         bool
         Range::check(Args args) {
@@ -46,6 +44,11 @@ namespace laol {
 
         Laol::TPMethod
         Range::getFunc(const string& methodNm) const {
+            if (stMethodByName.empty()) {
+                stMethodByName = Laol::join(Laol::stMethodByName,{
+                    //todo
+                });
+            }
             return Laol::getFunc(stMethodByName, methodNm);
         }
 

@@ -33,13 +33,8 @@ namespace laol {
     namespace rt {
 
         //static
-        Laol::METHOD_BY_NAME Array::stMethodByName = {
-            {"length", static_cast<TPMethod> (&Array::length)},
-            {"empty?", static_cast<TPMethod> (&Array::empty_PRED)},
-            {"reverse", static_cast<TPMethod> (&Array::reverse)},
-            {"reverse!", static_cast<TPMethod> (&Array::reverse_SELF)},
-            {"subscript_assign", static_cast<TPMethod> (&Array::subscript_assign)}
-        };
+
+        Laol::METHOD_BY_NAME Array::stMethodByName;
 
         Array::Array() {
         }
@@ -49,22 +44,34 @@ namespace laol {
 
         Laol::TPMethod
         Array::getFunc(const string& methodNm) const {
+            if (stMethodByName.empty()) {
+                stMethodByName = Laol::join(
+                        Laol::stMethodByName,{
+                    {"length", static_cast<TPMethod> (&Array::length)},
+                    {"empty?", static_cast<TPMethod> (&Array::empty_PRED)},
+                    {"reverse", static_cast<TPMethod> (&Array::reverse)},
+                    {"reverse!", static_cast<TPMethod> (&Array::reverse_SELF)},
+                    {"subscript_assign", static_cast<TPMethod> (&Array::subscript_assign)}
+                });
+            }
             return Laol::getFunc(stMethodByName, methodNm);
         }
 
         LaolObj
         Array::left_shift(const LaolObj& self, const LaolObj& opB) const {
             unconst(this)->m_ar.push_back(opB);
+
             return self;
         }
 
         LaolObj
         Array::right_shift(const LaolObj& self, const LaolObj& opB) const {
             unconst(this)->m_ar.insert(m_ar.begin(), opB);
+
             return self;
         }
-       
-        LaolObj 
+
+        LaolObj
         Array::equal(const LaolObj& self, const LaolObj& opB) const {
             LaolObj isEqual = false;
             if (opB.isA<Array>()) {
@@ -77,6 +84,7 @@ namespace laol {
                 if (N == other.size()) {
                     for (auto i = 0; i < N; i++) {
                         if ((m_ar[i] != other[i]).toBool()) {
+
                             return false;
                         }
                     }
@@ -99,10 +107,12 @@ namespace laol {
                 doComma = true;
             }
             oss << "]";
+
             return new String(oss.str());
         }
 
         // Local iterator over int range
+
         template<typename FUNC>
         void iterate(const Range& rng, FUNC forEach) {
             auto i = rng.m_begin.toLInt(), end = rng.m_end.toLInt();
@@ -110,12 +120,13 @@ namespace laol {
             while (true) {
                 forEach(i);
                 if (i == end) {
+
                     return;
                 }
                 i += incr;
             }
-        } 
-        
+        }
+
         /*
          * opB : scalar or Array of vals...
          */
@@ -127,11 +138,12 @@ namespace laol {
                 if (sub.isInt()) {
                     val.push_back(m_ar[actualIndex(sub.toLInt())]);
                 } else if (sub.isObject() && sub.isA<Range>()) {
-                    iterate(sub.toType<Range>(), [this, &val](auto i){
+                    iterate(sub.toType<Range>(), [this, &val](auto i) {
                         //this-> work around gcc 5.1.0 bug
                         val.push_back(m_ar[this->actualIndex(i)]);
                     });
                 } else {
+
                     ASSERT_NEVER; //todo: error
                 }
             }
@@ -140,6 +152,7 @@ namespace laol {
 
         LaolObj
         Array::empty_PRED(const LaolObj&, const LaolObj&) const {
+
             return m_ar.empty();
         }
 
@@ -147,21 +160,24 @@ namespace laol {
         Array::reverse(const LaolObj&, const LaolObj&) const {
             auto p = new Array(m_ar);
             std::reverse(std::begin(p->m_ar), std::end(p->m_ar));
+
             return p;
         }
 
         LaolObj
         Array::reverse_SELF(const LaolObj& self, const LaolObj&) const {
             std::reverse(std::begin(unconst(this)->m_ar), std::end(unconst(this)->m_ar));
+
             return self;
         }
 
-        LaolObj 
+        LaolObj
         Array::length(const LaolObj&, const LaolObj&) const {
+
             return length();
         }
 
-        LaolObj 
+        LaolObj
         Array::subscript_assign(const LaolObj& self, const LaolObj& args) const {
             ASSERT_TRUE(args.isA<Array>());
             const Vector& vargs = args.toType<Array>().m_ar;
@@ -177,7 +193,7 @@ namespace laol {
                 if (sub.isInt()) {
                     actualIndices.push_back(actualIndex(sub.toLInt()));
                 } else if (sub.isObject() && sub.isA<Range>()) {
-                    iterate(sub.toType<Range>(), [this, &actualIndices](auto i){
+                    iterate(sub.toType<Range>(), [this, &actualIndices](auto i) {
                         //this-> work around gcc 5.1.0 bug
                         actualIndices.push_back(this->actualIndex(i));
                     });

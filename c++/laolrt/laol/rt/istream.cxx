@@ -32,21 +32,23 @@ namespace laol {
     namespace rt {
 
         using std::vector;
-        
+
         IStream::~IStream() {
         }
 
         //static
-        Laol::METHOD_BY_NAME
-        IStream::stMethodByName = {
-            {"empty?", static_cast<TPMethod> (&IStream::empty_PRED)},
-            {"eachLine", static_cast<TPMethod> (&IStream::eachLine)},
-            {"fail?", static_cast<TPMethod> (&IStream::fail_PRED)},
-            {"close", static_cast<TPMethod> (&IStream::close)}
-        };
+        Laol::METHOD_BY_NAME IStream::stMethodByName;
 
         Laol::TPMethod
         IStream::getFunc(const string& methodNm) const {
+            if (stMethodByName.empty()) {
+                stMethodByName = Laol::join(Laol::stMethodByName,{
+                    {"empty?", static_cast<TPMethod> (&IStream::empty_PRED)},
+                    {"eachLine", static_cast<TPMethod> (&IStream::eachLine)},
+                    {"fail?", static_cast<TPMethod> (&IStream::fail_PRED)},
+                    {"close", static_cast<TPMethod> (&IStream::close)}
+                });
+            }
             return Laol::getFunc(stMethodByName, methodNm);
         }
 
@@ -78,7 +80,7 @@ namespace laol {
                     lineDone(self, buf, lambda);
                 }
             }
-            if (! buf.empty()) {
+            if (!buf.empty()) {
                 lineDone(self, buf, lambda);
             }
             unconst(this)->close();
@@ -104,6 +106,7 @@ namespace laol {
         FileInputStream::~FileInputStream() {
             close();
         }
+
         void FileInputStream::close() {
             m_ifs.close();
         }

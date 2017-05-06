@@ -64,15 +64,19 @@ namespace laol {
             virtual LaolObj length(const LaolObj& self, const LaolObj& args) const;
 
             //useful for internal use
+
             LaolObj operator[](const LaolObj& ix) const {
                 return subscript(NULLOBJ, ix);
             }
-            
+
             Laol::TPMethod getFunc(const string& methodNm) const override;
 
             virtual ~Array();
 
+            static METHOD_BY_NAME stMethodByName;
+            
         private:
+
             size_t length() const override {
                 return m_ar.size();
             }
@@ -80,7 +84,6 @@ namespace laol {
             typedef std::vector<LaolObj> Vector;
 
             Vector m_ar;
-            static METHOD_BY_NAME stMethodByName;
         };
 
     }

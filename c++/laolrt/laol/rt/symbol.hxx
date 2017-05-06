@@ -54,14 +54,17 @@ namespace laol {
             static LaolObj sym(const string& s);
 
             virtual LaolObj toString(const LaolObj& self, const LaolObj& args) const override;
-            
+
             virtual LaolObj equal(const LaolObj& self, const LaolObj& opB) const override;
-            
+
             Laol::TPMethod getFunc(const string& methodNm) const override;
 
             NO_COPY_CONSTRUCTORS(Symbol);
 
             virtual ~Symbol();
+
+        protected:
+            static METHOD_BY_NAME stMethodByName;
 
         private:
             const VAL m_val;
@@ -74,7 +77,6 @@ namespace laol {
             typedef std::unordered_map<string, LaolObj> MAP;
             static MAP stMap;
             static VAL stLastVal;
-            static METHOD_BY_NAME stMethodByName;
         };
 
     }

@@ -403,7 +403,7 @@ builtin_type_name <-
 
 method_param_decl_default <- EQ expression
 
-//James Gosling would be happy: we only only interfaces
+//James Gosling would be happy: we only extend interfaces
 class_extends <- K_IMPLEMENTS scoped_name_list
 
 scoped_name_list <- scoped_name (COMMA scoped_name)*

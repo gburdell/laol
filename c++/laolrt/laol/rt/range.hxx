@@ -52,9 +52,11 @@ namespace laol {
 
             const LaolObj m_begin, m_end;
 
+        protected:
+            static METHOD_BY_NAME stMethodByName;
+            
         private:
             const bool m_precondition;
-            static METHOD_BY_NAME stMethodByName;
 
             static bool check(Args args);
 

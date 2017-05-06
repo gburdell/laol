@@ -57,7 +57,6 @@ namespace laol {
 
             virtual LaolObj next() = 0;
 
-        private:
             static METHOD_BY_NAME stMethodByName;
         };
 

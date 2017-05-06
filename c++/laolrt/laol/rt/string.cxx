@@ -30,23 +30,7 @@ namespace laol {
         using std::to_string;
 
         //static
-        Laol::METHOD_BY_NAME
-        String::stMethodByName = {
-            {"length", static_cast<TPMethod> (&String::length)},
-            {"empty?", static_cast<TPMethod> (&String::empty_PRED)},
-            {"reverse", static_cast<TPMethod> (&String::reverse)},
-            {"reverse!", static_cast<TPMethod> (&String::reverse_SELF)},
-            {"append", static_cast<TPMethod> (&String::append)},
-            {"append!", static_cast<TPMethod> (&String::append_SELF)},
-            {"prepend", static_cast<TPMethod> (&String::prepend)},
-            {"prepend!", static_cast<TPMethod> (&String::prepend_SELF)},
-            {"toString", static_cast<TPMethod> (&String::toString)},
-            {"at", static_cast<TPMethod> (&String::at)},
-            {"iterator", static_cast<TPMethod> (&String::at)},
-            {"equal", static_cast<TPMethod> (&String::equal)},
-            {"less", static_cast<TPMethod> (&String::less)},
-            {"greater", static_cast<TPMethod> (&String::greater)}
-        };
+        Laol::METHOD_BY_NAME String::stMethodByName;
 
         /*static*/
         string
@@ -68,6 +52,24 @@ namespace laol {
 
         Laol::TPMethod
         String::getFunc(const string& methodNm) const {
+            if (stMethodByName.empty()) {
+                stMethodByName = Laol::join(Laol::stMethodByName,{
+                    {"length", static_cast<TPMethod> (&String::length)},
+                    {"empty?", static_cast<TPMethod> (&String::empty_PRED)},
+                    {"reverse", static_cast<TPMethod> (&String::reverse)},
+                    {"reverse!", static_cast<TPMethod> (&String::reverse_SELF)},
+                    {"append", static_cast<TPMethod> (&String::append)},
+                    {"append!", static_cast<TPMethod> (&String::append_SELF)},
+                    {"prepend", static_cast<TPMethod> (&String::prepend)},
+                    {"prepend!", static_cast<TPMethod> (&String::prepend_SELF)},
+                    {"toString", static_cast<TPMethod> (&String::toString)},
+                    {"at", static_cast<TPMethod> (&String::at)},
+                    {"iterator", static_cast<TPMethod> (&String::at)},
+                    {"equal", static_cast<TPMethod> (&String::equal)},
+                    {"less", static_cast<TPMethod> (&String::less)},
+                    {"greater", static_cast<TPMethod> (&String::greater)}
+                });
+            }
             return Laol::getFunc(stMethodByName, methodNm);
         }
 

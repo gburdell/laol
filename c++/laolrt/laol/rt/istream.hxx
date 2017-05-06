@@ -58,7 +58,6 @@ namespace laol {
             IStream() {
             }
 
-        private:
             static METHOD_BY_NAME stMethodByName;
         };
 

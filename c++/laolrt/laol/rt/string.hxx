@@ -115,6 +115,9 @@ namespace laol {
                 size_t m_curr, m_len;
                 string& m_str;
             };
+            
+        protected:
+            static METHOD_BY_NAME stMethodByName; 
 
         private:
 
@@ -123,7 +126,6 @@ namespace laol {
             }
 
             string m_str;
-            static METHOD_BY_NAME stMethodByName;
         };
 
     }

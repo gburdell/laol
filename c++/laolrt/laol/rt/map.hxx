@@ -83,6 +83,7 @@ namespace laol {
 
             virtual ~Map();
 
+            static METHOD_BY_NAME stMethodByName;
         private:
             Map(const Map& from); //clone
 
@@ -91,7 +92,6 @@ namespace laol {
             }
 
             MAP m_map;
-            static METHOD_BY_NAME stMethodByName;
         };
 
     }

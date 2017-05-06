@@ -608,11 +608,13 @@ DEFINE_INT_APPLY()
             typedef LaolObj::TPMethod TPMethod;
 
             virtual TPMethod getFunc(const string& methodNm) const;
+            typedef std::map<string, TPMethod> METHOD_BY_NAME;
 
+            static METHOD_BY_NAME join(const METHOD_BY_NAME& base, const METHOD_BY_NAME& derived);
+            
             static string getClassName(const LaolObj& r);
 
         protected:
-            typedef std::map<string, TPMethod> METHOD_BY_NAME;
             static TPMethod getFunc(const METHOD_BY_NAME& methodByName, const string& methodNm);
 
             //useful for sized subclass
@@ -620,13 +622,14 @@ DEFINE_INT_APPLY()
 
             virtual size_t length() const;
 
+            static const METHOD_BY_NAME stMethodByName;
+
         private:
 
             auto objectId() const {
                 return toObjectId(this);
             }
 
-            static METHOD_BY_NAME stMethodByName;
         };
     }
 }

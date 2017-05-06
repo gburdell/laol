@@ -31,16 +31,7 @@
 namespace laol {
     namespace rt {
         //static
-        Laol::METHOD_BY_NAME
-        Map::stMethodByName = {
-            {"size", static_cast<TPMethod> (&Map::size)},
-            {"empty?", static_cast<TPMethod> (&Map::empty_PRED)},
-            {"merge", static_cast<TPMethod> (&Map::merge)},
-            {"merge!", static_cast<TPMethod> (&Map::merge_SELF)},
-            {"key?", static_cast<TPMethod> (&Map::key_PRED)},
-            {"find", static_cast<TPMethod> (&Map::find)},
-            {"subscript_assign", static_cast<TPMethod> (&Map::subscript_assign)},
-        };
+        Laol::METHOD_BY_NAME Map::stMethodByName;
 
         Map::Map(std::initializer_list<MAP::value_type> init)
         : m_map(init) {
@@ -53,7 +44,7 @@ namespace laol {
             }
         }
 
-        LaolObj 
+        LaolObj
         Map::subscript_assign(const LaolObj& self, const LaolObj& args) const {
             ASSERT_TRUE(args.isA<Array>());
             const Array& vargs = args.toType<Array>();
@@ -115,6 +106,17 @@ namespace laol {
 
         Laol::TPMethod
         Map::getFunc(const string& methodNm) const {
+            if (stMethodByName.empty()) {
+                stMethodByName = Laol::join(Laol::stMethodByName,{
+                    {"size", static_cast<TPMethod> (&Map::size)},
+                    {"empty?", static_cast<TPMethod> (&Map::empty_PRED)},
+                    {"merge", static_cast<TPMethod> (&Map::merge)},
+                    {"merge!", static_cast<TPMethod> (&Map::merge_SELF)},
+                    {"key?", static_cast<TPMethod> (&Map::key_PRED)},
+                    {"find", static_cast<TPMethod> (&Map::find)},
+                    {"subscript_assign", static_cast<TPMethod> (&Map::subscript_assign)},
+                });
+            }
             return Laol::getFunc(stMethodByName, methodNm);
 
         }

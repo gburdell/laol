@@ -32,11 +32,7 @@ namespace laol {
         /*static*/ Symbol::VAL Symbol::stLastVal = 0;
 
         //static
-        Laol::METHOD_BY_NAME
-        Symbol::stMethodByName = {
-            {"toString", static_cast<TPMethod> (&Symbol::toString)},
-            {"equal", static_cast<TPMethod> (&Symbol::equal)}
-        };
+        Laol::METHOD_BY_NAME Symbol::stMethodByName;
 
         LaolObj
         Symbol::sym(const string& s) {
@@ -65,7 +61,7 @@ namespace laol {
              * Anyway, we'll put in the code but preface w/ assert to see if 
              * we ever get here.
              */
-            ASSERT_NEVER;  
+            ASSERT_NEVER;
             return opB.isA<Symbol>() ? (m_val == opB.toType<Symbol>().m_val) : false;
         }
 
@@ -86,6 +82,12 @@ namespace laol {
 
         Laol::TPMethod
         Symbol::getFunc(const string& methodNm) const {
+            if (stMethodByName.empty()) {
+                stMethodByName = Laol::join(Laol::stMethodByName,{
+                    {"toString", static_cast<TPMethod> (&Symbol::toString)},
+                    {"equal", static_cast<TPMethod> (&Symbol::equal)}
+                });
+            }
             return Laol::getFunc(stMethodByName, methodNm);
         }
 

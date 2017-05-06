@@ -66,7 +66,6 @@ namespace laol {
             OStream() {
             }
 
-        private:
             static METHOD_BY_NAME stMethodByName;
 
         };
@@ -86,13 +85,15 @@ namespace laol {
 
             Laol::TPMethod getFunc(const string& methodNm) const override;
 
+        protected:
+            static METHOD_BY_NAME stMethodByName;
+
         private:
             void close();
 
             const string m_fileName;
             std::ofstream m_ofs;
 
-            static METHOD_BY_NAME stMethodByName;
         };
     }
 }

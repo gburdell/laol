@@ -198,25 +198,37 @@ public:
     LaolObj incr(const LaolObj& self, const LaolObj& args) const {
         return self("a1=", self("a1") + 1);
     }
-    
+
     Laol::TPMethod
     getFunc(const string& methodNm) const {
+        if (stMethodByName.empty()) {
+            stMethodByName = Laol::join(Laol::stMethodByName, {
+                {"a1", static_cast<TPMethod> (&C1::a1)},
+                {"a1=", static_cast<TPMethod> (&C1::a1_assign)},
+                {"a2", static_cast<TPMethod> (&C1::a2)},
+                {"a2=", static_cast<TPMethod> (&C1::a2_assign)},
+                {"incr", static_cast<TPMethod> (&C1::incr)}
+            });
+        }
         return Laol::getFunc(stMethodByName, methodNm);
     }
 
-private:
+protected:
     static METHOD_BY_NAME stMethodByName;
+    
+private:
     LaolObj m_a1, m_a2;
 };
 
 //static
-Laol::METHOD_BY_NAME
-C1::stMethodByName = {
-    {"a1", static_cast<TPMethod> (&C1::a1)},
-    {"a1=", static_cast<TPMethod> (&C1::a1_assign)},
-    {"a2", static_cast<TPMethod> (&C1::a2)},
-    {"a2=", static_cast<TPMethod> (&C1::a2_assign)},
-    {"incr", static_cast<TPMethod> (&C1::incr)}
+Laol::METHOD_BY_NAME C1::stMethodByName;
+
+struct C2 : public C1 {
+
+    C2()
+    : C1(123, 456) {
+    }
+
 };
 
 void test7() {
@@ -227,14 +239,57 @@ void test7() {
     lcout << "test7: c1.a2=" << c1("a2") << lendl
             << "test7: c1.incr: " << c1("incr") << lendl
             << "test7: c1.incr: " << c1("incr") << lendl;
-
+    LaolObj c2 = new C2();
+    lcout << "test7: c2.a1=" << c2("a1");
+    c2("incr");
+    lcout << ", c1.incr()=" << c2("a1") << lendl;
 }
 
 void test8() {
-    char blue[] = { 0x1b, '[', '1', ';', '3', '4', 'm', 0 };
-    char normal[] = { 0x1b, '[', '0', ';', '3', '9', 'm', 0 };
+    char blue[] = {0x1b, '[', '1', ';', '3', '4', 'm', 0};
+    char normal[] = {0x1b, '[', '0', ';', '3', '9', 'm', 0};
     cout << "test8: should be blue: "
-    << blue << "is this blue?" << normal << endl;
+            << blue << "is this blue?" << normal << endl;
+}
+
+//NOTE: here B1 and B2 are pure interfaces; thus, not derived from Laol
+struct B1  {
+    virtual LaolObj m1(const LaolObj& self, const LaolObj& args) const = 0;
+    virtual ~B1() = 0;
+};
+struct B2  {
+    virtual LaolObj m2(const LaolObj& self, const LaolObj& args) const = 0;
+    virtual ~B2() = 0;
+};
+B1::~B1(){}
+B2::~B2(){}
+struct D1 : public Laol, B1, B2 {
+    LaolObj m1(const LaolObj& self, const LaolObj& args) const override {
+        return args + 20;
+    }
+    LaolObj m2(const LaolObj& self, const LaolObj& args) const override {
+        return args + 99;
+    }
+    virtual ~D1() {}
+    
+    Laol::TPMethod
+    getFunc(const string& methodNm) const override {
+        if (stMethodByName.empty()) {
+            stMethodByName = {
+                {"m1", static_cast<TPMethod> (&D1::m1)},
+                {"m2", static_cast<TPMethod> (&D1::m2)}
+};
+        }
+        return Laol::getFunc(stMethodByName, methodNm);
+    }
+
+    static METHOD_BY_NAME stMethodByName;
+};
+Laol::METHOD_BY_NAME D1::stMethodByName;
+void test9() {
+    LaolObj d1 = new D1();
+    d1("m1",100);
+    d1("m2", 123456);
 }
 
 int main(int argc, char** argv) {
@@ -246,6 +301,7 @@ int main(int argc, char** argv) {
     test6();
     test7();
     test8();
+    test9();
     cout << "END: all tests" << endl;
     return (EXIT_SUCCESS);
 }
