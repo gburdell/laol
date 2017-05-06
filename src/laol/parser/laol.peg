@@ -269,8 +269,8 @@ package_statement <- K_PACKAGE PACKAGE_NAME K_tail
 PACKAGE_NAME <- [a-zA-Z][a-zA-Z_0-9]* ('.' [a-zA-Z][a-zA-Z_0-9]*)*
 
 import_statements <- K_IMPORT import_statement (COMMA import_statement)*
-import_statement  <- K_STATIC? IMPORT_NAME
-IMPORT_NAME <- PACKAGE_NAME ".*"? K_tail
+import_statement  <- IMPORT_NAME
+IMPORT_NAME <- PACKAGE_NAME K_tail
 
 file_item <- statement
 
@@ -424,10 +424,16 @@ anonymous_function_defn <-
 /   LCURLY OR method_param_decl_list 
 	OR method_return_decl? sp method_body? sp RCURLY
 
+method_type <-
+	K_DEF           //method with body
+/	K_INTERFACE		//declaration: no body
+/	K_IMPLEMENTS	//override
+/	K_STATIC K_DEF	//static method
+
 method_declaration <-
     access_modifier?
-    (K_STATIC / K_DEFAULT)?
-    K_DEF method_name method_param_decl? method_return_decl?
+    method_type
+    method_name method_param_decl? method_return_decl?
         //NOTE: abstract declaration if empty
         (LCURLY sp method_body sp RCURLY)?
         eos
@@ -540,7 +546,6 @@ K_CATCH     <- "catch"      K_tail
 K_CLASS     <- "class"      K_tail
 K_CONST     <- "const"      K_tail
 K_DEF       <- "def"        K_tail
-K_DEFAULT   <- "default"    K_tail
 K_DOUBLE    <- "double"     K_tail
 K_ELSE      <- "else"       K_tail
 K_ELSIF     <- "elsif"      K_tail

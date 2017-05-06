@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2016 gburdell.
+ * Copyright 2017 kpfalzer.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -23,20 +23,43 @@
  */
 package laol.ast;
 
+import apfe.runtime.Acceptor;
+
 /**
  *
- * @author gburdell
+ * @author kpfalzer
  */
-public class ImportStatement extends Item {
-    public ImportStatement(final laol.parser.apfe.ImportStatement decl) {
+public class MethodType extends Item {
+
+    public MethodType(final laol.parser.apfe.MethodType decl) {
         super(decl);
-        m_import = new AString(decl.getBaseAccepted());
+        final Acceptor acc = asPrioritizedChoice().getAccepted();
+        if (acc instanceof laol.parser.apfe.KINTERFACE) {
+            m_isInterface = true;
+        } else if (acc instanceof laol.parser.apfe.KIMPLEMENTS) {
+            m_isImplements = true;
+        } else if (acc instanceof laol.parser.apfe.KDEF) {
+            m_isDef = true;
+        } else {
+            m_isStatic = m_isDef = true;
+        }
     }
 
-    public AString getImport() {
-        return m_import;
+    public boolean isInterface() {
+        return m_isInterface;
     }
 
-    private final AString   m_import;
-    
+    public boolean isImplements() {
+        return m_isImplements;
+    }
+
+    public boolean isStaticDef() {
+        return m_isStatic && m_isDef;
+    }
+
+    public boolean isDef() {
+        return m_isDef && !isStaticDef();
+    }
+
+    private boolean m_isStatic = false, m_isDef = false, m_isImplements = false, m_isInterface = false;
 }

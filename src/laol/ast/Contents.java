@@ -93,6 +93,7 @@ public class Contents extends Item {
      * @throws java.io.IOException
      * @throws java.lang.ClassNotFoundException
      */
+    /*
     public boolean processImports(
             Collection<String> jarFiles,
             Map<String, SymbolTable> stabByPackage
@@ -137,6 +138,7 @@ public class Contents extends Item {
         }
         return ok;
     }
+    */
 
     /**
      * Create SymbolTable for elements declared in Contents.

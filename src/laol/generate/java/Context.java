@@ -98,7 +98,7 @@ public class Context implements AutoCloseable {
         os().println("package " + getPackageName() + ";");
         getContents().getRequires().forEach((istmt) -> {
             os().format("import %s%s ;\n", 
-                    (istmt.isStatic()) ? "static " : "",
+                    //todo? (istmt.isStatic()) ? "static " : "",
                     istmt.getImport().toString());
         });
         return this;

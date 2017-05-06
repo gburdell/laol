@@ -230,6 +230,13 @@ void test7() {
 
 }
 
+void test8() {
+    char blue[] = { 0x1b, '[', '1', ';', '3', '4', 'm', 0 };
+    char normal[] = { 0x1b, '[', '0', ';', '3', '9', 'm', 0 };
+    cout << "test8: should be blue: "
+    << blue << "is this blue?" << normal << endl;
+}
+
 int main(int argc, char** argv) {
     test1();
     test2();
@@ -238,6 +245,7 @@ int main(int argc, char** argv) {
     test5();
     test6();
     test7();
+    test8();
     cout << "END: all tests" << endl;
     return (EXIT_SUCCESS);
 }

@@ -148,12 +148,7 @@ public class Main {
         ok &= allCUs
                 .stream()
                 .map((Contents contents) -> {
-                    try {
-                        return contents.processImports(jarFiles, m_stabByPackage);
-                    } catch (IOException | ClassNotFoundException ex) {
-                        Util.handleException(ex);
-                    }
-                    return false;
+                    return false; //todo: contents.processImports(jarFiles, m_stabByPackage);
                 })
                 .allMatch(e -> e);
         return ok ? 0 : 1;

@@ -51,8 +51,10 @@ namespace laol {
         /*static*/
         string
         String::toStdString(const LaolObj& from, bool quote) {
-            LaolObj x = from;
-            LaolObj z = x("toString");
+            LaolObj z = from("toString");
+            if (z.isNull()) {
+                return "";
+            }
             const String& s = z.toType<String>();
             string ss = s.m_str;
             if (quote && from.isA<String>()) {
