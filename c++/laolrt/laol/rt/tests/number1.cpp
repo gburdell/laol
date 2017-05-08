@@ -202,7 +202,7 @@ public:
     Laol::TPMethod
     getFunc(const string& methodNm) const {
         if (stMethodByName.empty()) {
-            stMethodByName = Laol::join(Laol::stMethodByName, {
+            stMethodByName = Laol::join(Laol::stMethodByName,{
                 {"a1", static_cast<TPMethod> (&C1::a1)},
                 {"a1=", static_cast<TPMethod> (&C1::a1_assign)},
                 {"a2", static_cast<TPMethod> (&C1::a2)},
@@ -215,7 +215,7 @@ public:
 
 protected:
     static METHOD_BY_NAME stMethodByName;
-    
+
 private:
     LaolObj m_a1, m_a2;
 };
@@ -246,39 +246,57 @@ void test7() {
 }
 
 void test8() {
+    //color codes: http://www.cplusplus.com/forum/beginner/1640/
     char blue[] = {0x1b, '[', '1', ';', '3', '4', 'm', 0};
     char normal[] = {0x1b, '[', '0', ';', '3', '9', 'm', 0};
     cout << "test8: should be blue: "
             << blue << "is this blue?" << normal << endl;
 }
 
-//NOTE: here B1 and B2 are pure interfaces; thus, not derived from Laol
-struct B1  {
+//NOTE: here B1 and B2 are pure interfaces; thus, not derived from Laol.
+// Cannot do partial interface, since would require derived from 'virtual Laol'
+// and we get: error: conversion from pointer to member of class 'B1' 
+// to pointer to member of class 'laol::rt::Laol' via virtual base 'laol::rt::Laol' 
+// is not allowed
+
+struct B1 {//: public Laol {
     virtual LaolObj m1(const LaolObj& self, const LaolObj& args) const = 0;
     virtual ~B1() = 0;
+
 };
-struct B2  {
+
+struct B2 {//: public Laol {
     virtual LaolObj m2(const LaolObj& self, const LaolObj& args) const = 0;
     virtual ~B2() = 0;
+
 };
-B1::~B1(){}
-B2::~B2(){}
+
+B1::~B1() {
+}
+
+B2::~B2() {
+}
+
 struct D1 : public Laol, B1, B2 {
+
     LaolObj m1(const LaolObj& self, const LaolObj& args) const override {
         return args + 20;
     }
+
     LaolObj m2(const LaolObj& self, const LaolObj& args) const override {
         return args + 99;
     }
-    virtual ~D1() {}
-    
+
+    virtual ~D1() {
+    }
+
     Laol::TPMethod
     getFunc(const string& methodNm) const override {
         if (stMethodByName.empty()) {
             stMethodByName = {
                 {"m1", static_cast<TPMethod> (&D1::m1)},
                 {"m2", static_cast<TPMethod> (&D1::m2)}
-};
+            };
         }
         return Laol::getFunc(stMethodByName, methodNm);
     }
@@ -286,9 +304,10 @@ struct D1 : public Laol, B1, B2 {
     static METHOD_BY_NAME stMethodByName;
 };
 Laol::METHOD_BY_NAME D1::stMethodByName;
+
 void test9() {
     LaolObj d1 = new D1();
-    d1("m1",100);
+    d1("m1", 100);
     d1("m2", 123456);
 }
 
