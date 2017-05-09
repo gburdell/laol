@@ -38,14 +38,13 @@ namespace laol {
             return self;
         }
 
-        Laol::TPMethod
-        Lambda::getFunc(const string& methodNm) const {
+        const Laol::METHOD_BY_NAME& Lambda::getMethodByName() {
             if (stMethodByName.empty()) {
-                stMethodByName = Laol::join(Laol::stMethodByName,{
+                stMethodByName = Laol::join(Laol::getMethodByName(),{
                     {"call", static_cast<TPMethod> (&Lambda::call)},
                 });
             }
-            return Laol::getFunc(stMethodByName, methodNm);
+            return stMethodByName;
         }
 
         Lambda::~Lambda() {

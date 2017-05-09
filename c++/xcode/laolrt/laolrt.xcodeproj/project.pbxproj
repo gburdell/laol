@@ -17,6 +17,7 @@
 		F49970F91EAA8C9C00BD9B1B /* string.cxx in Sources */ = {isa = PBXBuildFile; fileRef = F49970F81EAA8C9C00BD9B1B /* string.cxx */; };
 		F49F96761EBA61C00068AD40 /* istream.cxx in Sources */ = {isa = PBXBuildFile; fileRef = F49F96751EBA61C00068AD40 /* istream.cxx */; };
 		F49F96781EBA7CFC0068AD40 /* lambda.cxx in Sources */ = {isa = PBXBuildFile; fileRef = F49F96771EBA7CFC0068AD40 /* lambda.cxx */; };
+		F4A2D0731EC10FDC0087E80B /* timer.cxx in Sources */ = {isa = PBXBuildFile; fileRef = F4A2D0721EC10FDC0087E80B /* timer.cxx */; };
 		F4DF09031EB6659800A05C58 /* map.cxx in Sources */ = {isa = PBXBuildFile; fileRef = F4DF09021EB6659800A05C58 /* map.cxx */; };
 /* End PBXBuildFile section */
 
@@ -32,6 +33,7 @@
 		F49970F81EAA8C9C00BD9B1B /* string.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = string.cxx; path = ../../laolrt/laol/rt/string.cxx; sourceTree = "<group>"; };
 		F49F96751EBA61C00068AD40 /* istream.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = istream.cxx; path = ../../laolrt/laol/rt/istream.cxx; sourceTree = "<group>"; };
 		F49F96771EBA7CFC0068AD40 /* lambda.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = lambda.cxx; path = ../../laolrt/laol/rt/lambda.cxx; sourceTree = "<group>"; };
+		F4A2D0721EC10FDC0087E80B /* timer.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = timer.cxx; path = ../../laolrt/laol/rt/timer.cxx; sourceTree = "<group>"; };
 		F4DF09021EB6659800A05C58 /* map.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = map.cxx; path = ../../laolrt/laol/rt/map.cxx; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -49,6 +51,7 @@
 		F455C7B01E93F6AE00F13033 = {
 			isa = PBXGroup;
 			children = (
+				F4A2D0721EC10FDC0087E80B /* timer.cxx */,
 				F49F96771EBA7CFC0068AD40 /* lambda.cxx */,
 				F49F96751EBA61C00068AD40 /* istream.cxx */,
 				F4824C7E1EB7EE4B00E6D3F2 /* symbol.cxx */,
@@ -150,6 +153,7 @@
 				F4DF09031EB6659800A05C58 /* map.cxx in Sources */,
 				F48290AD1EB177D9006280AF /* exception.cxx in Sources */,
 				F49F96761EBA61C00068AD40 /* istream.cxx in Sources */,
+				F4A2D0731EC10FDC0087E80B /* timer.cxx in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -50,10 +50,10 @@ namespace laol {
         String::~String() {
         }
 
-        Laol::TPMethod
-        String::getFunc(const string& methodNm) const {
+        const Laol::METHOD_BY_NAME&
+        String::getMethodByName() {
             if (stMethodByName.empty()) {
-                stMethodByName = Laol::join(Laol::stMethodByName,{
+                stMethodByName = Laol::join(Laol::getMethodByName(),{
                     {"length", static_cast<TPMethod> (&String::length)},
                     {"empty?", static_cast<TPMethod> (&String::empty_PRED)},
                     {"reverse", static_cast<TPMethod> (&String::reverse)},
@@ -70,7 +70,7 @@ namespace laol {
                     {"greater", static_cast<TPMethod> (&String::greater)}
                 });
             }
-            return Laol::getFunc(stMethodByName, methodNm);
+            return stMethodByName;
         }
 
         LaolObj String::length(const LaolObj&, const LaolObj&) const {

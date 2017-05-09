@@ -49,15 +49,15 @@ namespace laol {
 
             NO_COPY_CONSTRUCTORS(IStream);
 
-            Laol::TPMethod getFunc(const string& methodNm) const override;
-
             virtual ~IStream() = 0;
 
         protected:
+            virtual const METHOD_BY_NAME& getMethodByName() override;
 
             IStream() {
             }
 
+        private:
             static METHOD_BY_NAME stMethodByName;
         };
 
@@ -73,12 +73,17 @@ namespace laol {
             NO_COPY_CONSTRUCTORS(FileInputStream);
 
             virtual ~FileInputStream();
-            
+
+        protected:
+            virtual const METHOD_BY_NAME& getMethodByName() override;
+
         private:
             void close();
-            
+
             const string m_fileName;
             std::ifstream m_ifs;
+
+            static METHOD_BY_NAME stMethodByName;
         };
     }
 }

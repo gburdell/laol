@@ -49,7 +49,6 @@ namespace laol {
             explicit String(const string& s) : m_str(s) {
             }
 
-
             String& operator=(const String&) = delete;
 
             //operators
@@ -92,8 +91,6 @@ namespace laol {
             virtual LaolObj at(const LaolObj& self, const LaolObj& args) const;
             virtual LaolObj toString(const LaolObj& self, const LaolObj& args) const override;
 
-            Laol::TPMethod getFunc(const string& methodNm) const override;
-
             // Get primitive std::string from 'from'
             static string toStdString(const LaolObj& from, bool quote= false);
 
@@ -116,8 +113,8 @@ namespace laol {
                 string& m_str;
             };
             
-        protected:
-            static METHOD_BY_NAME stMethodByName; 
+		protected:
+			virtual const METHOD_BY_NAME& getMethodByName() override;
 
         private:
 
@@ -126,6 +123,8 @@ namespace laol {
             }
 
             string m_str;
+
+            static METHOD_BY_NAME stMethodByName; 
         };
 
     }

@@ -104,10 +104,10 @@ namespace laol {
             return (it != m_map.end()) ? it->second : NULLOBJ;
         }
 
-        Laol::TPMethod
-        Map::getFunc(const string& methodNm) const {
+        const Laol::METHOD_BY_NAME&
+        Map::getMethodByName() {
             if (stMethodByName.empty()) {
-                stMethodByName = Laol::join(Laol::stMethodByName,{
+                stMethodByName = Laol::join(Laol::getMethodByName(),{
                     {"size", static_cast<TPMethod> (&Map::size)},
                     {"empty?", static_cast<TPMethod> (&Map::empty_PRED)},
                     {"merge", static_cast<TPMethod> (&Map::merge)},
@@ -117,7 +117,7 @@ namespace laol {
                     {"subscript_assign", static_cast<TPMethod> (&Map::subscript_assign)},
                 });
             }
-            return Laol::getFunc(stMethodByName, methodNm);
+            return stMethodByName;
 
         }
 

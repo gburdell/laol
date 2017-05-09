@@ -48,13 +48,14 @@ namespace laol {
 
             NO_COPY_CONSTRUCTORS(Lambda);
 
-            Laol::TPMethod getFunc(const string& methodNm) const override;
-
             virtual ~Lambda();
 
-            static METHOD_BY_NAME stMethodByName;
+		protected:
+			virtual const METHOD_BY_NAME& getMethodByName() override;
+
         private:
             const FUNC m_fn;
+            static METHOD_BY_NAME stMethodByName;
         };
     }
 }

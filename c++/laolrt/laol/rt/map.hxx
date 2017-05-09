@@ -77,13 +77,13 @@ namespace laol {
 
             LaolObj find(const LaolObj& self, const LaolObj& args) const;
 
-            Laol::TPMethod getFunc(const string& methodNm) const override;
-
             Map& operator=(const Map&) = delete;
 
             virtual ~Map();
 
-            static METHOD_BY_NAME stMethodByName;
+		protected:
+			virtual const METHOD_BY_NAME& getMethodByName() override;
+
         private:
             Map(const Map& from); //clone
 
@@ -92,6 +92,7 @@ namespace laol {
             }
 
             MAP m_map;
+            static METHOD_BY_NAME stMethodByName;
         };
 
     }

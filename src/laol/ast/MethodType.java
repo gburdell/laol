@@ -34,19 +34,13 @@ public class MethodType extends Item {
     public MethodType(final laol.parser.apfe.MethodType decl) {
         super(decl);
         final Acceptor acc = asPrioritizedChoice().getAccepted();
-        if (acc instanceof laol.parser.apfe.KINTERFACE) {
-            m_isInterface = true;
-        } else if (acc instanceof laol.parser.apfe.KIMPLEMENTS) {
+        if (acc instanceof laol.parser.apfe.KIMPLEMENTS) {
             m_isImplements = true;
         } else if (acc instanceof laol.parser.apfe.KDEF) {
             m_isDef = true;
         } else {
             m_isStatic = m_isDef = true;
         }
-    }
-
-    public boolean isInterface() {
-        return m_isInterface;
     }
 
     public boolean isImplements() {
@@ -61,5 +55,5 @@ public class MethodType extends Item {
         return m_isDef && !isStaticDef();
     }
 
-    private boolean m_isStatic = false, m_isDef = false, m_isImplements = false, m_isInterface = false;
+    private boolean m_isStatic = false, m_isDef = false, m_isImplements = false;
 }

@@ -45,7 +45,8 @@ OBJECTFILES= \
 	${OBJECTDIR}/laol/rt/ostream.o \
 	${OBJECTDIR}/laol/rt/range.o \
 	${OBJECTDIR}/laol/rt/string.o \
-	${OBJECTDIR}/laol/rt/symbol.o
+	${OBJECTDIR}/laol/rt/symbol.o \
+	${OBJECTDIR}/laol/rt/timer.o
 
 # Test Directory
 TESTDIR=${CND_BUILDDIR}/${CND_CONF}/${CND_PLATFORM}/tests
@@ -138,6 +139,11 @@ ${OBJECTDIR}/laol/rt/symbol.o: laol/rt/symbol.cxx
 	${MKDIR} -p ${OBJECTDIR}/laol/rt
 	${RM} "$@.d"
 	$(COMPILE.cc) -g -DDEBUG -I. -I../../../xyzzy/src -std=c++14 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/laol/rt/symbol.o laol/rt/symbol.cxx
+
+${OBJECTDIR}/laol/rt/timer.o: laol/rt/timer.cxx
+	${MKDIR} -p ${OBJECTDIR}/laol/rt
+	${RM} "$@.d"
+	$(COMPILE.cc) -g -DDEBUG -I. -I../../../xyzzy/src -std=c++14 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/laol/rt/timer.o laol/rt/timer.cxx
 
 # Subprojects
 .build-subprojects:
@@ -298,6 +304,19 @@ ${OBJECTDIR}/laol/rt/symbol_nomain.o: ${OBJECTDIR}/laol/rt/symbol.o laol/rt/symb
 	    $(COMPILE.cc) -g -DDEBUG -I. -I../../../xyzzy/src -std=c++14 -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/laol/rt/symbol_nomain.o laol/rt/symbol.cxx;\
 	else  \
 	    ${CP} ${OBJECTDIR}/laol/rt/symbol.o ${OBJECTDIR}/laol/rt/symbol_nomain.o;\
+	fi
+
+${OBJECTDIR}/laol/rt/timer_nomain.o: ${OBJECTDIR}/laol/rt/timer.o laol/rt/timer.cxx 
+	${MKDIR} -p ${OBJECTDIR}/laol/rt
+	@NMOUTPUT=`${NM} ${OBJECTDIR}/laol/rt/timer.o`; \
+	if (echo "$$NMOUTPUT" | ${GREP} '|main$$') || \
+	   (echo "$$NMOUTPUT" | ${GREP} 'T main$$') || \
+	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
+	then  \
+	    ${RM} "$@.d";\
+	    $(COMPILE.cc) -g -DDEBUG -I. -I../../../xyzzy/src -std=c++14 -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/laol/rt/timer_nomain.o laol/rt/timer.cxx;\
+	else  \
+	    ${CP} ${OBJECTDIR}/laol/rt/timer.o ${OBJECTDIR}/laol/rt/timer_nomain.o;\
 	fi
 
 # Run Test Targets

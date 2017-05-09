@@ -318,12 +318,18 @@ namespace laol {
         }
 
         /*static*/
-        const Laol::METHOD_BY_NAME Laol::stMethodByName = {
+        const Laol::METHOD_BY_NAME 
+        Laol::stMethodByName = {
             {"toString", static_cast<TPMethod> (&Laol::toString)},
             {"objectId", static_cast<TPMethod> (&Laol::objectId)},
             {"hashCode", static_cast<TPMethod> (&Laol::objectId)}
         };
-        
+
+        const Laol::METHOD_BY_NAME& 
+        Laol::getMethodByName() {
+            return stMethodByName;
+        }
+
         Laol::METHOD_BY_NAME
         Laol::join(const METHOD_BY_NAME& base, const METHOD_BY_NAME& derived) {
             METHOD_BY_NAME joined(base.begin(), base.end());
@@ -385,7 +391,7 @@ namespace laol {
 
         Laol::TPMethod
         Laol::getFunc(const string& methodNm) const {
-            return getFunc(stMethodByName, methodNm);
+            return getFunc(unconst(this)->getMethodByName(), methodNm);
         }
 
         /*static*/

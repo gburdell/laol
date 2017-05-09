@@ -43,6 +43,7 @@
 #include "laol/rt/range.hxx"
 #include "laol/rt/string.hxx"
 #include "laol/rt/symbol.hxx"
+#include "laol/rt/timer.hxx"
 
 #endif /* _laol_rt_runtime_hxx_ */
 

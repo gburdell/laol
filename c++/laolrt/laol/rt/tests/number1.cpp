@@ -32,6 +32,9 @@
 #include <stdlib.h>
 #include <iostream>
 #include <array>
+#include <chrono>
+#include <thread>
+#include "xyzzy/date.hxx"
 #include "laol/rt/runtime.hxx"
 
 using namespace std;
@@ -199,10 +202,9 @@ public:
         return self("a1=", self("a1") + 1);
     }
 
-    Laol::TPMethod
-    getFunc(const string& methodNm) const {
+    const Laol::METHOD_BY_NAME& getMethodByName() override {
         if (stMethodByName.empty()) {
-            stMethodByName = Laol::join(Laol::stMethodByName,{
+            stMethodByName = Laol::join(Laol::getMethodByName(),{
                 {"a1", static_cast<TPMethod> (&C1::a1)},
                 {"a1=", static_cast<TPMethod> (&C1::a1_assign)},
                 {"a2", static_cast<TPMethod> (&C1::a2)},
@@ -210,7 +212,7 @@ public:
                 {"incr", static_cast<TPMethod> (&C1::incr)}
             });
         }
-        return Laol::getFunc(stMethodByName, methodNm);
+        return stMethodByName;
     }
 
 protected:
@@ -253,11 +255,15 @@ void test8() {
             << blue << "is this blue?" << normal << endl;
 }
 
+//TODO: this issue is no longer true: since we use reinterpret-cast!
+//However, need to make sure base-class methodByName created before...
+//
 //NOTE: here B1 and B2 are pure interfaces; thus, not derived from Laol.
 // Cannot do partial interface, since would require derived from 'virtual Laol'
 // and we get: error: conversion from pointer to member of class 'B1' 
 // to pointer to member of class 'laol::rt::Laol' via virtual base 'laol::rt::Laol' 
 // is not allowed
+#ifdef NOPE
 
 struct B1 {//: public Laol {
     virtual LaolObj m1(const LaolObj& self, const LaolObj& args) const = 0;
@@ -310,6 +316,60 @@ void test9() {
     d1("m1", 100);
     d1("m2", 123456);
 }
+#else
+
+void test9() {
+}
+#endif //NOPE
+
+void test10() {
+    cout << "Current time: " << xyzzy::Date::timeToString() << endl;
+    LaolObj t1 = new Timer();
+    for (auto i = 0; i < 32; i++) {
+        std::this_thread::sleep_for(std::chrono::seconds(2));
+        lcout << "elapsed: " << t1("elapsed") << ": " << t1("hhmmss") << " (hh:mm:ss)" << lendl;
+    }
+}
+
+struct A1 {
+};
+
+struct A2 {
+};
+
+struct A3 {
+
+    A1 operator[](int i) {
+        return a1;
+    }
+
+    A2 operator[](int i) const {
+        return a2;
+    }
+    
+    A1 a1; A2 a2;
+};
+
+template<typename T>
+int vat(const A1& a1, T v) {
+    return v;
+}
+template<typename T, typename... Args>
+int vat(const A1& a1, T first, Args... args) {
+    auto r = first + vat(a1, args...);
+    return r;
+}
+
+void test11() {
+    A3 a3;
+    const A3 a3c;
+    A1 a1;
+    a3[45] = a1;
+    A2 a2 = ((const A3&)a3)[123];
+    a2 = a3c[456];
+    auto v = vat(a1, 1,2,3,4,5);
+    v += 0;
+}
 
 int main(int argc, char** argv) {
     test1();
@@ -321,6 +381,8 @@ int main(int argc, char** argv) {
     test7();
     test8();
     test9();
+    test11();
+    test10();
     cout << "END: all tests" << endl;
     return (EXIT_SUCCESS);
 }

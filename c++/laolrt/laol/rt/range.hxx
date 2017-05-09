@@ -45,21 +45,20 @@ namespace laol {
         public:
             Range(Args args);
 
-            Laol::TPMethod getFunc(const string& methodNm) const override;
-
             virtual ~Range() {
             }
 
             const LaolObj m_begin, m_end;
 
-        protected:
-            static METHOD_BY_NAME stMethodByName;
-            
+		protected:
+			virtual const METHOD_BY_NAME& getMethodByName() override;
+
         private:
             const bool m_precondition;
 
             static bool check(Args args);
 
+            static METHOD_BY_NAME stMethodByName;
         };
 
     }

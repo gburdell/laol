@@ -55,17 +55,17 @@ namespace laol {
             virtual LaolObj append_SELF(const LaolObj& self, const LaolObj& args) const = 0;
             virtual LaolObj flush(const LaolObj& self, const LaolObj& args) const;
 
-            Laol::TPMethod getFunc(const string& methodNm) const override;
-
             NO_COPY_CONSTRUCTORS(OStream);
 
             virtual ~OStream() = 0;
 
         protected:
+            virtual const METHOD_BY_NAME& getMethodByName() override;
 
             OStream() {
             }
 
+        private:
             static METHOD_BY_NAME stMethodByName;
 
         };
@@ -74,8 +74,8 @@ namespace laol {
         public:
             explicit FileOutputStream(const LaolObj& fileName);
 
-            virtual LaolObj fail_PRED(const LaolObj& self, const LaolObj& args) const ;
-            virtual LaolObj close(const LaolObj& self, const LaolObj& args) const ;
+            virtual LaolObj fail_PRED(const LaolObj& self, const LaolObj& args) const;
+            virtual LaolObj close(const LaolObj& self, const LaolObj& args) const;
             virtual LaolObj append_SELF(const LaolObj& self, const LaolObj& args) const override;
             virtual LaolObj flush(const LaolObj& self, const LaolObj& args) const override;
 
@@ -83,10 +83,8 @@ namespace laol {
 
             virtual ~FileOutputStream();
 
-            Laol::TPMethod getFunc(const string& methodNm) const override;
-
         protected:
-            static METHOD_BY_NAME stMethodByName;
+            virtual const METHOD_BY_NAME& getMethodByName() override;
 
         private:
             void close();
@@ -94,6 +92,7 @@ namespace laol {
             const string m_fileName;
             std::ofstream m_ofs;
 
+            static METHOD_BY_NAME stMethodByName;
         };
     }
 }

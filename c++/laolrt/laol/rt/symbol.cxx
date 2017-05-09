@@ -80,15 +80,15 @@ namespace laol {
             throw std::logic_error("unexpected");
         }
 
-        Laol::TPMethod
-        Symbol::getFunc(const string& methodNm) const {
+        const Laol::METHOD_BY_NAME&
+        Symbol::getMethodByName() {
             if (stMethodByName.empty()) {
-                stMethodByName = Laol::join(Laol::stMethodByName,{
+                stMethodByName = Laol::join(Laol::getMethodByName(),{
                     {"toString", static_cast<TPMethod> (&Symbol::toString)},
                     {"equal", static_cast<TPMethod> (&Symbol::equal)}
                 });
             }
-            return Laol::getFunc(stMethodByName, methodNm);
+            return stMethodByName;
         }
 
         Symbol::~Symbol() {

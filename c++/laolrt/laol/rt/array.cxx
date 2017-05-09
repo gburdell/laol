@@ -42,11 +42,11 @@ namespace laol {
         Array::~Array() {
         }
 
-        Laol::TPMethod
-        Array::getFunc(const string& methodNm) const {
+        const Laol::METHOD_BY_NAME& 
+            Array::getMethodByName() {
             if (stMethodByName.empty()) {
                 stMethodByName = Laol::join(
-                        Laol::stMethodByName,{
+                        Laol::getMethodByName(), {
                     {"length", static_cast<TPMethod> (&Array::length)},
                     {"empty?", static_cast<TPMethod> (&Array::empty_PRED)},
                     {"reverse", static_cast<TPMethod> (&Array::reverse)},
@@ -54,7 +54,7 @@ namespace laol {
                     {"subscript_assign", static_cast<TPMethod> (&Array::subscript_assign)}
                 });
             }
-            return Laol::getFunc(stMethodByName, methodNm);
+            return stMethodByName;
         }
 
         LaolObj

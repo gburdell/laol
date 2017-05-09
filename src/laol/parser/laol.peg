@@ -425,8 +425,7 @@ anonymous_function_defn <-
 	OR method_return_decl? sp method_body? sp RCURLY
 
 method_type <-
-	K_DEF           //method with body
-/	K_INTERFACE		//declaration: no body
+	K_DEF           //method with body or interface method
 /	K_IMPLEMENTS	//override
 /	K_STATIC K_DEF	//static method
 

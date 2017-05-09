@@ -1,0 +1,12 @@
+
+interface ITimer {
+	def now
+	def hhmmss
+}
+
+class Timer implements ITimer {
+	implement now {
+	}
+	implement hhmmss {
+	}
+}

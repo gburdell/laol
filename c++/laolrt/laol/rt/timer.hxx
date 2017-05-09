@@ -23,46 +23,61 @@
  */
 
 /* 
- * File:   iterator.hxx
+ * File:   timer.hxx
  * Author: kpfalzer
  *
- * Created on April 23, 2017, 3:55 PM
+ * Created on May 8, 2017, 11:33 AM
  */
 
-#ifndef _laol_rt_iterator_hxx_
-#define _laol_rt_iterator_hxx_
+#ifndef _laol_rt_timer_hxx_
+#define _laol_rt_timer_hxx_
 
+#include <ctime>
 #include "laol/rt/laol.hxx"
 
 namespace laol {
     namespace rt {
-        // Iterator interface
+        //NOTE: intentionally verbose to flush through feasibility
 
-        class Iterator : public Laol {
+        class ITimer : public virtual Laol {
         public:
-            //allow copy constructors
+            virtual LaolObj hhmmss(const LaolObj& self, const LaolObj& args) const = 0;
+            virtual LaolObj elapsed(const LaolObj& self, const LaolObj& args) const = 0;
+            virtual LaolObj time(const LaolObj& self, const LaolObj& args) const = 0;
 
-            //unique methods
-            virtual LaolObj next_PRED(const LaolObj&, const LaolObj&) const;
-            virtual LaolObj next(const LaolObj&, const LaolObj&) const;
-            
-            virtual ~Iterator() {
-            };
+            virtual ~ITimer() = 0;
 
-		protected:
-			virtual const METHOD_BY_NAME& getMethodByName() override;
+        protected:
+            virtual const METHOD_BY_NAME& getMethodByName() override;
 
-            // Implementation for builtins: String, Array, ...
-            virtual LaolObj hasNext() const = 0;
-
-            virtual LaolObj next() = 0;
-
-		private:
+        private:
             static METHOD_BY_NAME stMethodByName;
         };
 
+        class Timer : public virtual Laol, public ITimer {
+        public:
+            explicit Timer();
+
+            virtual LaolObj hhmmss(const LaolObj& self, const LaolObj& args) const override;
+            virtual LaolObj elapsed(const LaolObj& self, const LaolObj& args) const override;
+            virtual LaolObj time(const LaolObj& self, const LaolObj& args) const override;
+
+            //allow copy constructors
+
+            virtual ~Timer();
+
+        protected:
+            virtual const METHOD_BY_NAME& getMethodByName() override;
+
+        private:
+            auto elapsed() const;
+
+            time_t m_start;
+
+            static METHOD_BY_NAME stMethodByName;
+        };
     }
 }
 
-#endif /* _laol_rt_iterator_hxx_ */
+#endif /* _laol_rt_timer_hxx_ */
 

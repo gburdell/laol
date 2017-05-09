@@ -38,18 +38,27 @@ namespace laol {
 
         //static
         Laol::METHOD_BY_NAME IStream::stMethodByName;
+        Laol::METHOD_BY_NAME FileInputStream::stMethodByName;
 
-        Laol::TPMethod
-        IStream::getFunc(const string& methodNm) const {
+        const Laol::METHOD_BY_NAME& 
+        IStream::getMethodByName() {
             if (stMethodByName.empty()) {
-                stMethodByName = Laol::join(Laol::stMethodByName,{
+                stMethodByName = {
                     {"empty?", static_cast<TPMethod> (&IStream::empty_PRED)},
                     {"eachLine", static_cast<TPMethod> (&IStream::eachLine)},
                     {"fail?", static_cast<TPMethod> (&IStream::fail_PRED)},
                     {"close", static_cast<TPMethod> (&IStream::close)}
-                });
+                };
             }
-            return Laol::getFunc(stMethodByName, methodNm);
+            return stMethodByName;
+        }
+
+        const Laol::METHOD_BY_NAME& 
+        FileInputStream::getMethodByName() {
+            if (stMethodByName.empty()) {
+                stMethodByName = Laol::join(Laol::getMethodByName(), IStream::getMethodByName());
+            }
+            return stMethodByName;
         }
 
         FileInputStream::FileInputStream(const LaolObj& fileName)

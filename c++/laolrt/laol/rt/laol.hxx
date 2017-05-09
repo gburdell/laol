@@ -220,7 +220,7 @@ namespace laol {
 
             // incr/decr
             LaolObj operator++(int) const; //post
-            
+
             //
             // logical
             //
@@ -335,8 +335,8 @@ namespace laol {
                 return rval; \
             }
 
-DEFINE_INT_APPLY(const)
-DEFINE_INT_APPLY()
+            DEFINE_INT_APPLY(const)
+            DEFINE_INT_APPLY()
 
 #undef DEFINE_INT_APPLY
 
@@ -607,24 +607,25 @@ DEFINE_INT_APPLY()
 
             typedef LaolObj::TPMethod TPMethod;
 
-            virtual TPMethod getFunc(const string& methodNm) const;
+            TPMethod getFunc(const string& methodNm) const;
             typedef std::map<string, TPMethod> METHOD_BY_NAME;
 
             static METHOD_BY_NAME join(const METHOD_BY_NAME& base, const METHOD_BY_NAME& derived);
-            
+
             static string getClassName(const LaolObj& r);
 
         protected:
-            static TPMethod getFunc(const METHOD_BY_NAME& methodByName, const string& methodNm);
+            virtual const METHOD_BY_NAME& getMethodByName();
 
             //useful for sized subclass
             size_t actualIndex(long int ix) const;
 
             virtual size_t length() const;
 
-            static const METHOD_BY_NAME stMethodByName;
-
         private:
+            static TPMethod getFunc(const METHOD_BY_NAME& methodByName, const string& methodNm);
+
+            static const METHOD_BY_NAME stMethodByName;
 
             auto objectId() const {
                 return toObjectId(this);

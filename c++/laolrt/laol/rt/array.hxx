@@ -69,14 +69,15 @@ namespace laol {
                 return subscript(NULLOBJ, ix);
             }
 
-            Laol::TPMethod getFunc(const string& methodNm) const override;
-
             virtual ~Array();
+
+		protected:
+			virtual const METHOD_BY_NAME& getMethodByName() override;
+
+        private:
 
             static METHOD_BY_NAME stMethodByName;
             
-        private:
-
             size_t length() const override {
                 return m_ar.size();
             }

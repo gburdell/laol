@@ -29,17 +29,16 @@ namespace laol {
         //static
         Laol::METHOD_BY_NAME Iterator::stMethodByName;
 
-        Laol::TPMethod
-        Iterator::getFunc(const string& methodNm) const {
+        const Laol::METHOD_BY_NAME& Iterator::getMethodByName() {
             if (stMethodByName.empty()) {
                 stMethodByName = Laol::join(
-                        Laol::stMethodByName,{
+                        Laol::getMethodByName(),{
                     {"next?", static_cast<TPMethod> (&Iterator::next_PRED)},
                     {"next", static_cast<TPMethod> (&Iterator::next)}
 
                 });
             }
-            return Laol::getFunc(stMethodByName, methodNm);
+            return stMethodByName;
         }
 
         LaolObj

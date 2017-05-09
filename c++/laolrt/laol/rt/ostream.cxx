@@ -45,14 +45,13 @@ namespace laol {
                 return NL;
             }
 
-            Laol::TPMethod
-            getFunc(const string& methodNm) const override {
+            const METHOD_BY_NAME& getMethodByName() override {
                 if (stMethodByName.empty()) {
-                    stMethodByName = Laol::join(Laol::stMethodByName,{
+                    stMethodByName = Laol::join(Laol::getMethodByName(),{
                         {"call", static_cast<TPMethod> (&Endl::call)}
                     });
                 }
-                return Laol::getFunc(stMethodByName, methodNm);
+                return stMethodByName;
             }
 
             NO_COPY_CONSTRUCTORS(Endl);
@@ -107,7 +106,6 @@ namespace laol {
         private:
             std::ostream& m_os;
 
-
         };
 
         /*extern*/ const LaolObj lcout = new StdOStream(std::cout);
@@ -122,15 +120,15 @@ namespace laol {
             return self;
         }
 
-        Laol::TPMethod
-        OStream::getFunc(const string& methodNm) const {
+        const Laol::METHOD_BY_NAME&
+        OStream::getMethodByName() {
             if (stMethodByName.empty()) {
-                stMethodByName = Laol::join(Laol::stMethodByName,{
+                stMethodByName = {
                     {"append!", static_cast<TPMethod> (&OStream::append_SELF)},
                     {"flush", static_cast<TPMethod> (&OStream::flush)}
-                });
+                };
             }
-            return Laol::getFunc(stMethodByName, methodNm);
+            return stMethodByName;
         }
 
         OStream::~OStream() {
@@ -140,15 +138,17 @@ namespace laol {
         //static
         Laol::METHOD_BY_NAME FileOutputStream::stMethodByName;
 
-        Laol::TPMethod
-        FileOutputStream::getFunc(const string& methodNm) const {
+        const Laol::METHOD_BY_NAME&
+        FileOutputStream::getMethodByName() {
             if (stMethodByName.empty()) {
-                stMethodByName = {
+                stMethodByName = Laol::join(
+                        Laol::join(Laol::getMethodByName(),
+                        OStream::getMethodByName()),{
                     {"close", static_cast<TPMethod> (&FileOutputStream::close)},
                     {"fail_PRED", static_cast<TPMethod> (&FileOutputStream::fail_PRED)}
-                };
+                });
             }
-            return Laol::getFunc(stMethodByName, methodNm);
+            return stMethodByName;
         }
 
         FileOutputStream::FileOutputStream(const LaolObj& fileName)

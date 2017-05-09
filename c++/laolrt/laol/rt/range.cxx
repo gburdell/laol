@@ -42,14 +42,14 @@ namespace laol {
         , m_begin(args[0]), m_end(args[(1 == args.size()) ? 0 : 1]) {
         }
 
-        Laol::TPMethod
-        Range::getFunc(const string& methodNm) const {
+        const Laol::METHOD_BY_NAME&
+        Range::getMethodByName() {
             if (stMethodByName.empty()) {
-                stMethodByName = Laol::join(Laol::stMethodByName,{
+                stMethodByName = Laol::join(Laol::getMethodByName(),{
                     //todo
                 });
             }
-            return Laol::getFunc(stMethodByName, methodNm);
+            return stMethodByName;
         }
 
     }
