@@ -53,7 +53,8 @@ namespace laol {
         const Laol::METHOD_BY_NAME&
         String::getMethodByName() {
             if (stMethodByName.empty()) {
-                stMethodByName = Laol::join(Laol::getMethodByName(),{
+                stMethodByName = Laol::join(stMethodByName,
+				Laol::getMethodByName(),METHOD_BY_NAME({
                     {"length", static_cast<TPMethod> (&String::length)},
                     {"empty?", static_cast<TPMethod> (&String::empty_PRED)},
                     {"reverse", static_cast<TPMethod> (&String::reverse)},
@@ -68,7 +69,7 @@ namespace laol {
                     {"equal", static_cast<TPMethod> (&String::equal)},
                     {"less", static_cast<TPMethod> (&String::less)},
                     {"greater", static_cast<TPMethod> (&String::greater)}
-                });
+                }));
             }
             return stMethodByName;
         }

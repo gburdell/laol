@@ -121,8 +121,7 @@ primary_expression <-
 /   sass_primary
 
 //KISS: drop true scoped for now
-//scoped_name <- IDENTNK (DOT IDENTNK)*
-scoped_name <- IDENTNK
+scoped_name <- IDENTNK (COLON2 IDENTNK)*
 
 postfix_expression <-
     postfix_expression LBRACK select_expression RBRACK block?
@@ -265,12 +264,9 @@ assignment_op <-
 contents <-
     package_statement? import_statements* file_item+
 
-package_statement <- K_PACKAGE PACKAGE_NAME K_tail
-PACKAGE_NAME <- [a-zA-Z][a-zA-Z_0-9]* ('.' [a-zA-Z][a-zA-Z_0-9]*)*
+package_statement <- K_PACKAGE scoped_name
 
-import_statements <- K_IMPORT import_statement (COMMA import_statement)*
-import_statement  <- IMPORT_NAME
-IMPORT_NAME <- PACKAGE_NAME K_tail
+import_statements <- K_IMPORT scoped_name (COMMA scoped_name)*
 
 file_item <- statement
 
@@ -403,8 +399,13 @@ builtin_type_name <-
 
 method_param_decl_default <- EQ expression
 
-//James Gosling would be happy: we only extend interfaces
-class_extends <- K_IMPLEMENTS scoped_name_list
+//James Gosling would be happy: iff. we only extend interfaces
+//However, since we're a new language: let's be cavalier and support
+//multiple inheritance, ala c++...
+class_extends <- 
+	K_EXTENDS scoped_name_list K_IMPLEMENTS scoped_name_list
+/	K_EXTENDS scoped_name_list 
+/	K_IMPLEMENTS scoped_name_list
 
 scoped_name_list <- scoped_name (COMMA scoped_name)*
 
@@ -425,9 +426,10 @@ anonymous_function_defn <-
 	OR method_return_decl? sp method_body? sp RCURLY
 
 method_type <-
-	K_DEF           //method with body or interface method
-/	K_IMPLEMENTS	//override
-/	K_STATIC K_DEF	//static method
+	K_DEF           	//method with body or interface method
+/	K_OVERRIDE K_DEF 	//override
+/	K_DEFAULT K_DEF     //default implementation
+/	K_STATIC K_DEF		//static method
 
 method_declaration <-
     access_modifier?
@@ -545,6 +547,7 @@ K_CATCH     <- "catch"      K_tail
 K_CLASS     <- "class"      K_tail
 K_CONST     <- "const"      K_tail
 K_DEF       <- "def"        K_tail
+K_DEFAULT   <- "default"    K_tail
 K_DOUBLE    <- "double"     K_tail
 K_ELSE      <- "else"       K_tail
 K_ELSIF     <- "elsif"      K_tail
@@ -561,6 +564,7 @@ K_INTERFACE <-  "interface" K_tail
 K_NEXT      <- "next"       K_tail
 K_NEW       <- "new"        K_tail
 K_NIL       <- "nil" '?'?   K_tail
+K_OVERRIDE  <- "override"   K_tail
 K_PACKAGE   <- "package"    K_tail
 K_PRIVATE   <- "private"    K_tail
 K_PROTECTED <- "protected"  K_tail

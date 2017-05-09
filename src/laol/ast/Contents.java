@@ -60,8 +60,8 @@ public class Contents extends Item {
         return Collections.unmodifiableList(m_fileItems);
     }
 
-    public List<ImportStatement> getRequires() {
-        List<ImportStatement> stmts = new LinkedList<>();
+    public List<ScopedName> getRequires() {
+        List<ScopedName> stmts = new LinkedList<>();
         m_requires.forEach((ImportStatements imports)->{stmts.addAll(imports.getImports());});
         return Collections.unmodifiableList(stmts);
     }

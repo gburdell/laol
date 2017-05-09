@@ -4,9 +4,9 @@ interface ITimer {
 	def hhmmss
 }
 
-class Timer implements ITimer {
-	implement now {
+class Timer extends C1, C2 implements ITimer {
+	override def now {
 	}
-	implement hhmmss {
+	override def hhmmss {
 	}
 }

@@ -22,7 +22,6 @@
  * THE SOFTWARE.
  */
 package laol.ast;
-import apfe.runtime.Sequence;
 
 /**
  *
@@ -31,14 +30,13 @@ import apfe.runtime.Sequence;
 public class PackageStatement extends Item {
     public PackageStatement(final laol.parser.apfe.PackageStatement decl) {
         super(decl);
-        final Sequence seq = asSequence();
-        m_package = new AString(seq.itemAt(1));
+        m_package = createItem(1);
     }
 
-    public AString getPackageName() {
+    public ScopedName getPackageName() {
         return m_package;
     }
 
-    private final AString   m_package;
+    private final ScopedName   m_package;
     
 }

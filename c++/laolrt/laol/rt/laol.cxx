@@ -330,15 +330,6 @@ namespace laol {
             return stMethodByName;
         }
 
-        Laol::METHOD_BY_NAME
-        Laol::join(const METHOD_BY_NAME& base, const METHOD_BY_NAME& derived) {
-            METHOD_BY_NAME joined(base.begin(), base.end());
-            for (auto& kv : derived) {
-                joined[kv.first] = kv.second;
-            }
-            return joined;
-        }
-
         /*static*/
         string
         Laol::getClassName(const LaolObj& r) {

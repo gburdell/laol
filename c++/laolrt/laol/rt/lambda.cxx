@@ -40,9 +40,9 @@ namespace laol {
 
         const Laol::METHOD_BY_NAME& Lambda::getMethodByName() {
             if (stMethodByName.empty()) {
-                stMethodByName = Laol::join(Laol::getMethodByName(),{
+                stMethodByName = Laol::join(stMethodByName, Laol::getMethodByName(),METHOD_BY_NAME({
                     {"call", static_cast<TPMethod> (&Lambda::call)},
-                });
+                }));
             }
             return stMethodByName;
         }

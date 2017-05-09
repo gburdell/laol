@@ -56,7 +56,7 @@ namespace laol {
         const Laol::METHOD_BY_NAME& 
         FileInputStream::getMethodByName() {
             if (stMethodByName.empty()) {
-                stMethodByName = Laol::join(Laol::getMethodByName(), IStream::getMethodByName());
+                stMethodByName = Laol::join(stMethodByName, Laol::getMethodByName(), IStream::getMethodByName());
             }
             return stMethodByName;
         }

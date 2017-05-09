@@ -24,6 +24,7 @@
 package laol.ast;
 
 import apfe.runtime.Acceptor;
+import apfe.runtime.Sequence;
 
 /**
  *
@@ -31,29 +32,46 @@ import apfe.runtime.Acceptor;
  */
 public class MethodType extends Item {
 
+    public static enum EType {
+        eDef, eDefault, eOverride, eStatic
+    }
+
     public MethodType(final laol.parser.apfe.MethodType decl) {
         super(decl);
         final Acceptor acc = asPrioritizedChoice().getAccepted();
-        if (acc instanceof laol.parser.apfe.KIMPLEMENTS) {
-            m_isImplements = true;
-        } else if (acc instanceof laol.parser.apfe.KDEF) {
-            m_isDef = true;
+        if (acc instanceof laol.parser.apfe.KDEF) {
+            m_type = EType.eDef;
         } else {
-            m_isStatic = m_isDef = true;
+            final Acceptor first = asSequence(acc).itemAt(0);
+            if (first instanceof laol.parser.apfe.KDEFAULT) {
+                m_type = EType.eDefault;
+            } else if (first instanceof laol.parser.apfe.KOVERRIDE) {
+                m_type = EType.eOverride;
+            } else {
+                m_type = EType.eStatic;
+            }
         }
     }
 
-    public boolean isImplements() {
-        return m_isImplements;
+    public EType getType() {
+        return m_type;
+    }
+    
+    public boolean isOverrideDef() {
+        return (EType.eOverride == getType());
     }
 
     public boolean isStaticDef() {
-        return m_isStatic && m_isDef;
+        return (EType.eStatic == getType());
     }
 
     public boolean isDef() {
-        return m_isDef && !isStaticDef();
+        return (EType.eDef == getType());
+    }
+    
+    public boolean isDefaultDef() {
+        return (EType.eDefault == getType());
     }
 
-    private boolean m_isStatic = false, m_isDef = false, m_isImplements = false;
+    private final EType m_type;
 }

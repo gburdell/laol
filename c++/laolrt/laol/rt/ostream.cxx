@@ -47,9 +47,9 @@ namespace laol {
 
             const METHOD_BY_NAME& getMethodByName() override {
                 if (stMethodByName.empty()) {
-                    stMethodByName = Laol::join(Laol::getMethodByName(),{
+                    stMethodByName = Laol::join(stMethodByName, Laol::getMethodByName(),METHOD_BY_NAME({
                         {"call", static_cast<TPMethod> (&Endl::call)}
-                    });
+                    }));
                 }
                 return stMethodByName;
             }
@@ -132,7 +132,6 @@ namespace laol {
         }
 
         OStream::~OStream() {
-
         }
 
         //static
@@ -142,11 +141,12 @@ namespace laol {
         FileOutputStream::getMethodByName() {
             if (stMethodByName.empty()) {
                 stMethodByName = Laol::join(
-                        Laol::join(Laol::getMethodByName(),
-                        OStream::getMethodByName()),{
+                        stMethodByName,
+                        Laol::getMethodByName(),
+                        OStream::getMethodByName(),METHOD_BY_NAME({
                     {"close", static_cast<TPMethod> (&FileOutputStream::close)},
                     {"fail_PRED", static_cast<TPMethod> (&FileOutputStream::fail_PRED)}
-                });
+                }));
             }
             return stMethodByName;
         }

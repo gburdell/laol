@@ -42,17 +42,18 @@ namespace laol {
         Array::~Array() {
         }
 
-        const Laol::METHOD_BY_NAME& 
-            Array::getMethodByName() {
+        const Laol::METHOD_BY_NAME&
+        Array::getMethodByName() {
             if (stMethodByName.empty()) {
-                stMethodByName = Laol::join(
-                        Laol::getMethodByName(), {
+                stMethodByName = join(
+                        stMethodByName,
+                        Laol::getMethodByName(), METHOD_BY_NAME({
                     {"length", static_cast<TPMethod> (&Array::length)},
                     {"empty?", static_cast<TPMethod> (&Array::empty_PRED)},
                     {"reverse", static_cast<TPMethod> (&Array::reverse)},
                     {"reverse!", static_cast<TPMethod> (&Array::reverse_SELF)},
                     {"subscript_assign", static_cast<TPMethod> (&Array::subscript_assign)}
-                });
+                }));
             }
             return stMethodByName;
         }

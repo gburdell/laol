@@ -93,17 +93,19 @@ public class Context implements AutoCloseable {
         }
         return pkg;
     }
-    
+
     public Context packageAndImports() {
         os().println("package " + getPackageName() + ";");
+        /*TODO
         getContents().getRequires().forEach((istmt) -> {
             os().format("import %s%s ;\n", 
                     //todo? (istmt.isStatic()) ? "static " : "",
                     istmt.getImport().toString());
         });
+         */
         return this;
     }
-    
+
     public PrintStream os() {
         return m_os;
     }

@@ -204,13 +204,14 @@ public:
 
     const Laol::METHOD_BY_NAME& getMethodByName() override {
         if (stMethodByName.empty()) {
-            stMethodByName = Laol::join(Laol::getMethodByName(),{
+            stMethodByName = Laol::join(
+                    stMethodByName, Laol::getMethodByName(),METHOD_BY_NAME({
                 {"a1", static_cast<TPMethod> (&C1::a1)},
                 {"a1=", static_cast<TPMethod> (&C1::a1_assign)},
                 {"a2", static_cast<TPMethod> (&C1::a2)},
                 {"a2=", static_cast<TPMethod> (&C1::a2_assign)},
                 {"incr", static_cast<TPMethod> (&C1::incr)}
-            });
+            }));
         }
         return stMethodByName;
     }
@@ -346,29 +347,18 @@ struct A3 {
     A2 operator[](int i) const {
         return a2;
     }
-    
-    A1 a1; A2 a2;
-};
 
-template<typename T>
-int vat(const A1& a1, T v) {
-    return v;
-}
-template<typename T, typename... Args>
-int vat(const A1& a1, T first, Args... args) {
-    auto r = first + vat(a1, args...);
-    return r;
-}
+    A1 a1;
+    A2 a2;
+};
 
 void test11() {
     A3 a3;
     const A3 a3c;
     A1 a1;
     a3[45] = a1;
-    A2 a2 = ((const A3&)a3)[123];
+    A2 a2 = ((const A3&) a3)[123];
     a2 = a3c[456];
-    auto v = vat(a1, 1,2,3,4,5);
-    v += 0;
 }
 
 int main(int argc, char** argv) {

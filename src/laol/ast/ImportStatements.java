@@ -39,9 +39,9 @@ public class ImportStatements extends Item {
         m_imports.addAll(zeroOrMore(asRepetition(seq, 2), 1));
     }
 
-    public List<ImportStatement> getImports() {
+    public List<ScopedName> getImports() {
         return Collections.unmodifiableList(m_imports);
     }
     
-    private final List<ImportStatement> m_imports = new LinkedList<>();
+    private final List<ScopedName> m_imports = new LinkedList<>();
 }

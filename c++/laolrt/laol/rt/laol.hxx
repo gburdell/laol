@@ -610,7 +610,65 @@ namespace laol {
             TPMethod getFunc(const string& methodNm) const;
             typedef std::map<string, TPMethod> METHOD_BY_NAME;
 
-            static METHOD_BY_NAME join(const METHOD_BY_NAME& base, const METHOD_BY_NAME& derived);
+            //static METHOD_BY_NAME join(const METHOD_BY_NAME& base, const METHOD_BY_NAME& derived);
+
+#ifdef NOPE
+
+            static
+            METHOD_BY_NAME& join(
+                    METHOD_BY_NAME& onto,
+                    const METHOD_BY_NAME& from) {
+                for (auto& kv : from) {
+                    onto[kv.first] = kv.second;
+                }
+                return onto;
+            }
+
+            static
+            METHOD_BY_NAME& join(
+                    METHOD_BY_NAME& onto,
+                    const METHOD_BY_NAME& from1,
+                    const METHOD_BY_NAME& from2) {
+                return join(join(onto, from1), from2);
+            }
+
+            static
+            METHOD_BY_NAME& join(
+                    METHOD_BY_NAME& onto,
+                    const METHOD_BY_NAME& from1,
+                    const METHOD_BY_NAME& from2,
+                    const METHOD_BY_NAME& from3) {
+                return join(join(join(onto, from1), from2), from3);
+            }
+
+            static
+            METHOD_BY_NAME& join(
+                    METHOD_BY_NAME& onto,
+                    const METHOD_BY_NAME& from1,
+                    const METHOD_BY_NAME& from2,
+                    const METHOD_BY_NAME& from3,
+                    const METHOD_BY_NAME& from4) {
+                return join(join(join(join(onto, from1), from2), from3), from4);
+            }
+#else
+            typedef const METHOD_BY_NAME& FROMT;
+
+            //template<typename T>
+            static
+            METHOD_BY_NAME& join(METHOD_BY_NAME& onto, const METHOD_BY_NAME& from) {
+                for (auto& kv : from) {
+                    onto[kv.first] = kv.second;
+                }
+                return onto;
+            }
+
+            template<typename T1, typename... Args>
+            static
+            METHOD_BY_NAME& join(METHOD_BY_NAME& onto, T1 from, Args... args) {
+                return join(join(onto, from), args...);
+            }
+
+#endif
 
             static string getClassName(const LaolObj& r);
 

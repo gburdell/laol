@@ -32,11 +32,12 @@ namespace laol {
         const Laol::METHOD_BY_NAME& Iterator::getMethodByName() {
             if (stMethodByName.empty()) {
                 stMethodByName = Laol::join(
-                        Laol::getMethodByName(),{
+						stMethodByName, 
+                        Laol::getMethodByName(),METHOD_BY_NAME({
                     {"next?", static_cast<TPMethod> (&Iterator::next_PRED)},
                     {"next", static_cast<TPMethod> (&Iterator::next)}
 
-                });
+                }));
             }
             return stMethodByName;
         }

@@ -83,10 +83,11 @@ namespace laol {
         const Laol::METHOD_BY_NAME&
         Symbol::getMethodByName() {
             if (stMethodByName.empty()) {
-                stMethodByName = Laol::join(Laol::getMethodByName(),{
+                stMethodByName = Laol::join(stMethodByName,
+				Laol::getMethodByName(),METHOD_BY_NAME({
                     {"toString", static_cast<TPMethod> (&Symbol::toString)},
                     {"equal", static_cast<TPMethod> (&Symbol::equal)}
-                });
+                }));
             }
             return stMethodByName;
         }

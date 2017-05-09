@@ -23,27 +23,40 @@
  */
 package laol.ast;
 
-import gblib.Util;
+import apfe.runtime.Sequence;
 
 /**
- * A class can only implement.
  * @author gburdell
  */
 public class ClassExtends extends Item {
 
     public ClassExtends(final laol.parser.apfe.ClassExtends decl) {
         super(decl);
-        m_implements = createItem(1);
+        final Sequence seq = asPrioritizedChoice().getBaseAccepted();
+        if (seq.itemAt(0) instanceof laol.parser.apfe.KEXTENDS) {
+            m_extends = createItem(seq, 1);
+            m_implements = (2 < seq.length()) ? createItem(seq, 3) : null;
+        } else {
+            m_implements = createItem(seq, 1);
+            m_extends = null;
+        }
+    }
+
+    public boolean hasImplements() {
+        return null != m_implements;
+    }
+
+    public boolean hasExtends() {
+        return null != m_extends;
     }
 
     public ScopedNameList getImplements() {
         return m_implements;
     }
 
-    @Override
-    public String toString() {
-        return Util.join(getImplements().getNames(), ", ");
+    public ScopedNameList getExtends() {
+        return m_extends;
     }
-    
-    private final ScopedNameList m_implements;
+
+    private final ScopedNameList m_extends, m_implements;
 }
