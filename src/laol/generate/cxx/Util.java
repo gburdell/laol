@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2016 gburdell.
+ * Copyright 2017 kpfalzer.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -21,28 +21,39 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package laol.ast;
+package laol.generate.cxx;
 
-import apfe.runtime.Sequence;
-import java.util.Collections;
-import java.util.LinkedList;
-import java.util.List;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
+import laol.ast.AccessModifier;
+import laol.ast.ClassDeclaration;
+import laol.ast.ClassExtends;
+import laol.ast.ScopedName;
+import static laol.generate.Util.createDirectory;
 
 /**
- * @author gburdell
+ * Utilities for Java target generation.
+ *
+ * @author kpfalzer
  */
-public class ScopedName extends Item {
+public class Util {
 
-    public ScopedName(final laol.parser.apfe.ScopedName decl) {
-        super(decl);
-        final Sequence seq = asSequence();
-        m_names.add(getIdent(seq, 0));
-        m_names.addAll(zeroOrMoreIdent(asRepetition(seq, 1), 1));
+    /**
+     * Get output directory based on root and package name.
+     *
+     * @param rootDir root directory.
+     * @param pkgName package name (or null).
+     * @return output directory.
+     * @throws laol.generate.Util.EarlyTermination
+     */
+    public static Path getOutputDir(final String rootDir, String pkgName) throws laol.generate.Util.EarlyTermination {
+        Path outdir = Paths.get(rootDir, pkgName.replace("::", "/"));
+        createDirectory(outdir);
+        return outdir;
     }
-    
-    public List<Ident> getNames() {
-        return Collections.unmodifiableList(m_names);
-    }
-    
-    private List<Ident> m_names = new LinkedList<>();
+
 }

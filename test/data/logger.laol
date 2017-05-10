@@ -1,0 +1,11 @@
+import laol::rt
+
+interface Logger {
+	def info(msg)
+	def warn(msg)
+	def error(msg)
+	def fatal(msg)
+}
+
+class FileLogger(logFname) implements Logger {
+}

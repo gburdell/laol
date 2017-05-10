@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2016 gburdell.
+ * Copyright 2017 gburdell.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -21,28 +21,18 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package laol.ast;
+package laol.generate.cxx;
 
-import apfe.runtime.Sequence;
-import java.util.Collections;
-import java.util.LinkedList;
 import java.util.List;
+import laol.ast.Item;
 
 /**
+ *
  * @author gburdell
  */
-public class ScopedName extends Item {
-
-    public ScopedName(final laol.parser.apfe.ScopedName decl) {
-        super(decl);
-        final Sequence seq = asSequence();
-        m_names.add(getIdent(seq, 0));
-        m_names.addAll(zeroOrMoreIdent(asRepetition(seq, 1), 1));
+public class RangeExpression {
+    public static void process(final laol.ast.RangeExpression item, final Context ctx) {
+        List<Item> items = item.getItems();  //left-recursive items
+        //todo: Item are LorExpression with implied '..' operator
     }
-    
-    public List<Ident> getNames() {
-        return Collections.unmodifiableList(m_names);
-    }
-    
-    private List<Ident> m_names = new LinkedList<>();
 }
