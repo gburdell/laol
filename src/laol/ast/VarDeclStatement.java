@@ -25,18 +25,15 @@ package laol.ast;
 
 import apfe.runtime.Repetition;
 import apfe.runtime.Sequence;
-import java.util.EnumSet;
 import java.util.LinkedList;
 import java.util.List;
-import laol.ast.etc.ISymbol;
-import laol.ast.etc.ISymbolCreator;
-import laol.ast.etc.SymbolTable;
+import laol.ast.etc.IModifiers;
 
 /**
  *
  * @author gburdell
  */
-public class VarDeclStatement extends Item implements ISymbolCreator {
+public class VarDeclStatement extends Item  {
 
     public VarDeclStatement(final laol.parser.apfe.VarDeclStatement decl) {
         super(decl);
@@ -59,20 +56,14 @@ public class VarDeclStatement extends Item implements ISymbolCreator {
      * An inner class (so can access enclosing info) capturing declared
      * var(s) as ISymbol.
      */
-    public class Symbol implements ISymbol {
+    public class Symbol implements IModifiers {
 
         private Symbol(ScopedName name, int modifiers) {
             m_name = name;
             m_modifers = modifiers;
         }
 
-        @Override
-        public EnumSet<EType> getType() {
-            return ISymbol.VAR_TYPE;
-        }
-
-        @Override
-        public Ident getIdent() {
+        public ScopedName getIdent() {
             return m_name;
         }
 
@@ -83,17 +74,6 @@ public class VarDeclStatement extends Item implements ISymbolCreator {
 
         private final int m_modifers;
         private final ScopedName m_name;
-    }
-
-    @Override
-    public boolean insert(SymbolTable stab) {
-        int modifiers = getType().getModifiers();
-        boolean ok = true;
-        for (ScopedName name : m_names) {
-            Symbol sym = new Symbol(name, modifiers);
-            ok &= stab.insert(sym);
-        }
-        return ok;
     }
 
     public AssignmentOp getOp() {

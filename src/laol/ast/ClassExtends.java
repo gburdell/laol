@@ -24,6 +24,8 @@
 package laol.ast;
 
 import apfe.runtime.Sequence;
+import java.util.LinkedList;
+import java.util.List;
 
 /**
  * @author gburdell
@@ -32,7 +34,7 @@ public class ClassExtends extends Item {
 
     public ClassExtends(final laol.parser.apfe.ClassExtends decl) {
         super(decl);
-        final Sequence seq = asPrioritizedChoice().getBaseAccepted();
+        final Sequence seq = asPrioritizedChoice().getAccepted();
         if (seq.itemAt(0) instanceof laol.parser.apfe.KEXTENDS) {
             m_extends = createItem(seq, 1);
             m_implements = (2 < seq.length()) ? createItem(seq, 3) : null;
@@ -58,5 +60,20 @@ public class ClassExtends extends Item {
         return m_extends;
     }
 
+    /**
+     * Get Extends and Implements.
+     * @return all extends and implements in declaration order.
+     */
+    public List<ScopedName> getAll() {
+        List<ScopedName> all = new LinkedList<>();
+        if (hasExtends()) {
+            all.addAll(m_extends.getNames());
+        }
+        if (hasImplements()) {
+            all.addAll(m_implements.getNames());
+        }
+        return all;
+    }
+    
     private final ScopedNameList m_extends, m_implements;
 }

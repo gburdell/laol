@@ -67,7 +67,7 @@ public class Generate extends laol.generate.Generate {
     private void process(final Ast ast) throws Util.EarlyTermination {
         final Contents contents = ast.getGrammar().getContents();
         if (nonNull(contents)) {
-            try (Context ctx = new Context(contents, m_config)) {
+            try (Context ctx = new Context(ast.getFileName(), contents, m_config)) {
                 contents
                         .getFileItems()
                         .stream()

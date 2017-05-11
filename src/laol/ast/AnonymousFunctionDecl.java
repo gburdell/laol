@@ -24,15 +24,13 @@
 package laol.ast;
 
 import apfe.runtime.Sequence;
-import java.util.EnumSet;
 import laol.ast.etc.IName;
-import laol.ast.etc.ISymbol;
 
 /**
  *
  * @author gburdell
  */
-public class AnonymousFunctionDecl extends Item implements IName, ISymbol {
+public class AnonymousFunctionDecl extends Item implements IName {
 
     public AnonymousFunctionDecl(final laol.parser.apfe.AnonymousFunctionDecl decl) {
         super(decl);
@@ -61,25 +59,6 @@ public class AnonymousFunctionDecl extends Item implements IName, ISymbol {
     @Override
     public Ident getIdent() {
         return getParmName().getName();
-    }
-
-    public static final EnumSet<ISymbol.EType> ANONFUNC_TYPE = ISymbol.createType(EType.eAnonFunc);
-    
-    @Override
-    public EnumSet<EType> getType() {
-        return ANONFUNC_TYPE;
-    }
-
-    /**
-     * We're almost a ISymbol --- but we need an actual implementation of
-     * getModifiers.
-     *
-     * @return 0 (invalid).
-     */
-    @Override
-    public int getModifiers() {
-        assert (false);
-        return 0;
     }
 
 }

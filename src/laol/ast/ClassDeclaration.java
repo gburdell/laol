@@ -24,28 +24,14 @@
 package laol.ast;
 
 import apfe.runtime.Sequence;
-import gblib.Util;
-import static gblib.Util.invariant;
 import java.lang.reflect.Modifier;
-import java.util.EnumSet;
-import java.util.List;
-import gblib.AtomicBoolean;
-import java.util.Collection;
-import java.util.LinkedList;
-import java.util.Objects;
-import java.util.stream.Collectors;
-import laol.ast.etc.HierSymbolTable;
 import laol.ast.etc.IModifiers;
-import laol.ast.etc.ISymbol;
-import laol.ast.etc.ISymbolCreator;
-import laol.ast.etc.Inherited;
-import laol.ast.etc.SymbolTable;
 
 /**
  *
  * @author gburdell
  */
-public class ClassDeclaration extends Item implements IModifiers, ISymbol, ISymbolCreator {
+public class ClassDeclaration extends Item implements IModifiers {
 
     public ClassDeclaration(final laol.parser.apfe.ClassDeclaration decl) {
         super(decl);
@@ -65,7 +51,6 @@ public class ClassDeclaration extends Item implements IModifiers, ISymbol, ISymb
         return m_extends;
     }
 
-    @Override
     public Ident getIdent() {
         return m_name;
     }
@@ -84,11 +69,6 @@ public class ClassDeclaration extends Item implements IModifiers, ISymbol, ISymb
     private final ClassExtends m_extends;
     private final ClassBody m_body;
 
-    @Override
-    public EnumSet<EType> getType() {
-        return ISymbol.CLASS_TYPE;
-    }
-
     /**
      * Get access privilege for ClassDeclaration. Default is public.
      *
@@ -99,24 +79,4 @@ public class ClassDeclaration extends Item implements IModifiers, ISymbol, ISymb
         return getModifiers(m_access, Modifier.PUBLIC);
     }
 
-     /**
-     * Check if can inherit symbol.
-     *
-     * @param sym symbol to check for inherit-ability.
-     * @return true if we can inherit symbol.
-     */
-    private static boolean canInherit(ISymbol sym, boolean isInterface) {
-        invariant(!isInterface || !sym.isConstructor());  //interface does not have constructor
-        if (!sym.isAnyOf(CONSTRUCTOR_TYPE, MEMBER_METHOD_TYPE, MEMBER_VAR_TYPE)) {
-            return false;
-        }
-        return sym.isPublic() || sym.isProtected();
-    }
-
-    @Override
-    public SymbolTable getSymbolTable() {
-        return m_stab;
-    }
-
-    private HierSymbolTable m_stab;
 }

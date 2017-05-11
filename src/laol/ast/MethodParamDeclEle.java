@@ -26,20 +26,14 @@ package laol.ast;
 import apfe.runtime.Acceptor;
 import apfe.runtime.Sequence;
 import static gblib.Util.emptyUnmodifiableList;
-import java.util.Collections;
-import java.util.EnumSet;
-import java.util.LinkedList;
 import java.util.List;
 import laol.ast.etc.IModifiers;
-import laol.ast.etc.ISymbol;
-import laol.ast.etc.ISymbolCreator;
-import laol.ast.etc.SymbolTable;
 
 /**
  *
  * @author gburdell
  */
-public class MethodParamDeclEle extends Item implements ISymbolCreator, IModifiers {
+public class MethodParamDeclEle extends Item implements IModifiers {
 
     public MethodParamDeclEle(final laol.parser.apfe.MethodParamDeclEle decl) {
         super(decl);
@@ -56,7 +50,7 @@ public class MethodParamDeclEle extends Item implements ISymbolCreator, IModifie
     /**
      * A more complex element.
      */
-    public class Named extends Item implements ISymbol {
+    public class Named extends Item implements IModifiers {
 
         public Named(Acceptor parsed) {
             super(parsed);
@@ -93,14 +87,8 @@ public class MethodParamDeclEle extends Item implements ISymbolCreator, IModifie
         private final ParamName m_paramName;
         private final MethodParamDeclDefault m_default;
 
-        @Override
         public Ident getIdent() {
             return m_paramName.getName();
-        }
-
-        @Override
-        public EnumSet<EType> getType() {
-            return ISymbol.MEMBER_VAR_TYPE;
         }
 
         @Override
@@ -139,7 +127,7 @@ public class MethodParamDeclEle extends Item implements ISymbolCreator, IModifie
     private final MethodParamDeclModifier m_modifier;
     private final Item m_ele;
 
-    public class AnonFuncDeclSymbol implements ISymbol {
+    public class AnonFuncDeclSymbol implements IModifiers {
 
         private AnonFuncDeclSymbol(AnonymousFunctionDecl decl) {
             m_decl = decl;
@@ -147,12 +135,6 @@ public class MethodParamDeclEle extends Item implements ISymbolCreator, IModifie
 
         private final AnonymousFunctionDecl m_decl;
 
-        @Override
-        public EnumSet<EType> getType() {
-            return m_decl.getType();
-        }
-
-        @Override
         public Ident getIdent() {
             return m_decl.getIdent();
         }
@@ -161,12 +143,6 @@ public class MethodParamDeclEle extends Item implements ISymbolCreator, IModifie
         public int getModifiers() {
             return MethodParamDeclEle.this.getModifiers();
         }
-    }
-
-    @Override
-    public boolean insert(SymbolTable stab) {
-        ISymbol sym = isNamed() ? asNamed() : new AnonFuncDeclSymbol(asAnonFuncDecl());
-        return stab.insert(sym);
     }
 
     public final static List<MethodParamDeclEle> EMPTY_LIST = emptyUnmodifiableList();

@@ -27,15 +27,13 @@ import apfe.runtime.Repetition;
 import apfe.runtime.Sequence;
 import gblib.Util;
 import java.lang.reflect.Modifier;
-import java.util.EnumSet;
-import laol.ast.etc.ISymbol;
-import laol.ast.etc.ISymbolCreator;
+import laol.ast.etc.IModifiers;
 
 /**
  *
  * @author gburdell
  */
-public class InterfaceDeclaration extends Item implements ISymbol, ISymbolCreator {
+public class InterfaceDeclaration extends Item implements IModifiers {
 
     public InterfaceDeclaration(final laol.parser.apfe.InterfaceDeclaration decl) {
         super(decl);
@@ -65,13 +63,7 @@ public class InterfaceDeclaration extends Item implements ISymbol, ISymbolCreato
         return m_implements;
     }
 
-    @Override
-    public EnumSet<EType> getType() {
-        return ISymbol.INTERFACE_TYPE;
-    }
-
-    @Override
-    public Ident getIdent() {
+     public Ident getIdent() {
         return m_name;
     }
 

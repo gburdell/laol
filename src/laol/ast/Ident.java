@@ -68,6 +68,11 @@ public class Ident extends Item {
         return Objects.nonNull(m_sfx);
     }
     
+    @Override
+    public String toString() {
+        return m_id + (hasSuffix() ? m_sfx : "");
+    }
+    
     private final String m_id;
     private final Character m_sfx;
 

@@ -103,10 +103,11 @@ public class Main {
                 PROGNM, CMD_OPTIONS.getUsage());
     }
 
-    public static final String PROGNM = "laol2j";
+    public static final String PROGNM = "laol2cxx";
 
     private static final Config CONFIG = Config.create()
             .add(new String[]{
+        "packageName laol::user",
         "outputDir " + PROGNM + "/generate/src",
         "verbosity *I1"
     });
@@ -114,6 +115,18 @@ public class Main {
     private static final Options CMD_OPTIONS = Options.create();
 
     static {
+        {
+            final String keyName = "packageName";
+            final String dflt = CONFIG.get(keyName).toString();
+            CMD_OPTIONS
+                    .add(
+                            "-p|--package name",
+                            "Default package name " + defaultOpt(dflt),
+                            (opt) -> {
+                                CONFIG.put(keyName, opt);
+                            }
+                    );
+        }
         {
             final String keyName = "outputDir";
             final String dflt = CONFIG.get(keyName).toString();

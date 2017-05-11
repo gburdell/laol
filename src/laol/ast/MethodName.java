@@ -37,6 +37,14 @@ public class MethodName extends Item {
         return (m_name instanceof MethodNameOp);
     }
     
+    public ScopedName asScopedName() {
+        return ScopedName.class.cast(m_name);
+    }
+    
+    public MethodNameOp asMethodNameOp() {
+        return MethodNameOp.class.cast(m_name);
+    }
+    
     public Item getName() {
         return m_name;
     }

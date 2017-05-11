@@ -25,13 +25,6 @@ package laol.generate.cxx;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
-import laol.ast.AccessModifier;
-import laol.ast.ClassDeclaration;
-import laol.ast.ClassExtends;
 import laol.ast.ScopedName;
 import static laol.generate.Util.createDirectory;
 
@@ -51,9 +44,12 @@ public class Util {
      * @throws laol.generate.Util.EarlyTermination
      */
     public static Path getOutputDir(final String rootDir, String pkgName) throws laol.generate.Util.EarlyTermination {
-        Path outdir = Paths.get(rootDir, pkgName.replace("::", "/"));
+        Path outdir = Paths.get(rootDir, pkgName.replaceAll("::", "/"));
         createDirectory(outdir);
         return outdir;
     }
-
+    
+    public static String toPath(final ScopedName name) {
+        return name.toString().replaceAll("::", "/");
+    }
 }

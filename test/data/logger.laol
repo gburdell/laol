@@ -1,4 +1,4 @@
-import laol::rt
+import laol::rt::runtime
 
 interface Logger {
 	def info(msg)
@@ -8,4 +8,6 @@ interface Logger {
 }
 
 class FileLogger(logFname) implements Logger {
+    override def info(msg) {}
+    def m1 {}
 }

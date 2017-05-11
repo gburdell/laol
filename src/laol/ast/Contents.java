@@ -40,7 +40,7 @@ public class Contents extends Item {
         super(decl);
         final Sequence seq = asSequence();
         m_package = oneOrNone(seq, 0);
-        m_requires = zeroOrMore(seq, 1);
+        m_imports = zeroOrMore(seq, 1);
         m_fileItems = zeroOrMore(seq, 2);
     }
 
@@ -48,9 +48,9 @@ public class Contents extends Item {
         return Collections.unmodifiableList(m_fileItems);
     }
 
-    public List<ScopedName> getRequires() {
+    public List<ScopedName> getImports() {
         List<ScopedName> stmts = new LinkedList<>();
-        m_requires.forEach((ImportStatements imports)->{stmts.addAll(imports.getImports());});
+        m_imports.forEach((ImportStatements imports)->{stmts.addAll(imports.getImports());});
         return Collections.unmodifiableList(stmts);
     }
 
@@ -73,7 +73,7 @@ public class Contents extends Item {
     }
 
     private final PackageStatement m_package;
-    private final List<ImportStatements> m_requires;
+    private final List<ImportStatements> m_imports;
     private final List<FileItem> m_fileItems;
 
 }

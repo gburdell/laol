@@ -27,17 +27,25 @@ import apfe.runtime.Sequence;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * @author gburdell
  */
 public class ScopedName extends Item {
-
+    
     public ScopedName(final laol.parser.apfe.ScopedName decl) {
         super(decl);
         final Sequence seq = asSequence();
         m_names.add(getIdent(seq, 0));
         m_names.addAll(zeroOrMoreIdent(asRepetition(seq, 1), 1));
+    }
+    
+    @Override
+    public String toString() {
+        return gblib.Util.join(m_names.stream().map((e) -> {
+            return e.toString();
+        }).collect(Collectors.toList()), "::");
     }
     
     public List<Ident> getNames() {

@@ -26,17 +26,13 @@ package laol.ast;
 import laol.ast.etc.IModifiers;
 import apfe.runtime.Repetition;
 import apfe.runtime.Sequence;
-import static gblib.Util.invariant;
 import java.lang.reflect.Modifier;
-import java.util.EnumSet;
-import laol.ast.etc.ISymbol;
-import laol.ast.etc.ISymbolCreator;
 
 /**
  *
  * @author gburdell
  */
-public class MethodDeclaration extends Item implements ISymbol, ISymbolCreator, IModifiers {
+public class MethodDeclaration extends Item implements IModifiers {
 
     public MethodDeclaration(final laol.parser.apfe.MethodDeclaration decl) {
         super(decl);
@@ -56,6 +52,14 @@ public class MethodDeclaration extends Item implements ISymbol, ISymbolCreator, 
         }
     }
 
+    public MethodName getName() {
+        return m_name;
+    }
+
+    public MethodType getType() {
+        return m_type;
+    }
+
     public MethodBody getBody() {
         return m_body;
     }
@@ -70,18 +74,6 @@ public class MethodDeclaration extends Item implements ISymbol, ISymbolCreator, 
 
     public MethodReturnDecl getRetnDecl() {
         return m_retnDecl;
-    }
-
-    @Override
-    public Ident getIdent() {
-        //todo: need to handle operator
-        invariant(!m_name.isOp());
-        return ScopedName.class.cast(m_name.getName());
-    }
-
-    @Override
-    public EnumSet<EType> getType() {
-        return ISymbol.MEMBER_METHOD_TYPE;
     }
 
     @Override
