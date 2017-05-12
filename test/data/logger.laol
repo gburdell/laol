@@ -7,7 +7,7 @@ interface Logger {
 	def fatal(msg)
 }
 
-class FileLogger(logFname) implements Logger {
+class FileLogger(@logFname) implements Logger {
     override def info(msg) {}
     def m1 {}
 }

@@ -22,7 +22,9 @@
  * THE SOFTWARE.
  */
 package laol.ast;
+
 import apfe.runtime.Sequence;
+import static gblib.Util.emptyUnmodifiableList;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
@@ -32,16 +34,18 @@ import java.util.List;
  * @author gburdell
  */
 public class MethodParamDeclList extends Item {
+
     public MethodParamDeclList(final laol.parser.apfe.MethodParamDeclList decl) {
         super(decl);
         final Sequence seq = asSequence();
         m_parms.add(createItem(seq, 0));
         m_parms.addAll(zeroOrMore(asRepetition(seq, 1), 1));
     }
-    
+
     public List<MethodParamDeclEle> getParms() {
         return Collections.unmodifiableList(m_parms);
     }
-    
+
     private final List<MethodParamDeclEle> m_parms = new LinkedList<>();
+
 }

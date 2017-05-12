@@ -653,7 +653,6 @@ namespace laol {
 #else
             typedef const METHOD_BY_NAME& FROMT;
 
-            //template<typename T>
             static
             METHOD_BY_NAME& join(METHOD_BY_NAME& onto, const METHOD_BY_NAME& from) {
                 for (auto& kv : from) {

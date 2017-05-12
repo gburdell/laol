@@ -23,19 +23,27 @@
  */
 package laol.ast;
 
+import static gblib.Util.emptyUnmodifiableList;
+import java.util.List;
+import java.util.Objects;
+
 /**
  *
  * @author gburdell
  */
 public class MethodParamDecl extends Item {
+
     public MethodParamDecl(final laol.parser.apfe.MethodParamDecl decl) {
         super(decl);
         m_decl = oneOrNone(1);
     }
-    
-    public MethodParamDeclList getDecl() {
-        return m_decl;
+
+    public List<MethodParamDeclEle> getDecl() {
+        return Objects.nonNull(m_decl) ? m_decl.getParms() : EMPTY_LIST;
     }
 
     private final MethodParamDeclList m_decl;
+
+    public final static List<MethodParamDeclEle> EMPTY_LIST = emptyUnmodifiableList();
+
 }

@@ -25,6 +25,7 @@ package laol.ast;
 
 import apfe.runtime.Sequence;
 import java.lang.reflect.Modifier;
+import java.util.List;
 import laol.ast.etc.IModifiers;
 
 /**
@@ -55,12 +56,8 @@ public class ClassDeclaration extends Item implements IModifiers {
         return m_name;
     }
 
-    public MethodParamDecl getParms() {
-        return m_parms;
-    }
-
-    public boolean hasParams() {
-        return isNonNull(getParms());
+    public List<MethodParamDeclEle> getParms() {
+        return isNonNull(m_parms) ? m_parms.getDecl() : MethodParamDecl.EMPTY_LIST;
     }
 
     private final AccessModifier m_access;

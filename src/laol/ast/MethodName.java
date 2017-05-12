@@ -37,6 +37,11 @@ public class MethodName extends Item {
         return (m_name instanceof MethodNameOp);
     }
     
+    @Override
+    public String toString() {
+        return isOp() ? "TODO" : asScopedName().toString();
+    }
+    
     public ScopedName asScopedName() {
         return ScopedName.class.cast(m_name);
     }

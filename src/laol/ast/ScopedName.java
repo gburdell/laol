@@ -52,5 +52,9 @@ public class ScopedName extends Item {
         return Collections.unmodifiableList(m_names);
     }
     
+    public boolean isSimpleName() {
+        return (1 == m_names.size()) && !m_names.get(0).hasSuffix();
+    }
+        
     private List<Ident> m_names = new LinkedList<>();
 }

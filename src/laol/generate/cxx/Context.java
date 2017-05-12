@@ -110,7 +110,7 @@ public class Context implements AutoCloseable {
         //convert import to namespace by dropping last
         getContents().getImports().forEach((ScopedName istmt) -> {
             final int n = istmt.getNames().size();
-            String nsu = String.join("/", 
+            String nsu = String.join("::", 
                     istmt
                     .getNames()
                     .subList(0, n - 1)

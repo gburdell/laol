@@ -144,6 +144,4 @@ public class MethodParamDeclEle extends Item implements IModifiers {
             return MethodParamDeclEle.this.getModifiers();
         }
     }
-
-    public final static List<MethodParamDeclEle> EMPTY_LIST = emptyUnmodifiableList();
 }

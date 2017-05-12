@@ -26,7 +26,9 @@ package laol.ast;
 import laol.ast.etc.IModifiers;
 import apfe.runtime.Repetition;
 import apfe.runtime.Sequence;
+import gblib.Util;
 import java.lang.reflect.Modifier;
+import java.util.Objects;
 
 /**
  *
@@ -58,6 +60,10 @@ public class MethodDeclaration extends Item implements IModifiers {
 
     public MethodType getType() {
         return m_type;
+    }
+
+    public boolean isAbstract() {
+        return Objects.isNull(getBody());
     }
 
     public MethodBody getBody() {

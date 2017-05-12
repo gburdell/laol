@@ -23,6 +23,7 @@
  */
 package laol.ast;
 import apfe.runtime.Sequence;
+import java.util.List;
 
 /**
  *
@@ -36,7 +37,7 @@ public class AnonymousFunctionDefn extends Item {
         if (isAnon) {
             m_parms = gblib.Util.<MethodParamDecl>downCast(createItem(seq, 1)).getDecl();
         } else {
-            m_parms = createItem(seq, 2);
+            m_parms = MethodParamDeclList.class.cast(createItem(seq, 2)).getParms();
         }
         m_return = oneOrNone(seq, isAnon ? 2 : 4);
         m_body = oneOrNone(seq, isAnon ? 4 : 5);
@@ -46,7 +47,7 @@ public class AnonymousFunctionDefn extends Item {
         return m_body;
     }
 
-    public MethodParamDeclList getParms() {
+    public List<MethodParamDeclEle> getParms() {
         return m_parms;
     }
 
@@ -54,7 +55,7 @@ public class AnonymousFunctionDefn extends Item {
         return m_return;
     }
     
-    private final MethodParamDeclList   m_parms;
+    private final List<MethodParamDeclEle>   m_parms;
     private final MethodReturnDecl      m_return;
     private final MethodBody            m_body;
     

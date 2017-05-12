@@ -205,7 +205,9 @@ public:
     const Laol::METHOD_BY_NAME& getMethodByName() override {
         if (stMethodByName.empty()) {
             stMethodByName = Laol::join(
-                    stMethodByName, Laol::getMethodByName(),METHOD_BY_NAME({
+                    stMethodByName,
+                    Laol::getMethodByName(),
+                    METHOD_BY_NAME({
                 {"a1", static_cast<TPMethod> (&C1::a1)},
                 {"a1=", static_cast<TPMethod> (&C1::a1_assign)},
                 {"a2", static_cast<TPMethod> (&C1::a2)},
