@@ -238,13 +238,8 @@ struct C2 : public C1 {
 
 void test7() {
     LaolObj c1 = new C1(123, 345);
-    lcout << "before: c1.a1=" << c1("a1") << lendl;
-    c1("a1") = 9999;
     LaolObj a = c1("a1");
-    
-    //LaolObj b = c1("a2=", toV(1, 2, 3));
-    LaolObj b = c1("a2") = toV(1, 2, 3);
-    
+    LaolObj b = c1("a2=", toV(1, 2, 3));
     c1("a2")("subscript_assign", toV(-1, 123));
     lcout << "test7: c1.a2=" << c1("a2") << lendl
             << "test7: c1.incr: " << c1("incr") << lendl
@@ -262,73 +257,6 @@ void test8() {
     cout << "test8: should be blue: "
             << blue << "is this blue?" << normal << endl;
 }
-
-//TODO: this issue is no longer true: since we use reinterpret-cast!
-//However, need to make sure base-class methodByName created before...
-//
-//NOTE: here B1 and B2 are pure interfaces; thus, not derived from Laol.
-// Cannot do partial interface, since would require derived from 'virtual Laol'
-// and we get: error: conversion from pointer to member of class 'B1' 
-// to pointer to member of class 'laol::rt::Laol' via virtual base 'laol::rt::Laol' 
-// is not allowed
-#ifdef NOPE
-
-struct B1 {//: public Laol {
-    virtual LaolObj m1(const LaolObj& self, const LaolObj& args) const = 0;
-    virtual ~B1() = 0;
-
-};
-
-struct B2 {//: public Laol {
-    virtual LaolObj m2(const LaolObj& self, const LaolObj& args) const = 0;
-    virtual ~B2() = 0;
-
-};
-
-B1::~B1() {
-}
-
-B2::~B2() {
-}
-
-struct D1 : public Laol, B1, B2 {
-
-    LaolObj m1(const LaolObj& self, const LaolObj& args) const override {
-        return args + 20;
-    }
-
-    LaolObj m2(const LaolObj& self, const LaolObj& args) const override {
-        return args + 99;
-    }
-
-    virtual ~D1() {
-    }
-
-    Laol::TPMethod
-    getFunc(const string& methodNm) const override {
-        if (stMethodByName.empty()) {
-            stMethodByName = {
-                {"m1", static_cast<TPMethod> (&D1::m1)},
-                {"m2", static_cast<TPMethod> (&D1::m2)}
-            };
-        }
-        return Laol::getFunc(stMethodByName, methodNm);
-    }
-
-    static METHOD_BY_NAME stMethodByName;
-};
-Laol::METHOD_BY_NAME D1::stMethodByName;
-
-void test9() {
-    LaolObj d1 = new D1();
-    d1("m1", 100);
-    d1("m2", 123456);
-}
-#else
-
-void test9() {
-}
-#endif //NOPE
 
 void test10() {
     cout << "Current time: " << xyzzy::Date::timeToString() << endl;
@@ -377,9 +305,8 @@ int main(int argc, char** argv) {
     test6();
     test7();
     test8();
-    test9();
     test11();
-    //test10();  ///timer test
+    //test10();  //timer
     cout << "END: all tests" << endl;
     return (EXIT_SUCCESS);
 }

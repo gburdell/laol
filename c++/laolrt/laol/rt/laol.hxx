@@ -81,7 +81,7 @@ namespace laol {
         class LaolObj {
         public:
 
-            explicit LaolObj() : m_type(eNull), m_relatedAssign() {
+            explicit LaolObj() : m_type(eNull) {
             }
 
             // Primitive: LaolRef lhs = val...
@@ -160,9 +160,6 @@ namespace laol {
              */
             template<typename T>
             const LaolObj& operator=(T rhs) {
-                if (m_relatedAssign.isValid()) {
-                    return m_relatedAssign.assign(rhs);
-                }
                 cleanup();
                 return set(rhs);
             }
@@ -312,49 +309,6 @@ namespace laol {
                 //long double u_ldouble;
             } m_dat;
 
-            /*
-             * When we encounter a Laol-related operator ('opx') which also has a
-             * 'opx=', then set relatedAssign.
-             * When operator=() is called, this relatedAssign is checked for validity.
-             * If valid, then called.
-             * This way, do not need to use clumsy "op=" explicitly.
-             */
-            class RelatedAssign {
-            public:
-                RelatedAssign(TPMethod assign, LaolObj* self)
-                : m_assign(assign), m_self(self) {
-                }
-
-                RelatedAssign() : RelatedAssign(nullptr, nullptr) {
-                }
-                
-                NO_COPY_CONSTRUCTORS(RelatedAssign);
-
-                void set(TPMethod assign, LaolObj* self) {
-                    m_assign = assign;
-                    m_self = self;
-                }
-                
-                template<typename T>
-                const LaolObj& assign(T val) {
-                    (m_self->asTPLaol()->*m_assign)(*m_self, val);
-                    return *m_self;
-                }
-                
-                void invalidate() {
-                    set(nullptr, nullptr);
-                }
-
-                bool isValid() const {
-                    return (nullptr != m_assign) && (nullptr != m_self);
-                }
-
-            private:
-                TPMethod m_assign;
-                LaolObj* m_self;
-            };
-            RelatedAssign m_relatedAssign;
-
             TRcLaol* asTPRcLaol() const {
                 return m_dat.u_prc;
             }
@@ -447,7 +401,6 @@ namespace laol {
             template<typename SF>
             const LaolObj& set(EType type, SF setFn) {
                 m_type = type;
-                m_relatedAssign.invalidate();
                 setFn();
                 return *this;
             }
