@@ -85,7 +85,6 @@ namespace laol {
                 if (N == other.size()) {
                     for (auto i = 0; i < N; i++) {
                         if ((m_ar[i] != other[i]).toBool()) {
-
                             return false;
                         }
                     }

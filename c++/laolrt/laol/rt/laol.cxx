@@ -86,9 +86,10 @@ namespace laol {
 
         const LaolObj&
         LaolObj::set(const LaolObj& rhs) {
+            m_relatedAssign.invalidate();
             m_type = rhs.m_type;
             if (isObject()) {
-                TRcLaol* p = const_cast<LaolObj&> (rhs).asTPRcLaol();
+                TRcLaol* p = unconst(rhs).asTPRcLaol();
                 m_dat.u_prc = p;
                 asTPRcLaol()->incr();
             } else {
@@ -156,7 +157,9 @@ namespace laol {
 
         LaolObj
         LaolObj::operator=(const LaolObj& rhs) {
-            if (isObject()) {
+            if (m_relatedAssign.isValid()) {
+                return m_relatedAssign.assign(rhs);
+            } else if (isObject()) {
                 return asTPLaol()->assign(*this, rhs);
             } else {
                 cleanup();
@@ -266,21 +269,26 @@ namespace laol {
         LaolObj::cleanup() {
             if (isObject()) {
                 if (asTPRcLaol()->decr()) {
-
                     delete m_dat.u_prc;
                 }
             }
             m_type = eNull;
+            m_relatedAssign.invalidate();
         }
 
         LaolObj
         LaolObj::operator()(const string& methodNm, const LaolObj& args, bool mustFind) const {
             LaolObj rval;
+            TPMethod relatedAssign = nullptr;
             if (isObject()) {
-                Laol* pObj = asTPRcLaol()->getPtr();
+                Laol* pObj = asTPLaol();
                 //first try subclass
                 TPMethod pMethod = pObj->getFunc(methodNm);
-                if (nullptr == pMethod) {
+                if (nullptr != pMethod) {
+                    //have a related assign?
+                    const string assignOp = methodNm + "=";
+                    relatedAssign = pObj->getFunc(assignOp);
+                } else {
                     //then try here
                     pMethod = pObj->Laol::getFunc(methodNm);
                 }
@@ -288,6 +296,10 @@ namespace laol {
                     rval = (pObj->*pMethod)(*this, args);
                 } else if (mustFind) {
                     ASSERT_NEVER; //not implemented
+                }
+                if (!rval.isNull() && (nullptr != relatedAssign)) {
+                    //todo: make sure get propped to copy???
+                    rval.m_relatedAssign.set(relatedAssign, unconst(this));
                 }
             } else {
                 auto found = stMethodByName.find(methodNm);
@@ -318,14 +330,14 @@ namespace laol {
         }
 
         /*static*/
-        const Laol::METHOD_BY_NAME 
+        const Laol::METHOD_BY_NAME
         Laol::stMethodByName = {
             {"toString", static_cast<TPMethod> (&Laol::toString)},
             {"objectId", static_cast<TPMethod> (&Laol::objectId)},
             {"hashCode", static_cast<TPMethod> (&Laol::objectId)}
         };
 
-        const Laol::METHOD_BY_NAME& 
+        const Laol::METHOD_BY_NAME&
         Laol::getMethodByName() {
             return stMethodByName;
         }

@@ -81,7 +81,7 @@ namespace laol {
         class LaolObj {
         public:
 
-            explicit LaolObj() : m_type(eNull) {
+            explicit LaolObj() : m_type(eNull), m_relatedAssign() {
             }
 
             // Primitive: LaolRef lhs = val...
@@ -155,14 +155,20 @@ namespace laol {
 
             LaolObj operator=(const LaolObj& rhs);
 
-            // []=
-            LaolObj subscript_assign(const LaolObj& subscript, const LaolObj& rhs);
-
+            /*
+             * Assignment constructor when rhs is primitive.
+             */
             template<typename T>
             const LaolObj& operator=(T rhs) {
+                if (m_relatedAssign.isValid()) {
+                    return m_relatedAssign.assign(rhs);
+                }
                 cleanup();
                 return set(rhs);
             }
+
+            // []=
+            LaolObj subscript_assign(const LaolObj& subscript, const LaolObj& rhs);
 
             bool isNull() const {
                 return (eNull == m_type);
@@ -286,6 +292,9 @@ namespace laol {
                 eNull
             };
 
+            /*
+             * Type/field used by DatType.
+             */
             EType m_type;
 
             union DatType {
@@ -302,6 +311,49 @@ namespace laol {
                 double u_double;
                 //long double u_ldouble;
             } m_dat;
+
+            /*
+             * When we encounter a Laol-related operator ('opx') which also has a
+             * 'opx=', then set relatedAssign.
+             * When operator=() is called, this relatedAssign is checked for validity.
+             * If valid, then called.
+             * This way, do not need to use clumsy "op=" explicitly.
+             */
+            class RelatedAssign {
+            public:
+                RelatedAssign(TPMethod assign, LaolObj* self)
+                : m_assign(assign), m_self(self) {
+                }
+
+                RelatedAssign() : RelatedAssign(nullptr, nullptr) {
+                }
+                
+                NO_COPY_CONSTRUCTORS(RelatedAssign);
+
+                void set(TPMethod assign, LaolObj* self) {
+                    m_assign = assign;
+                    m_self = self;
+                }
+                
+                template<typename T>
+                const LaolObj& assign(T val) {
+                    (m_self->asTPLaol()->*m_assign)(*m_self, val);
+                    return *m_self;
+                }
+                
+                void invalidate() {
+                    set(nullptr, nullptr);
+                }
+
+                bool isValid() const {
+                    return (nullptr != m_assign) && (nullptr != m_self);
+                }
+
+            private:
+                TPMethod m_assign;
+                LaolObj* m_self;
+            };
+            RelatedAssign m_relatedAssign;
 
             TRcLaol* asTPRcLaol() const {
                 return m_dat.u_prc;
@@ -395,6 +447,7 @@ namespace laol {
             template<typename SF>
             const LaolObj& set(EType type, SF setFn) {
                 m_type = type;
+                m_relatedAssign.invalidate();
                 setFn();
                 return *this;
             }
@@ -610,49 +663,6 @@ namespace laol {
             TPMethod getFunc(const string& methodNm) const;
             typedef std::map<string, TPMethod> METHOD_BY_NAME;
 
-            //static METHOD_BY_NAME join(const METHOD_BY_NAME& base, const METHOD_BY_NAME& derived);
-
-#ifdef NOPE
-
-            static
-            METHOD_BY_NAME& join(
-                    METHOD_BY_NAME& onto,
-                    const METHOD_BY_NAME& from) {
-                for (auto& kv : from) {
-                    onto[kv.first] = kv.second;
-                }
-                return onto;
-            }
-
-            static
-            METHOD_BY_NAME& join(
-                    METHOD_BY_NAME& onto,
-                    const METHOD_BY_NAME& from1,
-                    const METHOD_BY_NAME& from2) {
-                return join(join(onto, from1), from2);
-            }
-
-            static
-            METHOD_BY_NAME& join(
-                    METHOD_BY_NAME& onto,
-                    const METHOD_BY_NAME& from1,
-                    const METHOD_BY_NAME& from2,
-                    const METHOD_BY_NAME& from3) {
-                return join(join(join(onto, from1), from2), from3);
-            }
-
-            static
-            METHOD_BY_NAME& join(
-                    METHOD_BY_NAME& onto,
-                    const METHOD_BY_NAME& from1,
-                    const METHOD_BY_NAME& from2,
-                    const METHOD_BY_NAME& from3,
-                    const METHOD_BY_NAME& from4) {
-                return join(join(join(join(onto, from1), from2), from3), from4);
-            }
-#else
-            typedef const METHOD_BY_NAME& FROMT;
-
             static
             METHOD_BY_NAME& join(METHOD_BY_NAME& onto, const METHOD_BY_NAME& from) {
                 for (auto& kv : from) {
@@ -666,8 +676,6 @@ namespace laol {
             METHOD_BY_NAME& join(METHOD_BY_NAME& onto, T1 from, Args... args) {
                 return join(join(onto, from), args...);
             }
-
-#endif
 
             static string getClassName(const LaolObj& r);
 

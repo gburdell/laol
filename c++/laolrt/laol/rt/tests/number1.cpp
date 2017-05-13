@@ -238,8 +238,13 @@ struct C2 : public C1 {
 
 void test7() {
     LaolObj c1 = new C1(123, 345);
+    lcout << "before: c1.a1=" << c1("a1") << lendl;
+    c1("a1") = 9999;
     LaolObj a = c1("a1");
-    LaolObj b = c1("a2=", toV(1, 2, 3));
+    
+    //LaolObj b = c1("a2=", toV(1, 2, 3));
+    LaolObj b = c1("a2") = toV(1, 2, 3);
+    
     c1("a2")("subscript_assign", toV(-1, 123));
     lcout << "test7: c1.a2=" << c1("a2") << lendl
             << "test7: c1.incr: " << c1("incr") << lendl
@@ -374,7 +379,7 @@ int main(int argc, char** argv) {
     test8();
     test9();
     test11();
-    test10();
+    //test10();  ///timer test
     cout << "END: all tests" << endl;
     return (EXIT_SUCCESS);
 }
