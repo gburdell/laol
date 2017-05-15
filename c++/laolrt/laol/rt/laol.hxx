@@ -153,6 +153,14 @@ namespace laol {
                 set(val);
             }
 
+            LaolObj(LaolObj* val) {
+                set(val);
+            }
+
+            LaolObj(const LaolObj* val) {
+                ASSERT_NEVER;
+            }
+
             LaolObj operator=(const LaolObj& rhs);
 
             /*
@@ -160,23 +168,27 @@ namespace laol {
              */
             template<typename T>
             const LaolObj& operator=(T rhs) {
+                if (isPLaolObj()) {
+                    return thruPtrAssign(rhs);
+                }
                 cleanup();
                 return set(rhs);
             }
 
-            // []=
-            LaolObj subscript_assign(const LaolObj& subscript, const LaolObj& rhs);
+            LaolObj* ptr() const {
+                return const_cast<LaolObj*> (this);
+            }
+
+            template<typename PRED>
+            bool isType(PRED fn) const {
+                return fn() || (isPLaolObj() && dereference().isType(fn));
+            }
 
             bool isNull() const {
-                return (eNull == m_type);
+                return isType([this]() {
+                    return m_type == eNull;
+                });
             }
-
-            bool toBool() const {
-                return (eBool == m_type) && m_dat.u_bool;
-            }
-
-            unsigned long int toULInt() const;
-            long int toLInt() const;
 
             // true if int variant
             bool isInt() const;
@@ -184,11 +196,31 @@ namespace laol {
             bool isFloat() const;
 
             bool isBool() const {
-                return (eBool == m_type);
+                return isType([this]() {
+                    return m_type == eBool;
+                });
             }
 
             bool isObject() const {
-                return (ePRc == m_type);
+                return (ePRc == m_type) || (isPLaolObj() && asPLaolObj()->isObject());
+            }
+
+            bool isPLaolObj() const {
+                return (ePLaolObj == m_type);
+            }
+
+            bool toBool() const {
+                return ((eBool == m_type) && m_dat.u_bool)
+                        || (isPLaolObj() && dereference().toBool());
+            }
+
+            unsigned long int toULInt() const;
+            long int toLInt() const;
+
+            //todo: note: the recursion here which may solve 
+            //repeated reference operators, such as: a[][][]...
+            const LaolObj& dereference() const {
+                return isPLaolObj() ? asPLaolObj()->dereference() : (*this);
             }
 
             // Majority of operators are const, so we'll mark all
@@ -248,7 +280,7 @@ namespace laol {
 
             template<typename T>
             const T& toType() const {
-                return dynamic_cast<const T&> (asTPRcLaol()->asT());
+                return dynamic_cast<const T&> (dereference().asTPRcLaol()->asT());
             }
 
             template<typename T>
@@ -283,6 +315,7 @@ namespace laol {
 
             enum EType {
                 ePRc,
+                ePLaolObj,
                 eChar, eBool,
                 eInt, eUInt, eLInt, eULInt,
                 eFloat, eDouble,
@@ -296,6 +329,7 @@ namespace laol {
 
             union DatType {
                 TRcLaol* u_prc;
+                LaolObj* u_plaolobj;
                 char u_char;
                 bool u_bool;
                 int u_int;
@@ -309,12 +343,24 @@ namespace laol {
                 //long double u_ldouble;
             } m_dat;
 
+            template<typename T>
+            const LaolObj& thruPtrAssign(T val) {
+                const LaolObj& newVal = asPLaolObj()->operator=(val);
+                return set(newVal.m_type, [this, newVal]() {
+                    m_dat = newVal.m_dat;
+                });
+            }
+
+            LaolObj* asPLaolObj() const {
+                return m_dat.u_plaolobj;
+            }
+
             TRcLaol* asTPRcLaol() const {
                 return m_dat.u_prc;
             }
 
             Laol* asTPLaol() const {
-                return asTPRcLaol()->getPtr();
+                return dereference().asTPRcLaol()->getPtr();
             }
 
             // Need a const and unconst version of intApply
@@ -422,6 +468,12 @@ namespace laol {
 
             const LaolObj& set(const LaolObj& rhs);
 
+            const LaolObj& set(LaolObj* rhs) {
+                return set(ePLaolObj, [this, rhs]() {
+                    m_dat.u_plaolobj = rhs;
+                });
+            }
+
             const LaolObj& set(bool rhs) {
                 return set(eBool, [this, rhs]() {
                     m_dat.u_bool = rhs;
@@ -513,6 +565,7 @@ namespace laol {
 
             template<typename T>
             LaolObjKey(T obj) : LaolObj(obj) {
+                ASSERT_TRUE(!isPLaolObj());
             }
 
             size_t hashCode() const {
@@ -552,12 +605,12 @@ namespace laol {
         // and breaks the more natural primitive conversions: LaolObj(T val)...
 
         template<typename T>
-        inline auto toBool(const T& expr) {
+        inline bool toBool(const T& expr) {
             return expr;
         }
 
         template<>
-        inline auto toBool<LaolObj>(const LaolObj& expr) {
+        inline bool toBool<LaolObj>(const LaolObj& expr) {
             return expr.toBool();
         }
 
@@ -601,7 +654,6 @@ namespace laol {
             /* !  */ virtual LaolObj negate(const LaolObj& self, const LaolObj&) const;
             /* || */ virtual LaolObj logical_or(const LaolObj& self, const LaolObj& opB) const;
             /* && */ virtual LaolObj logical_and(const LaolObj& self, const LaolObj& opB) const;
-            /*[]= */ virtual LaolObj subscript_assign(const LaolObj& self, const LaolObj& opB) const;
             /*++(int) */ virtual LaolObj post_increment(const LaolObj& self, const LaolObj& opB) const;
 
             //Map special methods for call-by-method too

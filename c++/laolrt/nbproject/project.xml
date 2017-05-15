@@ -5,7 +5,7 @@
         <data xmlns="http://www.netbeans.org/ns/make-project/1">
             <name>laolrt</name>
             <c-extensions/>
-            <cpp-extensions>cpp,cxx</cpp-extensions>
+            <cpp-extensions>cxx</cpp-extensions>
             <header-extensions>hxx</header-extensions>
             <sourceEncoding>UTF-8</sourceEncoding>
             <make-dep-projects>

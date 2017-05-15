@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		F4F5D2111E94375B0093899C /* number1.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F4F5D2101E94375B0093899C /* number1.cpp */; };
+		F4F5D2111E94375B0093899C /* test.cxx in Sources */ = {isa = PBXBuildFile; fileRef = F4F5D2101E94375B0093899C /* test.cxx */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -57,7 +57,7 @@
 		F44947171EA15B5300EDB4A6 /* xyzzy.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = xyzzy.xcodeproj; path = ../../../../xyzzy/xcode/xyzzy/xyzzy.xcodeproj; sourceTree = "<group>"; };
 		F449471D1EA15B6A00EDB4A6 /* laolrt.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = laolrt.xcodeproj; path = ../laolrt/laolrt.xcodeproj; sourceTree = "<group>"; };
 		F4F5D2061E942CC10093899C /* laolrt_test */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = laolrt_test; sourceTree = BUILT_PRODUCTS_DIR; };
-		F4F5D2101E94375B0093899C /* number1.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = number1.cpp; path = ../../laolrt/laol/rt/tests/number1.cpp; sourceTree = "<group>"; };
+		F4F5D2101E94375B0093899C /* test.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = test.cxx; path = ../../laolrt/laol/rt/tests/test.cxx; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -92,7 +92,7 @@
 			children = (
 				F449471D1EA15B6A00EDB4A6 /* laolrt.xcodeproj */,
 				F44947171EA15B5300EDB4A6 /* xyzzy.xcodeproj */,
-				F4F5D2101E94375B0093899C /* number1.cpp */,
+				F4F5D2101E94375B0093899C /* test.cxx */,
 				F4F5D2071E942CC10093899C /* Products */,
 			);
 			sourceTree = "<group>";
@@ -191,7 +191,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				F4F5D2111E94375B0093899C /* number1.cpp in Sources */,
+				F4F5D2111E94375B0093899C /* test.cxx in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

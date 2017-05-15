@@ -58,8 +58,6 @@ namespace laol {
 
             virtual LaolObj toString(const LaolObj& self, const LaolObj& args) const override;
 
-            virtual LaolObj subscript_assign(const LaolObj& self, const LaolObj& args) const override;
-
             //unique methods
 
             LaolObj size(const LaolObj& self, const LaolObj& args) const {
@@ -81,8 +79,8 @@ namespace laol {
 
             virtual ~Map();
 
-		protected:
-			virtual const METHOD_BY_NAME& getMethodByName() override;
+        protected:
+            virtual const METHOD_BY_NAME& getMethodByName() override;
 
         private:
             Map(const Map& from); //clone

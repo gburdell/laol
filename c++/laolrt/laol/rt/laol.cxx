@@ -76,7 +76,7 @@ namespace laol {
 
         string
         LaolObj::toQString() const {
-            return isObject() ? String::toStdString(*this, true) : toStdString();
+            return isObject() ? String::toStdString(dereference(), true) : toStdString();
         }
 
         const LaolObj&
@@ -87,7 +87,7 @@ namespace laol {
         const LaolObj&
         LaolObj::set(const LaolObj& rhs) {
             m_type = rhs.m_type;
-            if (isObject()) {
+            if (ePRc == m_type) {  //NOT isObject() since we just care about ePrc
                 TRcLaol* p = unconst(rhs).asTPRcLaol();
                 m_dat.u_prc = p;
                 asTPRcLaol()->incr();
@@ -104,16 +104,33 @@ namespace laol {
 
         bool
         LaolObj::isInt() const {
-            switch (m_type) {
-                case eInt: case eLInt: case eUInt: case eULInt:
-                    return true;
-                default:
-                    return false;
-            }
+            return isType([this]() {
+                switch (m_type) {
+                    case eInt: case eLInt: case eUInt: case eULInt:
+                        return true;
+                    default:
+                        return false;
+                }
+            });
+        }
+
+        bool
+        LaolObj::isFloat() const {
+            return isType([this]() {
+                switch (m_type) {
+                    case eFloat: case eDouble:
+                        return true;
+                    default:
+                        return false;
+                }
+            });
         }
 
         unsigned long int
         LaolObj::toULInt() const {
+            if (isPLaolObj()) {
+                return dereference().toULInt();
+            }
             unsigned long int rval;
             intApply([&rval](auto val) {
                 rval = (unsigned long int) val;
@@ -124,6 +141,9 @@ namespace laol {
 
         long int
         LaolObj::toLInt() const {
+            if (isPLaolObj()) {
+                return dereference().toLInt();
+            }
             long int rval;
             intApply([&rval](auto val) {
                 rval = (long int) val;
@@ -132,31 +152,24 @@ namespace laol {
             return rval;
         }
 
-        bool
-        LaolObj::isFloat() const {
-            switch (m_type) {
-                case eFloat: case eDouble:
-                    return true;
-                default:
-                    return false;
-            }
-        }
-
         size_t
         LaolObj::hashCode() const {
             auto hc = isObject()
-                    ? asTPLaol()->hashCode(*this, NULLOBJ)
+                    ? asTPLaol()->hashCode(dereference(), NULLOBJ)
                     : hashCode(NULLOBJ);
-            return hc.toBool();
+            return hc.toBool(); //todo: fixme: should be toULint??
         }
 
         void LaolObj::decrRefCnt() {
+            ASSERT_TRUE(!isPLaolObj());
             unconst(this)->asTPRcLaol()->decr();
         }
 
         LaolObj
         LaolObj::operator=(const LaolObj& rhs) {
-            if (isObject()) {
+            if (isPLaolObj()) {
+                return thruPtrAssign(rhs); //todo: use deference?
+            } else if (isObject()) {
                 return asTPLaol()->assign(*this, rhs);
             } else {
                 cleanup();
@@ -165,15 +178,9 @@ namespace laol {
         }
 
         LaolObj
-        LaolObj::subscript_assign(const LaolObj& subscript, const LaolObj& rhs) {
-            ASSERT_TRUE(isObject());
-            return asTPLaol()->subscript_assign(*this, toV(subscript, rhs));
-        }
-
-        LaolObj
         LaolObj::operator<<(const LaolObj& opB) const {
             return isObject()
-                    ? asTPLaol()->left_shift(*this, opB)
+                    ? asTPLaol()->left_shift(dereference(), opB)
                     : intBinaryOp(opB, [](auto a, auto b) {
                         return a << b;
                     });
@@ -182,7 +189,7 @@ namespace laol {
         LaolObj
         LaolObj::operator>>(const LaolObj& opB) const {
             return isObject()
-                    ? asTPLaol()->right_shift(*this, opB)
+                    ? asTPLaol()->right_shift(dereference(), opB)
                     : intBinaryOp(opB, [](auto a, auto b) {
                         return a >> b;
                     });
@@ -191,28 +198,30 @@ namespace laol {
         LaolObj
         LaolObj::operator+(const LaolObj& opB) const {
             return isObject()
-                    ? asTPLaol()->add(*this, opB)
+                    ? asTPLaol()->add(dereference(), opB)
                     : numberBinaryOp(opB, [](auto a, auto b) {
                         return a + b;
                     });
         }
 
+        //todo: test if consecutive: a[][][]... work???
+
         LaolObj
         LaolObj::operator[](const LaolObj& opB) const {
-            return asTPLaol()->subscript(*this, opB);
+            return asTPLaol()->subscript(dereference(), opB);
         }
 
         LaolObj
         LaolObj::operator!() const {
             return isObject()
-                    ? asTPLaol()->negate(*this, NULLOBJ)
+                    ? asTPLaol()->negate(dereference(), NULLOBJ)
                     : !toBool();
         }
 
         LaolObj
         LaolObj::operator++(int) const { //post-increment
             return isObject()
-                    ? asTPLaol()->post_increment(*this, NULLOBJ)
+                    ? asTPLaol()->post_increment(dereference(), NULLOBJ)
                     : unconst(this)->intApply([](auto& a) {
                         return a++;
                     });
@@ -221,21 +230,21 @@ namespace laol {
         LaolObj
         LaolObj::operator&&(const LaolObj& opB) const {
             return isObject()
-                    ? asTPLaol()->logical_and(*this, NULLOBJ)
+                    ? asTPLaol()->logical_and(dereference(), NULLOBJ)
                     : (toBool() && opB.toBool());
         }
 
         LaolObj
         LaolObj::operator||(const LaolObj& opB) const {
             return isObject()
-                    ? asTPLaol()->logical_or(*this, NULLOBJ)
+                    ? asTPLaol()->logical_or(dereference(), NULLOBJ)
                     : (toBool() || opB.toBool());
         }
 
         LaolObj
         LaolObj::operator<(const LaolObj& opB) const {
             return isObject()
-                    ? asTPLaol()->less(*this, opB)
+                    ? asTPLaol()->less(dereference(), opB)
                     : primitiveBinaryOp(opB, [](auto a, auto b) {
                         return a < b;
                     });
@@ -244,7 +253,7 @@ namespace laol {
         LaolObj
         LaolObj::operator>(const LaolObj& opB) const {
             return isObject()
-                    ? asTPLaol()->greater(*this, opB)
+                    ? asTPLaol()->greater(dereference(), opB)
                     : primitiveBinaryOp(opB, [](auto a, auto b) {
                         return a > b;
                     });
@@ -256,7 +265,7 @@ namespace laol {
                 return true;
             }
             return isObject()
-                    ? asTPLaol()->equal(*this, opB)
+                    ? asTPLaol()->equal(dereference(), opB)
                     : primitiveBinaryOp(opB, [](auto a, auto b) {
                         return a == b;
                     });
@@ -264,7 +273,7 @@ namespace laol {
 
         void
         LaolObj::cleanup() {
-            if (isObject()) {
+            if (isObject() && !isPLaolObj()) {
                 if (asTPRcLaol()->decr()) {
                     delete m_dat.u_prc;
                 }
@@ -284,7 +293,7 @@ namespace laol {
                     pMethod = pObj->Laol::getFunc(methodNm);
                 }
                 if (nullptr != pMethod) {
-                    rval = (pObj->*pMethod)(*this, args);
+                    rval = (pObj->*pMethod)(dereference(), args);
                 } else if (mustFind) {
                     ASSERT_NEVER; //not implemented
                 }
@@ -374,7 +383,6 @@ namespace laol {
         LaolObj Laol::negate DEFINE_NO_IMPL
         LaolObj Laol::logical_and DEFINE_NO_IMPL
         LaolObj Laol::logical_or DEFINE_NO_IMPL
-        LaolObj Laol::subscript_assign DEFINE_NO_IMPL
         LaolObj Laol::post_increment DEFINE_NO_IMPL
 
 #undef DEFINE_NO_IMPL

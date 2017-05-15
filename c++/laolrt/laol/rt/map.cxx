@@ -44,7 +44,7 @@ namespace laol {
             }
         }
 
-        LaolObj
+        /*LaolObj
         Map::subscript_assign(const LaolObj& self, const LaolObj& args) const {
             ASSERT_TRUE(args.isA<Array>());
             const Array& vargs = args.toType<Array>();
@@ -55,7 +55,7 @@ namespace laol {
             LaolObj key = vargs[0], val = vargs[1];
             unconst(this)->m_map[key] = val;
             return self;
-        }
+        }*/
 
         LaolObj
         Map::toString(const LaolObj&, const LaolObj&) const {
@@ -114,8 +114,7 @@ namespace laol {
                     {"merge", static_cast<TPMethod> (&Map::merge)},
                     {"merge!", static_cast<TPMethod> (&Map::merge_SELF)},
                     {"key?", static_cast<TPMethod> (&Map::key_PRED)},
-                    {"find", static_cast<TPMethod> (&Map::find)},
-                    {"subscript_assign", static_cast<TPMethod> (&Map::subscript_assign)},
+                    {"find", static_cast<TPMethod> (&Map::find)}
                 }));
             }
             return stMethodByName;

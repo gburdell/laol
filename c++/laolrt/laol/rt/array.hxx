@@ -55,7 +55,6 @@ namespace laol {
             virtual LaolObj subscript(const LaolObj& self, const LaolObj& opB) const override;
             virtual LaolObj equal(const LaolObj& self, const LaolObj& opB) const override;
             virtual LaolObj toString(const LaolObj& self, const LaolObj& args) const override;
-            virtual LaolObj subscript_assign(const LaolObj& self, const LaolObj& args) const override;
 
             //unique methods
             virtual LaolObj empty_PRED(const LaolObj& self, const LaolObj& args) const;

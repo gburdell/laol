@@ -51,8 +51,7 @@ namespace laol {
                     {"length", static_cast<TPMethod> (&Array::length)},
                     {"empty?", static_cast<TPMethod> (&Array::empty_PRED)},
                     {"reverse", static_cast<TPMethod> (&Array::reverse)},
-                    {"reverse!", static_cast<TPMethod> (&Array::reverse_SELF)},
-                    {"subscript_assign", static_cast<TPMethod> (&Array::subscript_assign)}
+                    {"reverse!", static_cast<TPMethod> (&Array::reverse_SELF)}
                 }));
             }
             return stMethodByName;
@@ -136,14 +135,14 @@ namespace laol {
             Vector val;
             for (const LaolObj& sub : args) {
                 if (sub.isInt()) {
-                    val.push_back(m_ar[actualIndex(sub.toLInt())]);
+                    val.push_back(m_ar[actualIndex(sub.toLInt())].ptr());
                 } else if (sub.isObject() && sub.isA<Range>()) {
                     iterate(sub.toType<Range>(), [this, &val](auto i) {
                         //this-> work around gcc 5.1.0 bug
-                        val.push_back(m_ar[this->actualIndex(i)]);
+                        //we push *LaolObj
+                        val.push_back(m_ar[this->actualIndex(i)].ptr());
                     });
                 } else {
-
                     ASSERT_NEVER; //todo: error
                 }
             }
@@ -177,6 +176,7 @@ namespace laol {
             return length();
         }
 
+        /*
         LaolObj
         Array::subscript_assign(const LaolObj& self, const LaolObj& args) const {
             ASSERT_TRUE(args.isA<Array>());
@@ -214,5 +214,6 @@ namespace laol {
             }
             return self;
         }
+         */
     }
 }

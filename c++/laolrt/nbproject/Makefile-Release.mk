@@ -57,7 +57,7 @@ TESTFILES= \
 
 # Test Object Files
 TESTOBJECTFILES= \
-	${TESTDIR}/laol/rt/tests/number1.o
+	${TESTDIR}/laol/rt/tests/test.o
 
 # C Compiler Flags
 CFLAGS=
@@ -152,15 +152,15 @@ ${OBJECTDIR}/laol/rt/timer.o: laol/rt/timer.cxx
 .build-tests-conf: .build-tests-subprojects .build-conf ${TESTFILES}
 .build-tests-subprojects:
 
-${TESTDIR}/TestFiles/f1: ${TESTDIR}/laol/rt/tests/number1.o ${OBJECTFILES:%.o=%_nomain.o}
+${TESTDIR}/TestFiles/f1: ${TESTDIR}/laol/rt/tests/test.o ${OBJECTFILES:%.o=%_nomain.o}
 	${MKDIR} -p ${TESTDIR}/TestFiles
 	${LINK.cc} -o ${TESTDIR}/TestFiles/f1 $^ ${LDLIBSOPTIONS}   
 
 
-${TESTDIR}/laol/rt/tests/number1.o: laol/rt/tests/number1.cpp 
+${TESTDIR}/laol/rt/tests/test.o: laol/rt/tests/test.cxx 
 	${MKDIR} -p ${TESTDIR}/laol/rt/tests
 	${RM} "$@.d"
-	$(COMPILE.cc) -O2 -I../../../xyzzy/src -I. -MMD -MP -MF "$@.d" -o ${TESTDIR}/laol/rt/tests/number1.o laol/rt/tests/number1.cpp
+	$(COMPILE.cc) -O2 -I../../../xyzzy/src -I. -MMD -MP -MF "$@.d" -o ${TESTDIR}/laol/rt/tests/test.o laol/rt/tests/test.cxx
 
 
 ${OBJECTDIR}/laol/rt/array_nomain.o: ${OBJECTDIR}/laol/rt/array.o laol/rt/array.cxx 
