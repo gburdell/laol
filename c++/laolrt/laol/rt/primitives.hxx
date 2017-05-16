@@ -43,8 +43,18 @@ namespace laol {
         class LongInt;
         class UnsignedLongInt;
         class Char;
+        class Float;
+        class Double;
 
-        struct INumber {
+        class Bool : public virtual Laol {
+        public:
+            explicit Bool(bool val) : m_val(val) {}
+            
+            //allow copy constructors
+            const bool m_val;
+        };
+        
+        struct INumber : public virtual Laol {
 
             enum EType {
                 eInt, eUnsignedInt, eLongInt, eUnsignedLongInt,
@@ -53,10 +63,18 @@ namespace laol {
             };
 
             virtual EType getType() const = 0;
+
+            LaolObj add(const LaolObj&, const LaolObj& opB) const override;
+            LaolObj subtract(const LaolObj&, const LaolObj& opB) const override;
+            LaolObj multiply(const LaolObj&, const LaolObj& opB) const override;
+            LaolObj divide(const LaolObj&, const LaolObj& opB) const override;
+            LaolObj equal(const LaolObj&, const LaolObj& opB) const override;
+            LaolObj less(const LaolObj&, const LaolObj& opB) const override;
+            LaolObj greater(const LaolObj&, const LaolObj& opB) const override;
         };
 
         template<typename T>
-        class IntBase : public virtual Laol, public INumber {
+        class IntBase : public INumber {
         public:
 
             explicit IntBase(T val) : m_val(val) {
@@ -94,29 +112,82 @@ namespace laol {
                 return NULLOBJ;
             }
 
+            /* Integer only operations
+             */
             LaolObj left_shift(const LaolObj&, const LaolObj& opB) const override {
                 return binOp(opB, [](auto aa, auto bb) {
                     return aa << bb;
                 });
             }
 
-        private:
-            T m_val;
+            LaolObj right_shift(const LaolObj&, const LaolObj& opB) const override {
+                return binOp(opB, [](auto aa, auto bb) {
+                    return aa >> bb;
+                });
+            }
+
+            LaolObj modulus(const LaolObj&, const LaolObj& opB) const override {
+                return binOp(opB, [](auto aa, auto bb) {
+                    return aa % bb;
+                });
+            }
+
+            const T m_val;
         };
 
-#define DEFINE_INT_TYPE(_cls, _prim)                    \
+        template<typename T>
+        class FloatBase : public INumber {
+        public:
+
+            explicit FloatBase(T val) : m_val(val) {
+            }
+
+            const T m_val;
+        };
+
+#define DEFINE_INTS(_cls, _prim)                    \
     class _cls : public IntBase<_prim> {                \
     public: explicit _cls(_prim val) : IntBase(val) {}  \
     EType getType() const override {return e##_cls ;}   \
     }
 
-        DEFINE_INT_TYPE(Int, int);
-        DEFINE_INT_TYPE(UnsignedInt, unsigned int);
-        DEFINE_INT_TYPE(LongInt, long int);
-        DEFINE_INT_TYPE(UnsignedLongInt, unsigned long int);
-        DEFINE_INT_TYPE(Char, char);
+        DEFINE_INTS(Int, int);
+        DEFINE_INTS(UnsignedInt, unsigned int);
+        DEFINE_INTS(LongInt, long int);
+        DEFINE_INTS(UnsignedLongInt, unsigned long int);
+        DEFINE_INTS(Char, char);
+#undef DEFINE_INTS
 
-#undef DEFINE_INT_TYPE
+#define DEFINE_FLOATS(_cls, _prim)                    \
+    class _cls : public FloatBase<_prim> {                \
+    public: explicit _cls(_prim val) : FloatBase(val) {}  \
+    EType getType() const override {return e##_cls ;}   \
+    }
+
+        DEFINE_FLOATS(Float, float);
+        DEFINE_FLOATS(Double, double);
+#undef DEFINE_FLOATS
+
+        // For 'builtin op LaolObj'
+#define BINARY_OP(_op) \
+        template<typename T> \
+        inline LaolObj operator _op(T a, const LaolObj& b) { \
+            return LaolObj(a).operator _op(b); \
+        }
+
+        BINARY_OP(+)
+        BINARY_OP(-)
+        BINARY_OP(*)
+        BINARY_OP( /)
+        BINARY_OP( %)
+        BINARY_OP( <<)
+        BINARY_OP(>>)
+        BINARY_OP( ==)
+        BINARY_OP( !=)
+        BINARY_OP(<)
+        BINARY_OP(>)
+
+#undef BINARY_OP
     }
 }
 

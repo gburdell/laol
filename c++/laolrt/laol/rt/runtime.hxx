@@ -40,6 +40,7 @@
 #include "laol/rt/laol.hxx"
 #include "laol/rt/map.hxx"
 #include "laol/rt/ostream.hxx"
+#include "laol/rt/primitives.hxx"
 #include "laol/rt/range.hxx"
 #include "laol/rt/string.hxx"
 #include "laol/rt/symbol.hxx"

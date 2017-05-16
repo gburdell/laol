@@ -120,12 +120,10 @@ namespace laol {
             LaolObj(char rhs);
 
             LaolObj(double rhs);
-            
-#ifdef NOT_YET
-            LaolObj(bool rhs);
 
             LaolObj(float rhs);
-#endif
+
+            LaolObj(bool rhs);
 
             LaolObj(const char* rhs);
 
@@ -168,6 +166,10 @@ namespace laol {
             LaolObj operator<<(const LaolObj& opB) const;
             LaolObj operator>>(const LaolObj& opB) const;
             LaolObj operator+(const LaolObj& opB) const;
+            LaolObj operator-(const LaolObj& opB) const;
+            LaolObj operator*(const LaolObj& opB) const;
+            LaolObj operator/(const LaolObj& opB) const;
+            LaolObj operator%(const LaolObj& opB) const;
             LaolObj operator[](const LaolObj& opB) const;
             //
             // baseline comparators.
@@ -368,6 +370,10 @@ namespace laol {
             /* << */ virtual LaolObj left_shift(const LaolObj& self, const LaolObj& opB) const;
             /* >> */ virtual LaolObj right_shift(const LaolObj& self, const LaolObj& opB) const;
             /* +  */ virtual LaolObj add(const LaolObj& self, const LaolObj& opB) const;
+            /* -  */ virtual LaolObj subtract(const LaolObj& self, const LaolObj& opB) const;
+            /* *  */ virtual LaolObj multiply(const LaolObj& self, const LaolObj& opB) const;
+            /* /  */ virtual LaolObj divide(const LaolObj& self, const LaolObj& opB) const;
+            /* %  */ virtual LaolObj modulus(const LaolObj& self, const LaolObj& opB) const;
             /* =  */ virtual LaolObj assign(const LaolObj& self, const LaolObj& opB) const;
             /* [] */ virtual LaolObj subscript(const LaolObj& self, const LaolObj& opB) const;
             /* == */ virtual LaolObj equal(const LaolObj& self, const LaolObj& opB) const;

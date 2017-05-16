@@ -27,5 +27,87 @@
 namespace laol {
     namespace rt {
 
+        template<typename GETOP>
+        static LaolObj getOpx(const LaolObj& opx, GETOP rcvr) {
+            static LaolObj UNUSED;
+            switch (opx.toType<INumber>().getType()) {
+                case INumber::eInt:
+                    return rcvr(opx.toType<Int>().m_val);
+                case INumber::eUnsignedInt:
+                    return rcvr(opx.toType<UnsignedInt>().m_val);
+                case INumber::eLongInt:
+                    return rcvr(opx.toType<LongInt>().m_val);
+                case INumber::eUnsignedLongInt:
+                    return rcvr(opx.toType<UnsignedLongInt>().m_val);
+                case INumber::eChar:
+                    return rcvr(opx.toType<Char>().m_val);
+                case INumber::eFloat:
+                    return rcvr(opx.toType<Float>().m_val);
+                case INumber::eDouble:
+                    return rcvr(opx.toType<Double>().m_val);
+                default:
+                    ASSERT_NEVER;
+            }
+            return UNUSED;
+        }
+        
+        template<typename BINOP>
+        static LaolObj binOp(const LaolObj& self, const LaolObj& opB, BINOP binop) {
+            return getOpx(self, [opB, binop](auto a) {
+                return getOpx(opB, [a, binop](auto b) {
+                    return binop(a, b);
+                });
+            });
+        }
+        
+        LaolObj
+        INumber::add(const LaolObj& self, const LaolObj& opB) const {
+            return binOp(self, opB, [](auto a, auto b) {
+                return a + b;
+            });
+        }
+
+        LaolObj
+        INumber::subtract(const LaolObj& self, const LaolObj& opB) const {
+            return binOp(self, opB, [](auto a, auto b) {
+                return a - b;
+            });
+        }
+        
+        LaolObj
+        INumber::divide(const LaolObj& self, const LaolObj& opB) const {
+            return binOp(self, opB, [](auto a, auto b) {
+                return a / b;
+            });
+        }
+
+        LaolObj
+        INumber::multiply(const LaolObj& self, const LaolObj& opB) const {
+            return binOp(self, opB, [](auto a, auto b) {
+                return a * b;
+            });
+        }
+
+        LaolObj
+        INumber::equal(const LaolObj& self , const LaolObj& opB) const {
+            return binOp(self, opB, [](auto a, auto b) {
+                return a == b;
+            });
+        }
+
+        LaolObj
+        INumber::greater(const LaolObj& self, const LaolObj& opB) const {
+            return binOp(self, opB, [](auto a, auto b) {
+                return a > b;
+            });
+        }
+
+        LaolObj
+        INumber::less(const LaolObj& self, const LaolObj& opB) const {
+            return binOp(self, opB, [](auto a, auto b) {
+                return a < b;
+            });
+        }
+
     }
 }

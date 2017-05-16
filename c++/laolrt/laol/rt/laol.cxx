@@ -55,22 +55,14 @@ namespace laol {
         LaolObj::LaolObj(char rhs) : LaolObj(new Char(rhs)) {
         }
         
-        LaolObj::LaolObj(double rhs) {/*todo*/}
+        LaolObj::LaolObj(double rhs) : LaolObj(new Double(rhs)) {
+        }
         
-#ifdef NOT_YET
+        LaolObj::LaolObj(float rhs) : LaolObj(new Float(rhs)) {
+        }
 
         LaolObj::LaolObj(bool rhs) : LaolObj(new Bool(rhs)) {
         }
-
-        LaolObj::LaolObj(char rhs) : LaolObj(new Char(rhs)) {
-        }
-
-        LaolObj::LaolObj(double rhs) : LaolObj(new Double(rhs)) {
-        }
-
-        LaolObj::LaolObj(float rhs) : LaolObj(new Float(rhs)) {
-        }
-#endif
 
         LaolObj::LaolObj(const char* rhs) : LaolObj(new String(rhs)) {
         }
@@ -150,6 +142,26 @@ namespace laol {
         LaolObj
         LaolObj::operator+(const LaolObj& opB) const {
             return asTPLaol()->add(*this, opB);
+        }
+        
+        LaolObj
+        LaolObj::operator-(const LaolObj& opB) const {
+            return asTPLaol()->subtract(*this, opB);
+        }
+        
+        LaolObj
+        LaolObj::operator*(const LaolObj& opB) const {
+            return asTPLaol()->multiply(*this, opB);
+        }
+        
+        LaolObj
+        LaolObj::operator/(const LaolObj& opB) const {
+            return asTPLaol()->divide(*this, opB);
+        }
+
+        LaolObj
+        LaolObj::operator%(const LaolObj& opB) const {
+            return asTPLaol()->modulus(*this, opB);
         }
 
         //todo: test if consecutive: a[][][]... work???
@@ -280,6 +292,10 @@ namespace laol {
         LaolObj Laol::left_shift DEFINE_NO_IMPL
         LaolObj Laol::right_shift DEFINE_NO_IMPL
         LaolObj Laol::add DEFINE_NO_IMPL
+        LaolObj Laol::subtract DEFINE_NO_IMPL
+        LaolObj Laol::multiply DEFINE_NO_IMPL
+        LaolObj Laol::divide DEFINE_NO_IMPL
+        LaolObj Laol::modulus DEFINE_NO_IMPL
         LaolObj Laol::subscript DEFINE_NO_IMPL
         LaolObj Laol::equal DEFINE_NO_IMPL
         LaolObj Laol::less DEFINE_NO_IMPL
