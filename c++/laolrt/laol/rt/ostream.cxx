@@ -75,7 +75,8 @@ namespace laol {
             }
 
             LaolObj append_SELF(const LaolObj& self, const LaolObj& args) const override {
-                if (args.isObject() || args.isBool()) {
+                /*todo
+                if (args.isBool()) {
                     m_os << String::toStdString(args);
                     unconst(args).ifMethod("call", self);
                 } else {
@@ -84,6 +85,7 @@ namespace laol {
                         return val;
                     });
                 }
+                 */
                 return self;
             }
 
@@ -161,14 +163,16 @@ namespace laol {
 
         LaolObj
         FileOutputStream::append_SELF(const LaolObj& self, const LaolObj& args) const {
-            if (args.isObject() || args.isBool()) {
+            if (args.isBool()) {
                 unconst(this)->m_ofs << String::toStdString(args);
                 unconst(args).ifMethod("call", self);
             } else {
+                /*todo
                 args.primitiveApply([this](auto val) {
                     unconst(this)->m_ofs << val;
                     return val;
                 });
+                */;
             }
             return self;
         }

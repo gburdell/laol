@@ -61,7 +61,7 @@ namespace laol {
             //unique methods
 
             LaolObj size(const LaolObj& self, const LaolObj& args) const {
-                return size();
+                return (long int)size();
             }
 
             // args is Map: i.e., {key,val}

@@ -135,12 +135,12 @@ namespace laol {
             Vector val;
             for (const LaolObj& sub : args) {
                 if (sub.isInt()) {
-                    val.push_back(m_ar[actualIndex(sub.toLInt())].ptr());
-                } else if (sub.isObject() && sub.isA<Range>()) {
+                    val.push_back(m_ar[actualIndex(sub.toLInt())]);
+                } else if (sub.isA<Range>()) {
                     iterate(sub.toType<Range>(), [this, &val](auto i) {
                         //this-> work around gcc 5.1.0 bug
                         //we push *LaolObj
-                        val.push_back(m_ar[this->actualIndex(i)].ptr());
+                        val.push_back(m_ar[this->actualIndex(i)]);
                     });
                 } else {
                     ASSERT_NEVER; //todo: error

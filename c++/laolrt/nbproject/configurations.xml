@@ -12,6 +12,7 @@
       <itemPath>laol/rt/laol.hxx</itemPath>
       <itemPath>laol/rt/map.hxx</itemPath>
       <itemPath>laol/rt/ostream.hxx</itemPath>
+      <itemPath>laol/rt/primitives.hxx</itemPath>
       <itemPath>laol/rt/range.hxx</itemPath>
       <itemPath>laol/rt/runtime.hxx</itemPath>
       <itemPath>laol/rt/string.hxx</itemPath>
@@ -25,7 +26,6 @@
     <logicalFolder name="SourceFiles"
                    displayName="Source Files"
                    projectFiles="true">
-      <itemPath>laol/rt/array.cxx</itemPath>
       <itemPath>laol/rt/exception.cxx</itemPath>
       <itemPath>laol/rt/istream.cxx</itemPath>
       <itemPath>laol/rt/iterator.cxx</itemPath>
@@ -33,6 +33,7 @@
       <itemPath>laol/rt/laol.cxx</itemPath>
       <itemPath>laol/rt/map.cxx</itemPath>
       <itemPath>laol/rt/ostream.cxx</itemPath>
+      <itemPath>laol/rt/primitives.cxx</itemPath>
       <itemPath>laol/rt/range.cxx</itemPath>
       <itemPath>laol/rt/string.cxx</itemPath>
       <itemPath>laol/rt/symbol.cxx</itemPath>
@@ -104,6 +105,8 @@
             <pElem>.</pElem>
             <pElem>.</pElem>
             <pElem>.</pElem>
+            <pElem>.</pElem>
+            <pElem>.</pElem>
           </linkerDynSerch>
         </linkerTool>
       </folder>
@@ -130,6 +133,8 @@
             <pElem>.</pElem>
             <pElem>.</pElem>
             <pElem>.</pElem>
+            <pElem>.</pElem>
+            <pElem>.</pElem>
           </linkerDynSerch>
           <linkerLibItems>
             <linkerLibFileItem>dist/Debug/GNU-Linux/liblaolrt.a</linkerLibFileItem>
@@ -138,8 +143,6 @@
           <commandLine>-Wl,-rpath -Wl,/usr/local/lib64</commandLine>
         </linkerTool>
       </folder>
-      <item path="laol/rt/array.cxx" ex="false" tool="1" flavor2="0">
-      </item>
       <item path="laol/rt/array.hxx" ex="false" tool="3" flavor2="0">
       </item>
       <item path="laol/rt/exception.cxx" ex="false" tool="1" flavor2="0">
@@ -169,6 +172,10 @@
       <item path="laol/rt/ostream.cxx" ex="false" tool="1" flavor2="0">
       </item>
       <item path="laol/rt/ostream.hxx" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="laol/rt/primitives.cxx" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="laol/rt/primitives.hxx" ex="false" tool="3" flavor2="0">
       </item>
       <item path="laol/rt/range.cxx" ex="false" tool="1" flavor2="0">
       </item>
@@ -245,6 +252,8 @@
             <pElem>.</pElem>
             <pElem>.</pElem>
             <pElem>.</pElem>
+            <pElem>.</pElem>
+            <pElem>.</pElem>
           </linkerDynSerch>
         </linkerTool>
       </folder>
@@ -271,11 +280,11 @@
             <pElem>.</pElem>
             <pElem>.</pElem>
             <pElem>.</pElem>
+            <pElem>.</pElem>
+            <pElem>.</pElem>
           </linkerDynSerch>
         </linkerTool>
       </folder>
-      <item path="laol/rt/array.cxx" ex="false" tool="1" flavor2="0">
-      </item>
       <item path="laol/rt/array.hxx" ex="false" tool="3" flavor2="0">
       </item>
       <item path="laol/rt/exception.cxx" ex="false" tool="1" flavor2="0">
@@ -305,6 +314,10 @@
       <item path="laol/rt/ostream.cxx" ex="false" tool="1" flavor2="0">
       </item>
       <item path="laol/rt/ostream.hxx" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="laol/rt/primitives.cxx" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="laol/rt/primitives.hxx" ex="false" tool="3" flavor2="0">
       </item>
       <item path="laol/rt/range.cxx" ex="false" tool="1" flavor2="0">
       </item>
@@ -376,6 +389,8 @@
             <pElem>.</pElem>
             <pElem>.</pElem>
             <pElem>.</pElem>
+            <pElem>.</pElem>
+            <pElem>.</pElem>
           </linkerDynSerch>
         </linkerTool>
       </folder>
@@ -402,6 +417,8 @@
             <pElem>.</pElem>
             <pElem>.</pElem>
             <pElem>.</pElem>
+            <pElem>.</pElem>
+            <pElem>.</pElem>
           </linkerDynSerch>
           <linkerLibItems>
             <linkerLibFileItem>dist/Debug-MacOS/GNU-MacOSX/liblaolrt.a</linkerLibFileItem>
@@ -410,8 +427,6 @@
           <commandLine>-Wl,-rpath -Wl,/usr/local/lib64</commandLine>
         </linkerTool>
       </folder>
-      <item path="laol/rt/array.cxx" ex="false" tool="1" flavor2="11">
-      </item>
       <item path="laol/rt/array.hxx" ex="false" tool="3" flavor2="0">
       </item>
       <item path="laol/rt/exception.cxx" ex="false" tool="1" flavor2="11">
@@ -441,6 +456,10 @@
       <item path="laol/rt/ostream.cxx" ex="false" tool="1" flavor2="11">
       </item>
       <item path="laol/rt/ostream.hxx" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="laol/rt/primitives.cxx" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="laol/rt/primitives.hxx" ex="false" tool="3" flavor2="0">
       </item>
       <item path="laol/rt/range.cxx" ex="false" tool="1" flavor2="11">
       </item>

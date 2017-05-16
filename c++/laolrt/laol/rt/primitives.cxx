@@ -22,55 +22,10 @@
  * THE SOFTWARE.
  */
 
-/* 
- * File:   test.cxx
- * Author: kpfalzer
- *
- * Created on May 14, 2017, 7:10 PM
- */
+#include "laol/rt/primitives.hxx"
 
-#include <stdlib.h>
-#include <iostream>
-#include <array>
-#include <chrono>
-#include <thread>
-#include "laol/rt/runtime.hxx"
+namespace laol {
+    namespace rt {
 
-using namespace std;
-using namespace laol::rt;
-
-void test1() {
-    cout << "test1: (basic) BEGIN" << endl;
-    LaolObj i1 = (long int)2048;
-    LaolObj i2 = i1 << 4;
-    cout << "test1: END" << endl;
+    }
 }
-
-#ifdef NOPE
-void test2() {
-    cout << "test1: (Array) BEGIN" << endl;
-    LaolObj i1 = 12 + 34;
-    LaolObj i2 = i1;
-    LaolObj ar1 = new Array();
-    i2 = ar1 << i1 << (float) 1234.5; //cool: we get 1234 to LaolRef conversion!
-    lcout << "1: ar1=" << ar1 << lendl;
-    i1 = ar1("empty?");
-    i1 = 7;
-    i2 = new Array();
-    i1 = i2("empty?");
-    ASSERT_TRUE(toBool(i1));
-    ar1 << "foobar" << 23 << 1.234 << i2;
-    i1 = ar1("reverse")("reverse");
-    lcout << "2: ar1=" << ar1 << lendl;
-    ASSERT_TRUE(toBool(ar1[0] == 46));
-    cout << "test1: END" << endl;
-}
-#endif
-
-int main(int argc, char** argv) {
-    test1();
-    //test2();
-    cout << "END: all tests" << endl;
-    return (EXIT_SUCCESS);
-}
-

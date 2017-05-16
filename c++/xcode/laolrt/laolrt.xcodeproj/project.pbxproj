@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		F44979591EA42F9800602268 /* array.cxx in Sources */ = {isa = PBXBuildFile; fileRef = F44979581EA42F9800602268 /* array.cxx */; };
 		F455C7C11E93F78A00F13033 /* laol.cxx in Sources */ = {isa = PBXBuildFile; fileRef = F455C7C01E93F78A00F13033 /* laol.cxx */; };
 		F455DF881EB436A2009B4FEE /* ostream.cxx in Sources */ = {isa = PBXBuildFile; fileRef = F455DF871EB436A2009B4FEE /* ostream.cxx */; };
 		F46A07641EAFD63F00324003 /* iterator.cxx in Sources */ = {isa = PBXBuildFile; fileRef = F46A07621EAFD63F00324003 /* iterator.cxx */; };
@@ -22,7 +21,6 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		F44979581EA42F9800602268 /* array.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = array.cxx; path = ../../laolrt/laol/rt/array.cxx; sourceTree = "<group>"; };
 		F455C7B91E93F6AE00F13033 /* laolrt.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = laolrt.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		F455C7C01E93F78A00F13033 /* laol.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = laol.cxx; path = ../../laolrt/laol/rt/laol.cxx; sourceTree = "<group>"; };
 		F455DF871EB436A2009B4FEE /* ostream.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ostream.cxx; path = ../../laolrt/laol/rt/ostream.cxx; sourceTree = "<group>"; };
@@ -61,7 +59,6 @@
 				F46A07621EAFD63F00324003 /* iterator.cxx */,
 				F46A07631EAFD63F00324003 /* range.cxx */,
 				F49970F81EAA8C9C00BD9B1B /* string.cxx */,
-				F44979581EA42F9800602268 /* array.cxx */,
 				F455C7C01E93F78A00F13033 /* laol.cxx */,
 				F455C7BA1E93F6AE00F13033 /* Products */,
 			);
@@ -146,7 +143,6 @@
 				F46A07651EAFD63F00324003 /* range.cxx in Sources */,
 				F4824C7F1EB7EE4B00E6D3F2 /* symbol.cxx in Sources */,
 				F455C7C11E93F78A00F13033 /* laol.cxx in Sources */,
-				F44979591EA42F9800602268 /* array.cxx in Sources */,
 				F49F96781EBA7CFC0068AD40 /* lambda.cxx in Sources */,
 				F46A07641EAFD63F00324003 /* iterator.cxx in Sources */,
 				F455DF881EB436A2009B4FEE /* ostream.cxx in Sources */,

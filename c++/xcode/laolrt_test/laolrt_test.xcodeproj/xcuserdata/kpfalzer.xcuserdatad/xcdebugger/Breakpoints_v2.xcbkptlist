@@ -14,9 +14,7 @@
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "150"
-            endingLineNumber = "150"
-            landmarkName = "LaolObj::toLInt()"
-            landmarkType = "7">
+            endingLineNumber = "150">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -64,22 +62,6 @@
             startingLineNumber = "247"
             endingLineNumber = "247"
             landmarkName = "test8()"
-            landmarkType = "9">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "../../laolrt/laol/rt/tests/test.cxx"
-            timestampString = "516497198.616046"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "57"
-            endingLineNumber = "57"
-            landmarkName = "test1()"
             landmarkType = "9">
          </BreakpointContent>
       </BreakpointProxy>
@@ -134,22 +116,6 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "./laol/rt/laol.hxx"
-            timestampString = "516498793.239083"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "205"
-            endingLineNumber = "205"
-            landmarkName = "isObject()"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
             shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
@@ -161,6 +127,479 @@
             endingLineNumber = "89"
             landmarkName = "LaolObj::set(const LaolObj&amp; rhs)"
             landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "../../laolrt/laol/rt/tests/test.cxx"
+            timestampString = "516588535.386177"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "46"
+            endingLineNumber = "46"
+            landmarkName = "test1()"
+            landmarkType = "9">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "../../laolrt/laol/rt/tests/test.cxx"
+            timestampString = "516594929.881274"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "45"
+            endingLineNumber = "45"
+            landmarkName = "test1()"
+            landmarkType = "9">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "../laolrt/laolrt/laol/rt/primitives.hxx"
+            timestampString = "516594969.437144"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "96"
+            endingLineNumber = "96"
+            landmarkName = "left_shift(const LaolObj&amp;, const LaolObj&amp; opB)"
+            landmarkType = "9">
+            <Locations>
+               <Location
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "laol::rt::IntBase&lt;int&gt;::left_shift(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;) const"
+                  moduleName = "laolrt_test"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/kpfalzer/projects/laol/c++/xcode/laolrt/laolrt/laol/rt/primitives.hxx"
+                  timestampString = "516636890.104435"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "96"
+                  endingLineNumber = "96"
+                  offsetFromSymbolStart = "27">
+               </Location>
+               <Location
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "_ZZNK4laol2rt7IntBaseIiE10left_shiftERKNS0_7LaolObjES5_ENKUlT_T0_E_clIiiEEDaS6_S7_"
+                  moduleName = "laolrt_test"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/kpfalzer/projects/laol/c++/xcode/laolrt/laolrt/laol/rt/primitives.hxx"
+                  timestampString = "516636890.105951"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "97"
+                  endingLineNumber = "97"
+                  offsetFromSymbolStart = "14">
+               </Location>
+               <Location
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "_ZZNK4laol2rt7IntBaseIiE10left_shiftERKNS0_7LaolObjES5_ENKUlT_T0_E_clIijEEDaS6_S7_"
+                  moduleName = "laolrt_test"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/kpfalzer/projects/laol/c++/xcode/laolrt/laolrt/laol/rt/primitives.hxx"
+                  timestampString = "516636890.107601"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "97"
+                  endingLineNumber = "97"
+                  offsetFromSymbolStart = "14">
+               </Location>
+               <Location
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "_ZZNK4laol2rt7IntBaseIiE10left_shiftERKNS0_7LaolObjES5_ENKUlT_T0_E_clIilEEDaS6_S7_"
+                  moduleName = "laolrt_test"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/kpfalzer/projects/laol/c++/xcode/laolrt/laolrt/laol/rt/primitives.hxx"
+                  timestampString = "516636890.109027"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "97"
+                  endingLineNumber = "97"
+                  offsetFromSymbolStart = "15">
+               </Location>
+               <Location
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "_ZZNK4laol2rt7IntBaseIiE10left_shiftERKNS0_7LaolObjES5_ENKUlT_T0_E_clIimEEDaS6_S7_"
+                  moduleName = "laolrt_test"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/kpfalzer/projects/laol/c++/xcode/laolrt/laolrt/laol/rt/primitives.hxx"
+                  timestampString = "516636890.110455"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "97"
+                  endingLineNumber = "97"
+                  offsetFromSymbolStart = "15">
+               </Location>
+               <Location
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "laol::rt::IntBase&lt;unsigned int&gt;::left_shift(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;) const"
+                  moduleName = "laolrt_test"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/kpfalzer/projects/laol/c++/xcode/laolrt/laolrt/laol/rt/primitives.hxx"
+                  timestampString = "516636890.111904"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "96"
+                  endingLineNumber = "96"
+                  offsetFromSymbolStart = "27">
+               </Location>
+               <Location
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "_ZZNK4laol2rt7IntBaseIjE10left_shiftERKNS0_7LaolObjES5_ENKUlT_T0_E_clIjiEEDaS6_S7_"
+                  moduleName = "laolrt_test"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/kpfalzer/projects/laol/c++/xcode/laolrt/laolrt/laol/rt/primitives.hxx"
+                  timestampString = "516636890.113316"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "97"
+                  endingLineNumber = "97"
+                  offsetFromSymbolStart = "14">
+               </Location>
+               <Location
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "_ZZNK4laol2rt7IntBaseIjE10left_shiftERKNS0_7LaolObjES5_ENKUlT_T0_E_clIjjEEDaS6_S7_"
+                  moduleName = "laolrt_test"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/kpfalzer/projects/laol/c++/xcode/laolrt/laolrt/laol/rt/primitives.hxx"
+                  timestampString = "516636890.114718"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "97"
+                  endingLineNumber = "97"
+                  offsetFromSymbolStart = "14">
+               </Location>
+               <Location
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "_ZZNK4laol2rt7IntBaseIjE10left_shiftERKNS0_7LaolObjES5_ENKUlT_T0_E_clIjlEEDaS6_S7_"
+                  moduleName = "laolrt_test"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/kpfalzer/projects/laol/c++/xcode/laolrt/laolrt/laol/rt/primitives.hxx"
+                  timestampString = "516636890.116763"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "97"
+                  endingLineNumber = "97"
+                  offsetFromSymbolStart = "15">
+               </Location>
+               <Location
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "_ZZNK4laol2rt7IntBaseIjE10left_shiftERKNS0_7LaolObjES5_ENKUlT_T0_E_clIjmEEDaS6_S7_"
+                  moduleName = "laolrt_test"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/kpfalzer/projects/laol/c++/xcode/laolrt/laolrt/laol/rt/primitives.hxx"
+                  timestampString = "516636890.118449"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "97"
+                  endingLineNumber = "97"
+                  offsetFromSymbolStart = "15">
+               </Location>
+               <Location
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "laol::rt::IntBase&lt;long&gt;::left_shift(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;) const"
+                  moduleName = "laolrt_test"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/kpfalzer/projects/laol/c++/xcode/laolrt/laolrt/laol/rt/primitives.hxx"
+                  timestampString = "516636890.120275"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "96"
+                  endingLineNumber = "96"
+                  offsetFromSymbolStart = "27">
+               </Location>
+               <Location
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "_ZZNK4laol2rt7IntBaseIlE10left_shiftERKNS0_7LaolObjES5_ENKUlT_T0_E_clIliEEDaS6_S7_"
+                  moduleName = "laolrt_test"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/kpfalzer/projects/laol/c++/xcode/laolrt/laolrt/laol/rt/primitives.hxx"
+                  timestampString = "516636890.122834"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "97"
+                  endingLineNumber = "97"
+                  offsetFromSymbolStart = "15">
+               </Location>
+               <Location
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "_ZZNK4laol2rt7IntBaseIlE10left_shiftERKNS0_7LaolObjES5_ENKUlT_T0_E_clIljEEDaS6_S7_"
+                  moduleName = "laolrt_test"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/kpfalzer/projects/laol/c++/xcode/laolrt/laolrt/laol/rt/primitives.hxx"
+                  timestampString = "516636890.124443"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "97"
+                  endingLineNumber = "97"
+                  offsetFromSymbolStart = "15">
+               </Location>
+               <Location
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "_ZZNK4laol2rt7IntBaseIlE10left_shiftERKNS0_7LaolObjES5_ENKUlT_T0_E_clIllEEDaS6_S7_"
+                  moduleName = "laolrt_test"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/kpfalzer/projects/laol/c++/xcode/laolrt/laolrt/laol/rt/primitives.hxx"
+                  timestampString = "516636890.126114"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "97"
+                  endingLineNumber = "97"
+                  offsetFromSymbolStart = "16">
+               </Location>
+               <Location
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "_ZZNK4laol2rt7IntBaseIlE10left_shiftERKNS0_7LaolObjES5_ENKUlT_T0_E_clIlmEEDaS6_S7_"
+                  moduleName = "laolrt_test"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/kpfalzer/projects/laol/c++/xcode/laolrt/laolrt/laol/rt/primitives.hxx"
+                  timestampString = "516636890.127657"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "97"
+                  endingLineNumber = "97"
+                  offsetFromSymbolStart = "16">
+               </Location>
+               <Location
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "laol::rt::IntBase&lt;unsigned long&gt;::left_shift(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;) const"
+                  moduleName = "laolrt_test"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/kpfalzer/projects/laol/c++/xcode/laolrt/laolrt/laol/rt/primitives.hxx"
+                  timestampString = "516636890.129063"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "96"
+                  endingLineNumber = "96"
+                  offsetFromSymbolStart = "27">
+               </Location>
+               <Location
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "_ZZNK4laol2rt7IntBaseImE10left_shiftERKNS0_7LaolObjES5_ENKUlT_T0_E_clImiEEDaS6_S7_"
+                  moduleName = "laolrt_test"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/kpfalzer/projects/laol/c++/xcode/laolrt/laolrt/laol/rt/primitives.hxx"
+                  timestampString = "516636890.130449"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "97"
+                  endingLineNumber = "97"
+                  offsetFromSymbolStart = "15">
+               </Location>
+               <Location
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "_ZZNK4laol2rt7IntBaseImE10left_shiftERKNS0_7LaolObjES5_ENKUlT_T0_E_clImjEEDaS6_S7_"
+                  moduleName = "laolrt_test"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/kpfalzer/projects/laol/c++/xcode/laolrt/laolrt/laol/rt/primitives.hxx"
+                  timestampString = "516636890.132289"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "97"
+                  endingLineNumber = "97"
+                  offsetFromSymbolStart = "15">
+               </Location>
+               <Location
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "_ZZNK4laol2rt7IntBaseImE10left_shiftERKNS0_7LaolObjES5_ENKUlT_T0_E_clImlEEDaS6_S7_"
+                  moduleName = "laolrt_test"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/kpfalzer/projects/laol/c++/xcode/laolrt/laolrt/laol/rt/primitives.hxx"
+                  timestampString = "516636890.13392"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "97"
+                  endingLineNumber = "97"
+                  offsetFromSymbolStart = "16">
+               </Location>
+               <Location
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "_ZZNK4laol2rt7IntBaseImE10left_shiftERKNS0_7LaolObjES5_ENKUlT_T0_E_clImmEEDaS6_S7_"
+                  moduleName = "laolrt_test"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/kpfalzer/projects/laol/c++/xcode/laolrt/laolrt/laol/rt/primitives.hxx"
+                  timestampString = "516636890.135329"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "97"
+                  endingLineNumber = "97"
+                  offsetFromSymbolStart = "16">
+               </Location>
+               <Location
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "laol::rt::IntBase&lt;char&gt;::left_shift(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;) const"
+                  moduleName = "laolrt_test"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/kpfalzer/projects/laol/c++/xcode/laolrt/laolrt/laol/rt/primitives.hxx"
+                  timestampString = "516636890.13671"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "96"
+                  endingLineNumber = "96"
+                  offsetFromSymbolStart = "27">
+               </Location>
+               <Location
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "_ZZNK4laol2rt7IntBaseIcE10left_shiftERKNS0_7LaolObjES5_ENKUlT_T0_E_clIciEEDaS6_S7_"
+                  moduleName = "laolrt_test"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/kpfalzer/projects/laol/c++/xcode/laolrt/laolrt/laol/rt/primitives.hxx"
+                  timestampString = "516636890.13813"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "97"
+                  endingLineNumber = "97"
+                  offsetFromSymbolStart = "17">
+               </Location>
+               <Location
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "_ZZNK4laol2rt7IntBaseIcE10left_shiftERKNS0_7LaolObjES5_ENKUlT_T0_E_clIcjEEDaS6_S7_"
+                  moduleName = "laolrt_test"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/kpfalzer/projects/laol/c++/xcode/laolrt/laolrt/laol/rt/primitives.hxx"
+                  timestampString = "516636890.139523"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "97"
+                  endingLineNumber = "97"
+                  offsetFromSymbolStart = "17">
+               </Location>
+               <Location
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "_ZZNK4laol2rt7IntBaseIcE10left_shiftERKNS0_7LaolObjES5_ENKUlT_T0_E_clIclEEDaS6_S7_"
+                  moduleName = "laolrt_test"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/kpfalzer/projects/laol/c++/xcode/laolrt/laolrt/laol/rt/primitives.hxx"
+                  timestampString = "516636890.140939"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "97"
+                  endingLineNumber = "97"
+                  offsetFromSymbolStart = "18">
+               </Location>
+               <Location
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "_ZZNK4laol2rt7IntBaseIcE10left_shiftERKNS0_7LaolObjES5_ENKUlT_T0_E_clIcmEEDaS6_S7_"
+                  moduleName = "laolrt_test"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/kpfalzer/projects/laol/c++/xcode/laolrt/laolrt/laol/rt/primitives.hxx"
+                  timestampString = "516636890.142344"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "97"
+                  endingLineNumber = "97"
+                  offsetFromSymbolStart = "18">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "../../laolrt/laol/rt/tests/test.cxx"
+            timestampString = "516636387.049125"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "44"
+            endingLineNumber = "44"
+            landmarkName = "test1()"
+            landmarkType = "9">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "/Users/kpfalzer/projects/laol/c++/xcode/laolrt/../../../../xyzzy/src/xyzzy/refcnt.hxx"
+            timestampString = "516636792.964283"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "263"
+            endingLineNumber = "263"
+            landmarkName = "PTRcObjPtr(const PTRcObjPtr &amp;r)"
+            landmarkType = "9">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "/Users/kpfalzer/projects/laol/c++/xcode/laolrt/../../../../xyzzy/src/xyzzy/refcnt.hxx"
+            timestampString = "516636797.625446"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "258"
+            endingLineNumber = "258"
+            landmarkName = "PTRcObjPtr(T *p)"
+            landmarkType = "9">
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>
