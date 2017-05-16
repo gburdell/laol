@@ -131,7 +131,7 @@ namespace laol {
         LaolObj
         String::at(const LaolObj&, const LaolObj& args) const {
             //todo index-exception
-            return m_str.at(actualIndex(args.toLInt()));
+            return m_str.at(actualIndex(args.toLongInt()));
         }
 
         LaolObj

@@ -42,6 +42,7 @@ using namespace laol::rt;
 void test1() {
     cout << "test1: (basic) BEGIN" << endl;
     LaolObj i1 = (long int)2048;
+    ASSERT_TRUE(i1.toLongInt() == 2048);
     LaolObj i2 = i1 << 4;
     LaolObj d1 = 1.234 + i1;
     LaolObj d2 = d1 * 45.67 / 678 - i2 * d1;

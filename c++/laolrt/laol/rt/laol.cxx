@@ -54,10 +54,10 @@ namespace laol {
 
         LaolObj::LaolObj(char rhs) : LaolObj(new Char(rhs)) {
         }
-        
+
         LaolObj::LaolObj(double rhs) : LaolObj(new Double(rhs)) {
         }
-        
+
         LaolObj::LaolObj(float rhs) : LaolObj(new Float(rhs)) {
         }
 
@@ -86,44 +86,65 @@ namespace laol {
             unconst(this)->asTPRcLaol()->decr();
         }
 
-        bool 
+        bool
         LaolObj::isBool() const {
-            return false; //todo
+            return this->isA<Bool>();
         }
 
-        bool 
+        bool
         LaolObj::isFloat() const {
-            return false; //todo
+            if (!isA<INumber>()) {
+                return false;
+            }
+            switch (toType<INumber>().getType()) {
+                case INumber::eFloat: //fall through
+                case INumber::eDouble:
+                    return true;
+                default:
+                    return false;
+            }
         }
 
-        bool 
+        bool
         LaolObj::isInt() const {
-            return false; //todo
+            if (!isA<INumber>()) {
+                return false;
+            }
+            switch (toType<INumber>().getType()) {
+                case INumber::eFloat: //fall through
+                case INumber::eDouble:
+                    return false;
+                default:
+                    return true;
+            }
         }
-        
-        bool 
+
+        bool
         LaolObj::toBool() const {
-            return false; //todo
+            ASSERT_TRUE(isA<Bool>());
+            return toType<Bool>().m_val;
         }
-        long int 
-        LaolObj::toLInt() const {
-            return 0; //todo
+
+        long int
+        LaolObj::toLongInt() const {
+            return INumber::toLongInt(*this);
         }
-        string 
+
+        unsigned long int
+        LaolObj::toUnsignedLongInt() const {
+            return INumber::toUnsignedLongInt(*this);
+        }
+
+        string
         LaolObj::toQString() const {
             return "todo";
         }
-        string 
+
+        string
         LaolObj::toStdString() const {
             return "todo";
         }
 
-        unsigned long int 
-        LaolObj::toULInt() const {
-            return 0;//todo
-        }
-
-        
         LaolObj
         LaolObj::operator=(const LaolObj& rhs) {
             return asTPLaol()->assign(*this, rhs);
@@ -143,17 +164,17 @@ namespace laol {
         LaolObj::operator+(const LaolObj& opB) const {
             return asTPLaol()->add(*this, opB);
         }
-        
+
         LaolObj
         LaolObj::operator-(const LaolObj& opB) const {
             return asTPLaol()->subtract(*this, opB);
         }
-        
+
         LaolObj
         LaolObj::operator*(const LaolObj& opB) const {
             return asTPLaol()->multiply(*this, opB);
         }
-        
+
         LaolObj
         LaolObj::operator/(const LaolObj& opB) const {
             return asTPLaol()->divide(*this, opB);

@@ -50,7 +50,7 @@ namespace laol {
             }
             return UNUSED;
         }
-        
+
         template<typename BINOP>
         static LaolObj binOp(const LaolObj& self, const LaolObj& opB, BINOP binop) {
             return getOpx(self, [opB, binop](auto a) {
@@ -59,7 +59,39 @@ namespace laol {
                 });
             });
         }
-        
+
+        long int INumber::toLongInt(const LaolObj& v) {
+            switch (v.toType<INumber>().getType()) {
+                case eInt: case eUnsignedInt: case eLongInt:
+                    long int rval;
+                    getOpx(v, [&rval](auto x) {
+                        rval = x;
+                        return NULLOBJ;//unused
+                    });
+                    return rval;
+                default:
+                    break;
+            }
+            ASSERT_NEVER;
+            return 0;
+        }
+
+        unsigned long int INumber::toUnsignedLongInt(const LaolObj& v) {
+            switch (v.toType<INumber>().getType()) {
+                case eUnsignedLongInt:
+                    unsigned long int rval;
+                    getOpx(v, [&rval](auto x) {
+                        rval = x;
+                        return NULLOBJ;//unused
+                    });
+                    return rval;
+                default:
+                    break;
+            }
+            ASSERT_NEVER;
+            return 0;
+        }
+
         LaolObj
         INumber::add(const LaolObj& self, const LaolObj& opB) const {
             return binOp(self, opB, [](auto a, auto b) {
@@ -73,7 +105,7 @@ namespace laol {
                 return a - b;
             });
         }
-        
+
         LaolObj
         INumber::divide(const LaolObj& self, const LaolObj& opB) const {
             return binOp(self, opB, [](auto a, auto b) {
@@ -89,7 +121,7 @@ namespace laol {
         }
 
         LaolObj
-        INumber::equal(const LaolObj& self , const LaolObj& opB) const {
+        INumber::equal(const LaolObj& self, const LaolObj& opB) const {
             return binOp(self, opB, [](auto a, auto b) {
                 return a == b;
             });

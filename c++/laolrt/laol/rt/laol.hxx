@@ -147,6 +147,7 @@ namespace laol {
 
             // true if int variant
             bool isInt() const;
+            
             // true if float/double variant
             bool isFloat() const;
 
@@ -158,8 +159,9 @@ namespace laol {
 
             bool toBool() const;
 
-            unsigned long int toULInt() const;
-            long int toLInt() const;
+            unsigned long int toUnsignedLongInt() const;
+            
+            long int toLongInt() const;
 
             // Majority of operators are const, so we'll mark all
             // as const and unconst as necessary in Laol subclass.
