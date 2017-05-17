@@ -75,9 +75,14 @@ namespace laol {
         }
 
         const LaolObj&
-        LaolObj::set(const LaolObj& rhs) {
-            m_obj = unconst(rhs).asTRcLaol();
-            m_isRef = false;
+        LaolObj::set(const LaolObj& rhs, bool isConstructor) {
+            TRcLaol &rhsRef = unconst(rhs).asTRcLaol();
+            if (isConstructor || !m_isRef) {
+                m_obj = rhsRef;
+                m_isRef = false;
+            } else {
+                //todo: change underlying value: i.e., Laol* value
+            }
             return *this;
         }
 
@@ -198,8 +203,43 @@ namespace laol {
         }
 
         LaolObj
+        LaolObj::operator~() const {
+            return asTPLaol()->complement(*this, NULLOBJ);
+        }
+
+        LaolObj
+        LaolObj::operator&(const LaolObj& opB) const {
+            return asTPLaol()->bitwise_and(*this, opB);
+        }
+
+        LaolObj
+        LaolObj::operator|(const LaolObj& opB) const {
+            return asTPLaol()->bitwise_or(*this, opB);
+        }
+
+        LaolObj
+        LaolObj::operator^(const LaolObj& opB) const {
+            return asTPLaol()->bitwise_xor(*this, opB);
+        }
+
+        LaolObj
         LaolObj::operator++(int) const { //post-increment
             return asTPLaol()->post_increment(*this, NULLOBJ);
+        }
+
+        LaolObj
+        LaolObj::operator--(int) const { //post-increment
+            return asTPLaol()->post_decrement(*this, NULLOBJ);
+        }
+
+        LaolObj
+        LaolObj::operator++() const {
+            return asTPLaol()->pre_increment(*this, NULLOBJ);
+        }
+
+        LaolObj
+        LaolObj::operator--() const {
+            return asTPLaol()->pre_decrement(*this, NULLOBJ);
         }
 
         LaolObj
@@ -303,8 +343,8 @@ namespace laol {
         }
 
         LaolObj
-        Laol::assign(const LaolObj& self, const LaolObj& opB) const {
-            unconst(self).set(opB);
+        Laol::assign(const LaolObj& self, const LaolObj& rhs) const {
+            unconst(self).set(rhs, false);
             return self;
         }
 
@@ -322,9 +362,16 @@ namespace laol {
         LaolObj Laol::less DEFINE_NO_IMPL
         LaolObj Laol::greater DEFINE_NO_IMPL
         LaolObj Laol::negate DEFINE_NO_IMPL
+        LaolObj Laol::complement DEFINE_NO_IMPL
         LaolObj Laol::logical_and DEFINE_NO_IMPL
         LaolObj Laol::logical_or DEFINE_NO_IMPL
+        LaolObj Laol::bitwise_and DEFINE_NO_IMPL
+        LaolObj Laol::bitwise_or DEFINE_NO_IMPL
+        LaolObj Laol::bitwise_xor DEFINE_NO_IMPL
         LaolObj Laol::post_increment DEFINE_NO_IMPL
+        LaolObj Laol::post_decrement DEFINE_NO_IMPL
+        LaolObj Laol::pre_increment DEFINE_NO_IMPL
+        LaolObj Laol::pre_decrement DEFINE_NO_IMPL
 
 #undef DEFINE_NO_IMPL
 

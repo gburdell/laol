@@ -9,14 +9,121 @@
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "../../laolrt/laol/rt/tests/test.cxx"
-            timestampString = "516664451.15985"
+            filePath = "../../laolrt/laol/rt/primitives.cxx"
+            timestampString = "516680142.580176"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "46"
-            endingLineNumber = "46"
-            landmarkName = "test1()"
-            landmarkType = "9">
+            startingLineNumber = "162"
+            endingLineNumber = "162"
+            landmarkName = "INumber::post_decrement(const LaolObj&amp; self, const LaolObj&amp;)"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "auto laol::rt::INumber::post_decrement(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;) const::$_10::operator()&lt;int*&gt;(int*) const"
+                  moduleName = "laolrt_test"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/kpfalzer/projects/laol/c++/laolrt/laol/rt/primitives.cxx"
+                  timestampString = "516680163.872999"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "162"
+                  endingLineNumber = "162"
+                  offsetFromSymbolStart = "21">
+               </Location>
+               <Location
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "auto laol::rt::INumber::post_decrement(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;) const::$_10::operator()&lt;unsigned int*&gt;(unsigned int*) const"
+                  moduleName = "laolrt_test"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/kpfalzer/projects/laol/c++/laolrt/laol/rt/primitives.cxx"
+                  timestampString = "516680163.87516"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "162"
+                  endingLineNumber = "162"
+                  offsetFromSymbolStart = "21">
+               </Location>
+               <Location
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "auto laol::rt::INumber::post_decrement(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;) const::$_10::operator()&lt;long*&gt;(long*) const"
+                  moduleName = "laolrt_test"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/kpfalzer/projects/laol/c++/laolrt/laol/rt/primitives.cxx"
+                  timestampString = "516680163.876821"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "162"
+                  endingLineNumber = "162"
+                  offsetFromSymbolStart = "23">
+               </Location>
+               <Location
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "auto laol::rt::INumber::post_decrement(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;) const::$_10::operator()&lt;unsigned long*&gt;(unsigned long*) const"
+                  moduleName = "laolrt_test"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/kpfalzer/projects/laol/c++/laolrt/laol/rt/primitives.cxx"
+                  timestampString = "516680163.878382"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "162"
+                  endingLineNumber = "162"
+                  offsetFromSymbolStart = "23">
+               </Location>
+               <Location
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "auto laol::rt::INumber::post_decrement(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;) const::$_10::operator()&lt;char*&gt;(char*) const"
+                  moduleName = "laolrt_test"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/kpfalzer/projects/laol/c++/laolrt/laol/rt/primitives.cxx"
+                  timestampString = "516680163.880401"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "162"
+                  endingLineNumber = "162"
+                  offsetFromSymbolStart = "21">
+               </Location>
+               <Location
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "auto laol::rt::INumber::post_decrement(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;) const::$_10::operator()&lt;float*&gt;(float*) const"
+                  moduleName = "laolrt_test"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/kpfalzer/projects/laol/c++/laolrt/laol/rt/primitives.cxx"
+                  timestampString = "516680163.881972"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "162"
+                  endingLineNumber = "162"
+                  offsetFromSymbolStart = "33">
+               </Location>
+               <Location
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "auto laol::rt::INumber::post_decrement(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;) const::$_10::operator()&lt;double*&gt;(double*) const"
+                  moduleName = "laolrt_test"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/kpfalzer/projects/laol/c++/laolrt/laol/rt/primitives.cxx"
+                  timestampString = "516680163.883505"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "162"
+                  endingLineNumber = "162"
+                  offsetFromSymbolStart = "33">
+               </Location>
+            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -26,748 +133,118 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "../../laolrt/laol/rt/primitives.cxx"
-            timestampString = "516665554.146125"
+            timestampString = "516680159.894208"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "58"
-            endingLineNumber = "58"
-            landmarkName = "binop(const LaolObj&amp; self, const LaolObj&amp; opB, BINOP binop)"
-            landmarkType = "9">
+            startingLineNumber = "170"
+            endingLineNumber = "170"
+            landmarkName = "INumber::post_increment(const LaolObj&amp; self, const LaolObj&amp;)"
+            landmarkType = "7">
             <Locations>
                <Location
                   shouldBeEnabled = "Yes"
                   ignoreCount = "0"
                   continueAfterRunningActions = "No"
-                  symbolName = "&apos;lambda&apos;(laol::rt::INumber::add(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;) const::$_0) auto laol::rt::LaolObj laol::rt::binop&lt;laol::rt::INumber::add(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;) const::$_0&gt;(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;, laol::rt::INumber::add(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;) const::$_0)::&apos;lambda&apos;(laol::rt::INumber::add(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;) const::$_0)::operator()&lt;int&gt;(laol::rt::INumber::add(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;) const::$_0) const::&apos;lambda&apos;(laol::rt::INumber::add(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;) const::$_0)::operator()&lt;int&gt;(laol::rt::INumber::add(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;) const::$_0) const"
+                  symbolName = "auto laol::rt::INumber::post_increment(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;) const::$_11::operator()&lt;int*&gt;(int*) const"
                   moduleName = "laolrt_test"
                   usesParentBreakpointCondition = "Yes"
                   urlString = "file:///Users/kpfalzer/projects/laol/c++/laolrt/laol/rt/primitives.cxx"
-                  timestampString = "516665654.81347"
+                  timestampString = "516680163.927465"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "58"
-                  endingLineNumber = "58"
-                  offsetFromSymbolStart = "19">
+                  startingLineNumber = "170"
+                  endingLineNumber = "170"
+                  offsetFromSymbolStart = "12">
                </Location>
                <Location
                   shouldBeEnabled = "Yes"
                   ignoreCount = "0"
                   continueAfterRunningActions = "No"
-                  symbolName = "&apos;lambda&apos;(laol::rt::INumber::add(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;) const::$_0) auto laol::rt::LaolObj laol::rt::binop&lt;laol::rt::INumber::add(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;) const::$_0&gt;(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;, laol::rt::INumber::add(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;) const::$_0)::&apos;lambda&apos;(laol::rt::INumber::add(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;) const::$_0)::operator()&lt;int&gt;(laol::rt::INumber::add(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;) const::$_0) const::&apos;lambda&apos;(laol::rt::INumber::add(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;) const::$_0)::operator()&lt;unsigned int&gt;(laol::rt::INumber::add(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;) const::$_0) const"
+                  symbolName = "auto laol::rt::INumber::post_increment(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;) const::$_11::operator()&lt;unsigned int*&gt;(unsigned int*) const"
                   moduleName = "laolrt_test"
                   usesParentBreakpointCondition = "Yes"
                   urlString = "file:///Users/kpfalzer/projects/laol/c++/laolrt/laol/rt/primitives.cxx"
-                  timestampString = "516665654.815077"
+                  timestampString = "516680163.929356"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "58"
-                  endingLineNumber = "58"
-                  offsetFromSymbolStart = "19">
+                  startingLineNumber = "170"
+                  endingLineNumber = "170"
+                  offsetFromSymbolStart = "12">
                </Location>
                <Location
                   shouldBeEnabled = "Yes"
                   ignoreCount = "0"
                   continueAfterRunningActions = "No"
-                  symbolName = "&apos;lambda&apos;(laol::rt::INumber::add(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;) const::$_0) auto laol::rt::LaolObj laol::rt::binop&lt;laol::rt::INumber::add(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;) const::$_0&gt;(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;, laol::rt::INumber::add(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;) const::$_0)::&apos;lambda&apos;(laol::rt::INumber::add(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;) const::$_0)::operator()&lt;int&gt;(laol::rt::INumber::add(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;) const::$_0) const::&apos;lambda&apos;(laol::rt::INumber::add(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;) const::$_0)::operator()&lt;long&gt;(laol::rt::INumber::add(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;) const::$_0) const"
+                  symbolName = "auto laol::rt::INumber::post_increment(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;) const::$_11::operator()&lt;long*&gt;(long*) const"
                   moduleName = "laolrt_test"
                   usesParentBreakpointCondition = "Yes"
                   urlString = "file:///Users/kpfalzer/projects/laol/c++/laolrt/laol/rt/primitives.cxx"
-                  timestampString = "516665654.817472"
+                  timestampString = "516680163.931313"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "58"
-                  endingLineNumber = "58"
-                  offsetFromSymbolStart = "20">
+                  startingLineNumber = "170"
+                  endingLineNumber = "170"
+                  offsetFromSymbolStart = "12">
                </Location>
                <Location
                   shouldBeEnabled = "Yes"
                   ignoreCount = "0"
                   continueAfterRunningActions = "No"
-                  symbolName = "&apos;lambda&apos;(laol::rt::INumber::add(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;) const::$_0) auto laol::rt::LaolObj laol::rt::binop&lt;laol::rt::INumber::add(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;) const::$_0&gt;(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;, laol::rt::INumber::add(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;) const::$_0)::&apos;lambda&apos;(laol::rt::INumber::add(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;) const::$_0)::operator()&lt;int&gt;(laol::rt::INumber::add(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;) const::$_0) const::&apos;lambda&apos;(laol::rt::INumber::add(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;) const::$_0)::operator()&lt;unsigned long&gt;(laol::rt::INumber::add(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;) const::$_0) const"
+                  symbolName = "auto laol::rt::INumber::post_increment(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;) const::$_11::operator()&lt;unsigned long*&gt;(unsigned long*) const"
                   moduleName = "laolrt_test"
                   usesParentBreakpointCondition = "Yes"
                   urlString = "file:///Users/kpfalzer/projects/laol/c++/laolrt/laol/rt/primitives.cxx"
-                  timestampString = "516665654.819307"
+                  timestampString = "516680163.932981"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "58"
-                  endingLineNumber = "58"
-                  offsetFromSymbolStart = "20">
+                  startingLineNumber = "170"
+                  endingLineNumber = "170"
+                  offsetFromSymbolStart = "12">
                </Location>
                <Location
                   shouldBeEnabled = "Yes"
                   ignoreCount = "0"
                   continueAfterRunningActions = "No"
-                  symbolName = "&apos;lambda&apos;(laol::rt::INumber::add(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;) const::$_0) auto laol::rt::LaolObj laol::rt::binop&lt;laol::rt::INumber::add(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;) const::$_0&gt;(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;, laol::rt::INumber::add(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;) const::$_0)::&apos;lambda&apos;(laol::rt::INumber::add(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;) const::$_0)::operator()&lt;int&gt;(laol::rt::INumber::add(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;) const::$_0) const::&apos;lambda&apos;(laol::rt::INumber::add(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;) const::$_0)::operator()&lt;char&gt;(laol::rt::INumber::add(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;) const::$_0) const"
+                  symbolName = "auto laol::rt::INumber::post_increment(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;) const::$_11::operator()&lt;char*&gt;(char*) const"
                   moduleName = "laolrt_test"
                   usesParentBreakpointCondition = "Yes"
                   urlString = "file:///Users/kpfalzer/projects/laol/c++/laolrt/laol/rt/primitives.cxx"
-                  timestampString = "516665654.821025"
+                  timestampString = "516680163.934506"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "58"
-                  endingLineNumber = "58"
-                  offsetFromSymbolStart = "22">
+                  startingLineNumber = "170"
+                  endingLineNumber = "170"
+                  offsetFromSymbolStart = "12">
                </Location>
                <Location
                   shouldBeEnabled = "Yes"
                   ignoreCount = "0"
                   continueAfterRunningActions = "No"
-                  symbolName = "&apos;lambda&apos;(laol::rt::INumber::add(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;) const::$_0) auto laol::rt::LaolObj laol::rt::binop&lt;laol::rt::INumber::add(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;) const::$_0&gt;(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;, laol::rt::INumber::add(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;) const::$_0)::&apos;lambda&apos;(laol::rt::INumber::add(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;) const::$_0)::operator()&lt;int&gt;(laol::rt::INumber::add(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;) const::$_0) const::&apos;lambda&apos;(laol::rt::INumber::add(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;) const::$_0)::operator()&lt;float&gt;(laol::rt::INumber::add(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;) const::$_0) const"
+                  symbolName = "auto laol::rt::INumber::post_increment(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;) const::$_11::operator()&lt;float*&gt;(float*) const"
                   moduleName = "laolrt_test"
                   usesParentBreakpointCondition = "Yes"
                   urlString = "file:///Users/kpfalzer/projects/laol/c++/laolrt/laol/rt/primitives.cxx"
-                  timestampString = "516665654.822552"
+                  timestampString = "516680163.936438"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "58"
-                  endingLineNumber = "58"
-                  offsetFromSymbolStart = "21">
+                  startingLineNumber = "170"
+                  endingLineNumber = "170"
+                  offsetFromSymbolStart = "12">
                </Location>
                <Location
                   shouldBeEnabled = "Yes"
                   ignoreCount = "0"
                   continueAfterRunningActions = "No"
-                  symbolName = "&apos;lambda&apos;(laol::rt::INumber::add(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;) const::$_0) auto laol::rt::LaolObj laol::rt::binop&lt;laol::rt::INumber::add(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;) const::$_0&gt;(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;, laol::rt::INumber::add(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;) const::$_0)::&apos;lambda&apos;(laol::rt::INumber::add(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;) const::$_0)::operator()&lt;int&gt;(laol::rt::INumber::add(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;) const::$_0) const::&apos;lambda&apos;(laol::rt::INumber::add(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;) const::$_0)::operator()&lt;double&gt;(laol::rt::INumber::add(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;) const::$_0) const"
+                  symbolName = "auto laol::rt::INumber::post_increment(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;) const::$_11::operator()&lt;double*&gt;(double*) const"
                   moduleName = "laolrt_test"
                   usesParentBreakpointCondition = "Yes"
                   urlString = "file:///Users/kpfalzer/projects/laol/c++/laolrt/laol/rt/primitives.cxx"
-                  timestampString = "516665654.824144"
+                  timestampString = "516680163.938956"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "58"
-                  endingLineNumber = "58"
-                  offsetFromSymbolStart = "21">
-               </Location>
-               <Location
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "&apos;lambda&apos;(laol::rt::INumber::add(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;) const::$_0) auto laol::rt::LaolObj laol::rt::binop&lt;laol::rt::INumber::add(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;) const::$_0&gt;(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;, laol::rt::INumber::add(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;) const::$_0)::&apos;lambda&apos;(laol::rt::INumber::add(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;) const::$_0)::operator()&lt;unsigned int&gt;(laol::rt::INumber::add(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;) const::$_0) const::&apos;lambda&apos;(laol::rt::INumber::add(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;) const::$_0)::operator()&lt;int&gt;(laol::rt::INumber::add(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;) const::$_0) const"
-                  moduleName = "laolrt_test"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/kpfalzer/projects/laol/c++/laolrt/laol/rt/primitives.cxx"
-                  timestampString = "516665654.825758"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "58"
-                  endingLineNumber = "58"
-                  offsetFromSymbolStart = "19">
-               </Location>
-               <Location
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "&apos;lambda&apos;(laol::rt::INumber::add(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;) const::$_0) auto laol::rt::LaolObj laol::rt::binop&lt;laol::rt::INumber::add(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;) const::$_0&gt;(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;, laol::rt::INumber::add(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;) const::$_0)::&apos;lambda&apos;(laol::rt::INumber::add(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;) const::$_0)::operator()&lt;unsigned int&gt;(laol::rt::INumber::add(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;) const::$_0) const::&apos;lambda&apos;(laol::rt::INumber::add(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;) const::$_0)::operator()&lt;unsigned int&gt;(laol::rt::INumber::add(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;) const::$_0) const"
-                  moduleName = "laolrt_test"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/kpfalzer/projects/laol/c++/laolrt/laol/rt/primitives.cxx"
-                  timestampString = "516665654.827267"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "58"
-                  endingLineNumber = "58"
-                  offsetFromSymbolStart = "19">
-               </Location>
-               <Location
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "&apos;lambda&apos;(laol::rt::INumber::add(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;) const::$_0) auto laol::rt::LaolObj laol::rt::binop&lt;laol::rt::INumber::add(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;) const::$_0&gt;(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;, laol::rt::INumber::add(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;) const::$_0)::&apos;lambda&apos;(laol::rt::INumber::add(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;) const::$_0)::operator()&lt;unsigned int&gt;(laol::rt::INumber::add(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;) const::$_0) const::&apos;lambda&apos;(laol::rt::INumber::add(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;) const::$_0)::operator()&lt;long&gt;(laol::rt::INumber::add(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;) const::$_0) const"
-                  moduleName = "laolrt_test"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/kpfalzer/projects/laol/c++/laolrt/laol/rt/primitives.cxx"
-                  timestampString = "516665654.828768"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "58"
-                  endingLineNumber = "58"
-                  offsetFromSymbolStart = "20">
-               </Location>
-               <Location
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "&apos;lambda&apos;(laol::rt::INumber::add(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;) const::$_0) auto laol::rt::LaolObj laol::rt::binop&lt;laol::rt::INumber::add(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;) const::$_0&gt;(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;, laol::rt::INumber::add(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;) const::$_0)::&apos;lambda&apos;(laol::rt::INumber::add(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;) const::$_0)::operator()&lt;unsigned int&gt;(laol::rt::INumber::add(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;) const::$_0) const::&apos;lambda&apos;(laol::rt::INumber::add(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;) const::$_0)::operator()&lt;unsigned long&gt;(laol::rt::INumber::add(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;) const::$_0) const"
-                  moduleName = "laolrt_test"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/kpfalzer/projects/laol/c++/laolrt/laol/rt/primitives.cxx"
-                  timestampString = "516665654.83021"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "58"
-                  endingLineNumber = "58"
-                  offsetFromSymbolStart = "20">
-               </Location>
-               <Location
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "&apos;lambda&apos;(laol::rt::INumber::add(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;) const::$_0) auto laol::rt::LaolObj laol::rt::binop&lt;laol::rt::INumber::add(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;) const::$_0&gt;(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;, laol::rt::INumber::add(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;) const::$_0)::&apos;lambda&apos;(laol::rt::INumber::add(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;) const::$_0)::operator()&lt;unsigned int&gt;(laol::rt::INumber::add(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;) const::$_0) const::&apos;lambda&apos;(laol::rt::INumber::add(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;) const::$_0)::operator()&lt;char&gt;(laol::rt::INumber::add(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;) const::$_0) const"
-                  moduleName = "laolrt_test"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/kpfalzer/projects/laol/c++/laolrt/laol/rt/primitives.cxx"
-                  timestampString = "516665654.831711"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "58"
-                  endingLineNumber = "58"
-                  offsetFromSymbolStart = "22">
-               </Location>
-               <Location
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "&apos;lambda&apos;(laol::rt::INumber::add(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;) const::$_0) auto laol::rt::LaolObj laol::rt::binop&lt;laol::rt::INumber::add(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;) const::$_0&gt;(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;, laol::rt::INumber::add(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;) const::$_0)::&apos;lambda&apos;(laol::rt::INumber::add(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;) const::$_0)::operator()&lt;unsigned int&gt;(laol::rt::INumber::add(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;) const::$_0) const::&apos;lambda&apos;(laol::rt::INumber::add(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;) const::$_0)::operator()&lt;float&gt;(laol::rt::INumber::add(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;) const::$_0) const"
-                  moduleName = "laolrt_test"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/kpfalzer/projects/laol/c++/laolrt/laol/rt/primitives.cxx"
-                  timestampString = "516665654.833548"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "58"
-                  endingLineNumber = "58"
-                  offsetFromSymbolStart = "21">
-               </Location>
-               <Location
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "&apos;lambda&apos;(laol::rt::INumber::add(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;) const::$_0) auto laol::rt::LaolObj laol::rt::binop&lt;laol::rt::INumber::add(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;) const::$_0&gt;(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;, laol::rt::INumber::add(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;) const::$_0)::&apos;lambda&apos;(laol::rt::INumber::add(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;) const::$_0)::operator()&lt;unsigned int&gt;(laol::rt::INumber::add(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;) const::$_0) const::&apos;lambda&apos;(laol::rt::INumber::add(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;) const::$_0)::operator()&lt;double&gt;(laol::rt::INumber::add(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;) const::$_0) const"
-                  moduleName = "laolrt_test"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/kpfalzer/projects/laol/c++/laolrt/laol/rt/primitives.cxx"
-                  timestampString = "516665654.835106"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "58"
-                  endingLineNumber = "58"
-                  offsetFromSymbolStart = "21">
-               </Location>
-               <Location
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "&apos;lambda&apos;(laol::rt::INumber::add(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;) const::$_0) auto laol::rt::LaolObj laol::rt::binop&lt;laol::rt::INumber::add(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;) const::$_0&gt;(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;, laol::rt::INumber::add(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;) const::$_0)::&apos;lambda&apos;(laol::rt::INumber::add(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;) const::$_0)::operator()&lt;long&gt;(laol::rt::INumber::add(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;) const::$_0) const::&apos;lambda&apos;(laol::rt::INumber::add(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;) const::$_0)::operator()&lt;int&gt;(laol::rt::INumber::add(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;) const::$_0) const"
-                  moduleName = "laolrt_test"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/kpfalzer/projects/laol/c++/laolrt/laol/rt/primitives.cxx"
-                  timestampString = "516665654.836597"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "58"
-                  endingLineNumber = "58"
-                  offsetFromSymbolStart = "19">
-               </Location>
-               <Location
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "&apos;lambda&apos;(laol::rt::INumber::add(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;) const::$_0) auto laol::rt::LaolObj laol::rt::binop&lt;laol::rt::INumber::add(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;) const::$_0&gt;(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;, laol::rt::INumber::add(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;) const::$_0)::&apos;lambda&apos;(laol::rt::INumber::add(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;) const::$_0)::operator()&lt;long&gt;(laol::rt::INumber::add(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;) const::$_0) const::&apos;lambda&apos;(laol::rt::INumber::add(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;) const::$_0)::operator()&lt;unsigned int&gt;(laol::rt::INumber::add(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;) const::$_0) const"
-                  moduleName = "laolrt_test"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/kpfalzer/projects/laol/c++/laolrt/laol/rt/primitives.cxx"
-                  timestampString = "516665654.838248"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "58"
-                  endingLineNumber = "58"
-                  offsetFromSymbolStart = "19">
-               </Location>
-               <Location
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "&apos;lambda&apos;(laol::rt::INumber::add(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;) const::$_0) auto laol::rt::LaolObj laol::rt::binop&lt;laol::rt::INumber::add(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;) const::$_0&gt;(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;, laol::rt::INumber::add(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;) const::$_0)::&apos;lambda&apos;(laol::rt::INumber::add(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;) const::$_0)::operator()&lt;long&gt;(laol::rt::INumber::add(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;) const::$_0) const::&apos;lambda&apos;(laol::rt::INumber::add(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;) const::$_0)::operator()&lt;long&gt;(laol::rt::INumber::add(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;) const::$_0) const"
-                  moduleName = "laolrt_test"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/kpfalzer/projects/laol/c++/laolrt/laol/rt/primitives.cxx"
-                  timestampString = "516665654.839727"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "58"
-                  endingLineNumber = "58"
-                  offsetFromSymbolStart = "20">
-               </Location>
-               <Location
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "&apos;lambda&apos;(laol::rt::INumber::add(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;) const::$_0) auto laol::rt::LaolObj laol::rt::binop&lt;laol::rt::INumber::add(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;) const::$_0&gt;(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;, laol::rt::INumber::add(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;) const::$_0)::&apos;lambda&apos;(laol::rt::INumber::add(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;) const::$_0)::operator()&lt;long&gt;(laol::rt::INumber::add(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;) const::$_0) const::&apos;lambda&apos;(laol::rt::INumber::add(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;) const::$_0)::operator()&lt;unsigned long&gt;(laol::rt::INumber::add(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;) const::$_0) const"
-                  moduleName = "laolrt_test"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/kpfalzer/projects/laol/c++/laolrt/laol/rt/primitives.cxx"
-                  timestampString = "516665654.84123"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "58"
-                  endingLineNumber = "58"
-                  offsetFromSymbolStart = "20">
-               </Location>
-               <Location
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "&apos;lambda&apos;(laol::rt::INumber::add(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;) const::$_0) auto laol::rt::LaolObj laol::rt::binop&lt;laol::rt::INumber::add(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;) const::$_0&gt;(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;, laol::rt::INumber::add(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;) const::$_0)::&apos;lambda&apos;(laol::rt::INumber::add(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;) const::$_0)::operator()&lt;long&gt;(laol::rt::INumber::add(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;) const::$_0) const::&apos;lambda&apos;(laol::rt::INumber::add(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;) const::$_0)::operator()&lt;char&gt;(laol::rt::INumber::add(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;) const::$_0) const"
-                  moduleName = "laolrt_test"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/kpfalzer/projects/laol/c++/laolrt/laol/rt/primitives.cxx"
-                  timestampString = "516665654.842692"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "58"
-                  endingLineNumber = "58"
-                  offsetFromSymbolStart = "22">
-               </Location>
-               <Location
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "&apos;lambda&apos;(laol::rt::INumber::add(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;) const::$_0) auto laol::rt::LaolObj laol::rt::binop&lt;laol::rt::INumber::add(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;) const::$_0&gt;(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;, laol::rt::INumber::add(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;) const::$_0)::&apos;lambda&apos;(laol::rt::INumber::add(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;) const::$_0)::operator()&lt;long&gt;(laol::rt::INumber::add(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;) const::$_0) const::&apos;lambda&apos;(laol::rt::INumber::add(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;) const::$_0)::operator()&lt;float&gt;(laol::rt::INumber::add(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;) const::$_0) const"
-                  moduleName = "laolrt_test"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/kpfalzer/projects/laol/c++/laolrt/laol/rt/primitives.cxx"
-                  timestampString = "516665654.844082"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "58"
-                  endingLineNumber = "58"
-                  offsetFromSymbolStart = "21">
-               </Location>
-               <Location
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "&apos;lambda&apos;(laol::rt::INumber::add(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;) const::$_0) auto laol::rt::LaolObj laol::rt::binop&lt;laol::rt::INumber::add(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;) const::$_0&gt;(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;, laol::rt::INumber::add(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;) const::$_0)::&apos;lambda&apos;(laol::rt::INumber::add(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;) const::$_0)::operator()&lt;long&gt;(laol::rt::INumber::add(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;) const::$_0) const::&apos;lambda&apos;(laol::rt::INumber::add(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;) const::$_0)::operator()&lt;double&gt;(laol::rt::INumber::add(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;) const::$_0) const"
-                  moduleName = "laolrt_test"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/kpfalzer/projects/laol/c++/laolrt/laol/rt/primitives.cxx"
-                  timestampString = "516665654.845433"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "58"
-                  endingLineNumber = "58"
-                  offsetFromSymbolStart = "21">
-               </Location>
-               <Location
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "&apos;lambda&apos;(laol::rt::INumber::add(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;) const::$_0) auto laol::rt::LaolObj laol::rt::binop&lt;laol::rt::INumber::add(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;) const::$_0&gt;(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;, laol::rt::INumber::add(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;) const::$_0)::&apos;lambda&apos;(laol::rt::INumber::add(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;) const::$_0)::operator()&lt;unsigned long&gt;(laol::rt::INumber::add(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;) const::$_0) const::&apos;lambda&apos;(laol::rt::INumber::add(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;) const::$_0)::operator()&lt;int&gt;(laol::rt::INumber::add(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;) const::$_0) const"
-                  moduleName = "laolrt_test"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/kpfalzer/projects/laol/c++/laolrt/laol/rt/primitives.cxx"
-                  timestampString = "516665654.846815"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "58"
-                  endingLineNumber = "58"
-                  offsetFromSymbolStart = "19">
-               </Location>
-               <Location
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "&apos;lambda&apos;(laol::rt::INumber::add(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;) const::$_0) auto laol::rt::LaolObj laol::rt::binop&lt;laol::rt::INumber::add(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;) const::$_0&gt;(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;, laol::rt::INumber::add(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;) const::$_0)::&apos;lambda&apos;(laol::rt::INumber::add(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;) const::$_0)::operator()&lt;unsigned long&gt;(laol::rt::INumber::add(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;) const::$_0) const::&apos;lambda&apos;(laol::rt::INumber::add(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;) const::$_0)::operator()&lt;unsigned int&gt;(laol::rt::INumber::add(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;) const::$_0) const"
-                  moduleName = "laolrt_test"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/kpfalzer/projects/laol/c++/laolrt/laol/rt/primitives.cxx"
-                  timestampString = "516665654.84831"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "58"
-                  endingLineNumber = "58"
-                  offsetFromSymbolStart = "19">
-               </Location>
-               <Location
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "&apos;lambda&apos;(laol::rt::INumber::add(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;) const::$_0) auto laol::rt::LaolObj laol::rt::binop&lt;laol::rt::INumber::add(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;) const::$_0&gt;(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;, laol::rt::INumber::add(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;) const::$_0)::&apos;lambda&apos;(laol::rt::INumber::add(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;) const::$_0)::operator()&lt;unsigned long&gt;(laol::rt::INumber::add(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;) const::$_0) const::&apos;lambda&apos;(laol::rt::INumber::add(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;) const::$_0)::operator()&lt;long&gt;(laol::rt::INumber::add(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;) const::$_0) const"
-                  moduleName = "laolrt_test"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/kpfalzer/projects/laol/c++/laolrt/laol/rt/primitives.cxx"
-                  timestampString = "516665654.849944"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "58"
-                  endingLineNumber = "58"
-                  offsetFromSymbolStart = "20">
-               </Location>
-               <Location
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "&apos;lambda&apos;(laol::rt::INumber::add(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;) const::$_0) auto laol::rt::LaolObj laol::rt::binop&lt;laol::rt::INumber::add(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;) const::$_0&gt;(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;, laol::rt::INumber::add(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;) const::$_0)::&apos;lambda&apos;(laol::rt::INumber::add(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;) const::$_0)::operator()&lt;unsigned long&gt;(laol::rt::INumber::add(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;) const::$_0) const::&apos;lambda&apos;(laol::rt::INumber::add(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;) const::$_0)::operator()&lt;unsigned long&gt;(laol::rt::INumber::add(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;) const::$_0) const"
-                  moduleName = "laolrt_test"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/kpfalzer/projects/laol/c++/laolrt/laol/rt/primitives.cxx"
-                  timestampString = "516665654.851413"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "58"
-                  endingLineNumber = "58"
-                  offsetFromSymbolStart = "20">
-               </Location>
-               <Location
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "&apos;lambda&apos;(laol::rt::INumber::add(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;) const::$_0) auto laol::rt::LaolObj laol::rt::binop&lt;laol::rt::INumber::add(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;) const::$_0&gt;(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;, laol::rt::INumber::add(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;) const::$_0)::&apos;lambda&apos;(laol::rt::INumber::add(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;) const::$_0)::operator()&lt;unsigned long&gt;(laol::rt::INumber::add(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;) const::$_0) const::&apos;lambda&apos;(laol::rt::INumber::add(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;) const::$_0)::operator()&lt;char&gt;(laol::rt::INumber::add(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;) const::$_0) const"
-                  moduleName = "laolrt_test"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/kpfalzer/projects/laol/c++/laolrt/laol/rt/primitives.cxx"
-                  timestampString = "516665654.85289"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "58"
-                  endingLineNumber = "58"
-                  offsetFromSymbolStart = "22">
-               </Location>
-               <Location
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "&apos;lambda&apos;(laol::rt::INumber::add(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;) const::$_0) auto laol::rt::LaolObj laol::rt::binop&lt;laol::rt::INumber::add(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;) const::$_0&gt;(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;, laol::rt::INumber::add(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;) const::$_0)::&apos;lambda&apos;(laol::rt::INumber::add(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;) const::$_0)::operator()&lt;unsigned long&gt;(laol::rt::INumber::add(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;) const::$_0) const::&apos;lambda&apos;(laol::rt::INumber::add(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;) const::$_0)::operator()&lt;float&gt;(laol::rt::INumber::add(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;) const::$_0) const"
-                  moduleName = "laolrt_test"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/kpfalzer/projects/laol/c++/laolrt/laol/rt/primitives.cxx"
-                  timestampString = "516665654.854283"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "58"
-                  endingLineNumber = "58"
-                  offsetFromSymbolStart = "21">
-               </Location>
-               <Location
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "&apos;lambda&apos;(laol::rt::INumber::add(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;) const::$_0) auto laol::rt::LaolObj laol::rt::binop&lt;laol::rt::INumber::add(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;) const::$_0&gt;(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;, laol::rt::INumber::add(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;) const::$_0)::&apos;lambda&apos;(laol::rt::INumber::add(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;) const::$_0)::operator()&lt;unsigned long&gt;(laol::rt::INumber::add(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;) const::$_0) const::&apos;lambda&apos;(laol::rt::INumber::add(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;) const::$_0)::operator()&lt;double&gt;(laol::rt::INumber::add(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;) const::$_0) const"
-                  moduleName = "laolrt_test"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/kpfalzer/projects/laol/c++/laolrt/laol/rt/primitives.cxx"
-                  timestampString = "516665654.855618"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "58"
-                  endingLineNumber = "58"
-                  offsetFromSymbolStart = "21">
-               </Location>
-               <Location
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "&apos;lambda&apos;(laol::rt::INumber::add(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;) const::$_0) auto laol::rt::LaolObj laol::rt::binop&lt;laol::rt::INumber::add(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;) const::$_0&gt;(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;, laol::rt::INumber::add(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;) const::$_0)::&apos;lambda&apos;(laol::rt::INumber::add(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;) const::$_0)::operator()&lt;char&gt;(laol::rt::INumber::add(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;) const::$_0) const::&apos;lambda&apos;(laol::rt::INumber::add(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;) const::$_0)::operator()&lt;int&gt;(laol::rt::INumber::add(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;) const::$_0) const"
-                  moduleName = "laolrt_test"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/kpfalzer/projects/laol/c++/laolrt/laol/rt/primitives.cxx"
-                  timestampString = "516665654.856951"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "58"
-                  endingLineNumber = "58"
-                  offsetFromSymbolStart = "19">
-               </Location>
-               <Location
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "&apos;lambda&apos;(laol::rt::INumber::add(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;) const::$_0) auto laol::rt::LaolObj laol::rt::binop&lt;laol::rt::INumber::add(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;) const::$_0&gt;(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;, laol::rt::INumber::add(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;) const::$_0)::&apos;lambda&apos;(laol::rt::INumber::add(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;) const::$_0)::operator()&lt;char&gt;(laol::rt::INumber::add(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;) const::$_0) const::&apos;lambda&apos;(laol::rt::INumber::add(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;) const::$_0)::operator()&lt;unsigned int&gt;(laol::rt::INumber::add(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;) const::$_0) const"
-                  moduleName = "laolrt_test"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/kpfalzer/projects/laol/c++/laolrt/laol/rt/primitives.cxx"
-                  timestampString = "516665654.858519"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "58"
-                  endingLineNumber = "58"
-                  offsetFromSymbolStart = "19">
-               </Location>
-               <Location
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "&apos;lambda&apos;(laol::rt::INumber::add(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;) const::$_0) auto laol::rt::LaolObj laol::rt::binop&lt;laol::rt::INumber::add(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;) const::$_0&gt;(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;, laol::rt::INumber::add(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;) const::$_0)::&apos;lambda&apos;(laol::rt::INumber::add(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;) const::$_0)::operator()&lt;char&gt;(laol::rt::INumber::add(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;) const::$_0) const::&apos;lambda&apos;(laol::rt::INumber::add(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;) const::$_0)::operator()&lt;long&gt;(laol::rt::INumber::add(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;) const::$_0) const"
-                  moduleName = "laolrt_test"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/kpfalzer/projects/laol/c++/laolrt/laol/rt/primitives.cxx"
-                  timestampString = "516665654.859857"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "58"
-                  endingLineNumber = "58"
-                  offsetFromSymbolStart = "20">
-               </Location>
-               <Location
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "&apos;lambda&apos;(laol::rt::INumber::add(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;) const::$_0) auto laol::rt::LaolObj laol::rt::binop&lt;laol::rt::INumber::add(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;) const::$_0&gt;(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;, laol::rt::INumber::add(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;) const::$_0)::&apos;lambda&apos;(laol::rt::INumber::add(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;) const::$_0)::operator()&lt;char&gt;(laol::rt::INumber::add(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;) const::$_0) const::&apos;lambda&apos;(laol::rt::INumber::add(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;) const::$_0)::operator()&lt;unsigned long&gt;(laol::rt::INumber::add(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;) const::$_0) const"
-                  moduleName = "laolrt_test"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/kpfalzer/projects/laol/c++/laolrt/laol/rt/primitives.cxx"
-                  timestampString = "516665654.861194"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "58"
-                  endingLineNumber = "58"
-                  offsetFromSymbolStart = "20">
-               </Location>
-               <Location
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "&apos;lambda&apos;(laol::rt::INumber::add(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;) const::$_0) auto laol::rt::LaolObj laol::rt::binop&lt;laol::rt::INumber::add(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;) const::$_0&gt;(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;, laol::rt::INumber::add(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;) const::$_0)::&apos;lambda&apos;(laol::rt::INumber::add(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;) const::$_0)::operator()&lt;char&gt;(laol::rt::INumber::add(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;) const::$_0) const::&apos;lambda&apos;(laol::rt::INumber::add(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;) const::$_0)::operator()&lt;char&gt;(laol::rt::INumber::add(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;) const::$_0) const"
-                  moduleName = "laolrt_test"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/kpfalzer/projects/laol/c++/laolrt/laol/rt/primitives.cxx"
-                  timestampString = "516665654.862521"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "58"
-                  endingLineNumber = "58"
-                  offsetFromSymbolStart = "22">
-               </Location>
-               <Location
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "&apos;lambda&apos;(laol::rt::INumber::add(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;) const::$_0) auto laol::rt::LaolObj laol::rt::binop&lt;laol::rt::INumber::add(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;) const::$_0&gt;(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;, laol::rt::INumber::add(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;) const::$_0)::&apos;lambda&apos;(laol::rt::INumber::add(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;) const::$_0)::operator()&lt;char&gt;(laol::rt::INumber::add(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;) const::$_0) const::&apos;lambda&apos;(laol::rt::INumber::add(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;) const::$_0)::operator()&lt;float&gt;(laol::rt::INumber::add(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;) const::$_0) const"
-                  moduleName = "laolrt_test"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/kpfalzer/projects/laol/c++/laolrt/laol/rt/primitives.cxx"
-                  timestampString = "516665654.864001"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "58"
-                  endingLineNumber = "58"
-                  offsetFromSymbolStart = "21">
-               </Location>
-               <Location
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "&apos;lambda&apos;(laol::rt::INumber::add(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;) const::$_0) auto laol::rt::LaolObj laol::rt::binop&lt;laol::rt::INumber::add(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;) const::$_0&gt;(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;, laol::rt::INumber::add(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;) const::$_0)::&apos;lambda&apos;(laol::rt::INumber::add(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;) const::$_0)::operator()&lt;char&gt;(laol::rt::INumber::add(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;) const::$_0) const::&apos;lambda&apos;(laol::rt::INumber::add(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;) const::$_0)::operator()&lt;double&gt;(laol::rt::INumber::add(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;) const::$_0) const"
-                  moduleName = "laolrt_test"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/kpfalzer/projects/laol/c++/laolrt/laol/rt/primitives.cxx"
-                  timestampString = "516665654.865563"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "58"
-                  endingLineNumber = "58"
-                  offsetFromSymbolStart = "21">
-               </Location>
-               <Location
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "&apos;lambda&apos;(laol::rt::INumber::add(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;) const::$_0) auto laol::rt::LaolObj laol::rt::binop&lt;laol::rt::INumber::add(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;) const::$_0&gt;(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;, laol::rt::INumber::add(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;) const::$_0)::&apos;lambda&apos;(laol::rt::INumber::add(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;) const::$_0)::operator()&lt;float&gt;(laol::rt::INumber::add(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;) const::$_0) const::&apos;lambda&apos;(laol::rt::INumber::add(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;) const::$_0)::operator()&lt;int&gt;(laol::rt::INumber::add(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;) const::$_0) const"
-                  moduleName = "laolrt_test"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/kpfalzer/projects/laol/c++/laolrt/laol/rt/primitives.cxx"
-                  timestampString = "516665654.867182"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "58"
-                  endingLineNumber = "58"
-                  offsetFromSymbolStart = "19">
-               </Location>
-               <Location
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "&apos;lambda&apos;(laol::rt::INumber::add(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;) const::$_0) auto laol::rt::LaolObj laol::rt::binop&lt;laol::rt::INumber::add(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;) const::$_0&gt;(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;, laol::rt::INumber::add(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;) const::$_0)::&apos;lambda&apos;(laol::rt::INumber::add(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;) const::$_0)::operator()&lt;float&gt;(laol::rt::INumber::add(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;) const::$_0) const::&apos;lambda&apos;(laol::rt::INumber::add(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;) const::$_0)::operator()&lt;unsigned int&gt;(laol::rt::INumber::add(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;) const::$_0) const"
-                  moduleName = "laolrt_test"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/kpfalzer/projects/laol/c++/laolrt/laol/rt/primitives.cxx"
-                  timestampString = "516665654.868537"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "58"
-                  endingLineNumber = "58"
-                  offsetFromSymbolStart = "19">
-               </Location>
-               <Location
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "&apos;lambda&apos;(laol::rt::INumber::add(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;) const::$_0) auto laol::rt::LaolObj laol::rt::binop&lt;laol::rt::INumber::add(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;) const::$_0&gt;(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;, laol::rt::INumber::add(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;) const::$_0)::&apos;lambda&apos;(laol::rt::INumber::add(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;) const::$_0)::operator()&lt;float&gt;(laol::rt::INumber::add(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;) const::$_0) const::&apos;lambda&apos;(laol::rt::INumber::add(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;) const::$_0)::operator()&lt;long&gt;(laol::rt::INumber::add(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;) const::$_0) const"
-                  moduleName = "laolrt_test"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/kpfalzer/projects/laol/c++/laolrt/laol/rt/primitives.cxx"
-                  timestampString = "516665654.869991"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "58"
-                  endingLineNumber = "58"
-                  offsetFromSymbolStart = "20">
-               </Location>
-               <Location
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "&apos;lambda&apos;(laol::rt::INumber::add(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;) const::$_0) auto laol::rt::LaolObj laol::rt::binop&lt;laol::rt::INumber::add(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;) const::$_0&gt;(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;, laol::rt::INumber::add(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;) const::$_0)::&apos;lambda&apos;(laol::rt::INumber::add(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;) const::$_0)::operator()&lt;float&gt;(laol::rt::INumber::add(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;) const::$_0) const::&apos;lambda&apos;(laol::rt::INumber::add(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;) const::$_0)::operator()&lt;unsigned long&gt;(laol::rt::INumber::add(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;) const::$_0) const"
-                  moduleName = "laolrt_test"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/kpfalzer/projects/laol/c++/laolrt/laol/rt/primitives.cxx"
-                  timestampString = "516665654.871347"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "58"
-                  endingLineNumber = "58"
-                  offsetFromSymbolStart = "20">
-               </Location>
-               <Location
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "&apos;lambda&apos;(laol::rt::INumber::add(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;) const::$_0) auto laol::rt::LaolObj laol::rt::binop&lt;laol::rt::INumber::add(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;) const::$_0&gt;(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;, laol::rt::INumber::add(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;) const::$_0)::&apos;lambda&apos;(laol::rt::INumber::add(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;) const::$_0)::operator()&lt;float&gt;(laol::rt::INumber::add(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;) const::$_0) const::&apos;lambda&apos;(laol::rt::INumber::add(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;) const::$_0)::operator()&lt;char&gt;(laol::rt::INumber::add(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;) const::$_0) const"
-                  moduleName = "laolrt_test"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/kpfalzer/projects/laol/c++/laolrt/laol/rt/primitives.cxx"
-                  timestampString = "516665654.872698"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "58"
-                  endingLineNumber = "58"
-                  offsetFromSymbolStart = "22">
-               </Location>
-               <Location
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "&apos;lambda&apos;(laol::rt::INumber::add(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;) const::$_0) auto laol::rt::LaolObj laol::rt::binop&lt;laol::rt::INumber::add(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;) const::$_0&gt;(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;, laol::rt::INumber::add(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;) const::$_0)::&apos;lambda&apos;(laol::rt::INumber::add(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;) const::$_0)::operator()&lt;float&gt;(laol::rt::INumber::add(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;) const::$_0) const::&apos;lambda&apos;(laol::rt::INumber::add(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;) const::$_0)::operator()&lt;float&gt;(laol::rt::INumber::add(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;) const::$_0) const"
-                  moduleName = "laolrt_test"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/kpfalzer/projects/laol/c++/laolrt/laol/rt/primitives.cxx"
-                  timestampString = "516665654.874068"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "58"
-                  endingLineNumber = "58"
-                  offsetFromSymbolStart = "21">
-               </Location>
-               <Location
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "&apos;lambda&apos;(laol::rt::INumber::add(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;) const::$_0) auto laol::rt::LaolObj laol::rt::binop&lt;laol::rt::INumber::add(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;) const::$_0&gt;(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;, laol::rt::INumber::add(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;) const::$_0)::&apos;lambda&apos;(laol::rt::INumber::add(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;) const::$_0)::operator()&lt;float&gt;(laol::rt::INumber::add(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;) const::$_0) const::&apos;lambda&apos;(laol::rt::INumber::add(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;) const::$_0)::operator()&lt;double&gt;(laol::rt::INumber::add(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;) const::$_0) const"
-                  moduleName = "laolrt_test"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/kpfalzer/projects/laol/c++/laolrt/laol/rt/primitives.cxx"
-                  timestampString = "516665654.875599"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "58"
-                  endingLineNumber = "58"
-                  offsetFromSymbolStart = "21">
-               </Location>
-               <Location
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "&apos;lambda&apos;(laol::rt::INumber::add(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;) const::$_0) auto laol::rt::LaolObj laol::rt::binop&lt;laol::rt::INumber::add(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;) const::$_0&gt;(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;, laol::rt::INumber::add(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;) const::$_0)::&apos;lambda&apos;(laol::rt::INumber::add(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;) const::$_0)::operator()&lt;double&gt;(laol::rt::INumber::add(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;) const::$_0) const::&apos;lambda&apos;(laol::rt::INumber::add(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;) const::$_0)::operator()&lt;int&gt;(laol::rt::INumber::add(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;) const::$_0) const"
-                  moduleName = "laolrt_test"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/kpfalzer/projects/laol/c++/laolrt/laol/rt/primitives.cxx"
-                  timestampString = "516665654.876956"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "58"
-                  endingLineNumber = "58"
-                  offsetFromSymbolStart = "19">
-               </Location>
-               <Location
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "&apos;lambda&apos;(laol::rt::INumber::add(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;) const::$_0) auto laol::rt::LaolObj laol::rt::binop&lt;laol::rt::INumber::add(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;) const::$_0&gt;(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;, laol::rt::INumber::add(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;) const::$_0)::&apos;lambda&apos;(laol::rt::INumber::add(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;) const::$_0)::operator()&lt;double&gt;(laol::rt::INumber::add(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;) const::$_0) const::&apos;lambda&apos;(laol::rt::INumber::add(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;) const::$_0)::operator()&lt;unsigned int&gt;(laol::rt::INumber::add(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;) const::$_0) const"
-                  moduleName = "laolrt_test"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/kpfalzer/projects/laol/c++/laolrt/laol/rt/primitives.cxx"
-                  timestampString = "516665654.878272"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "58"
-                  endingLineNumber = "58"
-                  offsetFromSymbolStart = "19">
-               </Location>
-               <Location
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "&apos;lambda&apos;(laol::rt::INumber::add(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;) const::$_0) auto laol::rt::LaolObj laol::rt::binop&lt;laol::rt::INumber::add(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;) const::$_0&gt;(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;, laol::rt::INumber::add(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;) const::$_0)::&apos;lambda&apos;(laol::rt::INumber::add(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;) const::$_0)::operator()&lt;double&gt;(laol::rt::INumber::add(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;) const::$_0) const::&apos;lambda&apos;(laol::rt::INumber::add(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;) const::$_0)::operator()&lt;long&gt;(laol::rt::INumber::add(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;) const::$_0) const"
-                  moduleName = "laolrt_test"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/kpfalzer/projects/laol/c++/laolrt/laol/rt/primitives.cxx"
-                  timestampString = "516665654.87959"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "58"
-                  endingLineNumber = "58"
-                  offsetFromSymbolStart = "20">
-               </Location>
-               <Location
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "&apos;lambda&apos;(laol::rt::INumber::add(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;) const::$_0) auto laol::rt::LaolObj laol::rt::binop&lt;laol::rt::INumber::add(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;) const::$_0&gt;(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;, laol::rt::INumber::add(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;) const::$_0)::&apos;lambda&apos;(laol::rt::INumber::add(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;) const::$_0)::operator()&lt;double&gt;(laol::rt::INumber::add(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;) const::$_0) const::&apos;lambda&apos;(laol::rt::INumber::add(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;) const::$_0)::operator()&lt;unsigned long&gt;(laol::rt::INumber::add(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;) const::$_0) const"
-                  moduleName = "laolrt_test"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/kpfalzer/projects/laol/c++/laolrt/laol/rt/primitives.cxx"
-                  timestampString = "516665654.881011"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "58"
-                  endingLineNumber = "58"
-                  offsetFromSymbolStart = "20">
-               </Location>
-               <Location
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "&apos;lambda&apos;(laol::rt::INumber::add(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;) const::$_0) auto laol::rt::LaolObj laol::rt::binop&lt;laol::rt::INumber::add(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;) const::$_0&gt;(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;, laol::rt::INumber::add(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;) const::$_0)::&apos;lambda&apos;(laol::rt::INumber::add(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;) const::$_0)::operator()&lt;double&gt;(laol::rt::INumber::add(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;) const::$_0) const::&apos;lambda&apos;(laol::rt::INumber::add(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;) const::$_0)::operator()&lt;char&gt;(laol::rt::INumber::add(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;) const::$_0) const"
-                  moduleName = "laolrt_test"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/kpfalzer/projects/laol/c++/laolrt/laol/rt/primitives.cxx"
-                  timestampString = "516665654.882542"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "58"
-                  endingLineNumber = "58"
-                  offsetFromSymbolStart = "22">
-               </Location>
-               <Location
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "&apos;lambda&apos;(laol::rt::INumber::add(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;) const::$_0) auto laol::rt::LaolObj laol::rt::binop&lt;laol::rt::INumber::add(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;) const::$_0&gt;(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;, laol::rt::INumber::add(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;) const::$_0)::&apos;lambda&apos;(laol::rt::INumber::add(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;) const::$_0)::operator()&lt;double&gt;(laol::rt::INumber::add(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;) const::$_0) const::&apos;lambda&apos;(laol::rt::INumber::add(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;) const::$_0)::operator()&lt;float&gt;(laol::rt::INumber::add(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;) const::$_0) const"
-                  moduleName = "laolrt_test"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/kpfalzer/projects/laol/c++/laolrt/laol/rt/primitives.cxx"
-                  timestampString = "516665654.884106"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "58"
-                  endingLineNumber = "58"
-                  offsetFromSymbolStart = "21">
-               </Location>
-               <Location
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "&apos;lambda&apos;(laol::rt::INumber::add(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;) const::$_0) auto laol::rt::LaolObj laol::rt::binop&lt;laol::rt::INumber::add(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;) const::$_0&gt;(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;, laol::rt::INumber::add(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;) const::$_0)::&apos;lambda&apos;(laol::rt::INumber::add(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;) const::$_0)::operator()&lt;double&gt;(laol::rt::INumber::add(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;) const::$_0) const::&apos;lambda&apos;(laol::rt::INumber::add(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;) const::$_0)::operator()&lt;double&gt;(laol::rt::INumber::add(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;) const::$_0) const"
-                  moduleName = "laolrt_test"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/kpfalzer/projects/laol/c++/laolrt/laol/rt/primitives.cxx"
-                  timestampString = "516665654.885472"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "58"
-                  endingLineNumber = "58"
-                  offsetFromSymbolStart = "21">
+                  startingLineNumber = "170"
+                  endingLineNumber = "170"
+                  offsetFromSymbolStart = "12">
                </Location>
             </Locations>
          </BreakpointContent>

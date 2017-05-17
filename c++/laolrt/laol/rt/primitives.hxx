@@ -48,12 +48,22 @@ namespace laol {
 
         class Bool : public virtual Laol {
         public:
-            explicit Bool(bool val) : m_val(val) {}
-            
+
+            explicit Bool(bool val) : m_val(val) {
+            }
+
+            LaolObj negate(const LaolObj&, const LaolObj& opB) const override {
+                return !m_val;
+            }
+
+            LaolObj complement(const LaolObj&, const LaolObj& opB) const override {
+                return ~m_val;
+            }
+
             //allow copy constructors
             const bool m_val;
         };
-        
+
         struct INumber : public virtual Laol {
 
             enum EType {
@@ -67,7 +77,7 @@ namespace laol {
             static int toInt(const LaolObj& v);
             static long int toLongInt(const LaolObj& v);
             static unsigned long int toUnsignedLongInt(const LaolObj& v);
-            
+
             LaolObj add(const LaolObj&, const LaolObj& opB) const override;
             LaolObj subtract(const LaolObj&, const LaolObj& opB) const override;
             LaolObj multiply(const LaolObj&, const LaolObj& opB) const override;
@@ -75,6 +85,11 @@ namespace laol {
             LaolObj equal(const LaolObj&, const LaolObj& opB) const override;
             LaolObj less(const LaolObj&, const LaolObj& opB) const override;
             LaolObj greater(const LaolObj&, const LaolObj& opB) const override;
+            LaolObj negate(const LaolObj&, const LaolObj&) const override;
+            LaolObj post_decrement(const LaolObj& self, const LaolObj&) const override;
+            LaolObj post_increment(const LaolObj& self, const LaolObj&) const override;
+            LaolObj pre_decrement(const LaolObj& self, const LaolObj&) const override;
+            LaolObj pre_increment(const LaolObj& self, const LaolObj&) const override;
         };
 
         template<typename T>
@@ -136,6 +151,42 @@ namespace laol {
                 });
             }
 
+            LaolObj logical_and(const LaolObj&, const LaolObj& opB) const override {
+                return binOp(opB, [](auto aa, auto bb) {
+                    return aa && bb;
+                });
+            }
+
+            LaolObj logical_or(const LaolObj&, const LaolObj& opB) const override {
+                return binOp(opB, [](auto aa, auto bb) {
+                    return aa || bb;
+                });
+            }
+
+            LaolObj bitwise_and(const LaolObj&, const LaolObj& opB) const override {
+                return binOp(opB, [](auto aa, auto bb) {
+                    return aa & bb;
+                });
+            }
+
+            LaolObj bitwise_or(const LaolObj&, const LaolObj& opB) const override {
+                return binOp(opB, [](auto aa, auto bb) {
+                    return aa | bb;
+                });
+            }
+
+            LaolObj bitwise_xor(const LaolObj&, const LaolObj& opB) const override {
+                return binOp(opB, [](auto aa, auto bb) {
+                    return aa ^ bb;
+                });
+            }
+
+            LaolObj complement(const LaolObj&, const LaolObj&) const override {
+                return get([](auto aa) {
+                    return ~aa;
+                });
+            }
+
             const T m_val;
         };
 
@@ -190,6 +241,11 @@ namespace laol {
         BINARY_OP( !=)
         BINARY_OP(<)
         BINARY_OP(>)
+        BINARY_OP( ||)
+        BINARY_OP(&&)
+        BINARY_OP(&)
+        BINARY_OP( |)
+        BINARY_OP(^)
 
 #undef BINARY_OP
     }

@@ -101,8 +101,8 @@ namespace laol {
 
             LaolObj(Args r);
 
-            LaolObj(Laol* rhs, bool isRef = false)
-            : m_obj(rhs), m_isRef(isRef) {
+            LaolObj(Laol* rhs)
+            : m_obj(rhs), m_isRef(false) {
             }
 
             LaolObj(const Laol* rhs) {
@@ -127,8 +127,8 @@ namespace laol {
 
             LaolObj(const char* rhs);
 
-            LaolObj(TRcLaol* val, bool isRef = false)
-            : m_obj(*val), m_isRef(isRef) {
+            LaolObj(TRcLaol* val)
+            : m_obj(*val), m_isRef(false) {
             }
 
             LaolObj(const LaolObj& val) {
@@ -147,7 +147,7 @@ namespace laol {
 
             // true if int variant
             bool isInt() const;
-            
+
             // true if float/double variant
             bool isFloat() const;
 
@@ -160,7 +160,7 @@ namespace laol {
             bool toBool() const;
 
             unsigned long int toUnsignedLongInt() const;
-            
+
             long int toLongInt() const;
 
             // Majority of operators are const, so we'll mark all
@@ -172,6 +172,8 @@ namespace laol {
             LaolObj operator*(const LaolObj& opB) const;
             LaolObj operator/(const LaolObj& opB) const;
             LaolObj operator%(const LaolObj& opB) const;
+
+            //subscript
             LaolObj operator[](const LaolObj& opB) const;
             //
             // baseline comparators.
@@ -199,6 +201,9 @@ namespace laol {
 
             // incr/decr
             LaolObj operator++(int) const; //post
+            LaolObj operator--(int) const; //post
+            LaolObj operator++() const;
+            LaolObj operator--() const;
 
             //
             // logical
@@ -206,6 +211,14 @@ namespace laol {
             LaolObj operator!() const;
             LaolObj operator||(const LaolObj& opB) const;
             LaolObj operator&&(const LaolObj& opB) const;
+
+            //
+            // bitwise
+            //
+            LaolObj operator~() const;
+            LaolObj operator&(const LaolObj& opB) const;
+            LaolObj operator|(const LaolObj& opB) const;
+            LaolObj operator^(const LaolObj& opB) const;
 
             //TPMethod
             typedef LaolObj(Laol::* TPMethod)(const LaolObj& self, const LaolObj& args) const;
@@ -224,6 +237,7 @@ namespace laol {
 
             template<typename T>
             const T& toType() const {
+                ASSERT_TRUE(isA<T>());
                 return dynamic_cast<const T&> (asTPRcLaol()->asT());
             }
 
@@ -246,7 +260,7 @@ namespace laol {
 
             const LaolObj& set(Args args);
 
-            const LaolObj& set(const LaolObj& rhs);
+            const LaolObj& set(const LaolObj& rhs, bool isConstructor = true);
 
             TRcLaol* asTPRcLaol() const {
                 return const_cast<TRcLaol*> (&m_obj);
@@ -382,9 +396,16 @@ namespace laol {
             /* <  */ virtual LaolObj less(const LaolObj& self, const LaolObj& opB) const;
             /* >  */ virtual LaolObj greater(const LaolObj& self, const LaolObj& opB) const;
             /* !  */ virtual LaolObj negate(const LaolObj& self, const LaolObj&) const;
+            /* ~  */ virtual LaolObj complement(const LaolObj& self, const LaolObj&) const;
+            /* &  */ virtual LaolObj bitwise_and(const LaolObj& self, const LaolObj&) const;
+            /* |  */ virtual LaolObj bitwise_or(const LaolObj& self, const LaolObj&) const;
+            /* ^  */ virtual LaolObj bitwise_xor(const LaolObj& self, const LaolObj&) const;
             /* || */ virtual LaolObj logical_or(const LaolObj& self, const LaolObj& opB) const;
             /* && */ virtual LaolObj logical_and(const LaolObj& self, const LaolObj& opB) const;
             /*++(int) */ virtual LaolObj post_increment(const LaolObj& self, const LaolObj& opB) const;
+            /*--(int) */ virtual LaolObj post_decrement(const LaolObj& self, const LaolObj& opB) const;
+            /*++() */ virtual LaolObj pre_increment(const LaolObj& self, const LaolObj& opB) const;
+            /*--() */ virtual LaolObj pre_decrement(const LaolObj& self, const LaolObj& opB) const;
 
             //Map special methods for call-by-method too
             virtual LaolObj toString(const LaolObj&, const LaolObj&) const;

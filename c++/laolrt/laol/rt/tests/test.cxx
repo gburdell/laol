@@ -41,13 +41,21 @@ using namespace laol::rt;
 
 void test1() {
     cout << "test1: (basic) BEGIN" << endl;
-    LaolObj i1 = (long int)2048;
-    ASSERT_TRUE(i1.toLongInt() == 2048);
-    LaolObj i2 = i1 << 4;
-    LaolObj d1 = 1.234 + i1;
-    LaolObj d2 = d1 * 45.67 / 678 - i2 * d1;
-    LaolObj i3 = 1234567 << i1;
+    const long int I1 = 2048;
+    LaolObj i1 = I1;
+    ASSERT_TRUE(i1.toLongInt() == I1);
+    auto i6 = i1++;
+    ASSERT_TRUE(i6.toLongInt() == I1);
+    ASSERT_TRUE(i1.toLongInt() == I1+1);
+    ASSERT_TRUE((--i1).toLongInt() == I1);
+    auto i2 = i1 << 4;
+    auto d1 = 1.234 + i1;
+    auto d2 = d1 * 45.67 / 678 - i2 * d1;
+    auto i3 = 1234567 << i1;
+    auto i4 = 123 | i3 | 123;
     double d3 = 1234 % 34;
+    bool b1 = !'a';
+    int d4 = ~1234;
     cout << "test1: END" << endl;
 }
 
