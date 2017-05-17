@@ -67,19 +67,25 @@ namespace laol {
         LaolObj::LaolObj(const char* rhs) : LaolObj(new String(rhs)) {
         }
 
-        const LaolObj&
-        LaolObj::set(Args args) {
-            //todo m_obj = new Array(args);
-            m_isRef = false;
-            return *this;
+        LaolObj::LaolObj(const LaolObj& rhs) : m_obj(rhs.m_obj) {
+            m_refLife = (0 > rhs.m_refLife) ? -1 : (rhs.m_refLife + 1);
         }
 
         const LaolObj&
-        LaolObj::set(const LaolObj& rhs, bool isConstructor) {
+        LaolObj::set(Args args) {
+            m_obj = new Array(args);
+            m_refLife = -1;
+            return *this;
+        }
+
+        //todo: just from assign
+
+        const LaolObj&
+        LaolObj::set(const LaolObj& rhs) {
             TRcLaol &rhsRef = unconst(rhs).asTRcLaol();
-            if (isConstructor || !m_isRef) {
+            if (2 != m_refLife) {
                 m_obj = rhsRef;
-                m_isRef = false;
+                m_refLife = -1;
             } else {
                 //todo: change underlying value: i.e., Laol* value
             }
@@ -152,6 +158,14 @@ namespace laol {
 
         LaolObj
         LaolObj::operator=(const LaolObj& rhs) {
+            if (this == &rhs) {
+                return *this;
+            }
+            if (isNull()) {
+                m_obj = rhs.m_obj;
+                m_refLife = -1;
+                return *this;
+            } 
             return asTPLaol()->assign(*this, rhs);
         }
 
@@ -344,7 +358,7 @@ namespace laol {
 
         LaolObj
         Laol::assign(const LaolObj& self, const LaolObj& rhs) const {
-            unconst(self).set(rhs, false);
+            unconst(self).set(rhs);
             return self;
         }
 

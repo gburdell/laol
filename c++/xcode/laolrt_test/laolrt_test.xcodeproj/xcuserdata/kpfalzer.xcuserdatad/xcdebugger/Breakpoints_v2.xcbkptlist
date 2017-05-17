@@ -6,124 +6,17 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            shouldBeEnabled = "Yes"
+            shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "../../laolrt/laol/rt/primitives.cxx"
-            timestampString = "516680142.580176"
+            filePath = "../../laolrt/laol/rt/array.cxx"
+            timestampString = "516740061.634197"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "162"
-            endingLineNumber = "162"
-            landmarkName = "INumber::post_decrement(const LaolObj&amp; self, const LaolObj&amp;)"
+            startingLineNumber = "133"
+            endingLineNumber = "133"
+            landmarkName = "Array::subscript(const LaolObj&amp;, const LaolObj&amp; opB)"
             landmarkType = "7">
-            <Locations>
-               <Location
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "auto laol::rt::INumber::post_decrement(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;) const::$_10::operator()&lt;int*&gt;(int*) const"
-                  moduleName = "laolrt_test"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/kpfalzer/projects/laol/c++/laolrt/laol/rt/primitives.cxx"
-                  timestampString = "516680163.872999"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "162"
-                  endingLineNumber = "162"
-                  offsetFromSymbolStart = "21">
-               </Location>
-               <Location
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "auto laol::rt::INumber::post_decrement(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;) const::$_10::operator()&lt;unsigned int*&gt;(unsigned int*) const"
-                  moduleName = "laolrt_test"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/kpfalzer/projects/laol/c++/laolrt/laol/rt/primitives.cxx"
-                  timestampString = "516680163.87516"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "162"
-                  endingLineNumber = "162"
-                  offsetFromSymbolStart = "21">
-               </Location>
-               <Location
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "auto laol::rt::INumber::post_decrement(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;) const::$_10::operator()&lt;long*&gt;(long*) const"
-                  moduleName = "laolrt_test"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/kpfalzer/projects/laol/c++/laolrt/laol/rt/primitives.cxx"
-                  timestampString = "516680163.876821"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "162"
-                  endingLineNumber = "162"
-                  offsetFromSymbolStart = "23">
-               </Location>
-               <Location
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "auto laol::rt::INumber::post_decrement(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;) const::$_10::operator()&lt;unsigned long*&gt;(unsigned long*) const"
-                  moduleName = "laolrt_test"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/kpfalzer/projects/laol/c++/laolrt/laol/rt/primitives.cxx"
-                  timestampString = "516680163.878382"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "162"
-                  endingLineNumber = "162"
-                  offsetFromSymbolStart = "23">
-               </Location>
-               <Location
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "auto laol::rt::INumber::post_decrement(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;) const::$_10::operator()&lt;char*&gt;(char*) const"
-                  moduleName = "laolrt_test"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/kpfalzer/projects/laol/c++/laolrt/laol/rt/primitives.cxx"
-                  timestampString = "516680163.880401"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "162"
-                  endingLineNumber = "162"
-                  offsetFromSymbolStart = "21">
-               </Location>
-               <Location
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "auto laol::rt::INumber::post_decrement(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;) const::$_10::operator()&lt;float*&gt;(float*) const"
-                  moduleName = "laolrt_test"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/kpfalzer/projects/laol/c++/laolrt/laol/rt/primitives.cxx"
-                  timestampString = "516680163.881972"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "162"
-                  endingLineNumber = "162"
-                  offsetFromSymbolStart = "33">
-               </Location>
-               <Location
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "auto laol::rt::INumber::post_decrement(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;) const::$_10::operator()&lt;double*&gt;(double*) const"
-                  moduleName = "laolrt_test"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/kpfalzer/projects/laol/c++/laolrt/laol/rt/primitives.cxx"
-                  timestampString = "516680163.883505"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "162"
-                  endingLineNumber = "162"
-                  offsetFromSymbolStart = "33">
-               </Location>
-            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -132,121 +25,94 @@
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "../../laolrt/laol/rt/primitives.cxx"
-            timestampString = "516680159.894208"
+            filePath = "../../laolrt/laol/rt/array.cxx"
+            timestampString = "516741532.35578"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "170"
-            endingLineNumber = "170"
-            landmarkName = "INumber::post_increment(const LaolObj&amp; self, const LaolObj&amp;)"
+            startingLineNumber = "148"
+            endingLineNumber = "148"
+            landmarkName = "Array::subscript(const LaolObj&amp;, const LaolObj&amp; opB)"
             landmarkType = "7">
-            <Locations>
-               <Location
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "auto laol::rt::INumber::post_increment(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;) const::$_11::operator()&lt;int*&gt;(int*) const"
-                  moduleName = "laolrt_test"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/kpfalzer/projects/laol/c++/laolrt/laol/rt/primitives.cxx"
-                  timestampString = "516680163.927465"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "170"
-                  endingLineNumber = "170"
-                  offsetFromSymbolStart = "12">
-               </Location>
-               <Location
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "auto laol::rt::INumber::post_increment(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;) const::$_11::operator()&lt;unsigned int*&gt;(unsigned int*) const"
-                  moduleName = "laolrt_test"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/kpfalzer/projects/laol/c++/laolrt/laol/rt/primitives.cxx"
-                  timestampString = "516680163.929356"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "170"
-                  endingLineNumber = "170"
-                  offsetFromSymbolStart = "12">
-               </Location>
-               <Location
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "auto laol::rt::INumber::post_increment(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;) const::$_11::operator()&lt;long*&gt;(long*) const"
-                  moduleName = "laolrt_test"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/kpfalzer/projects/laol/c++/laolrt/laol/rt/primitives.cxx"
-                  timestampString = "516680163.931313"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "170"
-                  endingLineNumber = "170"
-                  offsetFromSymbolStart = "12">
-               </Location>
-               <Location
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "auto laol::rt::INumber::post_increment(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;) const::$_11::operator()&lt;unsigned long*&gt;(unsigned long*) const"
-                  moduleName = "laolrt_test"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/kpfalzer/projects/laol/c++/laolrt/laol/rt/primitives.cxx"
-                  timestampString = "516680163.932981"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "170"
-                  endingLineNumber = "170"
-                  offsetFromSymbolStart = "12">
-               </Location>
-               <Location
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "auto laol::rt::INumber::post_increment(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;) const::$_11::operator()&lt;char*&gt;(char*) const"
-                  moduleName = "laolrt_test"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/kpfalzer/projects/laol/c++/laolrt/laol/rt/primitives.cxx"
-                  timestampString = "516680163.934506"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "170"
-                  endingLineNumber = "170"
-                  offsetFromSymbolStart = "12">
-               </Location>
-               <Location
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "auto laol::rt::INumber::post_increment(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;) const::$_11::operator()&lt;float*&gt;(float*) const"
-                  moduleName = "laolrt_test"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/kpfalzer/projects/laol/c++/laolrt/laol/rt/primitives.cxx"
-                  timestampString = "516680163.936438"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "170"
-                  endingLineNumber = "170"
-                  offsetFromSymbolStart = "12">
-               </Location>
-               <Location
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "auto laol::rt::INumber::post_increment(laol::rt::LaolObj const&amp;, laol::rt::LaolObj const&amp;) const::$_11::operator()&lt;double*&gt;(double*) const"
-                  moduleName = "laolrt_test"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/kpfalzer/projects/laol/c++/laolrt/laol/rt/primitives.cxx"
-                  timestampString = "516680163.938956"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "170"
-                  endingLineNumber = "170"
-                  offsetFromSymbolStart = "12">
-               </Location>
-            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "../../laolrt/laol/rt/laol.cxx"
+            timestampString = "516742985.751385"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "86"
+            endingLineNumber = "86"
+            landmarkName = "LaolObj::set(const LaolObj&amp; rhs)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "../../laolrt/laol/rt/laol.cxx"
+            timestampString = "516745391.968133"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "71"
+            endingLineNumber = "71"
+            landmarkName = "LaolObj::LaolObj(const LaolObj&amp; rhs)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "../../laolrt/laol/rt/tests/test.cxx"
+            timestampString = "516750617.415652"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "68"
+            endingLineNumber = "68"
+            landmarkName = "test2()"
+            landmarkType = "9">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "../../laolrt/laol/rt/tests/test.cxx"
+            timestampString = "516750617.415652"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "70"
+            endingLineNumber = "70"
+            landmarkName = "test2()"
+            landmarkType = "9">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "../../laolrt/laol/rt/tests/test.cxx"
+            timestampString = "516750617.415652"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "71"
+            endingLineNumber = "71"
+            landmarkName = "test2()"
+            landmarkType = "9">
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>

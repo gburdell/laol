@@ -19,6 +19,7 @@
 		F49F96781EBA7CFC0068AD40 /* lambda.cxx in Sources */ = {isa = PBXBuildFile; fileRef = F49F96771EBA7CFC0068AD40 /* lambda.cxx */; };
 		F4A2D0731EC10FDC0087E80B /* timer.cxx in Sources */ = {isa = PBXBuildFile; fileRef = F4A2D0721EC10FDC0087E80B /* timer.cxx */; };
 		F4DF09031EB6659800A05C58 /* map.cxx in Sources */ = {isa = PBXBuildFile; fileRef = F4DF09021EB6659800A05C58 /* map.cxx */; };
+		F4EBC1ED1ECCD3A0000397D1 /* array.cxx in Sources */ = {isa = PBXBuildFile; fileRef = F4EBC1EC1ECCD3A0000397D1 /* array.cxx */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -35,6 +36,7 @@
 		F49F96771EBA7CFC0068AD40 /* lambda.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = lambda.cxx; path = ../../laolrt/laol/rt/lambda.cxx; sourceTree = "<group>"; };
 		F4A2D0721EC10FDC0087E80B /* timer.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = timer.cxx; path = ../../laolrt/laol/rt/timer.cxx; sourceTree = "<group>"; };
 		F4DF09021EB6659800A05C58 /* map.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = map.cxx; path = ../../laolrt/laol/rt/map.cxx; sourceTree = "<group>"; };
+		F4EBC1EC1ECCD3A0000397D1 /* array.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = array.cxx; path = ../../laolrt/laol/rt/array.cxx; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -51,6 +53,7 @@
 		F455C7B01E93F6AE00F13033 = {
 			isa = PBXGroup;
 			children = (
+				F4EBC1EC1ECCD3A0000397D1 /* array.cxx */,
 				F475D1391ECBACD200FA5130 /* primitives.cxx */,
 				F4A2D0721EC10FDC0087E80B /* timer.cxx */,
 				F49F96771EBA7CFC0068AD40 /* lambda.cxx */,
@@ -153,6 +156,7 @@
 				F48290AD1EB177D9006280AF /* exception.cxx in Sources */,
 				F49F96761EBA61C00068AD40 /* istream.cxx in Sources */,
 				F4A2D0731EC10FDC0087E80B /* timer.cxx in Sources */,
+				F4EBC1ED1ECCD3A0000397D1 /* array.cxx in Sources */,
 				F475D13A1ECBACD200FA5130 /* primitives.cxx in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

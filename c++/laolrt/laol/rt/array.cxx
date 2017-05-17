@@ -114,12 +114,11 @@ namespace laol {
 
         template<typename FUNC>
         void iterate(const Range& rng, FUNC forEach) {
-            auto i = rng.m_begin.toLInt(), end = rng.m_end.toLInt();
+            auto i = rng.m_begin.toLongInt(), end = rng.m_end.toLongInt();
             const auto incr = (end > i) ? 1 : -1;
             while (true) {
                 forEach(i);
                 if (i == end) {
-
                     return;
                 }
                 i += incr;
@@ -135,7 +134,7 @@ namespace laol {
             Vector val;
             for (const LaolObj& sub : args) {
                 if (sub.isInt()) {
-                    val.push_back(m_ar[actualIndex(sub.toLInt())]);
+                    val.push_back(m_ar[actualIndex(sub.toLongInt())]);
                 } else if (sub.isA<Range>()) {
                     iterate(sub.toType<Range>(), [this, &val](auto i) {
                         //this-> work around gcc 5.1.0 bug
@@ -146,7 +145,7 @@ namespace laol {
                     ASSERT_NEVER; //todo: error
                 }
             }
-            return (1 < val.size()) ? new Array(val) : val[0];
+            return (1 < val.size()) ? new Array(val) : val[0].asRef();
         }
 
         LaolObj

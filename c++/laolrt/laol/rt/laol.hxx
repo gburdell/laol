@@ -83,7 +83,7 @@ namespace laol {
         class LaolObj {
         public:
 
-            explicit LaolObj() : m_isRef(false) {
+            explicit LaolObj() : m_refLife(-1) {
             }
 
             // Primitive: LaolRef lhs = val...
@@ -102,7 +102,7 @@ namespace laol {
             LaolObj(Args r);
 
             LaolObj(Laol* rhs)
-            : m_obj(rhs), m_isRef(false) {
+            : m_obj(rhs), m_refLife(-1) {
             }
 
             LaolObj(const Laol* rhs) {
@@ -128,18 +128,27 @@ namespace laol {
             LaolObj(const char* rhs);
 
             LaolObj(TRcLaol* val)
-            : m_obj(*val), m_isRef(false) {
+            : m_obj(*val), m_refLife(-1) {
             }
 
-            LaolObj(const LaolObj& val) {
-                set(val);
-            }
+            LaolObj(const LaolObj& val);
 
             LaolObj(const LaolObj* val) {
                 NOT_SUPPORTED;
             }
 
             LaolObj operator=(const LaolObj& rhs);
+            
+            //The move constructor is used.
+            //We'll use the default.  But, not quite sure what
+            //it does w/ the reference counted stuff...
+            //Might be safer to just do copy...
+            LaolObj(LaolObj&&) = default;
+            
+            const LaolObj& asRef() {
+                m_refLife = 1;
+                return *this;
+            }
 
             bool isNull() const {
                 return m_obj.isNull();
@@ -256,11 +265,12 @@ namespace laol {
         private:
 
             TRcLaol m_obj;
-            bool m_isRef;
+            short int m_refLife;
 
             const LaolObj& set(Args args);
 
-            const LaolObj& set(const LaolObj& rhs, bool isConstructor = true);
+            //From copy constructor or assign/= op.
+            const LaolObj& set(const LaolObj& rhs);
 
             TRcLaol* asTPRcLaol() const {
                 return const_cast<TRcLaol*> (&m_obj);
@@ -271,6 +281,7 @@ namespace laol {
             }
 
             Laol* asTPLaol() const {
+                ASSERT_TRUE(! isNull());
                 return asTPRcLaol()->getPtr();
             }
 

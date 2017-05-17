@@ -26,6 +26,7 @@
     <logicalFolder name="SourceFiles"
                    displayName="Source Files"
                    projectFiles="true">
+      <itemPath>laol/rt/array.cxx</itemPath>
       <itemPath>laol/rt/exception.cxx</itemPath>
       <itemPath>laol/rt/istream.cxx</itemPath>
       <itemPath>laol/rt/iterator.cxx</itemPath>
@@ -107,6 +108,7 @@
             <pElem>.</pElem>
             <pElem>.</pElem>
             <pElem>.</pElem>
+            <pElem>.</pElem>
           </linkerDynSerch>
         </linkerTool>
       </folder>
@@ -135,6 +137,7 @@
             <pElem>.</pElem>
             <pElem>.</pElem>
             <pElem>.</pElem>
+            <pElem>.</pElem>
           </linkerDynSerch>
           <linkerLibItems>
             <linkerLibFileItem>dist/Debug/GNU-Linux/liblaolrt.a</linkerLibFileItem>
@@ -143,6 +146,8 @@
           <commandLine>-Wl,-rpath -Wl,/usr/local/lib64</commandLine>
         </linkerTool>
       </folder>
+      <item path="laol/rt/array.cxx" ex="false" tool="1" flavor2="0">
+      </item>
       <item path="laol/rt/array.hxx" ex="false" tool="3" flavor2="0">
       </item>
       <item path="laol/rt/exception.cxx" ex="false" tool="1" flavor2="0">
@@ -254,6 +259,7 @@
             <pElem>.</pElem>
             <pElem>.</pElem>
             <pElem>.</pElem>
+            <pElem>.</pElem>
           </linkerDynSerch>
         </linkerTool>
       </folder>
@@ -282,9 +288,12 @@
             <pElem>.</pElem>
             <pElem>.</pElem>
             <pElem>.</pElem>
+            <pElem>.</pElem>
           </linkerDynSerch>
         </linkerTool>
       </folder>
+      <item path="laol/rt/array.cxx" ex="false" tool="1" flavor2="0">
+      </item>
       <item path="laol/rt/array.hxx" ex="false" tool="3" flavor2="0">
       </item>
       <item path="laol/rt/exception.cxx" ex="false" tool="1" flavor2="0">
@@ -391,6 +400,7 @@
             <pElem>.</pElem>
             <pElem>.</pElem>
             <pElem>.</pElem>
+            <pElem>.</pElem>
           </linkerDynSerch>
         </linkerTool>
       </folder>
@@ -419,6 +429,7 @@
             <pElem>.</pElem>
             <pElem>.</pElem>
             <pElem>.</pElem>
+            <pElem>.</pElem>
           </linkerDynSerch>
           <linkerLibItems>
             <linkerLibFileItem>dist/Debug-MacOS/GNU-MacOSX/liblaolrt.a</linkerLibFileItem>
@@ -427,6 +438,8 @@
           <commandLine>-Wl,-rpath -Wl,/usr/local/lib64</commandLine>
         </linkerTool>
       </folder>
+      <item path="laol/rt/array.cxx" ex="false" tool="1" flavor2="0">
+      </item>
       <item path="laol/rt/array.hxx" ex="false" tool="3" flavor2="0">
       </item>
       <item path="laol/rt/exception.cxx" ex="false" tool="1" flavor2="11">

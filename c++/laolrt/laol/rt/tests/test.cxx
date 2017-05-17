@@ -59,30 +59,25 @@ void test1() {
     cout << "test1: END" << endl;
 }
 
-#ifdef NOPE
 void test2() {
     cout << "test1: (Array) BEGIN" << endl;
-    LaolObj i1 = 12 + 34;
-    LaolObj i2 = i1;
+    LaolObj i1 = 987654321;
     LaolObj ar1 = new Array();
-    i2 = ar1 << i1 << (float) 1234.5; //cool: we get 1234 to LaolRef conversion!
-    lcout << "1: ar1=" << ar1 << lendl;
-    i1 = ar1("empty?");
-    i1 = 7;
-    i2 = new Array();
-    i1 = i2("empty?");
-    ASSERT_TRUE(toBool(i1));
-    ar1 << "foobar" << 23 << 1.234 << i2;
-    i1 = ar1("reverse")("reverse");
-    lcout << "2: ar1=" << ar1 << lendl;
-    ASSERT_TRUE(toBool(ar1[0] == 46));
+    auto i2 = ar1 << i1 << (float) 1234.5; //cool: we get 1234 to LaolRef conversion!
+    
+    //NOTE: these 2 lines get same value of ref to ar1[0],
+    //since they are both copy constructors.
+    //This is not good, since a subsequent ix0 = newVal
+    //effectively modifies the [0]-th element
+    LaolObj ix0 = ar1[0];
+    ar1[0] = 777;
+    
     cout << "test1: END" << endl;
 }
-#endif
 
 int main(int argc, char** argv) {
     test1();
-    //test2();
+    test2();
     cout << "END: all tests" << endl;
     return (EXIT_SUCCESS);
 }
