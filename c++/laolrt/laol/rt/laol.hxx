@@ -70,6 +70,7 @@ namespace laol {
         typedef PTRcObjPtr<Laol> TRcLaol;
 
         class LaolObj;
+        class Ref;
         extern const LaolObj NULLOBJ;
 
         // prefix with 'l' to not confuse with cout/cerr, endl
@@ -83,7 +84,7 @@ namespace laol {
         class LaolObj {
         public:
 
-            explicit LaolObj() : m_refLife(-1) {
+            explicit LaolObj() {
             }
 
             // Primitive: LaolRef lhs = val...
@@ -102,7 +103,7 @@ namespace laol {
             LaolObj(Args r);
 
             LaolObj(Laol* rhs)
-            : m_obj(rhs), m_refLife(-1) {
+            : m_obj(rhs) {
             }
 
             LaolObj(const Laol* rhs) {
@@ -128,27 +129,24 @@ namespace laol {
             LaolObj(const char* rhs);
 
             LaolObj(TRcLaol* val)
-            : m_obj(*val), m_refLife(-1) {
+            : m_obj(*val) {
             }
 
             LaolObj(const LaolObj& val);
+
+            LaolObj(const Ref& r);
 
             LaolObj(const LaolObj* val) {
                 NOT_SUPPORTED;
             }
 
             LaolObj operator=(const LaolObj& rhs);
-            
+
             //The move constructor is used.
             //We'll use the default.  But, not quite sure what
             //it does w/ the reference counted stuff...
             //Might be safer to just do copy...
             LaolObj(LaolObj&&) = default;
-            
-            const LaolObj& asRef() {
-                m_refLife = 1;
-                return *this;
-            }
 
             bool isNull() const {
                 return m_obj.isNull();
@@ -171,6 +169,8 @@ namespace laol {
             unsigned long int toUnsignedLongInt() const;
 
             long int toLongInt() const;
+            
+            double toDouble() const;
 
             // Majority of operators are const, so we'll mark all
             // as const and unconst as necessary in Laol subclass.
@@ -183,7 +183,7 @@ namespace laol {
             LaolObj operator%(const LaolObj& opB) const;
 
             //subscript
-            LaolObj operator[](const LaolObj& opB) const;
+            Ref operator[](const LaolObj& opB) const;
             //
             // baseline comparators.
             // (others are generated as function of these).
@@ -265,7 +265,6 @@ namespace laol {
         private:
 
             TRcLaol m_obj;
-            short int m_refLife;
 
             const LaolObj& set(Args args);
 
@@ -281,7 +280,7 @@ namespace laol {
             }
 
             Laol* asTPLaol() const {
-                ASSERT_TRUE(! isNull());
+                ASSERT_TRUE(!isNull());
                 return asTPRcLaol()->getPtr();
             }
 
@@ -300,6 +299,7 @@ namespace laol {
             friend class Laol; //to optimize operator=()
             friend struct LaolObjKey;
             friend class Symbol; //decrRefCnt()
+            friend class Ref;
         };
 
         template<typename T>
@@ -310,6 +310,32 @@ namespace laol {
         inline LaolObj& unconst(const LaolObj& self) {
             return const_cast<LaolObj&> (self);
         }
+
+        // Look like LaolRef, so can do foo[i].method...
+
+        class Ref : public LaolObj {
+        public:
+
+            Ref(const LaolObj& r) : LaolObj(r), m_ref(unconst(r)) {
+            }
+
+            const Ref& operator=(const LaolObj& rhs);
+
+            const Ref& operator[](const LaolObj& subscript);
+
+            Ref(Ref& r) : LaolObj(r.m_ref), m_ref(r.m_ref) {
+            }
+
+            const Ref& operator=(const Ref& r);
+
+            // Allow move constructor to easily pass back return vals
+            Ref(Ref&& from) = default;
+
+        private:
+            LaolObj& m_ref;
+
+            friend class LaolObj;
+        };
 
         // LaolObj-like but with natural compare methods
 
@@ -402,7 +428,9 @@ namespace laol {
             /* /  */ virtual LaolObj divide(const LaolObj& self, const LaolObj& opB) const;
             /* %  */ virtual LaolObj modulus(const LaolObj& self, const LaolObj& opB) const;
             /* =  */ virtual LaolObj assign(const LaolObj& self, const LaolObj& opB) const;
-            /* [] */ virtual LaolObj subscript(const LaolObj& self, const LaolObj& opB) const;
+
+            /* [] */ virtual Ref subscript(const LaolObj& self, const LaolObj& opB) const;
+
             /* == */ virtual LaolObj equal(const LaolObj& self, const LaolObj& opB) const;
             /* <  */ virtual LaolObj less(const LaolObj& self, const LaolObj& opB) const;
             /* >  */ virtual LaolObj greater(const LaolObj& self, const LaolObj& opB) const;

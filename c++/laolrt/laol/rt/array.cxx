@@ -128,24 +128,24 @@ namespace laol {
         /*
          * opB : scalar or Array of vals...
          */
-        LaolObj
+        Ref
         Array::subscript(const LaolObj&, const LaolObj& opB) const {
             const Vector& args = opB.isA<Array>() ? opB.toType<Array>().m_ar : toV(opB);
-            Vector val;
+            std::vector<Ref> val;
             for (const LaolObj& sub : args) {
                 if (sub.isInt()) {
                     val.push_back(m_ar[actualIndex(sub.toLongInt())]);
                 } else if (sub.isA<Range>()) {
                     iterate(sub.toType<Range>(), [this, &val](auto i) {
                         //this-> work around gcc 5.1.0 bug
-                        //we push *LaolObj
                         val.push_back(m_ar[this->actualIndex(i)]);
                     });
                 } else {
                     ASSERT_NEVER; //todo: error
                 }
             }
-            return (1 < val.size()) ? new Array(val) : val[0].asRef();
+            //todo: return (1 < val.size()) ? new Array(val) : val[0];
+            return val[0];
         }
 
         LaolObj

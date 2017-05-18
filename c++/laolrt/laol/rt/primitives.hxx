@@ -77,6 +77,7 @@ namespace laol {
             static int toInt(const LaolObj& v);
             static long int toLongInt(const LaolObj& v);
             static unsigned long int toUnsignedLongInt(const LaolObj& v);
+            static double toDouble(const LaolObj& v);
 
             LaolObj add(const LaolObj&, const LaolObj& opB) const override;
             LaolObj subtract(const LaolObj&, const LaolObj& opB) const override;

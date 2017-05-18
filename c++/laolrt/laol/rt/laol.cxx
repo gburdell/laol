@@ -68,13 +68,14 @@ namespace laol {
         }
 
         LaolObj::LaolObj(const LaolObj& rhs) : m_obj(rhs.m_obj) {
-            m_refLife = (0 > rhs.m_refLife) ? -1 : (rhs.m_refLife + 1);
+        }
+
+        LaolObj::LaolObj(const Ref& r) : LaolObj(r.m_ref) {
         }
 
         const LaolObj&
         LaolObj::set(Args args) {
             m_obj = new Array(args);
-            m_refLife = -1;
             return *this;
         }
 
@@ -83,12 +84,7 @@ namespace laol {
         const LaolObj&
         LaolObj::set(const LaolObj& rhs) {
             TRcLaol &rhsRef = unconst(rhs).asTRcLaol();
-            if (2 != m_refLife) {
-                m_obj = rhsRef;
-                m_refLife = -1;
-            } else {
-                //todo: change underlying value: i.e., Laol* value
-            }
+            m_obj = rhsRef;
             return *this;
         }
 
@@ -146,6 +142,11 @@ namespace laol {
             return INumber::toUnsignedLongInt(*this);
         }
 
+        double
+        LaolObj::toDouble() const {
+            return INumber::toDouble(*this);
+        }
+        
         string
         LaolObj::toQString() const {
             return "todo";
@@ -163,9 +164,8 @@ namespace laol {
             }
             if (isNull()) {
                 m_obj = rhs.m_obj;
-                m_refLife = -1;
                 return *this;
-            } 
+            }
             return asTPLaol()->assign(*this, rhs);
         }
 
@@ -206,7 +206,7 @@ namespace laol {
 
         //todo: test if consecutive: a[][][]... work???
 
-        LaolObj
+        Ref
         LaolObj::operator[](const LaolObj& opB) const {
             return asTPLaol()->subscript(*this, opB);
         }
@@ -317,6 +317,20 @@ namespace laol {
         LaolObj::~LaolObj() {
         }
 
+        const Ref&
+        Ref::operator=(const LaolObj& rhs) {
+            m_ref = rhs;
+            this->LaolObj::operator=(rhs);
+            return *this;
+        }
+
+        const Ref&
+        Ref::operator=(const Ref& r) {
+            m_ref = r.m_ref;
+            this->LaolObj::operator=(m_ref);
+            return *this;
+        }
+
         /*static*/
         const Laol::METHOD_BY_NAME
         Laol::stMethodByName = {
@@ -371,7 +385,13 @@ namespace laol {
         LaolObj Laol::multiply DEFINE_NO_IMPL
         LaolObj Laol::divide DEFINE_NO_IMPL
         LaolObj Laol::modulus DEFINE_NO_IMPL
-        LaolObj Laol::subscript DEFINE_NO_IMPL
+
+        //LaolObj Laol::subscript DEFINE_NO_IMPL
+        Ref Laol::subscript(const LaolObj&, const LaolObj& self) const {
+            ASSERT_NEVER;
+            return NULLOBJ;
+        }
+
         LaolObj Laol::equal DEFINE_NO_IMPL
         LaolObj Laol::less DEFINE_NO_IMPL
         LaolObj Laol::greater DEFINE_NO_IMPL

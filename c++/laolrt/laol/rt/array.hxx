@@ -52,7 +52,7 @@ namespace laol {
             //operators
             virtual LaolObj left_shift(const LaolObj& self, const LaolObj& opB) const override;
             virtual LaolObj right_shift(const LaolObj& self, const LaolObj& opB) const override;
-            virtual LaolObj subscript(const LaolObj& self, const LaolObj& opB) const override;
+            virtual Ref subscript(const LaolObj& self, const LaolObj& opB) const override;
             virtual LaolObj equal(const LaolObj& self, const LaolObj& opB) const override;
             virtual LaolObj toString(const LaolObj& self, const LaolObj& args) const override;
 
@@ -64,19 +64,19 @@ namespace laol {
 
             //useful for internal use
 
-            LaolObj operator[](const LaolObj& ix) const {
+            Ref operator[](const LaolObj& ix) const {
                 return subscript(NULLOBJ, ix);
             }
 
             virtual ~Array();
 
-		protected:
-			virtual const METHOD_BY_NAME& getMethodByName() override;
+        protected:
+            virtual const METHOD_BY_NAME& getMethodByName() override;
 
         private:
 
             static METHOD_BY_NAME stMethodByName;
-            
+
             size_t length() const override {
                 return m_ar.size();
             }

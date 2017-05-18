@@ -52,7 +52,7 @@ namespace laol {
                 return merge(self, opB);
             }
 
-            virtual LaolObj subscript(const LaolObj& self, const LaolObj& opB) const override {
+            virtual Ref subscript(const LaolObj& self, const LaolObj& opB) const override {
                 return find(self, opB);
             }
 

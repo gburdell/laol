@@ -63,15 +63,21 @@ void test2() {
     cout << "test1: (Array) BEGIN" << endl;
     LaolObj i1 = 987654321;
     LaolObj ar1 = new Array();
-    auto i2 = ar1 << i1 << (float) 1234.5; //cool: we get 1234 to LaolRef conversion!
+    const float F1 = 1234.5;
+    auto i2 = ar1 << i1 << F1; //cool: we get 1234 to LaolRef conversion!
     
     //NOTE: these 2 lines get same value of ref to ar1[0],
     //since they are both copy constructors.
     //This is not good, since a subsequent ix0 = newVal
     //effectively modifies the [0]-th element
     LaolObj ix0 = ar1[0];
-    ar1[0] = 777;
-    
+    const int I1 = 777, I2 = 45;
+    ar1[0] = I1;
+    ASSERT_TRUE(ar1[0].toLongInt() == I1);
+    i2 = ar1[0] + I2;
+    ASSERT_TRUE(i2.toLongInt() == I1+I2);
+    ar1[0] = ar1[1];
+    ASSERT_TRUE(ar1[0].toDouble() == F1);
     cout << "test1: END" << endl;
 }
 

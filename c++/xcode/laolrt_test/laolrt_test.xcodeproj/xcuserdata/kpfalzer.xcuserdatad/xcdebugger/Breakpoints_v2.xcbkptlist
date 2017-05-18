@@ -9,46 +9,14 @@
             shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "../../laolrt/laol/rt/array.cxx"
-            timestampString = "516740061.634197"
+            filePath = "../../laolrt/laol/rt/tests/test.cxx"
+            timestampString = "516752911.012886"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "133"
-            endingLineNumber = "133"
-            landmarkName = "Array::subscript(const LaolObj&amp;, const LaolObj&amp; opB)"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "../../laolrt/laol/rt/array.cxx"
-            timestampString = "516741532.35578"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "148"
-            endingLineNumber = "148"
-            landmarkName = "Array::subscript(const LaolObj&amp;, const LaolObj&amp; opB)"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "../../laolrt/laol/rt/laol.cxx"
-            timestampString = "516742985.751385"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "86"
-            endingLineNumber = "86"
-            landmarkName = "LaolObj::set(const LaolObj&amp; rhs)"
-            landmarkType = "7">
+            startingLineNumber = "72"
+            endingLineNumber = "72"
+            landmarkName = "test2()"
+            landmarkType = "9">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -57,13 +25,30 @@
             shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "../../laolrt/laol/rt/laol.cxx"
-            timestampString = "516745391.968133"
+            filePath = "../../laolrt/laol/rt/tests/test.cxx"
+            timestampString = "516752911.748892"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "71"
-            endingLineNumber = "71"
-            landmarkName = "LaolObj::LaolObj(const LaolObj&amp; rhs)"
+            startingLineNumber = "73"
+            endingLineNumber = "73"
+            landmarkName = "test2()"
+            landmarkType = "9">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            condition = "isNull()"
+            continueAfterRunningActions = "No"
+            filePath = "../laolrt/laolrt/laol/rt/laol.hxx"
+            timestampString = "516766824.383356"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "281"
+            endingLineNumber = "281"
+            landmarkName = "asTPLaol()"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -73,14 +58,14 @@
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "../../laolrt/laol/rt/tests/test.cxx"
-            timestampString = "516750617.415652"
+            filePath = "../../laolrt/laol/rt/laol.cxx"
+            timestampString = "516767222.436526"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "68"
-            endingLineNumber = "68"
-            landmarkName = "test2()"
-            landmarkType = "9">
+            startingLineNumber = "319"
+            endingLineNumber = "319"
+            landmarkName = "Ref::operator=(const LaolObj&amp; rhs)"
+            landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -89,14 +74,14 @@
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "../../laolrt/laol/rt/tests/test.cxx"
-            timestampString = "516750617.415652"
+            filePath = "../../laolrt/laol/rt/array.cxx"
+            timestampString = "516767394.538202"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "70"
-            endingLineNumber = "70"
-            landmarkName = "test2()"
-            landmarkType = "9">
+            startingLineNumber = "149"
+            endingLineNumber = "149"
+            landmarkName = "Array::subscript(const LaolObj&amp;, const LaolObj&amp; opB)"
+            landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -105,14 +90,14 @@
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "../../laolrt/laol/rt/tests/test.cxx"
-            timestampString = "516750617.415652"
+            filePath = "../laolrt/laolrt/laol/rt/laol.hxx"
+            timestampString = "516767620.108615"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "71"
-            endingLineNumber = "71"
-            landmarkName = "test2()"
-            landmarkType = "9">
+            startingLineNumber = "328"
+            endingLineNumber = "328"
+            landmarkName = "class Ref"
+            landmarkType = "3">
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>

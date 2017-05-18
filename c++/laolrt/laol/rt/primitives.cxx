@@ -97,6 +97,15 @@ namespace laol {
             return 0;
         }
 
+        double INumber::toDouble(const LaolObj& v) {
+            double rval;
+            getOpx(v, [&rval](auto x) {
+                rval = *x;
+                return NULLOBJ; //unused
+            });
+            return rval;
+        }
+
         LaolObj
         INumber::add(const LaolObj& self, const LaolObj& opB) const {
             return binOp(self, opB, [](auto a, auto b) {
