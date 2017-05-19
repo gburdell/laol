@@ -27,71 +27,72 @@
 #include "laol/rt/array.hxx"
 #include "laol/rt/range.hxx"
 #include "laol/rt/string.hxx"
-
+#include "laol/rt/exception.hxx"
 
 namespace laol {
     namespace rt {
 
+        using std::to_string;
+        
         //static
 
-        Laol::METHOD_BY_NAME Array::stMethodByName;
+        Laol::METHOD_BY_NAME IArray::stMethodByName;
 
         Array::Array() {
         }
 
-        Array::~Array() {
+        Array::Array(const LaolObj& v)
+        : Array(v.isA<Array>() ? v.toType<Array>().m_ar : toV(v)) {
         }
 
         const Laol::METHOD_BY_NAME&
-        Array::getMethodByName() {
+        IArray::getMethodByName() {
             if (stMethodByName.empty()) {
-                stMethodByName = join(
-                        stMethodByName,
-                        Laol::getMethodByName(), METHOD_BY_NAME({
-                    {"length", static_cast<TPMethod> (&Array::length)},
-                    {"empty?", static_cast<TPMethod> (&Array::empty_PRED)},
-                    {"reverse", static_cast<TPMethod> (&Array::reverse)},
-                    {"reverse!", static_cast<TPMethod> (&Array::reverse_SELF)}
+                stMethodByName = join(stMethodByName,
+                        Laol::getMethodByName(),
+                        METHOD_BY_NAME({
+                    {"length", reinterpret_cast<TPMethod> (&IArray::length)},
+                    {"empty?", reinterpret_cast<TPMethod> (&IArray::empty_PRED)}
                 }));
             }
             return stMethodByName;
         }
 
+        LaolObj 
+        IArray::empty_PRED(const LaolObj& self, const LaolObj& args) const {
+            return isEmpty();
+        }
+
+        LaolObj 
+        IArray::length(const LaolObj& self, const LaolObj& args) const {
+            return xlength();
+        }
+
+        size_t
+        IArray::actualIndex(long int ix) const {
+            long int actual = (0 <= ix) ? ix : (xlength() + ix);
+            if ((actual >= xlength()) || (0 > actual)) {
+                const auto n = xlength() - 1;
+                throw IndexException(
+                        to_string(ix),
+                        "[" + to_string(-n) + ".." + to_string(n) + "]");
+            }
+            return actual;
+        }
+
         LaolObj
         Array::left_shift(const LaolObj& self, const LaolObj& opB) const {
             unconst(this)->m_ar.push_back(opB);
-
             return self;
         }
 
         LaolObj
         Array::right_shift(const LaolObj& self, const LaolObj& opB) const {
             unconst(this)->m_ar.insert(m_ar.begin(), opB);
-
             return self;
         }
 
-        LaolObj
-        Array::equal(const LaolObj& self, const LaolObj& opB) const {
-            LaolObj isEqual = false;
-            if (opB.isA<Array>()) {
-                const Vector& other = opB.toType<Array>().m_ar;
-                //we cannot use std::vector== since requires 'bool LaolObj==LaolObj'
-                //and we have 'LaolObj a==b' (without bool cast/operator).
-                //adding bool opens pandora box for ambiguity etc...
-                //TODO: could use LaolObjKey: but requires some thorough rewrite.
-                const auto N = m_ar.size();
-                if (N == other.size()) {
-                    for (auto i = 0; i < N; i++) {
-                        if ((m_ar[i] != other[i]).toBool()) {
-                            return false;
-                        }
-                    }
-                    isEqual = true;
-                }
-            }
-            return isEqual;
-        }
+#ifdef TODO
 
         LaolObj
         Array::toString(const LaolObj& self, const LaolObj&) const {
@@ -109,6 +110,7 @@ namespace laol {
 
             return new String(oss.str());
         }
+#endif
 
         // Local iterator over int range
 
@@ -131,88 +133,25 @@ namespace laol {
         Ref
         Array::subscript(const LaolObj&, const LaolObj& opB) const {
             const Vector& args = opB.isA<Array>() ? opB.toType<Array>().m_ar : toV(opB);
-            std::vector<Ref> val;
+            //degenerate case of single index
+            if ((1 == args.size()) && args[0].isInt()) {
+                return m_ar[actualIndex(args[0].toLongInt())];
+            }
+            //else, build up ArrayOfRef
+            ArrayOfRef *prefs = new ArrayOfRef();
             for (const LaolObj& sub : args) {
                 if (sub.isInt()) {
-                    val.push_back(m_ar[actualIndex(sub.toLongInt())]);
+                    *prefs << m_ar[actualIndex(sub.toLongInt())];
                 } else if (sub.isA<Range>()) {
-                    iterate(sub.toType<Range>(), [this, &val](auto i) {
+                    iterate(sub.toType<Range>(), [this, &prefs](auto i) {
                         //this-> work around gcc 5.1.0 bug
-                        val.push_back(m_ar[this->actualIndex(i)]);
+                        *prefs << m_ar[this->actualIndex(i)];
                     });
                 } else {
                     ASSERT_NEVER; //todo: error
                 }
             }
-            //todo: return (1 < val.size()) ? new Array(val) : val[0];
-            return val[0];
+            return LaolObj(prefs);
         }
-
-        LaolObj
-        Array::empty_PRED(const LaolObj&, const LaolObj&) const {
-
-            return m_ar.empty();
-        }
-
-        LaolObj
-        Array::reverse(const LaolObj&, const LaolObj&) const {
-            auto p = new Array(m_ar);
-            std::reverse(std::begin(p->m_ar), std::end(p->m_ar));
-
-            return p;
-        }
-
-        LaolObj
-        Array::reverse_SELF(const LaolObj& self, const LaolObj&) const {
-            std::reverse(std::begin(unconst(this)->m_ar), std::end(unconst(this)->m_ar));
-
-            return self;
-        }
-
-        LaolObj
-        Array::length(const LaolObj&, const LaolObj&) const {
-
-            return length();
-        }
-
-        /*
-        LaolObj
-        Array::subscript_assign(const LaolObj& self, const LaolObj& args) const {
-            ASSERT_TRUE(args.isA<Array>());
-            const Vector& vargs = args.toType<Array>().m_ar;
-            if (2 != vargs.size()) {
-                throw ArityException(vargs.size(), "2");
-            }
-            LaolObj rhs = vargs[1];
-            //make index into array for easier walk
-            const Vector& index = vargs[0].isA<Array>() ? vargs[0].toType<Array>().m_ar : toV(vargs[0]);
-            //flatten
-            vector<size_t> actualIndices;
-            for (const LaolObj& sub : index) {
-                if (sub.isInt()) {
-                    actualIndices.push_back(actualIndex(sub.toLInt()));
-                } else if (sub.isObject() && sub.isA<Range>()) {
-                    iterate(sub.toType<Range>(), [this, &actualIndices](auto i) {
-                        //this-> work around gcc 5.1.0 bug
-                        actualIndices.push_back(this->actualIndex(i));
-                    });
-                } else {
-                    ASSERT_NEVER; //todo: error
-                }
-            }
-            Array* ucthis = unconst(this); //unconst
-            const auto N = actualIndices.size();
-            if (1 == N) {
-                ucthis->m_ar[actualIndices[0]] = rhs;
-            } else {
-                const Vector& rhsVals = rhs.toType<Array>().m_ar;
-                ASSERT_TRUE(N == rhsVals.size());
-                for (auto i = 0; i < N; i++) {
-                    ucthis->m_ar[actualIndices[i]] = rhsVals[i];
-                }
-            }
-            return self;
-        }
-         */
     }
 }

@@ -50,8 +50,8 @@ namespace laol {
 
             const LaolObj m_begin, m_end;
 
-		protected:
-			virtual const METHOD_BY_NAME& getMethodByName() override;
+        protected:
+            virtual const METHOD_BY_NAME& getMethodByName() override;
 
         private:
             const bool m_precondition;

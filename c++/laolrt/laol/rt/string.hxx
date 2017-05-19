@@ -92,7 +92,7 @@ namespace laol {
             virtual LaolObj toString(const LaolObj& self, const LaolObj& args) const override;
 
             // Get primitive std::string from 'from'
-            static string toStdString(const LaolObj& from, bool quote= false);
+            static string toStdString(const LaolObj& from, bool quote = false);
 
             virtual ~String();
 
@@ -112,19 +112,19 @@ namespace laol {
                 size_t m_curr, m_len;
                 string& m_str;
             };
-            
-		protected:
-			virtual const METHOD_BY_NAME& getMethodByName() override;
+
+        protected:
+            virtual const METHOD_BY_NAME& getMethodByName() override;
 
         private:
 
-            size_t length() const override {
+            size_t length() const {
                 return m_str.length();
             }
 
             string m_str;
 
-            static METHOD_BY_NAME stMethodByName; 
+            static METHOD_BY_NAME stMethodByName;
         };
 
     }

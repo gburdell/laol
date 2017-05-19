@@ -477,11 +477,6 @@ namespace laol {
         protected:
             virtual const METHOD_BY_NAME& getMethodByName();
 
-            //useful for sized subclass
-            size_t actualIndex(long int ix) const;
-
-            virtual size_t length() const;
-
         private:
             static TPMethod getFunc(const METHOD_BY_NAME& methodByName, const string& methodNm);
 

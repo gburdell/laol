@@ -423,25 +423,6 @@ namespace laol {
             return rval;
         }
 
-        size_t
-        Laol::actualIndex(long int ix) const {
-            long int actual = (0 <= ix) ? ix : (length() + ix);
-            if ((actual >= length()) || (0 > actual)) {
-
-                const auto n = length() - 1;
-                throw IndexException(
-                        to_string(ix),
-                        "[" + to_string(-n) + ".." + to_string(n) + "]");
-            }
-            return actual;
-        }
-
-        size_t Laol::length() const {
-            ASSERT_NEVER;
-
-            return -1;
-        }
-
         Laol::Laol() {
         }
 
