@@ -43,9 +43,11 @@ OBJECTFILES= \
 	${OBJECTDIR}/laol/rt/laol.o \
 	${OBJECTDIR}/laol/rt/map.o \
 	${OBJECTDIR}/laol/rt/ostream.o \
+	${OBJECTDIR}/laol/rt/primitives.o \
 	${OBJECTDIR}/laol/rt/range.o \
 	${OBJECTDIR}/laol/rt/string.o \
-	${OBJECTDIR}/laol/rt/symbol.o
+	${OBJECTDIR}/laol/rt/symbol.o \
+	${OBJECTDIR}/laol/rt/timer.o
 
 # Test Directory
 TESTDIR=${CND_BUILDDIR}/${CND_CONF}/${CND_PLATFORM}/tests
@@ -56,7 +58,7 @@ TESTFILES= \
 
 # Test Object Files
 TESTOBJECTFILES= \
-	${TESTDIR}/laol/rt/tests/number1.o
+	${TESTDIR}/laol/rt/tests/test.o
 
 # C Compiler Flags
 CFLAGS=
@@ -124,6 +126,11 @@ ${OBJECTDIR}/laol/rt/ostream.o: laol/rt/ostream.cxx
 	${RM} "$@.d"
 	$(COMPILE.cc) -g -DDEBUG -I. -I../../../xyzzy/src -std=c++14 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/laol/rt/ostream.o laol/rt/ostream.cxx
 
+${OBJECTDIR}/laol/rt/primitives.o: laol/rt/primitives.cxx
+	${MKDIR} -p ${OBJECTDIR}/laol/rt
+	${RM} "$@.d"
+	$(COMPILE.cc) -g -DDEBUG -I. -I../../../xyzzy/src -std=c++14 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/laol/rt/primitives.o laol/rt/primitives.cxx
+
 ${OBJECTDIR}/laol/rt/range.o: laol/rt/range.cxx
 	${MKDIR} -p ${OBJECTDIR}/laol/rt
 	${RM} "$@.d"
@@ -139,6 +146,11 @@ ${OBJECTDIR}/laol/rt/symbol.o: laol/rt/symbol.cxx
 	${RM} "$@.d"
 	$(COMPILE.cc) -g -DDEBUG -I. -I../../../xyzzy/src -std=c++14 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/laol/rt/symbol.o laol/rt/symbol.cxx
 
+${OBJECTDIR}/laol/rt/timer.o: laol/rt/timer.cxx
+	${MKDIR} -p ${OBJECTDIR}/laol/rt
+	${RM} "$@.d"
+	$(COMPILE.cc) -g -DDEBUG -I. -I../../../xyzzy/src -std=c++14 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/laol/rt/timer.o laol/rt/timer.cxx
+
 # Subprojects
 .build-subprojects:
 
@@ -146,15 +158,15 @@ ${OBJECTDIR}/laol/rt/symbol.o: laol/rt/symbol.cxx
 .build-tests-conf: .build-tests-subprojects .build-conf ${TESTFILES}
 .build-tests-subprojects:
 
-${TESTDIR}/TestFiles/f1: ${TESTDIR}/laol/rt/tests/number1.o ${OBJECTFILES:%.o=%_nomain.o}
+${TESTDIR}/TestFiles/f1: ${TESTDIR}/laol/rt/tests/test.o ${OBJECTFILES:%.o=%_nomain.o}
 	${MKDIR} -p ${TESTDIR}/TestFiles
-	${LINK.cc} -o ${TESTDIR}/TestFiles/f1 $^ ${LDLIBSOPTIONS}  -Wl,-rpath -Wl,/usr/local/lib64 -Wl,-rpath,'.' -Wl,-rpath,'.' -Wl,-rpath,'.' -Wl,-rpath,'.' -Wl,-rpath,'.' -Wl,-rpath,'.' -Wl,-rpath,'.' -Wl,-rpath,'.' -Wl,-rpath,'.' -Wl,-rpath,'.' -Wl,-rpath,'.' -Wl,-rpath,'.' -Wl,-rpath,'.' -Wl,-rpath,'.' -Wl,-rpath,'.' -Wl,-rpath,'.' dist/Debug/GNU-Linux/liblaolrt.a ../../../xyzzy/dist/debug/linux/xyzzy.a 
+	${LINK.cc} -o ${TESTDIR}/TestFiles/f1 $^ ${LDLIBSOPTIONS}  -Wl,-rpath -Wl,/usr/local/lib64 -Wl,-rpath,'.' -Wl,-rpath,'.' -Wl,-rpath,'.' -Wl,-rpath,'.' -Wl,-rpath,'.' -Wl,-rpath,'.' -Wl,-rpath,'.' -Wl,-rpath,'.' -Wl,-rpath,'.' -Wl,-rpath,'.' -Wl,-rpath,'.' -Wl,-rpath,'.' -Wl,-rpath,'.' -Wl,-rpath,'.' -Wl,-rpath,'.' -Wl,-rpath,'.' -Wl,-rpath,'.' -Wl,-rpath,'.' -Wl,-rpath,'.' -Wl,-rpath,'.' -Wl,-rpath,'.' -Wl,-rpath,'.' -Wl,-rpath,'.' -Wl,-rpath,'.' -Wl,-rpath,'.' -Wl,-rpath,'.' -Wl,-rpath,'.' -Wl,-rpath,'.' dist/Debug/GNU-Linux/liblaolrt.a ../../../xyzzy/dist/debug/linux/xyzzy.a 
 
 
-${TESTDIR}/laol/rt/tests/number1.o: laol/rt/tests/number1.cpp 
+${TESTDIR}/laol/rt/tests/test.o: laol/rt/tests/test.cxx 
 	${MKDIR} -p ${TESTDIR}/laol/rt/tests
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -DDEBUG -I. -I../../../xyzzy/src -I. -std=c++14 -MMD -MP -MF "$@.d" -o ${TESTDIR}/laol/rt/tests/number1.o laol/rt/tests/number1.cpp
+	$(COMPILE.cc) -g -DDEBUG -I. -I../../../xyzzy/src -I. -std=c++14 -MMD -MP -MF "$@.d" -o ${TESTDIR}/laol/rt/tests/test.o laol/rt/tests/test.cxx
 
 
 ${OBJECTDIR}/laol/rt/array_nomain.o: ${OBJECTDIR}/laol/rt/array.o laol/rt/array.cxx 
@@ -261,6 +273,19 @@ ${OBJECTDIR}/laol/rt/ostream_nomain.o: ${OBJECTDIR}/laol/rt/ostream.o laol/rt/os
 	    ${CP} ${OBJECTDIR}/laol/rt/ostream.o ${OBJECTDIR}/laol/rt/ostream_nomain.o;\
 	fi
 
+${OBJECTDIR}/laol/rt/primitives_nomain.o: ${OBJECTDIR}/laol/rt/primitives.o laol/rt/primitives.cxx 
+	${MKDIR} -p ${OBJECTDIR}/laol/rt
+	@NMOUTPUT=`${NM} ${OBJECTDIR}/laol/rt/primitives.o`; \
+	if (echo "$$NMOUTPUT" | ${GREP} '|main$$') || \
+	   (echo "$$NMOUTPUT" | ${GREP} 'T main$$') || \
+	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
+	then  \
+	    ${RM} "$@.d";\
+	    $(COMPILE.cc) -g -DDEBUG -I. -I../../../xyzzy/src -std=c++14 -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/laol/rt/primitives_nomain.o laol/rt/primitives.cxx;\
+	else  \
+	    ${CP} ${OBJECTDIR}/laol/rt/primitives.o ${OBJECTDIR}/laol/rt/primitives_nomain.o;\
+	fi
+
 ${OBJECTDIR}/laol/rt/range_nomain.o: ${OBJECTDIR}/laol/rt/range.o laol/rt/range.cxx 
 	${MKDIR} -p ${OBJECTDIR}/laol/rt
 	@NMOUTPUT=`${NM} ${OBJECTDIR}/laol/rt/range.o`; \
@@ -298,6 +323,19 @@ ${OBJECTDIR}/laol/rt/symbol_nomain.o: ${OBJECTDIR}/laol/rt/symbol.o laol/rt/symb
 	    $(COMPILE.cc) -g -DDEBUG -I. -I../../../xyzzy/src -std=c++14 -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/laol/rt/symbol_nomain.o laol/rt/symbol.cxx;\
 	else  \
 	    ${CP} ${OBJECTDIR}/laol/rt/symbol.o ${OBJECTDIR}/laol/rt/symbol_nomain.o;\
+	fi
+
+${OBJECTDIR}/laol/rt/timer_nomain.o: ${OBJECTDIR}/laol/rt/timer.o laol/rt/timer.cxx 
+	${MKDIR} -p ${OBJECTDIR}/laol/rt
+	@NMOUTPUT=`${NM} ${OBJECTDIR}/laol/rt/timer.o`; \
+	if (echo "$$NMOUTPUT" | ${GREP} '|main$$') || \
+	   (echo "$$NMOUTPUT" | ${GREP} 'T main$$') || \
+	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
+	then  \
+	    ${RM} "$@.d";\
+	    $(COMPILE.cc) -g -DDEBUG -I. -I../../../xyzzy/src -std=c++14 -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/laol/rt/timer_nomain.o laol/rt/timer.cxx;\
+	else  \
+	    ${CP} ${OBJECTDIR}/laol/rt/timer.o ${OBJECTDIR}/laol/rt/timer_nomain.o;\
 	fi
 
 # Run Test Targets

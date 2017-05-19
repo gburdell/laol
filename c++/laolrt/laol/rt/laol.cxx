@@ -36,6 +36,19 @@ namespace laol {
 
         /*extern*/ const LaolObj NULLOBJ;
 
+        /*extern*/
+        size_t
+        actualIndex(long int ix, size_t length) {
+            long int actual = (0 <= ix) ? ix : (length + ix);
+            if ((actual >= length) || (0 > actual)) {
+                const auto n = length - 1;
+                throw IndexException(
+                        to_string(ix),
+                        "[" + to_string(-n) + ".." + to_string(n) + "]");
+            }
+            return actual;
+        }
+
         LaolObj::LaolObj(Args args) {
             set(args);
         }
@@ -146,7 +159,7 @@ namespace laol {
         LaolObj::toDouble() const {
             return INumber::toDouble(*this);
         }
-        
+
         string
         LaolObj::toQString() const {
             return "todo";
@@ -318,14 +331,14 @@ namespace laol {
         }
 
         const Ref&
-        Ref::operator=(const LaolObj& rhs) {
+                Ref::operator=(const LaolObj& rhs) {
             m_ref = rhs;
             this->LaolObj::operator=(rhs);
             return *this;
         }
 
         const Ref&
-        Ref::operator=(const Ref& r) {
+                Ref::operator=(const Ref& r) {
             m_ref = r.m_ref;
             this->LaolObj::operator=(m_ref);
             return *this;

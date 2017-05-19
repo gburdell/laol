@@ -80,6 +80,10 @@ namespace laol {
 
         //Convenient type (for args) so we can pass {v1,v2,...}
         typedef const vector<LaolObj>& Args;
+        
+        // Generate 0-origin index from -n..n index.
+        // Throw exception on out of bound.
+        extern size_t actualIndex(long int ix, size_t length);
 
         class LaolObj {
         public:

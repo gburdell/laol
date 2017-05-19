@@ -33,12 +33,18 @@ namespace laol {
     namespace rt {
 
         using std::to_string;
-        
-        //static
 
         Laol::METHOD_BY_NAME IArray::stMethodByName;
+        Laol::METHOD_BY_NAME Array::stMethodByName;
+
+        IArray::~IArray() {
+        }
 
         Array::Array() {
+        }
+
+        Array::Array(Args v)
+        : PTArray<LaolObj>(v) {
         }
 
         Array::Array(const LaolObj& v)
@@ -58,26 +64,32 @@ namespace laol {
             return stMethodByName;
         }
 
-        LaolObj 
+        LaolObj
         IArray::empty_PRED(const LaolObj& self, const LaolObj& args) const {
             return isEmpty();
         }
 
-        LaolObj 
+        LaolObj
         IArray::length(const LaolObj& self, const LaolObj& args) const {
             return xlength();
         }
 
         size_t
         IArray::actualIndex(long int ix) const {
-            long int actual = (0 <= ix) ? ix : (xlength() + ix);
-            if ((actual >= xlength()) || (0 > actual)) {
-                const auto n = xlength() - 1;
-                throw IndexException(
-                        to_string(ix),
-                        "[" + to_string(-n) + ".." + to_string(n) + "]");
+            return laol::rt::actualIndex(ix, xlength());
+        }
+
+        const Laol::METHOD_BY_NAME&
+        Array::getMethodByName() {
+            if (stMethodByName.empty()) {
+                stMethodByName = join(stMethodByName,
+                        IArray::getMethodByName(),
+                        METHOD_BY_NAME({
+                    {"left_shift", reinterpret_cast<TPMethod> (&Array::left_shift)},
+                    {"right_shift", reinterpret_cast<TPMethod> (&Array::right_shift)}
+                }));
             }
-            return actual;
+            return stMethodByName;
         }
 
         LaolObj
@@ -153,5 +165,11 @@ namespace laol {
             }
             return LaolObj(prefs);
         }
+
+        Ref
+        ArrayOfRef::subscript(const LaolObj& self, const LaolObj& opB) const {
+            return self; //todo
+        }
+
     }
 }

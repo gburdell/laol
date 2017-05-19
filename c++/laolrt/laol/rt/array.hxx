@@ -33,6 +33,7 @@
 #define _laol_rt_array_hxx_
 
 #include <vector>
+#include <algorithm>
 #include "laol/rt/laol.hxx"
 #include "laol/rt/exception.hxx"    
 
@@ -48,7 +49,7 @@ namespace laol {
             virtual Ref subscript(const LaolObj& self, const LaolObj& opB) const = 0;
             virtual LaolObj equal(const LaolObj& self, const LaolObj& opB) const = 0;
             virtual LaolObj toString(const LaolObj& self, const LaolObj& args) const = 0;
-            */
+             */
 
             //unique methods
 
@@ -128,7 +129,7 @@ namespace laol {
             virtual Ref operator[](size_t ix) const override {
                 return m_ar[ix];
             }
-            
+
             virtual ~PTArray() {
             }
 
@@ -155,7 +156,7 @@ namespace laol {
             explicit Array();
 
             explicit Array(const LaolObj& v);
-            
+
             Array(Args v);
 
             Array& operator=(const Array& r) = delete;
@@ -178,7 +179,7 @@ namespace laol {
 
         // Array of Ref
 
-        class ArrayOfRef : public PTArray<Ref> {
+        class ArrayOfRef final : public PTArray<Ref> {
         public:
 
             explicit ArrayOfRef() {
@@ -188,6 +189,9 @@ namespace laol {
 
             //operators
             virtual Ref subscript(const LaolObj& self, const LaolObj& opB) const override;
+
+            ~ArrayOfRef() {
+            }
         };
 
     }
