@@ -155,6 +155,11 @@ namespace laol {
             return INumber::toUnsignedLongInt(*this);
         }
 
+        size_t
+        LaolObj::toSizet() const {
+            return toUnsignedLongInt();
+        }
+
         double
         LaolObj::toDouble() const {
             return INumber::toDouble(*this);
@@ -330,18 +335,28 @@ namespace laol {
         LaolObj::~LaolObj() {
         }
 
-        const Ref&
-                Ref::operator=(const LaolObj& rhs) {
+        //todo: change to virtual/override of LaolObj operatpr=(...) ???
+
+        const Ref& Ref::operator=(const LaolObj& rhs) {
             m_ref = rhs;
             this->LaolObj::operator=(rhs);
             return *this;
         }
 
-        const Ref&
-                Ref::operator=(const Ref& r) {
+        const Ref& Ref::operator=(const Ref& r) {
             m_ref = r.m_ref;
             this->LaolObj::operator=(m_ref);
             return *this;
+        }
+
+        Ref
+        Ref::operator[](const LaolObj& subscript) const {
+            if (!m_ref.isA<ArrayOfRef>()) {
+                return this->LaolObj::operator[](subscript);
+            } else {
+                const ArrayOfRef& refs = m_ref.toType<ArrayOfRef>();
+                return refs.subscript(*this, subscript);
+            }
         }
 
         /*static*/

@@ -46,7 +46,7 @@ void test1() {
     ASSERT_TRUE(i1.toLongInt() == I1);
     auto i6 = i1++;
     ASSERT_TRUE(i6.toLongInt() == I1);
-    ASSERT_TRUE(i1.toLongInt() == I1+1);
+    ASSERT_TRUE(i1.toLongInt() == I1 + 1);
     ASSERT_TRUE((--i1).toLongInt() == I1);
     auto i2 = i1 << 4;
     auto d1 = 1.234 + i1;
@@ -61,23 +61,38 @@ void test1() {
 
 void test2() {
     cout << "test1: (Array) BEGIN" << endl;
-    LaolObj i1 = 987654321;
-    LaolObj ar1 = new Array();
-    const float F1 = 1234.5;
-    auto i2 = ar1 << i1 << F1; //cool: we get 1234 to LaolRef conversion!
-    
-    //NOTE: these 2 lines get same value of ref to ar1[0],
-    //since they are both copy constructors.
-    //This is not good, since a subsequent ix0 = newVal
-    //effectively modifies the [0]-th element
-    LaolObj ix0 = ar1[0];
-    const int I1 = 777, I2 = 45;
-    ar1[0] = I1;
-    ASSERT_TRUE(ar1[0].toLongInt() == I1);
-    i2 = ar1[0] + I2;
-    ASSERT_TRUE(i2.toLongInt() == I1+I2);
-    ar1[0] = ar1[1];
-    ASSERT_TRUE(ar1[0].toDouble() == F1);
+    {
+        LaolObj i1 = 987654321;
+        LaolObj ar1 = new Array();
+        const float F1 = 1234.5;
+        auto i2 = ar1 << i1 << F1; //cool: we get 1234 to LaolRef conversion!    
+        LaolObj ix0 = ar1[0];
+        const int I1 = 777, I2 = 45;
+        ar1[0] = I1;
+        ASSERT_TRUE(ar1[0].toLongInt() == I1);
+        i2 = ar1[0] + I2;
+        ASSERT_TRUE(i2.toLongInt() == I1 + I2);
+        ar1[0] = ar1[1];
+        ASSERT_TRUE(ar1[0].toDouble() == F1);
+    }
+    {
+        //2d arrays
+        const int I1 = 1, I2 = 1234;
+        const auto V1 = toV(9, 8, 7);
+        LaolObj ar1 = new Array(toV(I1, V1, 3, 4));
+        auto ix1 = ar1[0];
+        ar1[0] = I2;
+        ASSERT_TRUE(ix1.toLongInt() == I1);
+        ASSERT_TRUE(ar1[0].toLongInt() == I2);
+        auto ix2 = ar1[-3];
+        auto n = ix2("length");
+        ASSERT_TRUE(n.toSizet() == 3);
+        ASSERT_TRUE((V1 == ix2).toBool());
+        auto ix3 = ix2[-2];
+        ASSERT_TRUE(ix3.toLongInt() == 8);
+        ASSERT_TRUE(ar1[-3][-2].toLongInt() == 8);
+        auto v1 = ar1[1][-1] = 777;
+    }
     cout << "test1: END" << endl;
 }
 

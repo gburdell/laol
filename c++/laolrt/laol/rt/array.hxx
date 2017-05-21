@@ -167,6 +167,9 @@ namespace laol {
             virtual LaolObj left_shift(const LaolObj& self, const LaolObj& opB) const override;
             virtual LaolObj right_shift(const LaolObj& self, const LaolObj& opB) const override;
 
+            static
+            const Vector toVector(const LaolObj& opB);
+
             virtual ~Array() {
             }
 
@@ -175,6 +178,8 @@ namespace laol {
 
         private:
             static METHOD_BY_NAME stMethodByName;
+            
+            friend const Vector toVector(const LaolObj& opB);
         };
 
         // Array of Ref

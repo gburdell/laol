@@ -139,12 +139,17 @@ namespace laol {
             }
         }
 
+        const Array::Vector 
+        Array::toVector(const LaolObj& opB) {
+            return opB.isA<Array>() ? opB.toType<Array>().m_ar : toV(opB);
+        }
+
         /*
          * opB : scalar or Array of vals...
          */
         Ref
         Array::subscript(const LaolObj&, const LaolObj& opB) const {
-            const Vector& args = opB.isA<Array>() ? opB.toType<Array>().m_ar : toV(opB);
+            const Vector args = toVector(opB);
             //degenerate case of single index
             if ((1 == args.size()) && args[0].isInt()) {
                 return m_ar[actualIndex(args[0].toLongInt())];
@@ -168,6 +173,11 @@ namespace laol {
 
         Ref
         ArrayOfRef::subscript(const LaolObj& self, const LaolObj& opB) const {
+            const Array::Vector args = Array::toVector(opB);
+            if ((1 == args.size()) && args[0].isInt()) {
+                return m_ar[actualIndex(args[0].toLongInt())];
+            }
+            ASSERT_NEVER; //todo
             return self; //todo
         }
 

@@ -171,6 +171,7 @@ namespace laol {
             bool toBool() const;
 
             unsigned long int toUnsignedLongInt() const;
+            size_t toSizet() const;
 
             long int toLongInt() const;
             
@@ -187,7 +188,7 @@ namespace laol {
             LaolObj operator%(const LaolObj& opB) const;
 
             //subscript
-            Ref operator[](const LaolObj& opB) const;
+            virtual Ref operator[](const LaolObj& opB) const;
             //
             // baseline comparators.
             // (others are generated as function of these).
@@ -325,7 +326,7 @@ namespace laol {
 
             const Ref& operator=(const LaolObj& rhs);
 
-            const Ref& operator[](const LaolObj& subscript);
+            Ref operator[](const LaolObj& subscript) const override;
 
             Ref(Ref& r) : LaolObj(r.m_ref), m_ref(r.m_ref) {
             }
