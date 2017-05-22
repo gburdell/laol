@@ -77,8 +77,8 @@ void test2() {
     }
     {
         //2d arrays
-        const int I1 = 1, I2 = 1234;
-        const auto V1 = toV(9, 8, 7);
+        const int I1 = 1, I2 = 1234, I3 = 7, I4 = 765;
+        const auto V1 = toV(9, 8, I3);
         LaolObj ar1 = new Array(toV(I1, V1, 3, 4));
         auto ix1 = ar1[0];
         ar1[0] = I2;
@@ -91,7 +91,11 @@ void test2() {
         auto ix3 = ix2[-2];
         ASSERT_TRUE(ix3.toLongInt() == 8);
         ASSERT_TRUE(ar1[-3][-2].toLongInt() == 8);
-        auto v1 = ar1[1][-1] = 777;
+        auto a11 = ar1[1][-1];
+        ASSERT_TRUE(a11.toLongInt() == I3);
+        auto v1 = ar1[1][-1] = I4;
+        ASSERT_TRUE(a11.toLongInt() == I3);
+        ASSERT_TRUE(ar1[1][-1].toLongInt() == I4);
     }
     cout << "test1: END" << endl;
 }
