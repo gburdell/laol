@@ -145,9 +145,19 @@ namespace laol {
             return toType<Bool>().m_val;
         }
 
+        int
+        LaolObj::toInt() const {
+            return INumber::toInt(*this);
+        }
+
         long int
         LaolObj::toLongInt() const {
             return INumber::toLongInt(*this);
+        }
+
+        unsigned int
+        LaolObj::toUnsignedInt() const {
+            return INumber::toUnsignedInt(*this);
         }
 
         unsigned long int
@@ -354,6 +364,8 @@ namespace laol {
             if (!m_ref.isA<ArrayOfRef>()) {
                 return this->LaolObj::operator[](subscript);
             } else {
+                ASSERT_NEVER;
+                //todo: we dont need this???
                 const ArrayOfRef& refs = m_ref.toType<ArrayOfRef>();
                 return refs.subscript(*this, subscript);
             }

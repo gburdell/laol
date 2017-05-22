@@ -38,6 +38,8 @@ namespace laol {
     namespace rt {
 
 
+        //NOTE: while we have these discrete primitive types; we do not (yet?!)
+        //have proper operator overloads to allow "Int op UnsignedInt"...
         class Int;
         class UnsignedInt;
         class LongInt;
@@ -75,6 +77,7 @@ namespace laol {
             virtual EType getType() const = 0;
 
             static int toInt(const LaolObj& v);
+            static unsigned int toUnsignedInt(const LaolObj& v);
             static long int toLongInt(const LaolObj& v);
             static unsigned long int toUnsignedLongInt(const LaolObj& v);
             static double toDouble(const LaolObj& v);

@@ -171,8 +171,13 @@ namespace laol {
             bool toBool() const;
 
             unsigned long int toUnsignedLongInt() const;
+            
+            unsigned int toUnsignedInt() const;
+            
             size_t toSizet() const;
 
+            int toInt() const;
+            
             long int toLongInt() const;
             
             double toDouble() const;
@@ -202,15 +207,15 @@ namespace laol {
             //            
 
             LaolObj operator!=(const LaolObj& opB) const {
-                return !(*this == opB);
+                return !((*this == opB).toBool());
             }
 
             LaolObj operator<=(const LaolObj& opB) const {
-                return (*this < opB) || (*this == opB);
+                return (*this < opB).toBool() || (*this == opB).toBool();
             }
 
             LaolObj operator>=(const LaolObj& opB) const {
-                return (*this > opB) || (*this == opB);
+                return (*this > opB).toBool() || (*this == opB).toBool();
             }
 
             // incr/decr

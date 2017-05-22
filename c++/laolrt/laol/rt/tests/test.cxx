@@ -34,6 +34,8 @@
 #include <array>
 #include <chrono>
 #include <thread>
+#include <climits>
+#include <cfloat>
 #include "laol/rt/runtime.hxx"
 
 using namespace std;
@@ -41,6 +43,15 @@ using namespace laol::rt;
 
 void test1() {
     cout << "test1: (basic) BEGIN" << endl;
+    {
+#ifdef TODO
+        //we cannot do: Int i1 = 0   //BAD!
+        Int i1(0);
+        UnsignedInt i2(12);
+        // error: invalid operands to binary expression ('laol::rt::Int' and 'laol::rt::UnsignedInt')
+        i1 != i2;
+#endif
+    }
     const long int I1 = 2048;
     LaolObj i1 = I1;
     ASSERT_TRUE(i1.toLongInt() == I1);
@@ -100,9 +111,29 @@ void test2() {
     cout << "test1: END" << endl;
 }
 
+void test3(const int NN = 10000) {
+    LaolObj N(NN);
+    cout << "test3: (Array-Triangle): N=" << NN << " BEGIN" << endl;
+    LaolObj triangle = new Array();
+    LaolObj n(1);
+    for (LaolObj rowi(1); toBool(rowi <= N); rowi++) {
+        LaolObj row = new Array();
+        for (LaolObj j(0); toBool(j < rowi); j++) {
+            row << n++;
+        }
+        triangle << row;
+        //cout << "DBG: row.length=" << row("length").toSizet() << endl;
+    }
+    for (LaolObj rowi(1); toBool(rowi <= N); rowi++) {
+        ASSERT_TRUE(toBool(triangle[rowi-1]("length") == rowi));
+    }
+    cout << "test3: n=" << n.toLongInt() << " END" << endl;
+}
+
 int main(int argc, char** argv) {
     test1();
     test2();
+    test3();
     cout << "END: all tests" << endl;
     return (EXIT_SUCCESS);
 }

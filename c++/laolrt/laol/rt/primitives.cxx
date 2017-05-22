@@ -65,9 +65,41 @@ namespace laol {
             });
         }
 
+        unsigned int INumber::toUnsignedInt(const LaolObj& v) {
+            switch (v.toType<INumber>().getType()) {
+                case eChar: case eUnsignedInt:
+                    unsigned int rval;
+                    getOpx(v, [&rval](auto x) {
+                        rval = (unsigned int) *x;
+                        return NULLOBJ; //unused
+                    });
+                    return rval;
+                default:
+                    break;
+            }
+            ASSERT_NEVER;
+            return 0;
+        }
+
+        int INumber::toInt(const LaolObj& v) {
+            switch (v.toType<INumber>().getType()) {
+                case eChar: case eInt:
+                    int rval;
+                    getOpx(v, [&rval](auto x) {
+                        rval = (int) *x;
+                        return NULLOBJ; //unused
+                    });
+                    return rval;
+                default:
+                    break;
+            }
+            ASSERT_NEVER;
+            return 0;
+        }
+
         long int INumber::toLongInt(const LaolObj& v) {
             switch (v.toType<INumber>().getType()) {
-                case eInt: case eUnsignedInt: case eLongInt:
+                case eChar: case eInt: case eUnsignedInt: case eLongInt:
                     long int rval;
                     getOpx(v, [&rval](auto x) {
                         rval = (long int) *x;
@@ -86,7 +118,7 @@ namespace laol {
                 case eUnsignedLongInt:
                     unsigned long int rval;
                     getOpx(v, [&rval](auto x) {
-                        rval = *x;
+                        rval = (unsigned long int) *x;
                         return NULLOBJ; //unused
                     });
                     return rval;
