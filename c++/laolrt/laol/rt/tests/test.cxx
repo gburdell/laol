@@ -124,9 +124,9 @@ void test3(const int NN = 10000) {
         triangle << row;
         //cout << "DBG: row.length=" << row("length").toSizet() << endl;
     }
-    for (LaolObj rowi(1); toBool(rowi <= N); rowi++) {
-        ASSERT_TRUE(toBool(triangle[rowi-1]("length") == rowi));
-    }
+    //for (LaolObj rowi(1); toBool(rowi <= N); rowi++) {
+    //    ASSERT_TRUE(toBool(triangle[rowi-1]("length") == rowi));
+    //}
     cout << "test3: n=" << n.toLongInt() << " END" << endl;
 }
 

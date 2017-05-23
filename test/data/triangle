@@ -1,0 +1,12 @@
+#!/usr/bin/env ruby
+
+N = 10000
+triangle = []
+ii = 1
+N.times do |n|
+	n += 1
+	row = []
+	n.times {|i| row << ii+=1}
+	triangle << row
+end
+puts "triangle.length=#{triangle.length}, ii=#{ii}"
