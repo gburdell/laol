@@ -71,13 +71,13 @@ namespace laol {
 
         class LaolObj;
         class Ref;
-        extern const LaolObj NULLOBJ;
+        extern const LaolObj NULLOBJ, TRUE, FALSE;
 
         // prefix with 'l' to not confuse with cout/cerr, endl
         extern const LaolObj lcerr;
         extern const LaolObj lcout;
         extern const LaolObj lendl; //newline and flush
-
+        
         //Convenient type (for args) so we can pass {v1,v2,...}
         typedef const vector<LaolObj>& Args;
         
@@ -181,6 +181,8 @@ namespace laol {
             long int toLongInt() const;
             
             double toDouble() const;
+            
+            float toFloat() const;
 
             // Majority of operators are const, so we'll mark all
             // as const and unconst as necessary in Laol subclass.
@@ -256,7 +258,7 @@ namespace laol {
 
             template<typename T>
             const T& toType() const {
-                ASSERT_TRUE(isA<T>());
+                //ASSERT_TRUE(isA<T>());
                 return dynamic_cast<const T&> (asTPRcLaol()->asT());
             }
 
@@ -290,7 +292,7 @@ namespace laol {
             }
 
             Laol* asTPLaol() const {
-                ASSERT_TRUE(!isNull());
+                //ASSERT_TRUE(!isNull());
                 return asTPRcLaol()->getPtr();
             }
 

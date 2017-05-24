@@ -115,11 +115,11 @@ void test3(const int NN = 10000) {
     LaolObj N(NN);
     cout << "test3: (Array-Triangle): N=" << NN << " BEGIN" << endl;
     LaolObj triangle = new Array();
-    LaolObj n(1);
-    for (LaolObj rowi(1); toBool(rowi <= N); rowi++) {
+    LaolObj n(0);
+    for (LaolObj rowi(1); toBool(rowi <= N); ++rowi) {
         LaolObj row = new Array();
-        for (LaolObj j(0); toBool(j < rowi); j++) {
-            row << n++;
+        for (LaolObj j(0); toBool(j < rowi); ++j) {
+            row << ++n;
         }
         triangle << row;
         //cout << "DBG: row.length=" << row("length").toSizet() << endl;
@@ -130,10 +130,35 @@ void test3(const int NN = 10000) {
     cout << "test3: n=" << n.toLongInt() << " END" << endl;
 }
 
+void test3b(const int NN = 10000) {
+    cout << "test3b: (Array-Triangle-C++): N=" << NN << " BEGIN" << endl;
+    vector<vector<int>> triangle;
+    int n = 1;
+    for (int rowi = 1; rowi <= NN; rowi++) {
+        vector<int> row;
+        for (int j = 0; j < rowi; j++) {
+            row.push_back(n++);
+        }
+        triangle.push_back(row);
+    }
+    cout << "test3b: n=" << n << " END" << endl;
+}
+
+void test4(const int NN = 10000000) {
+    cout << "test4: (post-increment): N=" << NN << " BEGIN" << endl;
+    LaolObj i(0);
+    for (int n = 0; n < NN; n++) {
+        i++;
+    }
+    cout << "test4: n=" << i.toLongInt() << " END" << endl;
+}
+
 int main(int argc, char** argv) {
-    test1();
-    test2();
+    //test1();
+    //test2();
     test3();
+    //test3b();
+    //test4();
     cout << "END: all tests" << endl;
     return (EXIT_SUCCESS);
 }

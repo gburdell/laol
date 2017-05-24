@@ -54,11 +54,11 @@ namespace laol {
             explicit Bool(bool val) : m_val(val) {
             }
 
-            LaolObj negate(const LaolObj&, const LaolObj& opB) const override {
+            LaolObj negate(const LaolObj&, const LaolObj&) const override {
                 return !m_val;
             }
 
-            LaolObj complement(const LaolObj&, const LaolObj& opB) const override {
+            LaolObj complement(const LaolObj&, const LaolObj&) const override {
                 return ~m_val;
             }
 
@@ -76,24 +76,28 @@ namespace laol {
 
             virtual EType getType() const = 0;
 
+            template<typename GETFN>
+            static LaolObj getIntVal(const LaolObj& op, const EType type, GETFN rcvr);
+
+            template<typename GETFN>
+            static LaolObj getIntVal(const LaolObj& op, GETFN rcvr) {
+                return getIntVal(op, op.toType<INumber>().getType(), rcvr);
+            }
+
+            template<typename GETFN>
+            static LaolObj getVal(const LaolObj& op, const EType type, GETFN rcvr);
+
+            template<typename GETFN>
+            static LaolObj getVal(const LaolObj& op, GETFN rcvr) {
+                return getVal(op, op.toType<INumber>().getType(), rcvr);
+            }
+
             static int toInt(const LaolObj& v);
             static unsigned int toUnsignedInt(const LaolObj& v);
             static long int toLongInt(const LaolObj& v);
             static unsigned long int toUnsignedLongInt(const LaolObj& v);
             static double toDouble(const LaolObj& v);
-
-            LaolObj add(const LaolObj&, const LaolObj& opB) const override;
-            LaolObj subtract(const LaolObj&, const LaolObj& opB) const override;
-            LaolObj multiply(const LaolObj&, const LaolObj& opB) const override;
-            LaolObj divide(const LaolObj&, const LaolObj& opB) const override;
-            LaolObj equal(const LaolObj&, const LaolObj& opB) const override;
-            LaolObj less(const LaolObj&, const LaolObj& opB) const override;
-            LaolObj greater(const LaolObj&, const LaolObj& opB) const override;
-            LaolObj negate(const LaolObj&, const LaolObj&) const override;
-            LaolObj post_decrement(const LaolObj& self, const LaolObj&) const override;
-            LaolObj post_increment(const LaolObj& self, const LaolObj&) const override;
-            LaolObj pre_decrement(const LaolObj& self, const LaolObj&) const override;
-            LaolObj pre_increment(const LaolObj& self, const LaolObj&) const override;
+            static float toFloat(const LaolObj& v);
         };
 
         template<typename T>
@@ -103,95 +107,132 @@ namespace laol {
             explicit IntBase(T val) : m_val(val) {
             }
 
-            template<typename GETFN>
-            LaolObj get(GETFN rcvr) const {
-                return rcvr(m_val);
-            }
-
-            template<typename TB, typename BINOP>
-            LaolObj binOp(const TB& opB, BINOP binop) const {
-                LaolObj rval = opB.get([this, binop](auto bb) {
-                    return binop(m_val, bb);
-                });
-                return rval;
-            }
-
-            template<typename BINOP>
-            LaolObj binOp(const LaolObj& opB, BINOP binop) const {
-                switch (opB.toType<INumber>().getType()) {
-                    case eInt:
-                        return binOp(opB.toType<Int>(), binop);
-                    case eUnsignedInt:
-                        return binOp(opB.toType<UnsignedInt>(), binop);
-                    case eLongInt:
-                        return binOp(opB.toType<LongInt>(), binop);
-                    case eUnsignedLongInt:
-                        return binOp(opB.toType<UnsignedLongInt>(), binop);
-                    case eChar:
-                        return binOp(opB.toType<Char>(), binop);
-                    default:
-                        ASSERT_NEVER;
-                }
-                return NULLOBJ;
-            }
-
             /* Integer only operations
              */
             LaolObj left_shift(const LaolObj&, const LaolObj& opB) const override {
-                return binOp(opB, [](auto aa, auto bb) {
-                    return aa << bb;
+                return getIntVal(opB, [this](auto bb) {
+                    return m_val << bb;
                 });
             }
 
             LaolObj right_shift(const LaolObj&, const LaolObj& opB) const override {
-                return binOp(opB, [](auto aa, auto bb) {
-                    return aa >> bb;
+                return getIntVal(opB, [this](auto bb) {
+                    return m_val >> bb;
                 });
             }
 
             LaolObj modulus(const LaolObj&, const LaolObj& opB) const override {
-                return binOp(opB, [](auto aa, auto bb) {
-                    return aa % bb;
+                return getIntVal(opB, [this](auto bb) {
+                    return m_val % bb;
                 });
             }
 
             LaolObj logical_and(const LaolObj&, const LaolObj& opB) const override {
-                return binOp(opB, [](auto aa, auto bb) {
-                    return aa && bb;
+                return getIntVal(opB, [this](auto bb) {
+                    return m_val && bb;
                 });
             }
 
             LaolObj logical_or(const LaolObj&, const LaolObj& opB) const override {
-                return binOp(opB, [](auto aa, auto bb) {
-                    return aa || bb;
+                return getIntVal(opB, [this](auto bb) {
+                    return m_val || bb;
                 });
             }
 
             LaolObj bitwise_and(const LaolObj&, const LaolObj& opB) const override {
-                return binOp(opB, [](auto aa, auto bb) {
-                    return aa & bb;
+                return getIntVal(opB, [this](auto bb) {
+                    return m_val & bb;
                 });
             }
 
             LaolObj bitwise_or(const LaolObj&, const LaolObj& opB) const override {
-                return binOp(opB, [](auto aa, auto bb) {
-                    return aa | bb;
+                return getIntVal(opB, [this](auto bb) {
+                    return m_val | bb;
                 });
             }
 
             LaolObj bitwise_xor(const LaolObj&, const LaolObj& opB) const override {
-                return binOp(opB, [](auto aa, auto bb) {
-                    return aa ^ bb;
+                return getIntVal(opB, [this](auto bb) {
+                    return m_val ^ bb;
                 });
             }
 
             LaolObj complement(const LaolObj&, const LaolObj&) const override {
-                return get([](auto aa) {
-                    return ~aa;
+                return ~m_val;
+            }
+
+            // Generate specializations for Int here for performance
+
+            LaolObj post_increment(const LaolObj& self, const LaolObj&) const override {
+                return unconst(this)->m_val++;
+            }
+
+            LaolObj post_decrement(const LaolObj& self, const LaolObj&) const override {
+                return unconst(this)->m_val--;
+            }
+
+            LaolObj pre_increment(const LaolObj& self, const LaolObj&) const override {
+                unconst(this)->m_val = m_val + 1;
+                return self;
+            }
+
+            LaolObj pre_decrement(const LaolObj& self, const LaolObj&) const override {
+                unconst(this)->m_val = m_val - 1;
+                return self;
+            }
+
+            LaolObj add(const LaolObj&, const LaolObj& opB) const override {
+                return getVal(opB, [this](auto bb) {
+                    return m_val + bb;
                 });
             }
 
-            const T m_val;
+            LaolObj subtract(const LaolObj&, const LaolObj& opB) const override {
+                return getVal(opB, [this](auto bb) {
+                    return m_val - bb;
+                });
+            }
+
+            LaolObj multiply(const LaolObj&, const LaolObj& opB) const override {
+                return getVal(opB, [this](auto bb) {
+                    return m_val * bb;
+                });
+            }
+
+            LaolObj divide(const LaolObj&, const LaolObj& opB) const override {
+                return getVal(opB, [this](auto bb) {
+                    return m_val / bb;
+                });
+            }
+
+            LaolObj equal(const LaolObj&, const LaolObj& opB) const override {
+                return getVal(opB, [this](auto bb) {
+                    return m_val == bb;
+                });
+            }
+
+            LaolObj less(const LaolObj&, const LaolObj& opB) const override {
+                return getVal(opB, [this](auto bb) {
+                    return m_val < bb;
+                });
+            }
+
+            LaolObj greater(const LaolObj&, const LaolObj& opB) const override {
+                return getVal(opB, [this](auto bb) {
+                    return m_val > bb;
+                });
+            }
+
+            LaolObj negate(const LaolObj&, const LaolObj&) const override {
+                //For an expression e, 
+                //the unary expression !e is equivalent to the expression (e == 0)
+                return (m_val != 0);
+            }
+
+        private:
+            friend class INumber;
+
+            T m_val;
         };
 
         template<typename T>
@@ -201,7 +242,78 @@ namespace laol {
             explicit FloatBase(T val) : m_val(val) {
             }
 
-            const T m_val;
+            // Generate specializations for Float here for performance
+
+            LaolObj post_increment(const LaolObj& self, const LaolObj&) const override {
+                return unconst(this)->m_val++;
+            }
+
+            LaolObj post_decrement(const LaolObj& self, const LaolObj&) const override {
+                return unconst(this)->m_val--;
+            }
+
+            LaolObj pre_increment(const LaolObj& self, const LaolObj&) const override {
+                unconst(this)->m_val = m_val + 1;
+                return self;
+            }
+
+            LaolObj pre_decrement(const LaolObj& self, const LaolObj&) const override {
+                unconst(this)->m_val = m_val - 1;
+                return self;
+            }
+
+            LaolObj add(const LaolObj&, const LaolObj& opB) const override {
+                return getVal(opB, [this](auto bb) {
+                    return m_val + bb;
+                });
+            }
+
+            LaolObj subtract(const LaolObj&, const LaolObj& opB) const override {
+                return getVal(opB, [this](auto bb) {
+                    return m_val - bb;
+                });
+            }
+
+            LaolObj multiply(const LaolObj&, const LaolObj& opB) const override {
+                return getVal(opB, [this](auto bb) {
+                    return m_val * bb;
+                });
+            }
+
+            LaolObj divide(const LaolObj&, const LaolObj& opB) const override {
+                return getVal(opB, [this](auto bb) {
+                    return m_val / bb;
+                });
+            }
+
+            LaolObj equal(const LaolObj&, const LaolObj& opB) const override {
+                return getVal(opB, [this](auto bb) {
+                    return m_val == bb;
+                });
+            }
+
+            LaolObj less(const LaolObj&, const LaolObj& opB) const override {
+                return getVal(opB, [this](auto bb) {
+                    return m_val < bb;
+                });
+            }
+
+            LaolObj greater(const LaolObj&, const LaolObj& opB) const override {
+                return getVal(opB, [this](auto bb) {
+                    return m_val > bb;
+                });
+            }
+
+            LaolObj negate(const LaolObj&, const LaolObj&) const override {
+                //For an expression e, 
+                //the unary expression !e is equivalent to the expression (e == 0)
+                return (m_val != 0);
+            }
+
+        private:
+            friend class INumber;
+
+            T m_val;
         };
 
 #define DEFINE_INTS(_cls, _prim)                    \
@@ -252,6 +364,41 @@ namespace laol {
         BINARY_OP(^)
 
 #undef BINARY_OP
+
+
+        template<typename GETFN>
+        LaolObj
+        INumber::getIntVal(const LaolObj& op, const EType type, GETFN rcvr) {
+            switch (type) {
+                case eInt:
+                    return rcvr(op.toType<Int>().m_val);
+                case eUnsignedInt:
+                    return rcvr(op.toType<UnsignedInt>().m_val);
+                case eLongInt:
+                    return rcvr(op.toType<LongInt>().m_val);
+                case eUnsignedLongInt:
+                    return rcvr(op.toType<UnsignedLongInt>().m_val);
+                case eChar:
+                    return rcvr(op.toType<Char>().m_val);
+                default:
+                    ASSERT_NEVER;
+            }
+            return NULLOBJ;
+        }
+
+        template<typename GETFN>
+        LaolObj
+        INumber::getVal(const LaolObj& op, const EType type, GETFN rcvr) {
+            switch (type) {
+                case eFloat:
+                    return rcvr(op.toType<Float>().m_val);
+                case eDouble:
+                    return rcvr(op.toType<Double>().m_val);
+                default:
+                    return getIntVal(op, type, rcvr);
+            }
+            return NULLOBJ;
+        }
     }
 }
 

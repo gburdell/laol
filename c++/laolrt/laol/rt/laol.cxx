@@ -35,6 +35,8 @@ namespace laol {
         using std::to_string;
 
         /*extern*/ const LaolObj NULLOBJ;
+        /*extern*/ const LaolObj TRUE(new Bool(true));
+        /*extern*/ const LaolObj FALSE(new Bool(false));
 
         /*extern*/
         size_t
@@ -74,7 +76,7 @@ namespace laol {
         LaolObj::LaolObj(float rhs) : LaolObj(new Float(rhs)) {
         }
 
-        LaolObj::LaolObj(bool rhs) : LaolObj(new Bool(rhs)) {
+        LaolObj::LaolObj(bool rhs) : LaolObj(rhs ? TRUE : FALSE) {
         }
 
         LaolObj::LaolObj(const char* rhs) : LaolObj(new String(rhs)) {
@@ -173,6 +175,11 @@ namespace laol {
         double
         LaolObj::toDouble() const {
             return INumber::toDouble(*this);
+        }
+
+        float
+        LaolObj::toFloat() const {
+            return INumber::toFloat(*this);
         }
 
         string

@@ -27,50 +27,13 @@
 namespace laol {
     namespace rt {
 
-        template<typename T, typename U>
-        U* pVal(const LaolObj& opx) {
-            return const_cast<U*> (&(opx.toType<T>().m_val));
-        }
-
-        template<typename GETOP>
-        static LaolObj getOpx(const LaolObj& opx, GETOP rcvr) {
-            static LaolObj UNUSED;
-            switch (opx.toType<INumber>().getType()) {
-                case INumber::eInt:
-                    return rcvr(pVal<Int, int>(opx));
-                case INumber::eUnsignedInt:
-                    return rcvr(pVal<UnsignedInt, unsigned int>(opx));
-                case INumber::eLongInt:
-                    return rcvr(pVal<LongInt, long int>(opx));
-                case INumber::eUnsignedLongInt:
-                    return rcvr(pVal<UnsignedLongInt, unsigned long int>(opx));
-                case INumber::eChar:
-                    return rcvr(pVal<Char, char>(opx));
-                case INumber::eFloat:
-                    return rcvr(pVal<Float, float>(opx));
-                case INumber::eDouble:
-                    return rcvr(pVal<Double, double>(opx));
-                default:
-                    ASSERT_NEVER;
-            }
-            return UNUSED;
-        }
-
-        template<typename BINOP>
-        static LaolObj binOp(const LaolObj& self, const LaolObj& opB, BINOP binop) {
-            return getOpx(self, [opB, binop](auto a) {
-                return getOpx(opB, [a, binop](auto b) {
-                    return binop(*a, *b);
-                });
-            });
-        }
-
         unsigned int INumber::toUnsignedInt(const LaolObj& v) {
-            switch (v.toType<INumber>().getType()) {
+            const EType type = v.toType<INumber>().getType();
+            switch (type) {
                 case eChar: case eUnsignedInt:
                     unsigned int rval;
-                    getOpx(v, [&rval](auto x) {
-                        rval = (unsigned int) *x;
+                    getIntVal(v, type, [&rval](auto x) {
+                        rval = (unsigned int) x;
                         return NULLOBJ; //unused
                     });
                     return rval;
@@ -82,11 +45,12 @@ namespace laol {
         }
 
         int INumber::toInt(const LaolObj& v) {
-            switch (v.toType<INumber>().getType()) {
+            const EType type = v.toType<INumber>().getType();
+            switch (type) {
                 case eChar: case eInt:
                     int rval;
-                    getOpx(v, [&rval](auto x) {
-                        rval = (int) *x;
+                    getIntVal(v, type, [&rval](auto x) {
+                        rval = (int) x;
                         return NULLOBJ; //unused
                     });
                     return rval;
@@ -98,11 +62,12 @@ namespace laol {
         }
 
         long int INumber::toLongInt(const LaolObj& v) {
-            switch (v.toType<INumber>().getType()) {
+            const EType type = v.toType<INumber>().getType();
+            switch (type) {
                 case eChar: case eInt: case eUnsignedInt: case eLongInt:
                     long int rval;
-                    getOpx(v, [&rval](auto x) {
-                        rval = (long int) *x;
+                    getIntVal(v, type, [&rval](auto x) {
+                        rval = (long int) x;
                         return NULLOBJ; //unused
                     });
                     return rval;
@@ -114,11 +79,12 @@ namespace laol {
         }
 
         unsigned long int INumber::toUnsignedLongInt(const LaolObj& v) {
-            switch (v.toType<INumber>().getType()) {
+            const EType type = v.toType<INumber>().getType();
+            switch (type) {
                 case eUnsignedLongInt:
                     unsigned long int rval;
-                    getOpx(v, [&rval](auto x) {
-                        rval = (unsigned long int) *x;
+                    getIntVal(v, type, [&rval](auto x) {
+                        rval = (unsigned long int) x;
                         return NULLOBJ; //unused
                     });
                     return rval;
@@ -131,101 +97,20 @@ namespace laol {
 
         double INumber::toDouble(const LaolObj& v) {
             double rval;
-            getOpx(v, [&rval](auto x) {
-                rval = *x;
+            getVal(v, [&rval](auto x) {
+                rval = x;
                 return NULLOBJ; //unused
             });
             return rval;
         }
 
-        LaolObj
-        INumber::add(const LaolObj& self, const LaolObj& opB) const {
-            return binOp(self, opB, [](auto a, auto b) {
-                return a + b;
+        float INumber::toFloat(const LaolObj& v) {
+            float rval;
+            getVal(v, [&rval](auto x) {
+                rval = x;
+                return NULLOBJ; //unused
             });
-        }
-
-        LaolObj
-        INumber::subtract(const LaolObj& self, const LaolObj& opB) const {
-            return binOp(self, opB, [](auto a, auto b) {
-                return a - b;
-            });
-        }
-
-        LaolObj
-        INumber::divide(const LaolObj& self, const LaolObj& opB) const {
-            return binOp(self, opB, [](auto a, auto b) {
-                return a / b;
-            });
-        }
-
-        LaolObj
-        INumber::multiply(const LaolObj& self, const LaolObj& opB) const {
-            return binOp(self, opB, [](auto a, auto b) {
-                return a * b;
-            });
-        }
-
-        LaolObj
-        INumber::equal(const LaolObj& self, const LaolObj& opB) const {
-            return binOp(self, opB, [](auto a, auto b) {
-                return a == b;
-            });
-        }
-
-        LaolObj
-        INumber::greater(const LaolObj& self, const LaolObj& opB) const {
-            return binOp(self, opB, [](auto a, auto b) {
-                return a > b;
-            });
-        }
-
-        LaolObj
-        INumber::less(const LaolObj& self, const LaolObj& opB) const {
-            return binOp(self, opB, [](auto a, auto b) {
-                return a < b;
-            });
-        }
-
-        LaolObj
-        INumber::negate(const LaolObj& self, const LaolObj&) const {
-            return getOpx(self, [](auto a) {
-                //For an expression e, 
-                //the unary expression !e is equivalent to the expression (e == 0)
-                return (a == 0);
-            });
-        }
-
-        LaolObj
-        INumber::post_decrement(const LaolObj& self, const LaolObj&) const {
-            return getOpx(self, [](auto a) {
-                auto now = *a;
-                *a -= 1;
-                return now;
-            });
-        }
-
-        LaolObj
-        INumber::post_increment(const LaolObj& self, const LaolObj&) const {
-            return getOpx(self, [](auto a) {
-                auto now = *a;
-                *a += 1;
-                return now;
-            });
-        }
-
-        LaolObj
-        INumber::pre_decrement(const LaolObj& self, const LaolObj&) const {
-            return getOpx(self, [](auto a) {
-                return *a -= 1;
-            });
-        }
-
-        LaolObj
-        INumber::pre_increment(const LaolObj& self, const LaolObj&) const {
-            return getOpx(self, [](auto a) {
-                return *a += 1;
-            });
+            return rval;
         }
 
     }
