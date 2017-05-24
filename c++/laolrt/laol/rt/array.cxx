@@ -55,7 +55,6 @@ namespace laol {
         IArray::getMethodByName() {
             if (stMethodByName.empty()) {
                 stMethodByName = join(stMethodByName,
-                        Laol::getMethodByName(),
                         METHOD_BY_NAME({
                     {"length", reinterpret_cast<TPMethod> (&IArray::length)},
                     {"empty?", reinterpret_cast<TPMethod> (&IArray::empty_PRED)}
@@ -64,14 +63,14 @@ namespace laol {
             return stMethodByName;
         }
 
-        LaolObj
+        Ref
         IArray::empty_PRED(const LaolObj& self, const LaolObj& args) const {
-            return isEmpty();
+            return LaolObj(isEmpty());
         }
 
-        LaolObj
+        Ref
         IArray::length(const LaolObj& self, const LaolObj& args) const {
-            return xlength();
+            return LaolObj(xlength());
         }
 
         size_t

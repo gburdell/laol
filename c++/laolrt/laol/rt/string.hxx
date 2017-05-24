@@ -78,18 +78,19 @@ namespace laol {
             }
 
             //unique methods
-            virtual LaolObj empty_PRED(const LaolObj& self, const LaolObj& args) const;
-            virtual LaolObj reverse(const LaolObj& self, const LaolObj& args) const;
-            virtual LaolObj reverse_SELF(const LaolObj& self, const LaolObj& args) const;
-            virtual LaolObj length(const LaolObj& self, const LaolObj& args) const;
-            virtual LaolObj append(const LaolObj& self, const LaolObj& args) const;
-            virtual LaolObj append_SELF(const LaolObj& self, const LaolObj& args) const;
-            virtual LaolObj prepend(const LaolObj& self, const LaolObj& args) const;
-            virtual LaolObj prepend_SELF(const LaolObj& self, const LaolObj& args) const;
-            virtual LaolObj iterator(const LaolObj& self, const LaolObj& args) const;
+            virtual Ref empty_PRED(const LaolObj& self, const LaolObj& args) const;
+            virtual Ref reverse(const LaolObj& self, const LaolObj& args) const;
+            virtual Ref reverse_SELF(const LaolObj& self, const LaolObj& args) const;
+            virtual Ref length(const LaolObj& self, const LaolObj& args) const;
+            virtual Ref append(const LaolObj& self, const LaolObj& args) const;
+            virtual Ref append_SELF(const LaolObj& self, const LaolObj& args) const;
+            virtual Ref prepend(const LaolObj& self, const LaolObj& args) const;
+            virtual Ref prepend_SELF(const LaolObj& self, const LaolObj& args) const;
+            virtual Ref iterator(const LaolObj& self, const LaolObj& args) const;
             //at(i) can take negative index too (-n is "n" from end, as in Ruby)
-            virtual LaolObj at(const LaolObj& self, const LaolObj& args) const;
-            virtual LaolObj toString(const LaolObj& self, const LaolObj& args) const override;
+            virtual Ref at(const LaolObj& self, const LaolObj& args) const;
+
+            virtual LaolObj toString() const override;
 
             // Get primitive std::string from 'from'
             static string toStdString(const LaolObj& from, bool quote = false);
@@ -105,8 +106,8 @@ namespace laol {
 
                 //allow copy constructors
 
-                LaolObj hasNext() const override;
-                LaolObj next() override;
+                Ref hasNext() const override;
+                Ref next() override;
 
             private:
                 size_t m_curr, m_len;

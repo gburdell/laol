@@ -52,8 +52,8 @@ namespace laol {
             }
 
             //unique methods
-            virtual LaolObj append_SELF(const LaolObj& self, const LaolObj& args) const = 0;
-            virtual LaolObj flush(const LaolObj& self, const LaolObj& args) const;
+            virtual Ref append_SELF(const LaolObj& self, const LaolObj& args) const = 0;
+            virtual Ref flush(const LaolObj& self, const LaolObj& args) const;
 
             NO_COPY_CONSTRUCTORS(OStream);
 
@@ -74,10 +74,10 @@ namespace laol {
         public:
             explicit FileOutputStream(const LaolObj& fileName);
 
-            virtual LaolObj fail_PRED(const LaolObj& self, const LaolObj& args) const;
-            virtual LaolObj close(const LaolObj& self, const LaolObj& args) const;
-            virtual LaolObj append_SELF(const LaolObj& self, const LaolObj& args) const override;
-            virtual LaolObj flush(const LaolObj& self, const LaolObj& args) const override;
+            virtual Ref fail_PRED(const LaolObj& self, const LaolObj& args) const;
+            virtual Ref close(const LaolObj& self, const LaolObj& args) const;
+            virtual Ref append_SELF(const LaolObj& self, const LaolObj& args) const override;
+            virtual Ref flush(const LaolObj& self, const LaolObj& args) const override;
 
             NO_COPY_CONSTRUCTORS(FileOutputStream);
 

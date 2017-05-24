@@ -53,10 +53,10 @@ namespace laol {
 
             //unique methods
 
-            virtual LaolObj empty_PRED(const LaolObj& self, const LaolObj& args) const;
-            virtual LaolObj reverse(const LaolObj& self, const LaolObj& args) const = 0;
-            virtual LaolObj reverse_SELF(const LaolObj& self, const LaolObj& args) const = 0;
-            virtual LaolObj length(const LaolObj& self, const LaolObj& args) const;
+            virtual Ref empty_PRED(const LaolObj& self, const LaolObj& args) const;
+            virtual Ref reverse(const LaolObj& self, const LaolObj& args) const = 0;
+            virtual Ref reverse_SELF(const LaolObj& self, const LaolObj& args) const = 0;
+            virtual Ref length(const LaolObj& self, const LaolObj& args) const;
 
             //single element access via 0-origin ix
             virtual Ref operator[](size_t ix) const = 0;
@@ -103,17 +103,17 @@ namespace laol {
                 return isEqual;
             }
 
-            virtual LaolObj toString(const LaolObj& self, const LaolObj& args) const override {
+            virtual LaolObj toString() const override {
                 return "!!TODO!!";
             }
 
-            virtual LaolObj reverse(const LaolObj&, const LaolObj&) const override {
+            virtual Ref reverse(const LaolObj&, const LaolObj&) const override {
                 auto p = new PTArray<T>(m_ar);
                 std::reverse(std::begin(p->m_ar), std::end(p->m_ar));
-                return p;
+                return LaolObj(p);
             }
 
-            virtual LaolObj reverse_SELF(const LaolObj& self, const LaolObj&) const override {
+            virtual Ref reverse_SELF(const LaolObj& self, const LaolObj&) const override {
                 std::reverse(std::begin(unconst(this)->m_ar), std::end(unconst(this)->m_ar));
                 return self;
             }

@@ -45,7 +45,8 @@ namespace laol {
         const Laol::METHOD_BY_NAME&
         Range::getMethodByName() {
             if (stMethodByName.empty()) {
-                stMethodByName = Laol::join(stMethodByName, Laol::getMethodByName(),METHOD_BY_NAME({
+                stMethodByName = Laol::join(stMethodByName, 
+				METHOD_BY_NAME({
                     //todo
                 }));
             }

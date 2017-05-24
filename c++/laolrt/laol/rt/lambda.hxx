@@ -44,7 +44,7 @@ namespace laol {
 
             explicit Lambda(FUNC fn);
 
-            virtual LaolObj call(const LaolObj& self, const LaolObj& args) const;
+            virtual Ref call(const LaolObj& self, const LaolObj& args) const;
 
             NO_COPY_CONSTRUCTORS(Lambda);
 

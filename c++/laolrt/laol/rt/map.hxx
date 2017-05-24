@@ -56,24 +56,24 @@ namespace laol {
                 return find(self, opB);
             }
 
-            virtual LaolObj toString(const LaolObj& self, const LaolObj& args) const override;
+            virtual LaolObj toString() const override;
 
             //unique methods
 
-            LaolObj size(const LaolObj& self, const LaolObj& args) const {
-                return (long int)size();
+            Ref size(const LaolObj& self, const LaolObj& args) const {
+                return LaolObj(size());
             }
 
             // args is Map: i.e., {key,val}
-            LaolObj merge(const LaolObj& self, const LaolObj& args) const;
+            Ref merge(const LaolObj& self, const LaolObj& args) const;
 
-            LaolObj merge_SELF(const LaolObj& self, const LaolObj& args) const;
+            Ref merge_SELF(const LaolObj& self, const LaolObj& args) const;
 
-            LaolObj empty_PRED(const LaolObj& self, const LaolObj& args) const;
+            Ref empty_PRED(const LaolObj& self, const LaolObj& args) const;
 
-            LaolObj key_PRED(const LaolObj& self, const LaolObj& args) const;
+            Ref key_PRED(const LaolObj& self, const LaolObj& args) const;
 
-            LaolObj find(const LaolObj& self, const LaolObj& args) const;
+            Ref find(const LaolObj& self, const LaolObj& args) const;
 
             Map& operator=(const Map&) = delete;
 

@@ -58,7 +58,7 @@ namespace laol {
         }*/
 
         LaolObj
-        Map::toString(const LaolObj&, const LaolObj&) const {
+        Map::toString() const {
             std::ostringstream oss;
             oss << "{";
             bool doComma = false;
@@ -73,12 +73,12 @@ namespace laol {
             return new String(oss.str());
         }
 
-        LaolObj
+        Ref
         Map::empty_PRED(const LaolObj& self, const LaolObj& args) const {
-            return m_map.empty();
+            return LaolObj(m_map.empty());
         }
 
-        LaolObj
+        Ref
         Map::merge_SELF(const LaolObj& self, const LaolObj& args) const {
             const Map& from = args.toType<Map>();
             for (auto& ele : from.m_map) {
@@ -87,18 +87,18 @@ namespace laol {
             return self;
         }
 
-        LaolObj
+        Ref
         Map::merge(const LaolObj& self, const LaolObj& args) const {
             LaolObj copy = new Map(*this);
             return copy.toType<Map>().merge_SELF(copy, args);
         }
 
-        LaolObj
+        Ref
         Map::key_PRED(const LaolObj& self, const LaolObj& args) const {
-            return (m_map.end() != m_map.find(args));
+            return LaolObj((m_map.end() != m_map.find(args)));
         }
 
-        LaolObj
+        Ref
         Map::find(const LaolObj& self, const LaolObj& args) const {
             auto it = m_map.find(args);
             return (it != m_map.end()) ? it->second : NULLOBJ;
@@ -108,7 +108,7 @@ namespace laol {
         Map::getMethodByName() {
             if (stMethodByName.empty()) {
                 stMethodByName = Laol::join(stMethodByName,
-				Laol::getMethodByName(),METHOD_BY_NAME({
+				METHOD_BY_NAME({
                     {"size", static_cast<TPMethod> (&Map::size)},
                     {"empty?", static_cast<TPMethod> (&Map::empty_PRED)},
                     {"merge", static_cast<TPMethod> (&Map::merge)},

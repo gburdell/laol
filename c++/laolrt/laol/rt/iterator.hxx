@@ -43,8 +43,8 @@ namespace laol {
             //allow copy constructors
 
             //unique methods
-            virtual LaolObj next_PRED(const LaolObj&, const LaolObj&) const;
-            virtual LaolObj next(const LaolObj&, const LaolObj&) const;
+            virtual Ref next_PRED(const LaolObj&, const LaolObj&) const;
+            virtual Ref next(const LaolObj&, const LaolObj&) const;
             
             virtual ~Iterator() {
             };
@@ -53,9 +53,9 @@ namespace laol {
 			virtual const METHOD_BY_NAME& getMethodByName() override;
 
             // Implementation for builtins: String, Array, ...
-            virtual LaolObj hasNext() const = 0;
+            virtual Ref hasNext() const = 0;
 
-            virtual LaolObj next() = 0;
+            virtual Ref next() = 0;
 
 		private:
             static METHOD_BY_NAME stMethodByName;

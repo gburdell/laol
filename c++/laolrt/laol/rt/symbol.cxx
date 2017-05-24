@@ -31,9 +31,6 @@ namespace laol {
         /*static*/ Symbol::MAP Symbol::stMap;
         /*static*/ Symbol::VAL Symbol::stLastVal = 0;
 
-        //static
-        Laol::METHOD_BY_NAME Symbol::stMethodByName;
-
         LaolObj
         Symbol::sym(const string& s) {
             LaolObj obj;
@@ -50,8 +47,8 @@ namespace laol {
         }
 
         LaolObj
-        Symbol::toString(const LaolObj&, const LaolObj&) const {
-            return new String(":" + toString());
+        Symbol::toString() const {
+            return new String(":" + toString(true));
         }
 
         LaolObj
@@ -71,7 +68,7 @@ namespace laol {
          * TODO: Costly performance here.
          */
         const string&
-        Symbol::toString() const {
+        Symbol::toString(bool) const {
             for (auto& keyVal : stMap) {
                 if (keyVal.second.toType<Symbol>().m_val == m_val) {
                     return keyVal.first;
@@ -80,21 +77,9 @@ namespace laol {
             throw std::logic_error("unexpected");
         }
 
-        const Laol::METHOD_BY_NAME&
-        Symbol::getMethodByName() {
-            if (stMethodByName.empty()) {
-                stMethodByName = Laol::join(stMethodByName,
-				Laol::getMethodByName(),METHOD_BY_NAME({
-                    {"toString", static_cast<TPMethod> (&Symbol::toString)},
-                    {"equal", static_cast<TPMethod> (&Symbol::equal)}
-                }));
-            }
-            return stMethodByName;
-        }
-
         Symbol::~Symbol() {
             //delete from table
-            stMap.erase(toString());
+            stMap.erase(toString(true));
         }
 
     }

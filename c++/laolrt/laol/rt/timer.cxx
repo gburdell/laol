@@ -59,34 +59,41 @@ namespace laol {
             return difftime(now, m_start);
         }
 
-        LaolObj
+        Ref
         Timer::hhmmss(const LaolObj& self, const LaolObj&) const {
             static const int SECS_PER_MIN = 60;
             static const int SECS_PER_HOUR = 60 * SECS_PER_MIN;
+            static const int SECS_PER_DAY = 24 * SECS_PER_HOUR;
             static char buf[128];
-            int hh, mm, ss = elapsed();
+            int dd, hh, mm, ss = elapsed();
+            dd = ss / SECS_PER_DAY;
+            ss -= (dd * SECS_PER_DAY);
             hh = ss / SECS_PER_HOUR;
             ss -= (hh * SECS_PER_HOUR);
             mm = ss / SECS_PER_MIN;
             ss -= (mm * SECS_PER_MIN);
-            snprintf(buf, sizeof (buf), "%02d:%02d:%02d", hh, mm, ss);
-            return new String(buf);
+            if (0 < dd) {
+                snprintf(buf, sizeof (buf), "%02d:%02d:%02d:%02d", dd, hh, mm, ss);
+            } else {
+                snprintf(buf, sizeof (buf), "%02d:%02d:%02d", hh, mm, ss);
+            }
+            return LaolObj(new String(buf));
         }
 
-        LaolObj Timer::time(const LaolObj&, const LaolObj&) const {
-            return std::time(0);
+        Ref
+        Timer::time(const LaolObj&, const LaolObj&) const {
+            return LaolObj(std::time(0));
         }
 
-        LaolObj
+        Ref
         Timer::elapsed(const LaolObj&, const LaolObj&) const {
-            return elapsed();
+            return LaolObj(elapsed());
         }
 
         const Laol::METHOD_BY_NAME&
         Timer::getMethodByName() {
             if (stMethodByName.empty()) {
                 stMethodByName = Laol::join(stMethodByName,
-				Laol::getMethodByName(),
                         ITimer::getMethodByName());
             }
             return stMethodByName;

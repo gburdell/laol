@@ -32,7 +32,7 @@ namespace laol {
         Lambda::Lambda(FUNC fn) : m_fn(fn) {
         }
 
-        LaolObj
+        Ref
         Lambda::call(const LaolObj& self, const LaolObj& args) const {
             m_fn(args);
             return self;
@@ -40,7 +40,8 @@ namespace laol {
 
         const Laol::METHOD_BY_NAME& Lambda::getMethodByName() {
             if (stMethodByName.empty()) {
-                stMethodByName = Laol::join(stMethodByName, Laol::getMethodByName(),METHOD_BY_NAME({
+                stMethodByName = Laol::join(stMethodByName, 
+				METHOD_BY_NAME({
                     {"call", static_cast<TPMethod> (&Lambda::call)},
                 }));
             }

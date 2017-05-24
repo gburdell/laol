@@ -46,9 +46,8 @@
         <group>
             <file>file:/Users/kpfalzer/projects/laol/c++/laolrt/laol/rt/tests/test.cxx</file>
             <file>file:/Users/kpfalzer/projects/laol/c++/laolrt/laol/rt/laol.cxx</file>
-            <file>file:/Users/kpfalzer/projects/laol/c++/laolrt/laol/rt/primitives.cxx</file>
             <file>file:/Users/kpfalzer/projects/laol/c++/laolrt/laol/rt/laol.hxx</file>
-            <file>file:/Users/kpfalzer/projects/laol/c++/laolrt/laol/rt/primitives.hxx</file>
+            <file>file:/Users/kpfalzer/projects/laol/c++/laolrt/laol/rt/timer.cxx</file>
         </group>
     </open-files>
 </project-private>

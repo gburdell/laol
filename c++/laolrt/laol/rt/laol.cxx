@@ -319,7 +319,7 @@ namespace laol {
             return asTPLaol()->equal(*this, opB);
         }
 
-        LaolObj
+        Ref
         LaolObj::operator()(const string& methodNm, const LaolObj& args, bool mustFind) const {
             LaolObj rval;
             Laol* pObj = asTPLaol();
@@ -337,7 +337,7 @@ namespace laol {
             return rval;
         }
 
-        LaolObj
+        Ref
         LaolObj::operator()(const string& methodNm) const {
             return this->operator()(methodNm, NULLOBJ);
         }
@@ -350,6 +350,21 @@ namespace laol {
         }
 
         LaolObj::~LaolObj() {
+        }
+
+        LaolObj
+        LaolObj::hashCode() const {
+            return asTPLaol()->hashCode();
+        }
+
+        LaolObj
+        LaolObj::objectId() const {
+            return asTPLaol()->objectId();
+        }
+
+        LaolObj
+        LaolObj::toString() const {
+            return asTPLaol()->toString();
         }
 
         //todo: change to virtual/override of LaolObj operatpr=(...) ???
@@ -379,46 +394,45 @@ namespace laol {
         }
 
         /*static*/
-        const Laol::METHOD_BY_NAME
-        Laol::stMethodByName = {
-            {"toString", static_cast<TPMethod> (&Laol::toString)},
-            {"objectId", static_cast<TPMethod> (&Laol::objectId)},
-            {"hashCode", static_cast<TPMethod> (&Laol::objectId)}
-        };
+        const Laol::METHOD_BY_NAME Laol::stMethodByName = {};
 
-        const Laol::METHOD_BY_NAME&
-        Laol::getMethodByName() {
+        const Laol::METHOD_BY_NAME& Laol::getMethodByName() {
             return stMethodByName;
         }
 
         /*static*/
         string
-        Laol::getClassName(const LaolObj& r) {
+        Laol::getClassName(const LaolObj & r) {
             const TRcObj& q = r.asTPRcLaol()->asT();
             return demangleName(typeid (q).name());
         }
 
+        string
+        Laol::getClassName() const {
+            return demangleName(typeid (*this).name());
+        }
+
         LaolObj
-        Laol::objectId(const LaolObj&, const LaolObj&) const {
-            LaolObj id = objectId();
+        Laol::objectId() const {
+            auto id = toObjectId(this);
             return id;
         }
 
         LaolObj
-        Laol::toString(const LaolObj& self, const LaolObj&) const {
+        Laol::toString() const {
             std::ostringstream oss;
-            oss << getClassName(self) << "@" << objectId();
+            oss << getClassName() << "@" << toObjectId(this);
             auto s = oss.str();
             return new String(s);
         }
 
         LaolObj
-        Laol::hashCode(const LaolObj&, const LaolObj&) const {
-            return objectId(NULLOBJ, NULLOBJ);
+        Laol::hashCode() const {
+            return objectId();
         }
 
         LaolObj
-        Laol::assign(const LaolObj& self, const LaolObj& rhs) const {
+        Laol::assign(const LaolObj& self, const LaolObj & rhs) const {
             unconst(self).set(rhs);
             return self;
         }
@@ -434,7 +448,7 @@ namespace laol {
         LaolObj Laol::modulus DEFINE_NO_IMPL
 
         //LaolObj Laol::subscript DEFINE_NO_IMPL
-        Ref Laol::subscript(const LaolObj&, const LaolObj& self) const {
+        Ref Laol::subscript(const LaolObj&, const LaolObj & self) const {
             ASSERT_NEVER;
             return NULLOBJ;
         }
@@ -457,13 +471,13 @@ namespace laol {
 #undef DEFINE_NO_IMPL
 
         Laol::TPMethod
-        Laol::getFunc(const string& methodNm) const {
+        Laol::getFunc(const string & methodNm) const {
             return getFunc(unconst(this)->getMethodByName(), methodNm);
         }
 
         /*static*/
         Laol::TPMethod
-        Laol::getFunc(const METHOD_BY_NAME& methodByName, const string& methodNm) {
+        Laol::getFunc(const METHOD_BY_NAME& methodByName, const string & methodNm) {
             auto search = methodByName.find(methodNm);
             auto rval = (search != methodByName.end()) ? search->second : nullptr;
 

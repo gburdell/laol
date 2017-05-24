@@ -77,10 +77,10 @@ namespace laol {
         extern const LaolObj lcerr;
         extern const LaolObj lcout;
         extern const LaolObj lendl; //newline and flush
-        
+
         //Convenient type (for args) so we can pass {v1,v2,...}
         typedef const vector<LaolObj>& Args;
-        
+
         // Generate 0-origin index from -n..n index.
         // Throw exception on out of bound.
         extern size_t actualIndex(long int ix, size_t length);
@@ -171,18 +171,23 @@ namespace laol {
             bool toBool() const;
 
             unsigned long int toUnsignedLongInt() const;
-            
+
             unsigned int toUnsignedInt() const;
-            
+
             size_t toSizet() const;
 
             int toInt() const;
-            
+
             long int toLongInt() const;
-            
+
             double toDouble() const;
-            
+
             float toFloat() const;
+
+            // Operator methods: i.e., can call directly
+            LaolObj toString() const;
+            LaolObj objectId() const;
+            LaolObj hashCode() const;
 
             // Majority of operators are const, so we'll mark all
             // as const and unconst as necessary in Laol subclass.
@@ -242,17 +247,15 @@ namespace laol {
             LaolObj operator^(const LaolObj& opB) const;
 
             //TPMethod
-            typedef LaolObj(Laol::* TPMethod)(const LaolObj& self, const LaolObj& args) const;
+            typedef Ref(Laol::* TPMethod)(const LaolObj& self, const LaolObj& args) const;
 
             //call method
-            LaolObj operator()(const string& methodNm, const LaolObj& args, bool mustFind = true) const;
-            LaolObj operator()(const string& methodNm) const;
+            Ref operator()(const string& methodNm, const LaolObj& args, bool mustFind = true) const;
+            Ref operator()(const string& methodNm) const;
 
             //call method if it exists (no error: as operator() does).
 
-            LaolObj ifMethod(const string& methodNm, const LaolObj& args) {
-                return (*this)(methodNm, args, false);
-            }
+            Ref ifMethod(const string& methodNm, const LaolObj& args);
 
             //cast as subclass of Laol
 
@@ -298,14 +301,6 @@ namespace laol {
 
             string toStdString() const;
 
-            LaolObj hashCode(const LaolObj&) const {
-                return NULLOBJ; //todo objectId(NULLOBJ);
-            }
-
-            size_t hashCode() const {
-                return 0; //todo
-            }
-
             void decrRefCnt();
 
             friend class Laol; //to optimize operator=()
@@ -349,16 +344,18 @@ namespace laol {
             friend class LaolObj;
         };
 
+        inline
+        Ref
+        LaolObj::ifMethod(const string& methodNm, const LaolObj& args) {
+            return (*this)(methodNm, args, false);
+        }
+
         // LaolObj-like but with natural compare methods
 
         struct LaolObjKey : public LaolObj {
 
             template<typename T>
             LaolObjKey(T obj) : LaolObj(obj) {
-            }
-
-            size_t hashCode() const {
-                return LaolObj::hashCode();
             }
 
             //allow copy constructors
@@ -458,10 +455,10 @@ namespace laol {
             /*++() */ virtual LaolObj pre_increment(const LaolObj& self, const LaolObj& opB) const;
             /*--() */ virtual LaolObj pre_decrement(const LaolObj& self, const LaolObj& opB) const;
 
-            //Map special methods for call-by-method too
-            virtual LaolObj toString(const LaolObj&, const LaolObj&) const;
-            virtual LaolObj objectId(const LaolObj&, const LaolObj&) const;
-            virtual LaolObj hashCode(const LaolObj&, const LaolObj&) const;
+            //Operator methods
+            virtual LaolObj toString() const;
+            virtual LaolObj objectId() const;
+            virtual LaolObj hashCode() const;
 
             virtual ~Laol() = 0;
 
@@ -486,18 +483,15 @@ namespace laol {
 
             static string getClassName(const LaolObj& r);
 
+            string getClassName() const;
+
         protected:
             virtual const METHOD_BY_NAME& getMethodByName();
 
         private:
-            static TPMethod getFunc(const METHOD_BY_NAME& methodByName, const string& methodNm);
-
             static const METHOD_BY_NAME stMethodByName;
 
-            auto objectId() const {
-                return toObjectId(this);
-            }
-
+            static TPMethod getFunc(const METHOD_BY_NAME& methodByName, const string& methodNm);
         };
     }
 }
@@ -509,7 +503,7 @@ namespace std {
     struct hash<LaolObjKey> {
 
         size_t operator()(const LaolObjKey& r) const {
-            return r.hashCode();
+            return r.hashCode().toSizet();
         }
     };
 }

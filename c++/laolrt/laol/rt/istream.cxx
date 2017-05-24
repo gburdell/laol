@@ -56,7 +56,7 @@ namespace laol {
         const Laol::METHOD_BY_NAME& 
         FileInputStream::getMethodByName() {
             if (stMethodByName.empty()) {
-                stMethodByName = Laol::join(stMethodByName, Laol::getMethodByName(), IStream::getMethodByName());
+                stMethodByName = Laol::join(stMethodByName, IStream::getMethodByName());
             }
             return stMethodByName;
         }
@@ -76,7 +76,7 @@ namespace laol {
             buf.clear();
         }
 
-        LaolObj
+        Ref
         FileInputStream::eachLine(const LaolObj& self, const LaolObj& args) const {
             const Lambda& lambda = args.toType<Lambda>();
             vector<char> buf;
@@ -96,17 +96,17 @@ namespace laol {
             return self;
         }
 
-        LaolObj
+        Ref
         FileInputStream::empty_PRED(const LaolObj& self, const LaolObj& args) const {
-            return m_ifs.eof();
+            return LaolObj(m_ifs.eof());
         }
 
-        LaolObj
+        Ref
         FileInputStream::fail_PRED(const LaolObj& self, const LaolObj& args) const {
-            return m_ifs.fail();
+            return LaolObj(m_ifs.fail());
         }
 
-        LaolObj
+        Ref
         FileInputStream::close(const LaolObj& self, const LaolObj& args) const {
             unconst(this)->close();
             return self;

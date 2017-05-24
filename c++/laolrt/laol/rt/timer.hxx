@@ -41,9 +41,9 @@ namespace laol {
 
         class ITimer : public virtual Laol {
         public:
-            virtual LaolObj hhmmss(const LaolObj& self, const LaolObj& args) const = 0;
-            virtual LaolObj elapsed(const LaolObj& self, const LaolObj& args) const = 0;
-            virtual LaolObj time(const LaolObj& self, const LaolObj& args) const = 0;
+            virtual Ref hhmmss(const LaolObj& self, const LaolObj& args) const = 0;
+            virtual Ref elapsed(const LaolObj& self, const LaolObj& args) const = 0;
+            virtual Ref time(const LaolObj& self, const LaolObj& args) const = 0;
 
             virtual ~ITimer() = 0;
 
@@ -58,9 +58,9 @@ namespace laol {
         public:
             explicit Timer();
 
-            virtual LaolObj hhmmss(const LaolObj& self, const LaolObj& args) const override;
-            virtual LaolObj elapsed(const LaolObj& self, const LaolObj& args) const override;
-            virtual LaolObj time(const LaolObj& self, const LaolObj& args) const override;
+            virtual Ref hhmmss(const LaolObj& self, const LaolObj& args) const override;
+            virtual Ref elapsed(const LaolObj& self, const LaolObj& args) const override;
+            virtual Ref time(const LaolObj& self, const LaolObj& args) const override;
 
             //allow copy constructors
 

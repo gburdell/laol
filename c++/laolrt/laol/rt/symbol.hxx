@@ -53,7 +53,7 @@ namespace laol {
             // Return existing symbol; or create new one.
             static LaolObj sym(const string& s);
 
-            virtual LaolObj toString(const LaolObj& self, const LaolObj& args) const override;
+            virtual LaolObj toString() const override;
 
             virtual LaolObj equal(const LaolObj& self, const LaolObj& opB) const override;
 
@@ -62,7 +62,7 @@ namespace laol {
             virtual ~Symbol();
 
 		protected:
-			virtual const METHOD_BY_NAME& getMethodByName() override;
+			//virtual const METHOD_BY_NAME& getMethodByName() override;
 
         private:
             const VAL m_val;
@@ -70,7 +70,7 @@ namespace laol {
             explicit Symbol() : m_val(stLastVal++) {
             }
 
-            const string& toString() const;
+            const string& toString(bool) const;
 
             typedef std::unordered_map<string, LaolObj> MAP;
             static MAP stMap;

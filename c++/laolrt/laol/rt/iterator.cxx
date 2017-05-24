@@ -33,7 +33,7 @@ namespace laol {
             if (stMethodByName.empty()) {
                 stMethodByName = Laol::join(
 						stMethodByName, 
-                        Laol::getMethodByName(),METHOD_BY_NAME({
+						METHOD_BY_NAME({
                     {"next?", static_cast<TPMethod> (&Iterator::next_PRED)},
                     {"next", static_cast<TPMethod> (&Iterator::next)}
 
@@ -42,12 +42,12 @@ namespace laol {
             return stMethodByName;
         }
 
-        LaolObj
+        Ref
         Iterator::next(const LaolObj&, const LaolObj&) const {
             return unconst(this)->next();
         }
 
-        LaolObj
+        Ref
         Iterator::next_PRED(const LaolObj&, const LaolObj&) const {
             return hasNext();
         }
