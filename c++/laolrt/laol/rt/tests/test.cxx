@@ -153,12 +153,53 @@ void test4(const int NN = 10000000) {
     cout << "test4: n=" << i.toLongInt() << " END" << endl;
 }
 
+class C : public Laol {
+public:
+
+    explicit C(int v = 3) : m_v1(v) {
+    }
+
+    Ref v1(const LaolObj& self, const LaolObj&) {
+        return m_v1;
+    }
+
+    const METHOD_BY_NAME& getMethodByName() override;
+
+private:
+    static METHOD_BY_NAME stMethodByName;
+
+    LaolObj m_v1;
+};
+
+Laol::METHOD_BY_NAME C::stMethodByName;
+
+const Laol::METHOD_BY_NAME& C::getMethodByName() {
+    if (stMethodByName.empty()) {
+        stMethodByName = {
+            {"v1", reinterpret_cast<TPMethod> (&C::v1)}
+        };
+    }
+    return stMethodByName;
+}
+
+void test5() {
+    cout << "test5: (member accessor methods): BEGIN" << endl;
+    const int I1 = 10, I2 = 12, I3 = -1234;
+    LaolObj c1 = new C(I1);
+    auto i1 = c1("v1") + I2;
+    ASSERT_TRUE(i1.toInt() == I1+I2);
+    c1("v1") = I3;
+    ASSERT_TRUE(I3 == c1("v1").toInt());
+    cout << "test5: END" << endl;
+}
+
 int main(int argc, char** argv) {
-    //test1();
-    //test2();
-    test3();
+    test1();
+    test2();
+    //test3();
     //test3b();
     //test4();
+    test5();
     cout << "END: all tests" << endl;
     return (EXIT_SUCCESS);
 }
