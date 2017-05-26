@@ -321,7 +321,7 @@ namespace laol {
 
         Ref
         LaolObj::operator()(const string& methodNm, const LaolObj& args, bool mustFind) const {
-            LaolObj rval;
+            Ref rval;
             Laol* pObj = asTPLaol();
             //first try subclass
             TPMethod pMethod = pObj->getFunc(methodNm);
@@ -370,7 +370,7 @@ namespace laol {
         //todo: change to virtual/override of LaolObj operatpr=(...) ???
 
         const Ref& Ref::operator=(const LaolObj& rhs) {
-            m_ref = rhs;
+            m_ref = unconst(rhs); //assign reference not copy
             this->LaolObj::operator=(rhs);
             return *this;
         }

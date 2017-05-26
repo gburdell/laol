@@ -323,6 +323,8 @@ namespace laol {
         class Ref : public LaolObj {
         public:
 
+            Ref() : LaolObj(NULLOBJ), m_ref(unconst(NULLOBJ)) {}
+            
             Ref(const LaolObj& r) : LaolObj(r), m_ref(unconst(r)) {
             }
 
