@@ -155,6 +155,7 @@ namespace laol {
             }
             //else, build up ArrayOfRef
             ArrayOfRef *prefs = new ArrayOfRef();
+#ifdef FIXME
             for (const LaolObj& sub : args) {
                 if (sub.isInt()) {
                     *prefs << m_ar[actualIndex(sub.toLongInt())];
@@ -167,6 +168,7 @@ namespace laol {
                     ASSERT_NEVER; //todo: error
                 }
             }
+#endif
             return LaolObj(prefs);
         }
 

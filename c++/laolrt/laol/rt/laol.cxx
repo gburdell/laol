@@ -85,7 +85,7 @@ namespace laol {
         LaolObj::LaolObj(const LaolObj& rhs) : m_obj(rhs.m_obj) {
         }
 
-        LaolObj::LaolObj(const Ref& r) : LaolObj(static_cast<const LaolObj&> (r)) {
+        LaolObj::LaolObj(const Ref& r) : LaolObj(static_cast<const LaolObj&> (*(r.m_ref))) {
         }
 
         const LaolObj&
@@ -324,6 +324,7 @@ namespace laol {
             Ref rval;
             Laol* pObj = asTPLaol();
             //first try subclass
+            FIXME!
             TPMethod pMethod = pObj->getFunc(methodNm);
             if (nullptr != pMethod) {
                 //then try here
@@ -371,7 +372,6 @@ namespace laol {
 
         const Ref& Ref::operator=(const LaolObj& rhs) {
             m_ref->LaolObj::operator=(rhs);
-            this->LaolObj::operator=(rhs);
             return *this;
         }
 
@@ -382,7 +382,6 @@ namespace laol {
                 } else {
                     m_ref = r.m_ref;
                 }
-                this->LaolObj::operator=(*(r.m_ref));
             }
             return *this;
         }
@@ -390,7 +389,7 @@ namespace laol {
         Ref
         Ref::operator[](const LaolObj& subscript) const {
             if (!m_ref->isA<ArrayOfRef>()) {
-                return this->LaolObj::operator[](subscript);
+                return m_ref->LaolObj::operator[](subscript);
             } else {
                 ASSERT_NEVER;
                 //todo: we dont need this???

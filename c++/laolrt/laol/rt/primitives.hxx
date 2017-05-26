@@ -339,36 +339,6 @@ namespace laol {
         DEFINE_FLOATS(Double, double);
 #undef DEFINE_FLOATS
 
-        // For 'builtin/Ref op LaolObj'
-#define BINARY_OP(_op) \
-        inline LaolObj operator _op(const Ref& a, const LaolObj& b) { \
-            return a.operator _op(b); \
-        } \
-        template<typename T> \
-        inline LaolObj operator _op(T a, const LaolObj& b) { \
-            return LaolObj(a).operator _op(b); \
-        }
-
-        BINARY_OP(+)
-        BINARY_OP(-)
-        BINARY_OP(*)
-        BINARY_OP( /)
-        BINARY_OP( %)
-        BINARY_OP( <<)
-        BINARY_OP(>>)
-        BINARY_OP( ==)
-        BINARY_OP( !=)
-        BINARY_OP(<)
-        BINARY_OP(>)
-        BINARY_OP( ||)
-        BINARY_OP(&&)
-        BINARY_OP(&)
-        BINARY_OP( |)
-        BINARY_OP(^)
-
-#undef BINARY_OP
-
-
         template<typename GETFN>
         LaolObj
         INumber::getIntVal(const LaolObj& op, const EType type, GETFN rcvr) {

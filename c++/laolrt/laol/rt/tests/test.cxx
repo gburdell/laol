@@ -80,33 +80,33 @@ void test2() {
         LaolObj ix0 = ar1[0];
         const int I1 = 777, I2 = 45;
         ar1[0] = I1;
-        ASSERT_TRUE(ar1[0].toLongInt() == I1);
+        ASSERT_TRUE(ar1[0].toObj().toLongInt() == I1);
         i2 = ar1[0] + I2;
         ASSERT_TRUE(i2.toLongInt() == I1 + I2);
         ar1[0] = ar1[1];
-        ASSERT_TRUE(ar1[0].toDouble() == F1);
+        ASSERT_TRUE(ar1[0].toObj().toDouble() == F1);
     }
     {
         //2d arrays
         const int I1 = 1, I2 = 1234, I3 = 7, I4 = 765;
         const auto V1 = toV(9, 8, I3);
         LaolObj ar1 = new Array(toV(I1, V1, 3, 4));
-        auto ix1 = ar1[0];
+        LaolObj ix1 = ar1[0];
         ar1[0] = I2;
         ASSERT_TRUE(ix1.toLongInt() == I1);
-        ASSERT_TRUE(ar1[0].toLongInt() == I2);
-        auto ix2 = ar1[-3];
-        auto n = ix2("length");
+        ASSERT_TRUE(ar1[0].toObj().toLongInt() == I2);
+        LaolObj ix2 = ar1[-3];
+        LaolObj n = ix2("length");
         ASSERT_TRUE(n.toSizet() == 3);
         ASSERT_TRUE((V1 == ix2).toBool());
-        auto ix3 = ix2[-2];
+        LaolObj ix3 = ix2[-2];
         ASSERT_TRUE(ix3.toLongInt() == 8);
-        ASSERT_TRUE(ar1[-3][-2].toLongInt() == 8);
-        auto a11 = ar1[1][-1];
+        ASSERT_TRUE(ar1[-3][-2].toObj().toLongInt() == 8);
+        LaolObj a11 = ar1[1][-1];
         ASSERT_TRUE(a11.toLongInt() == I3);
-        auto v1 = ar1[1][-1] = I4;
+        LaolObj v1 = ar1[1][-1] = I4;
         ASSERT_TRUE(a11.toLongInt() == I3);
-        ASSERT_TRUE(ar1[1][-1].toLongInt() == I4);
+        ASSERT_TRUE(ar1[1][-1].toObj().toLongInt() == I4);
     }
     cout << "test2: END" << endl;
 }
@@ -189,7 +189,7 @@ void test5() {
     auto i1 = c1("v1") + I2;
     ASSERT_TRUE(i1.toInt() == I1+I2);
     c1("v1") = I3;
-    ASSERT_TRUE(I3 == c1("v1").toInt());
+    ASSERT_TRUE(I3 == c1("v1").toObj().toInt());
     cout << "test5: END" << endl;
 }
 
@@ -197,8 +197,8 @@ int main(int argc, char** argv) {
     test1();
     test2();
     test3();
-    //test3b();
-    //test4();
+        //test3b();
+        //test4();
     test5();
     cout << "END: all tests" << endl;
     return (EXIT_SUCCESS);

@@ -320,19 +320,24 @@ namespace laol {
 
         // Look like LaolRef, so can do foo[i].method...
 
-        class Ref : public LaolObj {
+        class Ref {
         public:
 
-            Ref() : LaolObj(NULLOBJ), m_ref(nullptr) {}
-            
-            Ref(const LaolObj& r) : LaolObj(r), m_ref(unconst(&r)) {
+            Ref() : m_ref(nullptr) {
+            }
+
+            Ref(const LaolObj& r) : m_ref(unconst(&r)) {
+            }
+
+            const LaolObj& toObj() const {
+                return *m_ref;
             }
 
             const Ref& operator=(const LaolObj& rhs);
 
             const Ref& operator=(const Ref& r);
 
-            Ref operator[](const LaolObj& subscript) const override;
+            Ref operator[](const LaolObj& subscript) const;
 
             Ref(Ref& r) = default;
 
@@ -494,7 +499,38 @@ namespace laol {
 
             static TPMethod getFunc(const METHOD_BY_NAME& methodByName, const string& methodNm);
         };
+        
+        // For 'builtin/Ref op LaolObj'
+#define BINARY_OP(_op) \
+        inline LaolObj operator _op(const Ref& a, const Ref& b) { \
+            return LaolObj(a).operator _op(b); \
+        } \
+        template<typename T> \
+        inline LaolObj operator _op(T a, const LaolObj& b) { \
+            return LaolObj(a).operator _op(b); \
+        }
+
+        BINARY_OP(+)
+        BINARY_OP(-)
+        BINARY_OP(*)
+        BINARY_OP( /)
+        BINARY_OP( %)
+        BINARY_OP( <<)
+        BINARY_OP(>>)
+        BINARY_OP( ==)
+        BINARY_OP( !=)
+        BINARY_OP(<)
+        BINARY_OP(>)
+        BINARY_OP( ||)
+        BINARY_OP(&&)
+        BINARY_OP(&)
+        BINARY_OP( |)
+        BINARY_OP(^)
+
+#undef BINARY_OP
+
     }
+
 }
 
 namespace std {

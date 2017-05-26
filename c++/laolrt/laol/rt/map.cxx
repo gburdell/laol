@@ -60,16 +60,16 @@ namespace laol {
         LaolObj
         Map::toString() const {
             std::ostringstream oss;
-            oss << "{";
+            oss.operator << ("{");
             bool doComma = false;
             for (auto& ele : m_map) {
                 if (doComma) {
-                    oss << ", ";
+                    oss.operator << (", ");
                 }
                 oss << ele.first.toQString() << ": " << ele.second.toQString();
                 doComma = true;
             }
-            oss << "}";
+            oss.operator << ("}");
             return new String(oss.str());
         }
 
