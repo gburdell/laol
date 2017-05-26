@@ -71,7 +71,7 @@ void test1() {
 }
 
 void test2() {
-    cout << "test1: (Array) BEGIN" << endl;
+    cout << "test2: (Array) BEGIN" << endl;
     {
         LaolObj i1 = 987654321;
         LaolObj ar1 = new Array();
@@ -108,7 +108,7 @@ void test2() {
         ASSERT_TRUE(a11.toLongInt() == I3);
         ASSERT_TRUE(ar1[1][-1].toLongInt() == I4);
     }
-    cout << "test1: END" << endl;
+    cout << "test2: END" << endl;
 }
 
 void test3(const int NN = 10000) {
@@ -196,7 +196,7 @@ void test5() {
 int main(int argc, char** argv) {
     test1();
     test2();
-    //test3();
+    test3();
     //test3b();
     //test4();
     test5();

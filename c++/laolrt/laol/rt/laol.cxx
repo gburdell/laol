@@ -85,7 +85,7 @@ namespace laol {
         LaolObj::LaolObj(const LaolObj& rhs) : m_obj(rhs.m_obj) {
         }
 
-        LaolObj::LaolObj(const Ref& r) : LaolObj(r.m_ref) {
+        LaolObj::LaolObj(const Ref& r) : LaolObj(static_cast<const LaolObj&> (r)) {
         }
 
         const LaolObj&
@@ -370,25 +370,31 @@ namespace laol {
         //todo: change to virtual/override of LaolObj operatpr=(...) ???
 
         const Ref& Ref::operator=(const LaolObj& rhs) {
-            m_ref = unconst(rhs); //assign reference not copy
+            m_ref->LaolObj::operator=(rhs);
             this->LaolObj::operator=(rhs);
             return *this;
         }
 
         const Ref& Ref::operator=(const Ref& r) {
-            m_ref = r.m_ref;
-            this->LaolObj::operator=(m_ref);
+            if (m_ref != r.m_ref) {
+                if (nullptr != m_ref) {
+                    m_ref->LaolObj::operator=(*(r.m_ref));
+                } else {
+                    m_ref = r.m_ref;
+                }
+                this->LaolObj::operator=(*(r.m_ref));
+            }
             return *this;
         }
 
         Ref
         Ref::operator[](const LaolObj& subscript) const {
-            if (!m_ref.isA<ArrayOfRef>()) {
+            if (!m_ref->isA<ArrayOfRef>()) {
                 return this->LaolObj::operator[](subscript);
             } else {
                 ASSERT_NEVER;
                 //todo: we dont need this???
-                const ArrayOfRef& refs = m_ref.toType<ArrayOfRef>();
+                const ArrayOfRef& refs = m_ref->toType<ArrayOfRef>();
                 return refs.subscript(*this, subscript);
             }
         }

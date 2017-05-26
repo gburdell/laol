@@ -323,25 +323,24 @@ namespace laol {
         class Ref : public LaolObj {
         public:
 
-            Ref() : LaolObj(NULLOBJ), m_ref(unconst(NULLOBJ)) {}
+            Ref() : LaolObj(NULLOBJ), m_ref(nullptr) {}
             
-            Ref(const LaolObj& r) : LaolObj(r), m_ref(unconst(r)) {
+            Ref(const LaolObj& r) : LaolObj(r), m_ref(unconst(&r)) {
             }
 
             const Ref& operator=(const LaolObj& rhs);
 
+            const Ref& operator=(const Ref& r);
+
             Ref operator[](const LaolObj& subscript) const override;
 
-            Ref(Ref& r) : LaolObj(r.m_ref), m_ref(r.m_ref) {
-            }
-
-            const Ref& operator=(const Ref& r);
+            Ref(Ref& r) = default;
 
             // Allow move constructor to easily pass back return vals
             Ref(Ref&& from) = default;
 
         private:
-            LaolObj& m_ref;
+            LaolObj* m_ref;
 
             friend class LaolObj;
         };
