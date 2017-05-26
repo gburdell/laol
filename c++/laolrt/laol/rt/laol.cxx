@@ -324,7 +324,7 @@ namespace laol {
             Ref rval;
             Laol* pObj = asTPLaol();
             //first try subclass
-            FIXME!
+            //FIXME!
             TPMethod pMethod = pObj->getFunc(methodNm);
             if (nullptr != pMethod) {
                 //then try here
