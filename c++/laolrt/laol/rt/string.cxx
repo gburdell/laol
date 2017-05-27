@@ -35,7 +35,7 @@ namespace laol {
         /*static*/
         string
         String::toStdString(const LaolObj& from, bool quote) {
-            LaolObj z = from("toString");
+            LaolObj z = from.toString();
             if (z.isNull()) {
                 return "";
             }
@@ -72,20 +72,19 @@ namespace laol {
 
         Ref
         String::length(const LaolObj&, const LaolObj&) const {
-            auto n = length();
-            return LaolObj(n);
+            return length();
         }
 
         Ref
         String::empty_PRED(const LaolObj&, const LaolObj&) const {
-            return LaolObj(m_str.empty());
+            return m_str.empty();
         }
 
         Ref
         String::reverse(const LaolObj&, const LaolObj&) const {
             auto p = new String(m_str);
             std::reverse(std::begin(p->m_str), std::end(p->m_str));
-            return LaolObj(p);
+            return p;
         }
 
         Ref
@@ -97,7 +96,7 @@ namespace laol {
         Ref
         String::append(const LaolObj& self, const LaolObj& args) const {
             string r = m_str + toStdString(args);
-            return LaolObj(new String(r));
+            return new String(r);
         }
 
         Ref
@@ -109,7 +108,7 @@ namespace laol {
         Ref
         String::prepend(const LaolObj& self, const LaolObj& args) const {
             string r = toStdString(args) + m_str;
-            return LaolObj(new String(r));
+            return new String(r);
         }
 
         Ref
@@ -128,7 +127,7 @@ namespace laol {
         Ref
         String::at(const LaolObj&, const LaolObj& args) const {
             auto c = m_str.at(actualIndex(args.toLongInt(), m_str.size()));
-            return LaolObj(c);
+            return c;
         }
 
         Ref

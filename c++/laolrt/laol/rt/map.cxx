@@ -75,7 +75,7 @@ namespace laol {
 
         Ref
         Map::empty_PRED(const LaolObj& self, const LaolObj& args) const {
-            return LaolObj(m_map.empty());
+            return m_map.empty();
         }
 
         Ref
@@ -95,7 +95,7 @@ namespace laol {
 
         Ref
         Map::key_PRED(const LaolObj& self, const LaolObj& args) const {
-            return LaolObj((m_map.end() != m_map.find(args)));
+            return (m_map.end() != m_map.find(args));
         }
 
         Ref

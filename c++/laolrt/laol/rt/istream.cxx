@@ -98,12 +98,12 @@ namespace laol {
 
         Ref
         FileInputStream::empty_PRED(const LaolObj& self, const LaolObj& args) const {
-            return LaolObj(m_ifs.eof());
+            return m_ifs.eof();
         }
 
         Ref
         FileInputStream::fail_PRED(const LaolObj& self, const LaolObj& args) const {
-            return LaolObj(m_ifs.fail());
+            return m_ifs.fail();
         }
 
         Ref

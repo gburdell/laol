@@ -65,12 +65,12 @@ namespace laol {
 
         Ref
         IArray::empty_PRED(const LaolObj& self, const LaolObj& args) const {
-            return LaolObj(isEmpty());
+            return isEmpty();
         }
 
         Ref
         IArray::length(const LaolObj& self, const LaolObj& args) const {
-            return LaolObj(xlength());
+            return xlength();
         }
 
         size_t

@@ -77,17 +77,17 @@ namespace laol {
             } else {
                 snprintf(buf, sizeof (buf), "%02d:%02d:%02d", hh, mm, ss);
             }
-            return LaolObj(new String(buf));
+            return new String(buf);
         }
 
         Ref
         Timer::time(const LaolObj&, const LaolObj&) const {
-            return LaolObj(std::time(0));
+            return std::time(0);
         }
 
         Ref
         Timer::elapsed(const LaolObj&, const LaolObj&) const {
-            return LaolObj(elapsed());
+            return elapsed();
         }
 
         const Laol::METHOD_BY_NAME&

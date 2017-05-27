@@ -185,7 +185,7 @@ namespace laol {
 
         Ref
         FileOutputStream::fail_PRED(const LaolObj&, const LaolObj&) const {
-            return LaolObj(m_ofs.fail());
+            return m_ofs.fail();
         }
 
         Ref

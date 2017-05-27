@@ -146,11 +146,8 @@ namespace laol {
 
             LaolObj operator=(const LaolObj& rhs);
 
-            //The move constructor is used.
-            //We'll use the default.  But, not quite sure what
-            //it does w/ the reference counted stuff...
-            //Might be safer to just do copy...
-            LaolObj(LaolObj&&) = default;
+            //vector likes to use this...
+            LaolObj(LaolObj&& r) = default;
 
             bool isNull() const {
                 return m_obj.isNull();
@@ -302,6 +299,7 @@ namespace laol {
             string toStdString() const;
 
             void decrRefCnt();
+            void incrRefCnt();
 
             friend class Laol; //to optimize operator=()
             friend struct LaolObjKey;
@@ -323,11 +321,23 @@ namespace laol {
         class Ref {
         public:
 
-            Ref() : m_ref(nullptr) {
+            Ref() : m_ref(nullptr), m_ownsObject(false) {
             }
 
-            Ref(const LaolObj& r) : m_ref(unconst(&r)) {
+            // Constructor to create reference of actual/rvalue.
+            // Make sure to not reference a stacked/temporary object.
+            Ref(const LaolObj& r);
+
+            Ref(const Ref& r);
+
+            // Constructor for primitive types.
+
+            template<typename T>
+            Ref(T rhs) : m_ownsObject(true), m_ref(new LaolObj(rhs)) {
             }
+
+            // Allow move constructor to easily pass back return vals
+            Ref(Ref&& from);
 
             const LaolObj& toObj() const {
                 return *m_ref;
@@ -339,13 +349,22 @@ namespace laol {
 
             Ref operator[](const LaolObj& subscript) const;
 
-            Ref(Ref& r) = default;
+            Ref operator()(const string& methodNm, const LaolObj& args) const {
+                return m_ref->operator()(methodNm, args);
+            }
 
-            // Allow move constructor to easily pass back return vals
-            Ref(Ref&& from) = default;
+            Ref operator()(const string& methodNm) const {
+                return m_ref->operator()(methodNm);
+            }
+
+            // No subclass
+            virtual ~Ref() final;
 
         private:
             LaolObj* m_ref;
+            bool m_ownsObject;
+
+            void cleanup();
 
             friend class LaolObj;
         };
@@ -499,7 +518,7 @@ namespace laol {
 
             static TPMethod getFunc(const METHOD_BY_NAME& methodByName, const string& methodNm);
         };
-        
+
         // For 'builtin/Ref op LaolObj'
 #define BINARY_OP(_op) \
         inline LaolObj operator _op(const Ref& a, const Ref& b) { \

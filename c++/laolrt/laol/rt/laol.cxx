@@ -108,6 +108,11 @@ namespace laol {
             unconst(this)->asTPRcLaol()->decr();
         }
 
+        void
+        LaolObj::incrRefCnt() {
+            unconst(this)->asTPRcLaol()->incr();
+        }
+
         bool
         LaolObj::isBool() const {
             return this->isA<Bool>();
@@ -321,21 +326,14 @@ namespace laol {
 
         Ref
         LaolObj::operator()(const string& methodNm, const LaolObj& args, bool mustFind) const {
-            Ref rval;
             Laol* pObj = asTPLaol();
-            //first try subclass
-            FIXME!
             TPMethod pMethod = pObj->getFunc(methodNm);
             if (nullptr != pMethod) {
-                //then try here
-                pMethod = pObj->Laol::getFunc(methodNm);
-            }
-            if (nullptr != pMethod) {
-                rval = (pObj->*pMethod)(*this, args);
+                return (pObj->*pMethod)(*this, args);
             } else if (mustFind) {
                 ASSERT_NEVER; //not implemented
             }
-            return rval;
+            return NULLOBJ;
         }
 
         Ref
@@ -368,7 +366,18 @@ namespace laol {
             return asTPLaol()->toString();
         }
 
-        //todo: change to virtual/override of LaolObj operatpr=(...) ???
+        Ref::Ref(const LaolObj& r) : m_ref(unconst(&r)), m_ownsObject(false) {
+        }
+
+        Ref::Ref(const Ref& r) : m_ref(r.m_ref), m_ownsObject(false) {
+            //mark reference
+            m_ref->incrRefCnt();
+        }
+
+        Ref::Ref(Ref&& from) {
+            //from whence we came?
+            ASSERT_NEVER;
+        }
 
         const Ref& Ref::operator=(const LaolObj& rhs) {
             m_ref->LaolObj::operator=(rhs);
@@ -378,8 +387,10 @@ namespace laol {
         const Ref& Ref::operator=(const Ref& r) {
             if (m_ref != r.m_ref) {
                 if (nullptr != m_ref) {
+                    //ASSERT_TRUE(!r.m_ownsObject); //???
                     m_ref->LaolObj::operator=(*(r.m_ref));
                 } else {
+                    cleanup();
                     m_ref = r.m_ref;
                 }
             }
@@ -396,6 +407,20 @@ namespace laol {
                 const ArrayOfRef& refs = m_ref->toType<ArrayOfRef>();
                 return refs.subscript(*this, subscript);
             }
+        }
+
+        void
+        Ref::cleanup() {
+            if (m_ownsObject) {
+                // 1 count for our original here
+                if (1 == m_ref->asTPRcLaol()->getRefCnt()) {
+                    delete m_ref;
+                }
+            }
+        }
+
+        Ref::~Ref() {
+            cleanup();
         }
 
         /*static*/
@@ -483,6 +508,7 @@ namespace laol {
         /*static*/
         Laol::TPMethod
         Laol::getFunc(const METHOD_BY_NAME& methodByName, const string & methodNm) {
+            ASSERT_TRUE(!methodByName.empty());
             auto search = methodByName.find(methodNm);
             auto rval = (search != methodByName.end()) ? search->second : nullptr;
 
