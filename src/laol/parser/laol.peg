@@ -96,6 +96,16 @@ sass_content <-
 /   STRING
 /   !RCURLY any_not_eof
 
+cxx_inline <-
+    "%cxx{" sp 
+        cxx_content*
+    RCURLY
+
+cxx_content <-
+    LCURLY (!RCURLY cxx_content)* RCURLY
+/   STRING
+/   !RCURLY any_not_eof
+
 inline_eval <- "#{" sp expression RCURLY
 
 array_primary <-
@@ -271,7 +281,8 @@ import_statements <- K_IMPORT scoped_name (COMMA scoped_name)*
 file_item <- statement
 
 statement <- 
-    case_statement
+	cxx_inline
+/   case_statement
 /   if_statement
 /   while_statement
 /   until_statement
