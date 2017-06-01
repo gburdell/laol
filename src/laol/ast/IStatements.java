@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2016 gburdell.
+ * Copyright 2017 kpfalzer.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -22,26 +22,13 @@
  * THE SOFTWARE.
  */
 package laol.ast;
-import apfe.runtime.Sequence;
-import java.util.Collections;
-import java.util.LinkedList;
+
 import java.util.List;
 
 /**
  *
- * @author gburdell
+ * @author kpfalzer
  */
-public class ImportStatements extends Item {
-    public ImportStatements(final laol.parser.apfe.ImportStatements decl) {
-        super(decl);
-        final Sequence seq = asSequence();
-        m_imports.add(createItem(seq, 1));
-        m_imports.addAll(zeroOrMore(asRepetition(seq, 2), 1));
-    }
-
-    public List<ImportName> getImports() {
-        return Collections.unmodifiableList(m_imports);
-    }
-    
-    private final List<ImportName> m_imports = new LinkedList<>();
+public interface IStatements {
+    public List<Statement> getStatements();
 }

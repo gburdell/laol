@@ -276,7 +276,11 @@ contents <-
 
 package_statement <- K_PACKAGE scoped_name
 
-import_statements <- K_IMPORT scoped_name (COMMA scoped_name)*
+import_statements <- K_IMPORT import_name (COMMA import_name)*
+
+import_name <- 
+	'<' scoped_name '>'
+/	scoped_name
 
 file_item <- statement
 

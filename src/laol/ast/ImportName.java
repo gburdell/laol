@@ -22,26 +22,34 @@
  * THE SOFTWARE.
  */
 package laol.ast;
-import apfe.runtime.Sequence;
-import java.util.Collections;
-import java.util.LinkedList;
-import java.util.List;
 
 /**
  *
  * @author gburdell
  */
-public class ImportStatements extends Item {
-    public ImportStatements(final laol.parser.apfe.ImportStatements decl) {
+public class ImportName extends Item {
+    public ImportName(final laol.parser.apfe.ImportName decl) {
         super(decl);
-        final Sequence seq = asSequence();
-        m_imports.add(createItem(seq, 1));
-        m_imports.addAll(zeroOrMore(asRepetition(seq, 2), 1));
-    }
-
-    public List<ImportName> getImports() {
-        return Collections.unmodifiableList(m_imports);
+        m_isSystem = (0 == asPrioritizedChoice().whichAccepted());
+        if (m_isSystem) {
+            m_name = createItem(asSequence(asPrioritizedChoice().getAccepted()), 1);
+        } else {
+            m_name = createItem(asPrioritizedChoice().getAccepted());
+        }
     }
     
-    private final List<ImportName> m_imports = new LinkedList<>();
+    public ScopedName getScopedName() {
+        return m_name;
+    }
+    
+    /**
+     * Return true if name was specified as '<name>' (in brackets).
+     * @return true if system name.
+     */
+    public boolean isSystemName() {
+        return m_isSystem;
+    }
+    
+    private final ScopedName    m_name;
+    private final boolean       m_isSystem;
 }

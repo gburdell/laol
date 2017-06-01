@@ -26,15 +26,10 @@ package laol.generate.cxx;
 import gblib.Pair;
 import java.io.FileNotFoundException;
 import java.io.PrintStream;
-import java.util.Collection;
-import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Objects;
 import static java.util.Objects.nonNull;
 import java.util.stream.Collectors;
-import laol.ast.AccessModifier;
-import laol.ast.ClassExtends;
 import laol.ast.MethodDeclaration;
 import laol.ast.MethodParamDeclEle;
 import laol.ast.MethodType;
@@ -65,15 +60,13 @@ public class ClassDeclaration {
     public static final String METHOD_SIGNATURE = "(const LaolObj& self, const LaolObj& args) const";
 
     private ClassDeclaration memberAccessors() {
-        if (! m_parmNames.isEmpty()) {
+        if (!m_parmNames.isEmpty()) {
             hxx().println("\n//accessors");
         }
         m_parmNames.forEach(parm -> {
             if (parm.v2) {
-                hxx().format("LaolObj %s %s final {return m_%s;}\n", parm.v1, METHOD_SIGNATURE, parm.v1);
-                m_methods.add(parm.v1);
-                //todo: setter: foo("member") = newVal
-                //see number1.cpp.  need method "member=" defined.
+                hxx().format("Ref %s %s final {return m_%s;}\n", parm.v1, METHOD_SIGNATURE, parm.v1);
+                m_helper.getMethods().add(parm.v1);
             }
         });
         return this;
@@ -96,23 +89,7 @@ public class ClassDeclaration {
     }
 
     private ClassDeclaration hereMethods() {
-        m_decl.getBody().getStatements().forEach(statement -> {
-            if (statement.getStmt() instanceof laol.ast.MethodDeclaration) {
-                final MethodDeclaration decl = MethodDeclaration.class.cast(statement.getStmt());
-                final MethodType type = decl.getType();
-                final String name = decl.getName().toString();//asScopedName().toString();
-                if (type.isDefaultDef() || type.isDef()) {
-                    m_methods.add(name);
-                }
-                hxx().format("virtual LaolObj %s %s", name, METHOD_SIGNATURE);
-                if (type.isOverrideDef()) {
-                    hxx().print(" override");
-                } else if (decl.isAbstract()) {
-                    hxx().print(" = 0");
-                }
-                hxx().println(";");
-            }
-        });
+        m_helper.hereMethods();
         return this;
     }
 
@@ -128,7 +105,7 @@ public class ClassDeclaration {
     }
 
     private ClassDeclaration close() {
-        hxx().println("}; //" + m_clsName);
+        m_helper.close(m_clsName);
         return this;
     }
 
@@ -138,26 +115,7 @@ public class ClassDeclaration {
      * @return this.
      */
     private ClassDeclaration methodByName() {
-        hxx().println("protected:\n"
-                + "virtual const METHOD_BY_NAME& getMethodByName() override;\n"
-                + "private:\n"
-                + "static METHOD_BY_NAME stMethodByName;");
-        cxx()
-                .format("//static\nLaol::METHOD_BY_NAME %s::stMethodByName;\n", m_clsName)
-                .format("const Laol::METHOD_BY_NAME&\n%s::getMethodByName() {\n", m_clsName)
-                .format("if (stMethodByName.empty()) {\nstMethodByName = Laol::join(stMethodByName,\n")
-                .format("Laol::getMethodByName()");
-        if (nonNull(m_decl.getExtends())) {
-            m_decl.getExtends().getAll().forEach(name -> {
-                cxx().format(",\n%s::getMethodbyName()", name.toString());
-            });
-        }
-        cxx().println(",\nMETHOD_BY_NAME({");
-        cxx().print(String.join(",\n", m_methods.stream().map(ele -> {
-            return String.format("{\"%s\", reinterpret_cast<TPMethod> (&%s::%s)}",
-                    ele, m_clsName, ele);
-        }).collect(Collectors.toList())));
-        cxx().println("}));}\nreturn stMethodByName;\n}");
+        m_helper.methodByName(m_clsName, nonNull(m_decl.getExtends()) ? m_decl.getExtends().getAll() : null);
         return this;
     }
 
@@ -165,6 +123,7 @@ public class ClassDeclaration {
         m_decl = decl;
         m_ctx = ctx;
         m_clsName = m_decl.getIdent().toString();
+        m_helper = new ClassInterfaceDeclaration(m_decl.getBody(), hxx(), cxx());
     }
 
     private PrintStream hxx() {
@@ -178,11 +137,8 @@ public class ClassDeclaration {
     private final laol.ast.ClassDeclaration m_decl;
     private final Context m_ctx;
     private final String m_clsName;
+    private final ClassInterfaceDeclaration m_helper;
 
-    /**
-     * Methods defined here or declared/abstract.
-     */
-    private final List<String> m_methods = new LinkedList<>();
     /**
      * Constructor parameters w/ member attribute.
      */

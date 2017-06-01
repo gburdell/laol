@@ -29,7 +29,7 @@ import java.util.List;
  *
  * @author gburdell
  */
-public class ClassBody extends Item {
+public class ClassBody extends Item implements IStatements {
     public ClassBody(final laol.parser.apfe.ClassBody decl) {
         super(decl);
         m_base = oneOrNone(0);
@@ -40,6 +40,7 @@ public class ClassBody extends Item {
         return m_base;
     }
     
+    @Override
     public List<Statement> getStatements() {
         return Collections.unmodifiableList(isNonNull(m_stmts) ? m_stmts : Collections.emptyList());
     }

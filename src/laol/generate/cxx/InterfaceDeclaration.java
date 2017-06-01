@@ -23,20 +23,80 @@
  */
 package laol.generate.cxx;
 
+import gblib.Pair;
 import java.io.FileNotFoundException;
 import java.io.PrintStream;
 import java.util.Collection;
+import java.util.LinkedList;
+import java.util.List;
+import static java.util.Objects.nonNull;
+import laol.ast.MethodDeclaration;
+import laol.ast.MethodType;
 import laol.generate.Util;
+import static laol.generate.cxx.ClassDeclaration.METHOD_SIGNATURE;
 
 /**
  *
  * @author gburdell
  */
-public class InterfaceDeclaration  {
+public class InterfaceDeclaration {
 
     public static void process(final laol.ast.InterfaceDeclaration item, final Context ctx) throws FileNotFoundException, Util.EarlyTermination {
-        //todo: final ClassDeclaration cdecl = new ClassDeclaration(item, ctx);
-        //todo: cdecl.process();
+        final InterfaceDeclaration idecl = new InterfaceDeclaration(item, ctx);
+        idecl.process();
     }
 
+    public InterfaceDeclaration(final laol.ast.InterfaceDeclaration decl, final Context ctx) {
+        m_decl = decl;
+        m_ctx = ctx;
+        m_clsName = m_decl.getIdent().toString();
+        m_helper = new ClassInterfaceDeclaration(m_decl.getBody(), hxx(), cxx());
+    }
+
+    private InterfaceDeclaration declare() {
+        StringBuilder ext = new StringBuilder(": public virtual Laol");
+        if (nonNull(m_decl.getImplements())) {
+            m_decl.getImplements().getNames().forEach(name -> {
+                ext.append(", ").append(name.toString());
+            });
+        }
+        hxx().format("class %s %s {\npublic:\n", m_clsName, ext);
+        return this;
+    }
+
+    private InterfaceDeclaration hereMethods() {
+        m_helper.hereMethods();
+        return this;
+    }
+
+    private InterfaceDeclaration methodByName() {
+        m_helper.methodByName(m_clsName, nonNull(m_decl.getImplements()) ? m_decl.getImplements().getNames() : null);
+        return this;
+    }
+
+    private InterfaceDeclaration close() {
+        m_helper.close(m_clsName);
+        return this;
+    }
+
+    private PrintStream hxx() {
+        return m_ctx.hxx();
+    }
+
+    private PrintStream cxx() {
+        return m_ctx.cxx();
+    }
+
+    private void process() {
+        declare()
+                .hereMethods()
+                .methodByName()
+                //todo
+                .close();
+    }
+
+    private final laol.ast.InterfaceDeclaration m_decl;
+    private final Context m_ctx;
+    private final String m_clsName;
+    private final ClassInterfaceDeclaration m_helper;
 }

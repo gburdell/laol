@@ -56,5 +56,6 @@ public class ScopedName extends Item {
         return (1 == m_names.size()) && !m_names.get(0).hasSuffix();
     }
         
-    private List<Ident> m_names = new LinkedList<>();
+    private final List<Ident> m_names = new LinkedList<>();
+    public static final List<ScopedName> EMPTY_LIST = Collections.EMPTY_LIST;
 }

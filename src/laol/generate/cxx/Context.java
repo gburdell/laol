@@ -40,7 +40,7 @@ import java.util.stream.Collectors;
 import laol.ast.Contents;
 import laol.ast.Ident;
 import laol.ast.Item;
-import laol.ast.ScopedName;
+import laol.ast.ImportName;
 import laol.generate.Util;
 import static laol.generate.cxx.Util.getOutputDir;
 import static laol.generate.cxx.Util.toPath;
@@ -104,23 +104,35 @@ public class Context implements AutoCloseable {
             final String s = getHxxDefine();
             m_hxx.format("#ifndef %s\n#define %s\n", s, s);
         }
-        getContents().getImports().forEach((ScopedName istmt) -> {
-            m_hxx.format("#include \"%s.hxx\"\n", toPath(istmt));
-        });
-        //convert import to namespace by dropping last
-        getContents().getImports().forEach((ScopedName istmt) -> {
-            final int n = istmt.getNames().size();
-            String nsu = String.join("::", 
-                    istmt
-                    .getNames()
-                    .subList(0, n - 1)
-                    .stream()
-                    .map(e->{return e.toString();})
-                    .collect(Collectors.toList()));
-            if (!nsu.isEmpty()) {
-                m_hxx.format("namespace using %s ;\n", nsu);
+        getContents().getImports().forEach((ImportName istmt) -> {
+            char c1, c2;
+            if (istmt.isSystemName()) {
+                c1 = '<';
+                c2 = '>';
+            } else {
+                c1 = c2 = '"';
             }
+            m_hxx.format("#include %c%s.hxx%c\n", c1, toPath(istmt.getScopedName()), c2);
         });
+        //convert non-system import to namespace by dropping last
+        getContents().getImports().stream()
+                .filter((ImportName istmt) -> !istmt.isSystemName())
+                .forEach((ImportName istmt) -> {
+                    final int n = istmt.getScopedName().getNames().size();
+                    String nsu = String.join("::",
+                            istmt
+                                    .getScopedName()
+                                    .getNames()
+                                    .subList(0, n - 1)
+                                    .stream()
+                                    .map(e -> {
+                                        return e.toString();
+                                    })
+                                    .collect(Collectors.toList()));
+                    if (!nsu.isEmpty()) {
+                        m_hxx.format("namespace using %s ;\n", nsu);
+                    }
+                });
         nameSpace(m_hxx, true);
         return this;
     }
@@ -128,7 +140,7 @@ public class Context implements AutoCloseable {
     private String packageNameRepl(final String repl) {
         return getPackageName().replaceAll("::", repl);
     }
-    
+
     private Context initCxx() {
         String ifn = packageNameRepl("/");
         ifn += "/" + m_baseName + ".hxx";
@@ -136,7 +148,7 @@ public class Context implements AutoCloseable {
         nameSpace(m_cxx, true);
         return this;
     }
-    
+
     private Context nameSpace(final PrintStream os, final boolean isOpen) {
         for (String ns : getPackageName().split("::")) {
             os.format(isOpen ? "namespace %s {\n" : "} //%s\n", ns);

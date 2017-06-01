@@ -29,12 +29,13 @@ import java.util.List;
  *
  * @author gburdell
  */
-public class InterfaceBody extends Item {
+public class InterfaceBody extends Item implements IStatements {
     public InterfaceBody(final laol.parser.apfe.InterfaceBody decl) {
         super(decl);
         m_stmts = zeroOrMore(decl.getBaseAccepted());
     }
 
+    @Override
     public List<Statement> getStatements() {
         return isNonNull(m_stmts) 
                 ? Collections.unmodifiableList(m_stmts) 

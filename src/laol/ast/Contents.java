@@ -48,8 +48,8 @@ public class Contents extends Item {
         return Collections.unmodifiableList(m_fileItems);
     }
 
-    public List<ScopedName> getImports() {
-        List<ScopedName> stmts = new LinkedList<>();
+    public List<ImportName> getImports() {
+        List<ImportName> stmts = new LinkedList<>();
         m_imports.forEach((ImportStatements imports)->{stmts.addAll(imports.getImports());});
         return Collections.unmodifiableList(stmts);
     }
