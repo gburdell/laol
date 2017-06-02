@@ -68,6 +68,12 @@ public class InterfaceDeclaration {
         m_helper.hereMethods();
         return this;
     }
+    
+    private InterfaceDeclaration emptyConstructor() {
+        hxx().format("protected:\n%s(){/*empty*/}\nvirtual ~%s() = 0;\n", 
+                m_clsName, m_clsName);
+        return this;
+    }
 
     private InterfaceDeclaration methodByName() {
         m_helper.methodByName(m_clsName, nonNull(m_decl.getImplements()) ? m_decl.getImplements().getNames() : null);
@@ -90,6 +96,7 @@ public class InterfaceDeclaration {
     private void process() {
         declare()
                 .hereMethods()
+                .emptyConstructor()
                 .methodByName()
                 //todo
                 .close();

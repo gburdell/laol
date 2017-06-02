@@ -96,8 +96,9 @@ sass_content <-
 /   STRING
 /   !RCURLY any_not_eof
 
+// Inline into either .cxx or .hxx
 cxx_inline <-
-    "%cxx{" sp 
+    '%' [ch] "xx{" sp 
         cxx_content*
     RCURLY
 
@@ -308,7 +309,8 @@ statement <-
 
 // same as statement: but no inner class/interface
 class_body_statement <-
-    case_statement
+	cxx_inline
+/   case_statement
 /   if_statement
 /   while_statement
 /   until_statement

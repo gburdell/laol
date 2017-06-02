@@ -61,19 +61,28 @@ public class ClassDeclaration {
 
     private ClassDeclaration memberAccessors() {
         if (!m_parmNames.isEmpty()) {
-            hxx().println("\n//accessors");
+            hxx().println("\n//accessors {");
         }
-        m_parmNames.forEach(parm -> {
-            if (parm.v2) {
-                hxx().format("Ref %s %s final {return m_%s;}\n", parm.v1, METHOD_SIGNATURE, parm.v1);
-                m_helper.getMethods().add(parm.v1);
-            }
+        m_parmNames.stream().filter(parm -> {
+            return parm.v2;
+        }).forEach(parm -> {
+            hxx().format("Ref %s %s {return m_%s;}\n", parm.v1, METHOD_SIGNATURE, parm.v1);
+            m_helper.getMethods().add(parm.v1);
         });
+        if (!m_parmNames.isEmpty()) {
+            hxx().println("\nprivate:");
+            m_parmNames.stream().filter(parm -> {
+                return parm.v2;
+            }).forEach(parm -> {
+                hxx().format("LaolObj m_%s;\n", parm.v1);
+            });
+            hxx().println("\n//accessors }\n\npublic:");
+        }
         return this;
     }
 
     private ClassDeclaration constructors() {
-        hxx().format("explicit class %s(", m_clsName);
+        hxx().format("explicit %s(", m_clsName);
         m_decl.getParms().forEach((MethodParamDeclEle parm) -> {
             final ParamName pname = parm.getParamName();
             m_parmNames.add(new Pair(pname.getName().toString(), pname.isMember()));

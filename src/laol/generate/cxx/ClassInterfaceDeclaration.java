@@ -84,12 +84,13 @@ public class ClassInterfaceDeclaration {
                 + "virtual const METHOD_BY_NAME& getMethodByName() override;\n"
                 + "private:\n"
                 + "static METHOD_BY_NAME stMethodByName;");
+        
         cxx()
                 .format("//static\nLaol::METHOD_BY_NAME %s::stMethodByName;\n", clsName)
                 .format("const Laol::METHOD_BY_NAME&\n%s::getMethodByName() {\n", clsName)
                 .format("if (stMethodByName.empty()) {\nstMethodByName = Laol::join(stMethodByName");
         names.forEach(name -> {
-            cxx().format(",\n%s::getMethodbyName()", name.toString());
+            cxx().format(",\n%s::getMethodByName()", name.toString());
         });
         cxx().println(",\nMETHOD_BY_NAME({");
         cxx().print(String.join(",\n", getMethods().stream().map(ele -> {

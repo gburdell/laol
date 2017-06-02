@@ -130,7 +130,7 @@ public class Context implements AutoCloseable {
                                     })
                                     .collect(Collectors.toList()));
                     if (!nsu.isEmpty()) {
-                        m_hxx.format("namespace using %s ;\n", nsu);
+                        m_hxx.format("using namespace %s ;\n", nsu);
                     }
                 });
         nameSpace(m_hxx, true);
