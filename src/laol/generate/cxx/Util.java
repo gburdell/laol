@@ -25,6 +25,12 @@ package laol.generate.cxx;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Collection;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.stream.Collectors;
+import laol.ast.MethodParamDeclEle;
+import laol.ast.ParamName;
 import laol.ast.ScopedName;
 import static laol.generate.Util.createDirectory;
 
@@ -48,8 +54,33 @@ public class Util {
         createDirectory(outdir);
         return outdir;
     }
-    
+
     public static String toPath(final ScopedName name) {
         return name.toString().replaceAll("::", "/");
     }
+
+    /**
+     * Get names of parameters.
+     *
+     * @param parms list of parameters.
+     * @return list of names.
+     */
+    public static List<String> getNames(List<MethodParamDeclEle> parms) {
+        List<String> names = new LinkedList<>();
+        parms.forEach((MethodParamDeclEle parm) -> names.add(parm.getParamName().getName().toString()));
+        return names;
+    }
+
+    public static String getCxxDeclNames(List<String> parms, final String sep) {
+        return String.join(sep, parms
+                .stream()
+                .map(parm -> String.format("%s %s", CXX_PARAM_TYPE, parm))
+                .collect(Collectors.toList()));
+    }
+
+    public static String getCxxDeclNames(List<String> parms) {
+        return getCxxDeclNames(parms, ",\n");
+    }
+    
+    public static final String CXX_PARAM_TYPE = "const LaolObj&";
 }

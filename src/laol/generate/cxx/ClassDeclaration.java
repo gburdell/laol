@@ -26,15 +26,19 @@ package laol.generate.cxx;
 import gblib.Pair;
 import java.io.FileNotFoundException;
 import java.io.PrintStream;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import static java.util.Objects.nonNull;
+import java.util.Set;
 import java.util.stream.Collectors;
 import laol.ast.MethodDeclaration;
 import laol.ast.MethodParamDeclEle;
 import laol.ast.MethodType;
 import laol.ast.ParamName;
 import laol.generate.Util;
+import static laol.generate.cxx.Util.getNames;
+import static laol.generate.cxx.Util.getCxxDeclNames;
 
 /**
  *
@@ -49,51 +53,63 @@ public class ClassDeclaration {
 
     private void process() {
         declare()
-                .constructors()
+                .constructorDecl()
                 .memberAccessors()
                 .hereMethods()
                 .methodByName()
-                //todo
+                .constructorDefn()
                 .close();
     }
 
     public static final String METHOD_SIGNATURE = "(const LaolObj& self, const LaolObj& args) const";
 
     private ClassDeclaration memberAccessors() {
-        if (!m_parmNames.isEmpty()) {
+        if (!m_members.isEmpty()) {
             hxx().println("\n//accessors {");
         }
-        m_parmNames.stream().filter(parm -> {
-            return parm.v2;
-        }).forEach(parm -> {
-            hxx().format("Ref %s %s {return m_%s;}\n", parm.v1, METHOD_SIGNATURE, parm.v1);
-            m_helper.getMethods().add(parm.v1);
+        m_members.forEach(parm -> {
+            hxx().format("Ref %s %s {return m_%s;}\n", parm, METHOD_SIGNATURE, parm);
+            m_helper.getMethods().add(parm);
         });
-        if (!m_parmNames.isEmpty()) {
+        if (!m_members.isEmpty()) {
             hxx().println("\nprivate:");
-            m_parmNames.stream().filter(parm -> {
-                return parm.v2;
-            }).forEach(parm -> {
-                hxx().format("LaolObj m_%s;\n", parm.v1);
-            });
+            m_members.forEach(parm -> hxx().format("LaolObj m_%s;\n", parm));
             hxx().println("\n//accessors }\n\npublic:");
         }
         return this;
     }
 
-    private ClassDeclaration constructors() {
-        hxx().format("explicit %s(", m_clsName);
-        m_decl.getParms().forEach((MethodParamDeclEle parm) -> {
-            final ParamName pname = parm.getParamName();
-            m_parmNames.add(new Pair(pname.getName().toString(), pname.isMember()));
+    private ClassDeclaration constructorDecl() {
+        m_decl.getConstructorParmDecls().forEach(parms -> {
+            final List<String> constructorParms = getNames(parms);
+            m_members.addAll(constructorParms);
+            hxx()
+                    .format("explicit %s(", m_clsName)
+                    .format("%s);\n", getCxxDeclNames(constructorParms));
         });
-        hxx().format("%s);\n",
-                String.join(",\n", m_parmNames.stream().map(parm -> {
-                    return String.format("const LaolObj& %s", parm.v1);
-                }).collect(Collectors.toList())));
         hxx()
                 .format("NO_COPY_CONSTRUCTORS(%s);\n", m_clsName)
                 .format("virtual ~%s();\n", m_clsName);
+        return this;
+    }
+
+    private ClassDeclaration constructorDefn() {
+        m_decl.getConstructorParmDecls().forEach(parms -> {
+            final List<String> constructorParms = getNames(parms);
+            cxx()
+                    .format("%s::%s(", m_clsName, m_clsName)
+                    .format("%s)\n", getCxxDeclNames(constructorParms));
+            if (!constructorParms.isEmpty()) {
+                cxx()
+                        .format(": %s\n",
+                                String.join(",\n", constructorParms
+                                        .stream()
+                                        .map(parm -> String.format("m_%s(%s)", parm, parm))
+                                        .collect(Collectors.toList())));
+            }
+            cxx().println("{/*TODO*/}");
+        });
+
         return this;
     }
 
@@ -105,16 +121,14 @@ public class ClassDeclaration {
     private ClassDeclaration declare() {
         StringBuilder ext = new StringBuilder(": public virtual Laol");
         if (nonNull(m_decl.getExtends())) {
-            m_decl.getExtends().getAll().forEach(name -> {
-                ext.append(", ").append(name.toString());
-            });
+            m_decl.getExtends().getAll().forEach(name -> ext.append(", ").append(name.toString()));
         }
         hxx().format("class %s %s {\npublic:\n", m_clsName, ext);
         return this;
     }
 
     private ClassDeclaration close() {
-        m_helper.close(m_clsName);
+        m_helper.close();
         return this;
     }
 
@@ -124,7 +138,7 @@ public class ClassDeclaration {
      * @return this.
      */
     private ClassDeclaration methodByName() {
-        m_helper.methodByName(m_clsName, nonNull(m_decl.getExtends()) ? m_decl.getExtends().getAll() : null);
+        m_helper.methodByName(nonNull(m_decl.getExtends()) ? m_decl.getExtends().getAll() : null);
         return this;
     }
 
@@ -132,7 +146,7 @@ public class ClassDeclaration {
         m_decl = decl;
         m_ctx = ctx;
         m_clsName = m_decl.getIdent().toString();
-        m_helper = new ClassInterfaceDeclaration(m_decl.getBody(), hxx(), cxx());
+        m_helper = new ClassInterfaceDeclaration(m_clsName, m_decl.getBody(), hxx(), cxx());
     }
 
     private PrintStream hxx() {
@@ -151,5 +165,5 @@ public class ClassDeclaration {
     /**
      * Constructor parameters w/ member attribute.
      */
-    private final List<Pair<String, Boolean>> m_parmNames = new LinkedList<>();
+    private final Set<String> m_members = new HashSet<>();
 }

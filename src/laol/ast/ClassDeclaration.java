@@ -25,6 +25,7 @@ package laol.ast;
 
 import apfe.runtime.Sequence;
 import java.lang.reflect.Modifier;
+import java.util.LinkedList;
 import java.util.List;
 import laol.ast.etc.IModifiers;
 
@@ -60,6 +61,27 @@ public class ClassDeclaration extends Item implements IModifiers {
         return isNonNull(m_parms) ? m_parms.getDecl() : MethodParamDecl.EMPTY_LIST;
     }
 
+    /**
+     * Return all constructor declarations.
+     * We guarantee to return at least one element: the default declared with this class.
+     * @return constructor declarations.
+     */
+    public List<List<MethodParamDeclEle>> getConstructorParmDecls() {
+        final List<List<MethodParamDeclEle>> decls = new LinkedList<>();
+        decls.add(getParms());
+        getBody().getStatements().forEach((Statement stmt) -> {
+            boolean isDecl = stmt.getStmt() instanceof MethodDeclaration;
+            if (isDecl) {
+                final MethodDeclaration mdecl = MethodDeclaration.class.cast(stmt.getStmt());
+                isDecl = mdecl.getName().toString().equals(getIdent().toString());
+                if (isDecl) {
+                    decls.add(MethodParamDecl.getParms(mdecl.getParmDecl()));
+                }
+            }
+        });
+        return decls;
+    }
+    
     private final AccessModifier m_access;
     private final Ident m_name;
     private final MethodParamDecl m_parms;

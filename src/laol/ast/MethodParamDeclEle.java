@@ -25,8 +25,6 @@ package laol.ast;
 
 import apfe.runtime.Acceptor;
 import apfe.runtime.Sequence;
-import static gblib.Util.emptyUnmodifiableList;
-import java.util.List;
 import laol.ast.etc.IModifiers;
 
 /**

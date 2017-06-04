@@ -50,15 +50,14 @@ public class InterfaceDeclaration {
         m_decl = decl;
         m_ctx = ctx;
         m_clsName = m_decl.getIdent().toString();
-        m_helper = new ClassInterfaceDeclaration(m_decl.getBody(), hxx(), cxx());
+        m_helper = new ClassInterfaceDeclaration(m_clsName, m_decl.getBody(), hxx(), cxx());
     }
 
     private InterfaceDeclaration declare() {
         StringBuilder ext = new StringBuilder(": public virtual Laol");
         if (nonNull(m_decl.getImplements())) {
-            m_decl.getImplements().getNames().forEach(name -> {
-                ext.append(", ").append(name.toString());
-            });
+            m_decl.getImplements().getNames()
+                    .forEach(name -> ext.append(", ").append(name.toString()));
         }
         hxx().format("class %s %s {\npublic:\n", m_clsName, ext);
         return this;
@@ -76,12 +75,12 @@ public class InterfaceDeclaration {
     }
 
     private InterfaceDeclaration methodByName() {
-        m_helper.methodByName(m_clsName, nonNull(m_decl.getImplements()) ? m_decl.getImplements().getNames() : null);
+        m_helper.methodByName(nonNull(m_decl.getImplements()) ? m_decl.getImplements().getNames() : null);
         return this;
     }
 
     private InterfaceDeclaration close() {
-        m_helper.close(m_clsName);
+        m_helper.close();
         return this;
     }
 

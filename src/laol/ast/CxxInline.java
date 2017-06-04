@@ -37,5 +37,26 @@ import java.util.List;
 public class CxxInline extends Item {
     public CxxInline(final laol.parser.apfe.CxxInline decl) {
         super(decl);
+        final Sequence seq = asSequence();
+        m_isHxx = ('h' == seq.itemAt(1).toString().toLowerCase().charAt(0));
+        StringBuilder buf = new StringBuilder();
+        zeroOrMore(3).forEach(ele -> buf.append(ele.toString()));
+        m_content = buf.toString();
     }
+    
+    @Override
+    public String toString() {
+        return m_content;
+    }
+    
+    public boolean isHxx() {
+        return m_isHxx;
+    }
+    
+    public boolean isCxx() {
+        return !isHxx();
+    }
+    
+    private final String m_content;
+    private final boolean m_isHxx;
 }

@@ -41,10 +41,11 @@ import static laol.generate.cxx.ClassDeclaration.METHOD_SIGNATURE;
  */
 public class ClassInterfaceDeclaration {
 
-    public ClassInterfaceDeclaration(IStatements stmts, PrintStream hxx, PrintStream cxx) {
+    public ClassInterfaceDeclaration(String clsName, IStatements stmts, PrintStream hxx, PrintStream cxx) {
         m_stmts = stmts;
         m_hxx = hxx;
         m_cxx = cxx;
+        m_clsName = clsName;
     }
 
     private PrintStream hxx() {
@@ -58,56 +59,55 @@ public class ClassInterfaceDeclaration {
     public void hereMethods() {
         m_stmts.getStatements()
                 .stream()
-                .filter(statement -> {
-                    return statement.getStmt() instanceof laol.ast.MethodDeclaration;
-                })
-                .forEach(statement -> {
-                    final MethodDeclaration decl = MethodDeclaration.class.cast(statement.getStmt());
-                    final MethodType type = decl.getType();
-                    final String name = decl.getName().toString();//asScopedName().toString();
+                .map(stmt -> stmt.getStmt())
+                .map(stmt -> (stmt instanceof laol.ast.MethodDeclaration) ? MethodDeclaration.class.cast(stmt) : null)
+                .filter(methodDecl -> nonNull(methodDecl))
+                .filter(methodDecl -> !methodDecl.getName().toString().equals(m_clsName))
+                .forEach(methodDecl -> {
+                    final MethodType type = methodDecl.getType();
+                    final String name = methodDecl.getName().toString();//asScopedName().toString();
                     if (type.isDefaultDef() || type.isDef()) {
                         m_methods.add(name);
                     }
                     hxx().format("virtual Ref %s %s", name, METHOD_SIGNATURE);
                     if (type.isOverrideDef()) {
                         hxx().print(" override");
-                    } else if (decl.isAbstract()) {
+                    } else if (methodDecl.isAbstract()) {
                         hxx().print(" = 0");
                     }
                     hxx().println(";");
                 });
     }
 
-    public void methodByName(String clsName, List<ScopedName> names) {
+    public void methodByName(List<ScopedName> names) {
         names = Objects.isNull(names) ? ScopedName.EMPTY_LIST : names;
         hxx().println("protected:\n"
                 + "virtual const METHOD_BY_NAME& getMethodByName() override;\n"
                 + "private:\n"
                 + "static METHOD_BY_NAME stMethodByName;");
-        
+
         cxx()
-                .format("//static\nLaol::METHOD_BY_NAME %s::stMethodByName;\n", clsName)
-                .format("const Laol::METHOD_BY_NAME&\n%s::getMethodByName() {\n", clsName)
+                .format("\n//static\nLaol::METHOD_BY_NAME %s::stMethodByName;\n", m_clsName)
+                .format("const Laol::METHOD_BY_NAME&\n%s::getMethodByName() {\n", m_clsName)
                 .format("if (stMethodByName.empty()) {\nstMethodByName = Laol::join(stMethodByName");
-        names.forEach(name -> {
-            cxx().format(",\n%s::getMethodByName()", name.toString());
-        });
+        names.forEach(name -> cxx().format(",\n%s::getMethodByName()", name.toString()));
         cxx().println(",\nMETHOD_BY_NAME({");
-        cxx().print(String.join(",\n", getMethods().stream().map(ele -> {
-            return String.format("{\"%s\", reinterpret_cast<TPMethod> (&%s::%s)}",
-                    ele, clsName, ele);
-        }).collect(Collectors.toList())));
+        cxx().print(String.join(",\n", getMethods()
+                .stream()
+                .map(ele -> String.format("{\"%s\", reinterpret_cast<TPMethod> (&%s::%s)}", ele, m_clsName, ele))
+                .collect(Collectors.toList())));
         cxx().println("}));}\nreturn stMethodByName;\n}");
     }
 
-    public void close(String clsName) {
-        hxx().println("}; //" + clsName);
+    public void close() {
+        hxx().println("}; //" + m_clsName);
     }
 
     public List<String> getMethods() {
         return m_methods;
     }
 
+    private final String m_clsName;
     private final IStatements m_stmts;
     private final PrintStream m_hxx, m_cxx;
     /**
