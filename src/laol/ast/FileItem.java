@@ -33,7 +33,7 @@ public class FileItem extends Item {
         m_stmt = createItem(decl.getBaseAccepted());
     }
     
-    public Statement getStatement() {
+    public FsStatement getStatement() {
         return m_stmt;
     }
     
@@ -41,5 +41,5 @@ public class FileItem extends Item {
         return getStatement().getStmt();
     }
     
-    private final Statement m_stmt;
+    private final FsStatement m_stmt;
 }

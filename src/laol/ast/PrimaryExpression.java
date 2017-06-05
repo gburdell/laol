@@ -61,11 +61,9 @@ public class PrimaryExpression extends Item {
     static {
         final Class classes[] = {
             laol.parser.apfe.KNIL.class,
-            laol.parser.apfe.KFILE.class,
             laol.parser.apfe.KTRUE.class,
             laol.parser.apfe.KFALSE.class,
-            laol.parser.apfe.KSUPER.class,
-            laol.parser.apfe.KTHIS.class
+            laol.parser.apfe.KSELF.class,
         };
         KWRDS.addAll(Arrays.asList(classes));
     }

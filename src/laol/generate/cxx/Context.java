@@ -69,6 +69,22 @@ public class Context implements AutoCloseable {
         return m_contents;
     }
 
+    public static enum EType {eHxx, eCxx};
+    
+    /**
+     * Set current print stream: accessible via os().
+     * @param type one of EType.
+     * @return new, current print stream.
+     */
+    public NamedPrintStream setCurrStream(EType type) {
+        m_currStrm = (EType.eHxx == type) ? hxx() : cxx();
+        return m_currStrm;
+    }
+    
+    public NamedPrintStream os() {
+        return m_currStrm;
+    }
+    
     @Override
     public void close() throws Exception {
         Arrays.asList(m_cxx, m_hxx).forEach((os) -> {
@@ -117,7 +133,7 @@ public class Context implements AutoCloseable {
         //convert non-system import to namespace by dropping last
         getContents().getImports().stream()
                 .filter((ImportName istmt) -> !istmt.isSystemName())
-                .forEach((ImportName istmt) -> {
+                .forEachOrdered((ImportName istmt) -> {
                     final int n = istmt.getScopedName().getNames().size();
                     String nsu = String.join("::",
                             istmt
@@ -187,15 +203,15 @@ public class Context implements AutoCloseable {
         return pkg;
     }
 
-    public PrintStream hxx() {
+    public NamedPrintStream hxx() {
         return m_hxx;
     }
 
-    public PrintStream cxx() {
+    public NamedPrintStream cxx() {
         return m_cxx;
     }
 
-    private static class NamedPrintStream extends PrintStream {
+    public static class NamedPrintStream extends PrintStream {
 
         public NamedPrintStream(final Path dir, final String fname) throws FileNotFoundException {
             super(new File(dir.toFile(), fname));
@@ -216,4 +232,5 @@ public class Context implements AutoCloseable {
     private final Contents m_contents;
     private final Config m_config;
     private final String m_srcFname, m_baseName;
+    private NamedPrintStream m_currStrm = null;
 }

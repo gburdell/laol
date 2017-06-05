@@ -23,16 +23,30 @@
  */
 package laol.generate.cxx;
 
+import gblib.AtomicBoolean;
 import java.util.List;
 import laol.ast.ParamEle;
+import laol.ast.UnnamedParam;
 
 /**
  *
  * @author gburdell
  */
 public class ParamExpressionList {
-    public static void process(final laol.ast.ParamExpressionList item, final Context ctx) {
-        List<ParamEle> eles = item.getEles();
-        //todo: 
+    public static void process(final laol.ast.ParamExpressionList items, final Context ctx) {
+        final List<ParamEle> eles = items.getEles();
+        AtomicBoolean doComma = new AtomicBoolean(false);
+        eles.stream()
+                .map(ele -> ele.getEle())
+                .forEachOrdered(item -> {
+            assert(item instanceof UnnamedParam); //todo
+            final UnnamedParam parm = gblib.Util.downCast(item);
+            if (doComma.get()) {
+                ctx.os().print(", ");
+            } else {
+                doComma.set(true);
+            }
+            Expression.process(parm, ctx);
+        });
     }
 }

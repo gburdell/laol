@@ -22,7 +22,9 @@
  * THE SOFTWARE.
  */
 package laol.ast;
+
 import java.util.Collections;
+import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -30,21 +32,62 @@ import java.util.List;
  * @author gburdell
  */
 public class ClassBody extends Item implements IStatements {
+
     public ClassBody(final laol.parser.apfe.ClassBody decl) {
         super(decl);
-        m_base = oneOrNone(0);
+        m_base = zeroOrMore(0);
         m_stmts = zeroOrMore(1);
     }
 
-    public BaseClassInitializer getBase() {
-        return m_base;
+    /**
+     * Get base class initializer which match actual base names.
+     * @param baseNames list of base class names.
+     * @return base class initializers.
+     * The initializers are removed from here upon return.
+     */
+    public List<BaseClassInitializer> getBaseInitializers(List<String> baseNames) {
+        List<BaseClassInitializer> inits = new LinkedList<>();
+        getBase().stream()
+                .filter(init -> baseNames.contains(init.getBaseName()))
+                .forEach(init -> inits.add(init));
+        inits.forEach(init -> remove(init));
+        return inits;
     }
     
+    /**
+     * Get list of possible base class initializers.
+     * If the leadining IDENT does not match a base class, then 
+     * actually a statement.
+     * 
+     * @return possible base class initializers.
+     */
+    private List<BaseClassInitializer> getBase() {
+        return Collections.unmodifiableList(isNonNull(m_base) ? m_base : Collections.emptyList());
+    }
+
+    /**
+     * Remove initializer after processed.
+     * We do so in order to keep any statements which actually matched
+     * as base initializer.
+     * @param init initializer to remove.
+     */
+    private void remove(BaseClassInitializer init) {
+        final boolean ok = m_base.remove(init);
+        assert(ok);
+    }
+    
+    /**
+     * Get statements of class body.
+     * If there are any remaining BaseClassInitializer remaining; then
+     * those should be processed first as statement-like.
+     * @return class body statements.
+     */
     @Override
     public List<Statement> getStatements() {
+        assert(getBase().isEmpty());    //see above
         return Collections.unmodifiableList(isNonNull(m_stmts) ? m_stmts : Collections.emptyList());
     }
-    
-    private final BaseClassInitializer m_base;
-    private final List<Statement>   m_stmts;
+
+    private final List<BaseClassInitializer> m_base;
+    private final List<Statement> m_stmts;
 }

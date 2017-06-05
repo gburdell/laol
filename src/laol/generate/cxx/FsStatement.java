@@ -23,16 +23,12 @@
  */
 package laol.generate.cxx;
 
-import java.util.List;
-import laol.ast.Item;
-
 /**
  *
  * @author gburdell
  */
-public class RangeExpression {
-    public static void process(final laol.ast.RangeExpression item, final Context ctx) {
-        List<Item> items = item.getItems();  //left-recursive items
-        //todo: Item are LorExpression with implied '..' operator
+public class FsStatement {
+    public static void process(final laol.ast.FsStatement item, final Context ctx) {
+        Generate.callProcess(item.getStmt(), ctx);
     }
 }

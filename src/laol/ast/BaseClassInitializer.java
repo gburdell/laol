@@ -23,14 +23,29 @@
  */
 package laol.ast;
 
-import apfe.runtime.Util;
+import apfe.runtime.Sequence;
 
 /**
  *
  * @author gburdell
  */
-public class BaseClassInitializer extends MethodParamDecl {
+public class BaseClassInitializer extends Item {
+
     public BaseClassInitializer(final laol.parser.apfe.BaseClassInitializer decl) {
-        super(Util.downcast(asSequence(decl).itemAt(1)));
-    }    
+        super(decl);
+        final Sequence seq = asSequence();
+        m_baseName = getIdent(seq, 0).getId();
+        m_decl = oneOrNone(seq, 2);
+    }
+
+    public String getBaseName() {
+        return m_baseName;
+    }
+
+    public ParamExpressionList getInitializer() {
+        return m_decl;
+    }
+
+    private final String m_baseName;
+    private final ParamExpressionList m_decl;
 }

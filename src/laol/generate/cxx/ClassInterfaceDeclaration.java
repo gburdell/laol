@@ -63,7 +63,7 @@ public class ClassInterfaceDeclaration {
                 .map(stmt -> (stmt instanceof laol.ast.MethodDeclaration) ? MethodDeclaration.class.cast(stmt) : null)
                 .filter(methodDecl -> nonNull(methodDecl))
                 .filter(methodDecl -> !methodDecl.getName().toString().equals(m_clsName))
-                .forEach(methodDecl -> {
+                .forEachOrdered(methodDecl -> {
                     final MethodType type = methodDecl.getType();
                     final String name = methodDecl.getName().toString();//asScopedName().toString();
                     if (type.isDefaultDef() || type.isDef()) {
@@ -79,8 +79,7 @@ public class ClassInterfaceDeclaration {
                 });
     }
 
-    public void methodByName(List<ScopedName> names) {
-        names = Objects.isNull(names) ? ScopedName.EMPTY_LIST : names;
+    public void methodByName(List<String> names) {
         hxx().println("protected:\n"
                 + "virtual const METHOD_BY_NAME& getMethodByName() override;\n"
                 + "private:\n"
@@ -90,7 +89,7 @@ public class ClassInterfaceDeclaration {
                 .format("\n//static\nLaol::METHOD_BY_NAME %s::stMethodByName;\n", m_clsName)
                 .format("const Laol::METHOD_BY_NAME&\n%s::getMethodByName() {\n", m_clsName)
                 .format("if (stMethodByName.empty()) {\nstMethodByName = Laol::join(stMethodByName");
-        names.forEach(name -> cxx().format(",\n%s::getMethodByName()", name.toString()));
+        names.forEach(name -> cxx().format(",\n%s::getMethodByName()", name));
         cxx().println(",\nMETHOD_BY_NAME({");
         cxx().print(String.join(",\n", getMethods()
                 .stream()

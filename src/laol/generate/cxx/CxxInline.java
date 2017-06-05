@@ -23,16 +23,51 @@
  */
 package laol.generate.cxx;
 
+import gblib.Pair;
+import java.io.FileNotFoundException;
+import java.io.PrintStream;
+import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.List;
-import laol.ast.Item;
+import static java.util.Objects.nonNull;
+import java.util.Set;
+import java.util.stream.Collectors;
+import laol.ast.MethodDeclaration;
+import laol.ast.MethodParamDeclEle;
+import laol.ast.MethodType;
+import laol.ast.ParamName;
+import laol.generate.Util;
+import static laol.generate.cxx.Util.getNames;
+import static laol.generate.cxx.Util.getCxxDeclNames;
 
 /**
  *
  * @author gburdell
  */
-public class LorExpression {
-    public static void process(final laol.ast.LorExpression item, final Context ctx) {
-        List<Item> items = item.getItems();  //left-recursive items
-        //todo: Item are LandExpression with implied LOR2 operator
+public class CxxInline {
+
+    public static void process(final laol.ast.CxxInline item, final Context ctx) throws FileNotFoundException, Util.EarlyTermination {
+        final CxxInline cdecl = new CxxInline(item, ctx);
+        cdecl.process();
     }
+
+    private void process() {
+        (m_decl.isHxx() ? hxx() : cxx()).println(m_decl.toString());
+    }
+
+    private CxxInline(final laol.ast.CxxInline decl, final Context ctx) {
+        m_decl = decl;
+        m_ctx = ctx;
+    }
+
+    private PrintStream hxx() {
+        return m_ctx.hxx();
+    }
+
+    private PrintStream cxx() {
+        return m_ctx.cxx();
+    }
+
+    private final laol.ast.CxxInline m_decl;
+    private final Context m_ctx;
 }

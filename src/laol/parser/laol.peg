@@ -116,9 +116,8 @@ array_primary <-
 
 primary_expression <-
     K_NIL
-/   K_FILE
 /   K_TRUE / K_FALSE
-/   K_THIS / K_SUPER
+/   K_SELF
 /   STRING
 /   SYMBOL
 /   LPAREN expression RPAREN
@@ -131,7 +130,6 @@ primary_expression <-
 /   html_primary
 /   sass_primary
 
-//KISS: drop true scoped for now
 scoped_name <- IDENTNK (COLON2 IDENTNK)*
 
 postfix_expression <-
@@ -198,7 +196,7 @@ lor_expression <-
 /   land_expression
 
 range_expression <- 
-    range_expression DOT2 lor_expression
+    lor_expression DOT2 lor_expression
 /   lor_expression
 
 conditional_expression <-
@@ -283,7 +281,15 @@ import_name <-
 	'<' scoped_name '>'
 /	scoped_name
 
-file_item <- statement
+file_item <- fs_statement
+
+// file scope statement
+fs_statement <- 
+	cxx_inline
+/   class_declaration
+/   interface_declaration 
+/   method_declaration 
+/   var_decl_statement
 
 statement <- 
 	cxx_inline
@@ -377,9 +383,10 @@ interface_declaration <-
         RCURLY sp	//NOTE: no eos here
 
 //1st statement is initializer
-class_body <- base_class_initializer? class_body_statement*
+class_body <- base_class_initializer* class_body_statement*
 
-base_class_initializer <- K_SUPER method_param_decl 
+//The IDENT match a base class name
+base_class_initializer <- IDENTNK LPAREN param_expression_list? RPAREN
 
 interface_body <- interface_body_statement*
 
@@ -587,10 +594,9 @@ K_PRIVATE   <- "private"    K_tail
 K_PROTECTED <- "protected"  K_tail
 K_PUBLIC    <- "public"     K_tail
 K_RETURN    <- "return"     K_tail
+K_SELF      <- "self"       K_tail
 K_STATIC    <- "static"     K_tail
 K_STRING    <- "string"     K_tail
-K_SUPER     <- "super"      K_tail
-K_THIS      <- "this"       K_tail
 K_THROW     <- "throw"      K_tail
 K_TRUE      <- "true"       K_tail
 K_TRY       <- "try"        K_tail
@@ -599,7 +605,6 @@ K_UNTIL     <- "until"      K_tail
 K_VAR       <- "var"        K_tail
 K_WHEN      <- "when"       K_tail
 K_WHILE     <- "while"      K_tail
-K_FILE      <- "__FILE__"   K_tail
 
 K_tail <- ![_a-zA-Z0-9] Spacing
 

@@ -23,14 +23,12 @@
  */
 package laol.generate.cxx;
 
-import static gblib.Util.downCast;
-
 /**
  *
  * @author gburdell
  */
 public class Expression {
     public static void process(final laol.ast.Expression item, final Context ctx) {
-        Generate.callProcess(laol.ast.ConditionalExpression.class.cast(item), ctx);
+        ConditionalExpression.process(item, ctx);
     }
 }

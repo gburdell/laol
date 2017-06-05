@@ -25,8 +25,10 @@ package laol.ast;
 
 import apfe.runtime.Sequence;
 import java.lang.reflect.Modifier;
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Objects;
 import laol.ast.etc.IModifiers;
 
 /**
@@ -43,13 +45,29 @@ public class ClassDeclaration extends Item implements IModifiers {
         m_parms = oneOrNone(seq, 3);
         m_extends = oneOrNone(seq, 4);
         m_body = createItem(seq, 6);
+        if (Objects.nonNull(getExtends())) {
+            m_baseNames = new LinkedList<>();
+            getExtends().getAll().forEach(name -> m_baseNames.add(name.toString()));
+            m_baseInits = getBody().getBaseInitializers(m_baseNames);
+        } else {
+            m_baseInits = null;
+            m_baseNames = null;
+        }
     }
 
-    public ClassBody getBody() {
+    public final ClassBody getBody() {
         return m_body;
     }
 
-    public ClassExtends getExtends() {
+    public List<String> getBaseNames() {
+        return isNonNull(m_baseNames) ? m_baseNames : gblib.Util.emptyUnmodifiableList();
+    }
+    
+    public List<BaseClassInitializer> getBaseInitializers() {
+        return isNonNull(m_baseInits) ? m_baseInits : gblib.Util.emptyUnmodifiableList();
+    }
+    
+    private ClassExtends getExtends() {
         return m_extends;
     }
 
@@ -62,8 +80,9 @@ public class ClassDeclaration extends Item implements IModifiers {
     }
 
     /**
-     * Return all constructor declarations.
-     * We guarantee to return at least one element: the default declared with this class.
+     * Return all constructor declarations. We guarantee to return at least one
+     * element: the default declared with this class.
+     *
      * @return constructor declarations.
      */
     public List<List<MethodParamDeclEle>> getConstructorParmDecls() {
@@ -81,12 +100,14 @@ public class ClassDeclaration extends Item implements IModifiers {
         });
         return decls;
     }
-    
+
     private final AccessModifier m_access;
     private final Ident m_name;
     private final MethodParamDecl m_parms;
     private final ClassExtends m_extends;
     private final ClassBody m_body;
+    private final List<String> m_baseNames;
+    private final List<BaseClassInitializer> m_baseInits;
 
     /**
      * Get access privilege for ClassDeclaration. Default is public.

@@ -27,6 +27,10 @@ import apfe.runtime.Repetition;
 import apfe.runtime.Sequence;
 import gblib.Util;
 import java.lang.reflect.Modifier;
+import java.util.Collections;
+import java.util.List;
+import static java.util.Objects.nonNull;
+import java.util.stream.Collectors;
 import laol.ast.etc.IModifiers;
 
 /**
@@ -59,11 +63,19 @@ public class InterfaceDeclaration extends Item implements IModifiers {
         return m_body;
     }
 
+    public List<String> getBaseNames() {
+        return nonNull(getImplements())
+                ? getImplements().getNames().stream()
+                        .map(scoped -> scoped.toString())
+                        .collect(Collectors.toList())
+                : gblib.Util.emptyUnmodifiableList();
+    }
+
     public ScopedNameList getImplements() {
         return m_implements;
     }
 
-     public Ident getIdent() {
+    public Ident getIdent() {
         return m_name;
     }
 

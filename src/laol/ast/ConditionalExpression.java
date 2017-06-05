@@ -22,13 +22,16 @@
  * THE SOFTWARE.
  */
 package laol.ast;
+
 import apfe.runtime.Acceptor;
+import java.util.Objects;
 
 /**
  *
  * @author gburdell
  */
 public class ConditionalExpression extends Item {
+
     public ConditionalExpression(final laol.parser.apfe.ConditionalExpression decl) {
         super(decl);
         final Acceptor acc = asPrioritizedChoice().getAccepted();
@@ -53,7 +56,11 @@ public class ConditionalExpression extends Item {
     public Expression getIfTrue() {
         return m_ifTrue;
     }
-              
+
+    public boolean hasConditional() {
+        return Objects.nonNull(m_ifTrue);
+    }
+    
     private final RangeExpression m_expr;
     private final Expression m_ifTrue, m_ifFalse;
 }

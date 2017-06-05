@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2017 gburdell.
+ * Copyright 2016 gburdell.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -21,18 +21,22 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package laol.generate.cxx;
-
-import java.util.List;
-import laol.ast.Item;
+package laol.ast;
 
 /**
  *
  * @author gburdell
  */
-public class UnaryExpression {
-    public static void process(final laol.ast.UnaryExpression item, final Context ctx) {
-        List<Item> items = item.getItems();  
-        //todo
+public class FsStatement extends Item {
+
+    public FsStatement(final laol.parser.apfe.FsStatement decl) {
+        super(decl);
+        m_stmt = createItem(asPrioritizedChoice().getAccepted());
     }
+
+    public Item getStmt() {
+        return m_stmt;
+    }
+
+    private final Item m_stmt;
 }

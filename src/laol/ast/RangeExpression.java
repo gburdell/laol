@@ -23,12 +23,43 @@
  */
 package laol.ast;
 
+import apfe.runtime.PrioritizedChoice;
+import apfe.runtime.Sequence;
+import java.util.Objects;
+
 /**
  *
  * @author gburdell
  */
-public class RangeExpression extends BinaryOp.LRExpr<laol.parser.apfe.RangeExpression> {
+public class RangeExpression extends Item {
     public RangeExpression(final laol.parser.apfe.RangeExpression decl) {
         super(decl);
+        final PrioritizedChoice pc = asPrioritizedChoice();
+        if (pc.getAccepted() instanceof Sequence) {
+            final Sequence seq = asSequence(pc.getAccepted());
+            m_left = createItem(seq, 0);
+            m_right = createItem(seq, 2);
+        } else {
+            m_left = createItem(pc.getAccepted());
+            m_right = null;
+        }
     }
+    
+    public LorExpression left() {
+        return m_left;
+    }
+    
+    public LorExpression right() {
+        return m_right;
+    }
+    
+    /**
+     * Check is really a range expression.
+     * @return true if truly range expression; else just a LorExpression.
+     */
+    public boolean isRange() {
+        return Objects.nonNull(m_right);
+    }
+    
+    private final LorExpression m_left, m_right;
 }

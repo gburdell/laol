@@ -32,6 +32,7 @@ import java.util.List;
 import static java.util.Objects.nonNull;
 import java.util.Set;
 import java.util.stream.Collectors;
+import laol.ast.BaseClassInitializer;
 import laol.ast.MethodDeclaration;
 import laol.ast.MethodParamDeclEle;
 import laol.ast.MethodType;
@@ -99,13 +100,31 @@ public class ClassDeclaration {
             cxx()
                     .format("%s::%s(", m_clsName, m_clsName)
                     .format("%s)\n", getCxxDeclNames(constructorParms));
+            String colon = ": ";
+            if (!m_decl.getBaseInitializers().isEmpty()) {
+                cxx().println(":");
+                m_ctx.setCurrStream(Context.EType.eCxx);
+                boolean doComma = false;
+                for (BaseClassInitializer init : m_decl.getBaseInitializers()) {
+                    if (doComma) {
+                        cxx().println(",");
+                    } else {
+                        doComma = true;
+                    }
+                    cxx().format("%s(", init.getBaseName());
+                    ParamExpressionList.process(init.getInitializer(), m_ctx);
+                    cxx().print(")");
+                    colon = ",\n";
+                }
+            }
             if (!constructorParms.isEmpty()) {
                 cxx()
-                        .format(": %s\n",
-                                String.join(",\n", constructorParms
-                                        .stream()
-                                        .map(parm -> String.format("m_%s(%s)", parm, parm))
-                                        .collect(Collectors.toList())));
+                        .format("%s%s\n", colon,
+                                String.join(",\n",
+                                        constructorParms
+                                                .stream()
+                                                .map(parm -> String.format("m_%s(%s)", parm, parm))
+                                                .collect(Collectors.toList())));
             }
             cxx().println("{/*TODO*/}");
         });
@@ -120,9 +139,7 @@ public class ClassDeclaration {
 
     private ClassDeclaration declare() {
         StringBuilder ext = new StringBuilder(": public virtual Laol");
-        if (nonNull(m_decl.getExtends())) {
-            m_decl.getExtends().getAll().forEach(name -> ext.append(", ").append(name.toString()));
-        }
+        getBaseNames().forEach(ext.append(", ")::append);
         hxx().format("class %s %s {\npublic:\n", m_clsName, ext);
         return this;
     }
@@ -138,7 +155,7 @@ public class ClassDeclaration {
      * @return this.
      */
     private ClassDeclaration methodByName() {
-        m_helper.methodByName(nonNull(m_decl.getExtends()) ? m_decl.getExtends().getAll() : null);
+        m_helper.methodByName(getBaseNames());
         return this;
     }
 
@@ -157,6 +174,10 @@ public class ClassDeclaration {
         return m_ctx.cxx();
     }
 
+    private List<String> getBaseNames() {
+        return m_decl.getBaseNames();
+    }
+    
     private final laol.ast.ClassDeclaration m_decl;
     private final Context m_ctx;
     private final String m_clsName;
