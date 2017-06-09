@@ -32,6 +32,7 @@ import java.util.Vector;
 import laol.ast.Item;
 import laol.ast.ParamEle;
 import laol.ast.SelectExpression;
+import laol.ast.UnnamedParam;
 
 /**
  *
@@ -89,9 +90,13 @@ public class PostfixExpression {
                     AnonymousFunctionDefn.process(sfx.getBlock(), m_ctx);
                 } else if (items.peek() instanceof laol.ast.PostfixExpression.PrimExprList) {
                     final List<ParamEle> parms = downCast(items.pop());
-                    //todo...  refactor method to process csv (list)
+                    Util.processAsCSV(parms, m_ctx, p->{
+                        final UnnamedParam parm = downCast(p.getEle());
+                        Expression.process(parm, m_ctx);
+                    });
                 }
                 os().print("))");
+                return true;
             }
         }
         return false;
@@ -109,12 +114,6 @@ public class PostfixExpression {
         } else {
             os().format("[new Select(%s(", Util.TO_VEC);
             Util.processAsCSV(select, m_ctx, e->Expression.process(e, m_ctx));
-            boolean doComma = false;
-            for (laol.ast.Expression e : select) {
-                os().print(doComma ? ", " : "");
-                Expression.process(e, m_ctx);
-                doComma = true;
-            }
             os().print("))");
         }
         os().print(']');

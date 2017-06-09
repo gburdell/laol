@@ -92,7 +92,7 @@ public class Util {
      * @param ctx context.
      * @param consumer consumes each item.
      */
-    public static <T extends Item> void processAsCSV(List<T> items, Context ctx, Consumer consumer) {
+    public static <T extends Item> void processAsCSV(List<T> items, Context ctx, Consumer<T> consumer) {
         boolean doComma = false;
         for (T e : items) {
             ctx.os().print(doComma ? ", " : "");
