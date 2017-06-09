@@ -33,6 +33,7 @@ import static java.util.Objects.nonNull;
 import java.util.Set;
 import java.util.stream.Collectors;
 import laol.ast.BaseClassInitializer;
+import laol.ast.ClassDeclaration.Constructor;
 import laol.ast.MethodDeclaration;
 import laol.ast.MethodParamDeclEle;
 import laol.ast.MethodType;
@@ -81,12 +82,12 @@ public class ClassDeclaration {
     }
 
     private ClassDeclaration constructorDecl() {
-        m_decl.getConstructorParmDecls().forEach(parms -> {
-            final List<String> constructorParms = getNames(parms);
-            m_members.addAll(constructorParms);
+        m_decl.getConstructors().forEach((Constructor con) -> {
+            final List<String> conParms = getNames(con.getParms());
+            m_members.addAll(conParms);
             hxx()
                     .format("explicit %s(", m_clsName)
-                    .format("%s);\n", getCxxDeclNames(constructorParms));
+                    .format("%s);\n", getCxxDeclNames(conParms));
         });
         hxx()
                 .format("NO_COPY_CONSTRUCTORS(%s);\n", m_clsName)
@@ -95,17 +96,19 @@ public class ClassDeclaration {
     }
 
     private ClassDeclaration constructorDefn() {
-        m_decl.getConstructorParmDecls().forEach(parms -> {
-            final List<String> constructorParms = getNames(parms);
+        m_decl.getConstructors().forEach((Constructor con) -> {
+            //constructor declaration (in definition)
+            final List<String> conParms = getNames(con.getParms());
             cxx()
                     .format("%s::%s(", m_clsName, m_clsName)
-                    .format("%s)\n", getCxxDeclNames(constructorParms));
+                    .format("%s)\n", getCxxDeclNames(conParms));
+            //add in base class initializers (if any)
             String colon = ": ";
-            if (!m_decl.getBaseInitializers().isEmpty()) {
+            if (!con.getBaseInits().isEmpty()) {
                 cxx().println(":");
                 m_ctx.setCurrStream(Context.EType.eCxx);
                 boolean doComma = false;
-                for (BaseClassInitializer init : m_decl.getBaseInitializers()) {
+                for (BaseClassInitializer init : con.getBaseInits()) {
                     if (doComma) {
                         cxx().println(",");
                     } else {
@@ -117,18 +120,18 @@ public class ClassDeclaration {
                     colon = ",\n";
                 }
             }
-            if (!constructorParms.isEmpty()) {
+            //add in data member constructors
+            if (!conParms.isEmpty()) {
                 cxx()
                         .format("%s%s\n", colon,
                                 String.join(",\n",
-                                        constructorParms
+                                        conParms
                                                 .stream()
                                                 .map(parm -> String.format("m_%s(%s)", parm, parm))
                                                 .collect(Collectors.toList())));
             }
-            cxx().println("{/*TODO*/}");
+            cxx().println("{/*TODO: ConstructorBody*/}");
         });
-
         return this;
     }
 
@@ -177,7 +180,7 @@ public class ClassDeclaration {
     private List<String> getBaseNames() {
         return m_decl.getBaseNames();
     }
-    
+
     private final laol.ast.ClassDeclaration m_decl;
     private final Context m_ctx;
     private final String m_clsName;

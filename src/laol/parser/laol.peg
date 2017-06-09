@@ -133,11 +133,11 @@ primary_expression <-
 scoped_name <- IDENTNK (COLON2 IDENTNK)*
 
 postfix_expression <-
-    postfix_expression LBRACK select_expression RBRACK block?
+    postfix_expression LBRACK select_expression RBRACK 
 /   postfix_expression LPAREN param_expression_list? RPAREN block?
 /   postfix_expression dot_suffix block?
 /   postfix_expression (PLUS2 / MINUS2) 
-/   primary_expression block?
+/   primary_expression 
 
 unary_expression <-
     unary_op unary_expression
@@ -479,7 +479,8 @@ method_name_op <-
 /   PLUS2 / MINUS2  //postix operator
 /   ("++_" / "--_") sp //prefix operator
 
-method_body <- statement*
+// Constructors defined as methods could have base class initializers
+method_body <- base_class_initializer* statement*
     
 case_statement <-
     K_CASE expression LCURLY 

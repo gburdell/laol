@@ -23,6 +23,10 @@
  */
 package laol.generate.cxx;
 
+import apfe.runtime.LeftRecursiveAcceptor;
+import java.io.PrintStream;
+import laol.ast.BinaryOp;
+import laol.ast.Item;
 import laol.ast.Keyword;
 import laol.ast.LorExpression;
 import laol.ast.RangeExpression;
@@ -38,6 +42,10 @@ public class ConditionalExpression {
         (new ConditionalExpression(item, ctx)).process();
     }
 
+    private PrintStream os() {
+        return m_ctx.os();
+    }
+
     private void process() {
         if (m_condExpr.hasConditional()) {
 
@@ -48,30 +56,51 @@ public class ConditionalExpression {
 
     private void process(final RangeExpression rngExpr) {
         if (rngExpr.isRange()) {
-            m_buf.append("new Range(");
+            os().append("new Range(");
         }
         process(rngExpr.left());
         if (rngExpr.isRange()) {
-            m_buf.append(",");
+            os().append(",");
             process(rngExpr.right());
-            m_buf.append(")");
+            os().append(")");
         }
     }
 
-    private void process(final LorExpression lorExpr) {
-        lorExpr.getItems().forEach(item -> {
+    private <T extends LeftRecursiveAcceptor> void process(BinaryOp.LRExpr<T> lrexpr) {
+        lrexpr.getItems().forEach(item -> {
             if (item instanceof UnaryExpression) {
                 process(UnaryExpression.class.cast(item));
             } else if (item instanceof Keyword) {
-                
+                process(Keyword.class.cast(item));
+            } else if (item instanceof BinaryOp.LRExpr) {
+                process(BinaryOp.LRExpr.class.cast(item));
+            } else {
+                assert (false);
             }
         });
     }
 
     private void process(final UnaryExpression uexpr) {
-        boolean debug = true;
+        uexpr.getItems().forEach(item -> {
+            if (item instanceof UnaryExpression.UnaryOpExpr) {
+                process(UnaryExpression.UnaryOpExpr.class.cast(item));
+            } else {
+                PostfixExpression.process(laol.ast.PostfixExpression.class.cast(item), m_ctx);
+            }
+        });
+    }
+
+    private void process(final UnaryExpression.UnaryOpExpr uopExpr) {
+        process(uopExpr.getOp());
+        process(uopExpr.getExpr());
     }
     
+    private void process(final Keyword op) {
+        //m_buf.append(op.getClz().getSimpleName());
+        String s = op.toString();
+        os().append(' ').append(s).append(' ');
+    }
+
     private ConditionalExpression(final laol.ast.ConditionalExpression item, final Context ctx) {
         m_condExpr = item;
         m_ctx = ctx;
@@ -79,5 +108,4 @@ public class ConditionalExpression {
 
     private final laol.ast.ConditionalExpression m_condExpr;
     private final Context m_ctx;
-    private final StringBuilder m_buf = new StringBuilder();
 }

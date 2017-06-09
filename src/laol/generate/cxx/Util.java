@@ -28,7 +28,9 @@ import java.nio.file.Paths;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.function.Consumer;
 import java.util.stream.Collectors;
+import laol.ast.Item;
 import laol.ast.MethodParamDeclEle;
 import laol.ast.ParamName;
 import laol.ast.ScopedName;
@@ -81,6 +83,25 @@ public class Util {
     public static String getCxxDeclNames(List<String> parms) {
         return getCxxDeclNames(parms, ",\n");
     }
-    
+
+    /**
+     * Process list of items as comma separated values.
+     *
+     * @param <T> ast item.
+     * @param items list of items.
+     * @param ctx context.
+     * @param consumer consumes each item.
+     */
+    public static <T extends Item> void processAsCSV(List<T> items, Context ctx, Consumer consumer) {
+        boolean doComma = false;
+        for (T e : items) {
+            ctx.os().print(doComma ? ", " : "");
+            consumer.accept(e);
+            doComma = true;
+        }
+    }
+
     public static final String CXX_PARAM_TYPE = "const LaolObj&";
+
+    public static final String TO_VEC = "toV";
 }

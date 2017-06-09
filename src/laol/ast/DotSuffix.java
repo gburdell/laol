@@ -30,6 +30,7 @@ import apfe.runtime.Sequence;
  * @author gburdell
  */
 public class DotSuffix extends Item {
+
     public DotSuffix(final laol.parser.apfe.DotSuffix decl) {
         super(decl);
         final Sequence seq = asSequence();
@@ -44,12 +45,23 @@ public class DotSuffix extends Item {
     public Keyword getSuffix() {
         return m_suffix;
     }
-    
-    public boolean endsWithQmark() {
-        String s = getParsed().toString().trim();
-        return ('?' == s.charAt(s.length() - 1));
+
+    public boolean isNil() {
+        return getSuffix().getClz().equals(laol.parser.apfe.KNIL.class);
     }
-    
+
+    public boolean isNew() {
+        return getSuffix().getClz().equals(laol.parser.apfe.KNEW.class);
+    }
+
+    public boolean isIdent() {
+        return getSuffix().getClz().equals(laol.parser.IDENTNK.class);
+    }
+
+    public boolean endsWithQmark() {
+        return getSuffix().toString().endsWith("?");
+    }
+
     private final Op m_op;
     private final Keyword m_suffix;
 }

@@ -37,5 +37,16 @@ public class Keyword extends Item {
         m_cls = kwrd.getClass();
     }
     
+    public Class getClz() {
+        return m_cls;
+    }
+    
+    @Override
+    public String toString() {
+        //todo: looks a bit dicey here...
+        //want to look at other patterns/usages of Keyword
+        return asPrioritizedChoice().getAccepted().getBaseAccepted().toString();
+    }
+    
     private final Class m_cls;
 }

@@ -22,22 +22,13 @@
  * THE SOFTWARE.
  */
 package laol.ast;
-import java.util.Collections;
-import java.util.List;
 
 /**
  *
  * @author gburdell
  */
-public class MethodBody extends Item {
+public class MethodBody extends BodyBase<laol.parser.apfe.MethodBody> {
     public MethodBody(final laol.parser.apfe.MethodBody decl) {
         super(decl);
-        m_body = zeroOrMore(decl.getBaseAccepted());
     }
-
-    public List<Statement> getBody() {
-        return Collections.unmodifiableList(m_body);
-    }
-    
-    private final List<Statement>   m_body;
 }

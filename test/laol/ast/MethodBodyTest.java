@@ -53,7 +53,7 @@ public class MethodBodyTest extends TestRunner {
     @Override
     public void generateAndTestAst(Acceptor parsed) {
         laol.ast.MethodBody dut = new laol.ast.MethodBody((laol.parser.apfe.MethodBody) parsed);
-        assertTrue(m_expectCnt == dut.getBody().size());
+        assertTrue(m_expectCnt == dut.getStatements().size());
         assertTrue(m_test.equals(m_accepted));
     }
 

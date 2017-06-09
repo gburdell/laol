@@ -29,6 +29,6 @@ package laol.generate.cxx;
  */
 public class AnonymousFunctionDefn {
     public static void process(final laol.ast.AnonymousFunctionDefn item, final Context ctx) {
-        //todo
+        ctx.os().print("/*TODO: new AnonymousFunctionDefn(...)*/");
     }
 }

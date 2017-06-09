@@ -24,8 +24,10 @@
 package laol.ast;
 
 import apfe.runtime.Sequence;
+import gblib.Util;
 import java.lang.reflect.Modifier;
 import java.util.Collections;
+import static java.util.Collections.unmodifiableList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Objects;
@@ -60,13 +62,13 @@ public class ClassDeclaration extends Item implements IModifiers {
     }
 
     public List<String> getBaseNames() {
-        return isNonNull(m_baseNames) ? m_baseNames : gblib.Util.emptyUnmodifiableList();
+        return Util.getUnModifiableList(m_baseNames, self -> self);
     }
-    
+
     public List<BaseClassInitializer> getBaseInitializers() {
-        return isNonNull(m_baseInits) ? m_baseInits : gblib.Util.emptyUnmodifiableList();
+        return Util.getUnModifiableList(m_baseInits, self -> self);
     }
-    
+
     private ClassExtends getExtends() {
         return m_extends;
     }
@@ -75,30 +77,52 @@ public class ClassDeclaration extends Item implements IModifiers {
         return m_name;
     }
 
+    /**
+     * Get parameters of primary constructor.
+     * @return primary constructor parameters.
+     */
     public List<MethodParamDeclEle> getParms() {
-        return isNonNull(m_parms) ? m_parms.getDecl() : MethodParamDecl.EMPTY_LIST;
+        return Util.getUnModifiableList(m_parms, p -> p.getDecl());
     }
 
-    /**
-     * Return all constructor declarations. We guarantee to return at least one
-     * element: the default declared with this class.
-     *
-     * @return constructor declarations.
-     */
-    public List<List<MethodParamDeclEle>> getConstructorParmDecls() {
-        final List<List<MethodParamDeclEle>> decls = new LinkedList<>();
-        decls.add(getParms());
+    public class Constructor {
+
+        public Constructor(ClassDeclaration decl) {
+            m_parms = decl.getParms();
+            m_baseInits = decl.getBaseInitializers();
+        }
+
+        public Constructor(MethodDeclaration decl) {
+            m_parms = MethodParamDecl.getParms(decl.getParmDecl());
+            m_baseInits = decl.getBody().getBaseInitializers(getBaseNames());
+        }
+
+        public List<MethodParamDeclEle> getParms() {
+            return unmodifiableList(m_parms);
+        }
+
+        public List<BaseClassInitializer> getBaseInits() {
+            return unmodifiableList(m_baseInits);
+        }
+
+        private final List<MethodParamDeclEle> m_parms;
+        private final List<BaseClassInitializer> m_baseInits;
+    }
+
+    public List<Constructor> getConstructors() {
+        List<Constructor> cons = new LinkedList<>();
+        cons.add(new Constructor(this));
         getBody().getStatements().forEach((Statement stmt) -> {
             boolean isDecl = stmt.getStmt() instanceof MethodDeclaration;
             if (isDecl) {
                 final MethodDeclaration mdecl = MethodDeclaration.class.cast(stmt.getStmt());
                 isDecl = mdecl.getName().toString().equals(getIdent().toString());
                 if (isDecl) {
-                    decls.add(MethodParamDecl.getParms(mdecl.getParmDecl()));
+                    cons.add(new Constructor(mdecl));
                 }
             }
         });
-        return decls;
+        return unmodifiableList(cons);
     }
 
     private final AccessModifier m_access;

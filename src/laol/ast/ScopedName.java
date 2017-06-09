@@ -57,5 +57,4 @@ public class ScopedName extends Item {
     }
         
     private final List<Ident> m_names = new LinkedList<>();
-    public static final List<ScopedName> EMPTY_LIST = gblib.Util.emptyUnmodifiableList();
 }

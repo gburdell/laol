@@ -23,9 +23,10 @@
  */
 package laol.ast;
 
-import static gblib.Util.emptyUnmodifiableList;
+import static gblib.Util.getList;
+import static gblib.Util.getUnModifiableList;
+import java.util.Collections;
 import java.util.List;
-import java.util.Objects;
 
 /**
  *
@@ -39,15 +40,13 @@ public class MethodParamDecl extends Item {
     }
 
     public List<MethodParamDeclEle> getDecl() {
-        return Objects.nonNull(m_decl) ? m_decl.getParms() : EMPTY_LIST;
+        return getUnModifiableList(m_decl, f -> f.getParms());
     }
 
     public static List<MethodParamDeclEle> getParms(final MethodParamDecl decl) {
-        return Objects.nonNull(decl) ? decl.getDecl() : EMPTY_LIST;
+        return getList(decl, MethodParamDecl::getDecl);
     }
 
     private final MethodParamDeclList m_decl;
-
-    public final static List<MethodParamDeclEle> EMPTY_LIST = emptyUnmodifiableList();
 
 }

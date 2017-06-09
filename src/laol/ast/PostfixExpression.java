@@ -25,9 +25,11 @@ package laol.ast;
 
 import apfe.runtime.Acceptor;
 import apfe.runtime.Sequence;
+import static gblib.Util.getUnModifiableList;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Objects;
 
 /**
  *
@@ -70,16 +72,20 @@ public class PostfixExpression extends Item {
             return m_block;
         }
 
+        public boolean hasBlock() {
+            return Objects.nonNull(getBlock());
+        }
+        
         protected final Sequence m_seq;
 
         private final Block m_block;
     }
 
-    public static class ArySelExpr extends ItemWithBlock {
+    public static class ArySelExpr extends Item {
 
         private ArySelExpr(Acceptor parsed) {
             super(parsed);
-            m_expr = createItem(m_seq, 1);
+            m_expr = createItem(1);
         }
 
         public SelectExpression getExpr() {
@@ -96,11 +102,11 @@ public class PostfixExpression extends Item {
             m_expr = oneOrNone(m_seq, 1);
         }
 
-        public ParamExpressionList getExpr() {
-            return m_expr;
+        public List<ParamEle> getExpr() {
+            return getUnModifiableList(m_expr, e->e.getEles());
         }
 
-        private ParamExpressionList m_expr;
+        private final ParamExpressionList m_expr;
     }
 
     public static class DotSfx extends ItemWithBlock {
@@ -124,11 +130,11 @@ public class PostfixExpression extends Item {
         }
     }
 
-    public static class PrimExpr extends ItemWithBlock {
+    public static class PrimExpr extends Item {
 
         private PrimExpr(Acceptor parsed) {
             super(parsed);
-            m_expr = createItem(m_seq, 0);
+            m_expr = createItem(parsed);
         }
 
         public PrimaryExpression getExpr() {
