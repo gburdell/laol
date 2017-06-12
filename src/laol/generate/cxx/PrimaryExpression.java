@@ -23,6 +23,10 @@
  */
 package laol.generate.cxx;
 
+import java.io.PrintStream;
+import laol.ast.Item;
+import laol.ast.ScopedName;
+
 /**
  *
  * @author kpfalzer
@@ -30,6 +34,26 @@ package laol.generate.cxx;
 public class PrimaryExpression {
 
     public static void process(final laol.ast.PrimaryExpression item, final Context ctx) {
-        ctx.os().print(item.toString()); //todo
+        if (item.isNull()) {
+            print(ctx, "NULLOBJ");
+        } else {
+            Item expr = item.getExpr();
+            if (item.isKeyword()) {
+                print(ctx, expr);
+            } else if (item.isScopedName()) {
+                print(ctx, gblib.Util.<ScopedName>downCast(expr));
+            } else {
+                print(ctx, item.toString());
+            }
+        }
+    }
+
+    private static PrintStream print(final Context ctx, final String s) {
+        ctx.os().print(s);
+        return ctx.os();
+    }
+
+    private static PrintStream print(final Context ctx, final Item item) {
+        return print(ctx, item.toString());
     }
 }

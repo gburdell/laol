@@ -41,5 +41,9 @@ public class Symbol extends Item {
         }
     }
     
+    public boolean isIdent() {
+        return (m_symbol instanceof Ident);
+    }
+    
     private final Item  m_symbol;
 }

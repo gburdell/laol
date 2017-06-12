@@ -620,10 +620,13 @@ IDENT.
 //same as IDENT but No Keywords allowed
 IDENTNK.
 
+/*TODO: add BasedNumber to the mix
 Number <-   (   BasedNumber
             /   Integer
             /   Float
             ) Spacing
+*/
+Number <- (Integer / Float) Spacing
 
 //{DO NOT USE THESE DIRECTLY: use Number above
 Integer <- Digits !('.' | [eE])

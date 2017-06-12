@@ -22,31 +22,39 @@
  * THE SOFTWARE.
  */
 package laol.ast;
+
 import apfe.runtime.Acceptor;
+import apfe.runtime.PrioritizedChoice;
 
 /**
- * Convenience class for wrapping a primitive or keyword.
- * Use this instead of Class alias, since we can then add convenience methods
- * here.
- * 
+ * Convenience class for wrapping a primitive or keyword. Use this instead of
+ * Class alias, since we can then add convenience methods here.
+ *
  * @author gburdell
  */
 public class Keyword extends Item {
+
     public Keyword(final Acceptor kwrd) {
         super(kwrd);
         m_cls = kwrd.getClass();
     }
-    
+
     public Class getClz() {
         return m_cls;
     }
-    
+
     @Override
     public String toString() {
         //todo: looks a bit dicey here...
         //want to look at other patterns/usages of Keyword
-        return asPrioritizedChoice().getAccepted().getBaseAccepted().toString();
+        String s;
+        try {
+            s = asPrioritizedChoice().getAccepted().getBaseAccepted().toString();
+        } catch (ClassCastException ex) {
+            s = getParsed().getBaseAccepted().toString();
+        }
+        return s;
     }
-    
+
     private final Class m_cls;
 }

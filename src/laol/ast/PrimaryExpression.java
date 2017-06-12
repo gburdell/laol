@@ -22,6 +22,7 @@
  * THE SOFTWARE.
  */
 package laol.ast;
+
 import apfe.runtime.Acceptor;
 import apfe.runtime.Sequence;
 import java.util.Arrays;
@@ -33,6 +34,7 @@ import java.util.Set;
  * @author gburdell
  */
 public class PrimaryExpression extends Item {
+
     public PrimaryExpression(final laol.parser.apfe.PrimaryExpression decl) {
         super(decl);
         final Acceptor acc = asPrioritizedChoice().getAccepted();
@@ -51,20 +53,43 @@ public class PrimaryExpression extends Item {
         }
     }
 
+    public boolean isKeyword() {
+        return (getExpr() instanceof Keyword);
+    }
+
+    public boolean isNull() {
+        return isKeyword() && (gblib.Util.<Keyword>downCast(getExpr()).toString().equals("nil"));
+    }
+
+    public boolean isString() {
+        return (getExpr() instanceof AString);
+    }
+
+    public boolean isSymbol() {
+        return (getExpr() instanceof Symbol);
+    }
+
+    public boolean isNumber() {
+        return (getExpr() instanceof Number);
+    }
+    
+    public boolean isScopedName() {
+        return (getExpr() instanceof ScopedName);
+    }
+    
     public Item getExpr() {
         return m_expr;
     }
-    
-    private final Item  m_expr;
+
+    private final Item m_expr;
     private static final Set<Class> KWRDS = new HashSet<>();
-    
+
     static {
         final Class classes[] = {
             laol.parser.apfe.KNIL.class,
             laol.parser.apfe.KTRUE.class,
             laol.parser.apfe.KFALSE.class,
-            laol.parser.apfe.KSELF.class,
-        };
+            laol.parser.apfe.KSELF.class,};
         KWRDS.addAll(Arrays.asList(classes));
     }
 }
