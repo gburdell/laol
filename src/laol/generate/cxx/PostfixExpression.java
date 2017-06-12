@@ -29,8 +29,14 @@ import java.util.List;
 import gblib.Stack;
 import static gblib.Util.downCast;
 import java.util.Vector;
+import laol.ast.DotSuffix;
 import laol.ast.Item;
 import laol.ast.ParamEle;
+import laol.ast.PostfixExpression.ArySelExpr;
+import laol.ast.PostfixExpression.DotSfx;
+import laol.ast.PostfixExpression.IncDec;
+import laol.ast.PostfixExpression.PrimExpr;
+import laol.ast.PostfixExpression.PrimExprList;
 import laol.ast.SelectExpression;
 import laol.ast.UnnamedParam;
 
@@ -45,6 +51,8 @@ public class PostfixExpression {
     }
 
     /*
+        from laol.peg:
+    
         postfix_expression <-
             postfix_expression LBRACK select_expression RBRACK
         /   postfix_expression LPAREN param_expression_list? RPAREN block?
@@ -53,15 +61,18 @@ public class PostfixExpression {
         /   primary_expression
      */
     private void process() {
-        //A bit complicated since we need lookahead to detect ident.new
-        final Stack<Item> stk = new Stack<>(m_pfExpr.getExprs());
-        while (!stk.isEmpty()) {
-            if (!isConstructor(stk)) {
-                final Item item = stk.pop();
-                if (item instanceof laol.ast.PostfixExpression.ArySelExpr) {
-                    process(laol.ast.PostfixExpression.ArySelExpr.class.cast(item));
-                } else if (item instanceof laol.ast.PostfixExpression.DotSfx) {
-                    process(laol.ast.PostfixExpression.DotSfx.class.cast(item));
+        //A bit complicated since we need lookahead...
+        while (!m_stk.isEmpty()) {
+            if (!isConstructor()) {
+                final Item item = m_stk.pop();
+                if (item instanceof ArySelExpr) {
+                    process(ArySelExpr.class.cast(item));
+                } else if (item instanceof DotSfx) {
+                    process(DotSfx.class.cast(item));
+                } else if (item instanceof IncDec) {
+                    os().print(laol.ast.Keyword.class.cast(item).toString());
+                } else {
+                    PrimaryExpression.process(gblib.Util.<PrimExpr>downCast(item).getExpr(), m_ctx);
                 }
             }
         }
@@ -73,27 +84,23 @@ public class PostfixExpression {
      * @param items ordered items to check.
      * @return true if constructor pattern, and also process.
      */
-    private boolean isConstructor(Stack<Item> items) {
-        if (2 <= items.size()) {
-            if (items.get(1) instanceof laol.ast.PostfixExpression.DotSfx) {
-                final laol.ast.PostfixExpression.DotSfx sfx = downCast(items.get(1));
+    private boolean isConstructor() {
+        if (2 <= m_stk.size()) {
+            if (m_stk.get(1) instanceof DotSfx) {
+                final DotSfx sfx = downCast(m_stk.get(1));
                 if (!sfx.getExpr().isNew()) {
                     return false;
                 }
                 assert (!sfx.getExpr().endsWithQmark());
-                final laol.ast.PrimaryExpression primExpr = downCast(items.pop());
-                items.pop(); //we already grabbed sfx above
+                final laol.ast.PrimaryExpression primExpr = downCast(m_stk.pop());
+                m_stk.pop(); //we already grabbed sfx above
                 //NOTE: sfx could contain block!
                 final laol.ast.ScopedName name = downCast(primExpr.getExpr());
                 os().format("(new %s(", name.toString());
                 if (sfx.hasBlock()) {
                     AnonymousFunctionDefn.process(sfx.getBlock(), m_ctx);
-                } else if (items.peek() instanceof laol.ast.PostfixExpression.PrimExprList) {
-                    final List<ParamEle> parms = downCast(items.pop());
-                    Util.processAsCSV(parms, m_ctx, p->{
-                        final UnnamedParam parm = downCast(p.getEle());
-                        Expression.process(parm, m_ctx);
-                    });
+                } else {
+                    isPrimExprList();
                 }
                 os().print("))");
                 return true;
@@ -102,18 +109,67 @@ public class PostfixExpression {
         return false;
     }
 
-    private void process(final laol.ast.PostfixExpression.DotSfx expr) {
-        final String suffix = expr.getExpr().getSuffix().toString();
+    private void process(final DotSfx expr) {
+        final DotSuffix suffix = expr.getExpr();
+        assert (!suffix.isNew());    //do w/ isConstructor
+        if (suffix.isNil()) {
+            assert (suffix.endsWithQmark() && !expr.hasBlock());
+            os().print(".isNull()");
+        } else {
+            assert (suffix.isIdent());
+            final String methodName = Util.toMethodName(suffix.getSuffix());
+            os().printf("(\"%s\"", methodName);
+            if (expr.hasBlock()) {
+                os().print(", ");
+                AnonymousFunctionDefn.process(expr.getBlock(), m_ctx);
+            } else {
+                isPrimExprList(true, true);
+            }
+            os().print(")");
+        }
     }
 
-    private void process(final laol.ast.PostfixExpression.ArySelExpr expr) {
+    private boolean isPrimExprList(boolean addComma, boolean toVec) {
+        if (m_stk.peek() instanceof PrimExprList) {
+            final PrimExprList expr = downCast(m_stk.pop());
+            final List<ParamEle> parms = expr.getExpr();
+            if (addComma && !parms.isEmpty()) {
+                os().print(", ");
+            }
+            toVec &= (1 < parms.size()) || ((1 == parms.size()) && expr.hasBlock());
+            if (toVec) {
+                os().format("%s(", Util.TO_VEC);
+            }
+            Util.processAsCSV(parms, m_ctx, p -> {
+                final UnnamedParam parm = downCast(p.getEle());
+                Expression.process(parm, m_ctx);
+            });
+            if (expr.hasBlock()) {
+                if (!parms.isEmpty()) {
+                    os().print(", ");
+                }
+                AnonymousFunctionDefn.process(expr.getBlock(), m_ctx);
+            }
+            if (toVec) {
+                os().print(")");
+            }
+            return true;
+        }
+        return false;
+    }
+
+    private boolean isPrimExprList() {
+        return isPrimExprList(false, false);
+    }
+
+    private void process(final ArySelExpr expr) {
         final List<laol.ast.Expression> select = expr.getExpr().getExpressions();
         os().print('[');
         if (1 == select.size()) {
             Expression.process(select.get(0), m_ctx);
         } else {
             os().format("[new Select(%s(", Util.TO_VEC);
-            Util.processAsCSV(select, m_ctx, e->Expression.process(e, m_ctx));
+            Util.processAsCSV(select, m_ctx, e -> Expression.process(e, m_ctx));
             os().print("))");
         }
         os().print(']');
@@ -124,10 +180,10 @@ public class PostfixExpression {
     }
 
     private PostfixExpression(final laol.ast.PostfixExpression pfExpr, final Context ctx) {
-        m_pfExpr = pfExpr;
+        m_stk = new Stack(pfExpr.getExprs());
         m_ctx = ctx;
     }
 
-    private final laol.ast.PostfixExpression m_pfExpr;
+    private final Stack<Item> m_stk;
     private final Context m_ctx;
 }

@@ -36,6 +36,7 @@ import laol.generate.Parse;
 import laol.generate.Parse.Ast;
 import laol.ast.Contents;
 import laol.ast.Item;
+import laol.ast.Keyword;
 import laol.generate.Util;
 
 /**
@@ -85,7 +86,7 @@ public class Generate extends laol.generate.Generate {
     private static final String THIS_PKG = Generate.class.getPackage().getName();
 
     /*package*/
-    static void callProcess(final Item item, final Context ctx) {
+    public static void callProcess(final Item item, final Context ctx) {
         try {
             String itemName = item.getClass().getSimpleName();
             final String genClsName = THIS_PKG + "." + itemName;

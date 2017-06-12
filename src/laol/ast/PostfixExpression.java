@@ -41,19 +41,21 @@ public class PostfixExpression extends Item {
         super(decl);
         Item expr;
         for (Acceptor ele : decl.getItems()) {
-            final Sequence seq = asSequence(ele);
-            final Acceptor first = seq.itemAt(0);
-            if (first instanceof laol.parser.apfe.LBRACK) {
-                expr = new ArySelExpr(seq);
-            } else if (first instanceof laol.parser.apfe.LPAREN) {
-                expr = new PrimExprList(seq);
-            } else if (first instanceof laol.parser.apfe.DotSuffix) {
-                expr = new DotSfx(seq);
-            } else if (first instanceof laol.parser.apfe.PrimaryExpression) {
-                expr = new PrimExpr(seq);
+            if (ele instanceof laol.parser.apfe.PrimaryExpression) {
+                expr = new PrimExpr(ele);
             } else {
-                assert (1 == seq.length());
-                expr = new IncDec(seq.itemAt(0));
+                final Sequence seq = asSequence(ele);
+                final Acceptor first = seq.itemAt(0);
+                if (first instanceof laol.parser.apfe.LBRACK) {
+                    expr = new ArySelExpr(seq);
+                } else if (first instanceof laol.parser.apfe.LPAREN) {
+                    expr = new PrimExprList(seq);
+                } else if (first instanceof laol.parser.apfe.DotSuffix) {
+                    expr = new DotSfx(seq);
+                } else {
+                    assert (1 == seq.length());
+                    expr = new IncDec(seq.itemAt(0));
+                }
             }
             m_exprs.add(expr);
         }
@@ -75,7 +77,7 @@ public class PostfixExpression extends Item {
         public boolean hasBlock() {
             return Objects.nonNull(getBlock());
         }
-        
+
         protected final Sequence m_seq;
 
         private final Block m_block;
@@ -103,7 +105,7 @@ public class PostfixExpression extends Item {
         }
 
         public List<ParamEle> getExpr() {
-            return getUnModifiableList(m_expr, e->e.getEles());
+            return getUnModifiableList(m_expr, e -> e.getEles());
         }
 
         private final ParamExpressionList m_expr;

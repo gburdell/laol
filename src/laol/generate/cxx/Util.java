@@ -31,6 +31,7 @@ import java.util.List;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 import laol.ast.Item;
+import laol.ast.Keyword;
 import laol.ast.MethodParamDeclEle;
 import laol.ast.ParamName;
 import laol.ast.ScopedName;
@@ -99,6 +100,14 @@ public class Util {
             consumer.accept(e);
             doComma = true;
         }
+    }
+
+    public static String toMethodName(String name) {
+        return name.replaceFirst("\\?$", "_PRED").replaceFirst("\\!$", "_SELF");
+    }
+
+    public static String toMethodName(Keyword kwrd) {
+        return toMethodName(kwrd.toString());
     }
 
     public static final String CXX_PARAM_TYPE = "const LaolObj&";
