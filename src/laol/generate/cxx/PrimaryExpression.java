@@ -26,6 +26,8 @@ package laol.generate.cxx;
 import java.io.PrintStream;
 import laol.ast.Item;
 import laol.ast.ScopedName;
+import laol.ast.Symbol;
+import static laol.generate.cxx.Util.MKSYM;
 
 /**
  *
@@ -42,6 +44,9 @@ public class PrimaryExpression {
                 print(ctx, expr);
             } else if (item.isScopedName()) {
                 print(ctx, gblib.Util.<ScopedName>downCast(expr));
+            } else if (item.isSymbol()) {
+                final Symbol sym = gblib.Util.downCast(expr);
+                print(ctx, String.format("%s(\"%s\")", MKSYM, sym.toString()));
             } else {
                 print(ctx, item.toString());
             }

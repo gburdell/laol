@@ -26,9 +26,7 @@ package laol.generate.cxx;
 import java.io.PrintStream;
 import java.util.LinkedList;
 import java.util.List;
-import gblib.Stack;
 import static gblib.Util.downCast;
-import java.util.Vector;
 import laol.ast.DotSuffix;
 import laol.ast.Item;
 import laol.ast.ParamEle;
@@ -37,7 +35,6 @@ import laol.ast.PostfixExpression.DotSfx;
 import laol.ast.PostfixExpression.IncDec;
 import laol.ast.PostfixExpression.PrimExpr;
 import laol.ast.PostfixExpression.PrimExprList;
-import laol.ast.SelectExpression;
 import laol.ast.UnnamedParam;
 
 /**
@@ -62,9 +59,9 @@ public class PostfixExpression {
      */
     private void process() {
         //A bit complicated since we need lookahead...
-        while (!m_stk.isEmpty()) {
+        while (!m_eles.isEmpty()) {
             if (!isConstructor()) {
-                final Item item = m_stk.pop();
+                final Item item = m_eles.pop();
                 if (item instanceof ArySelExpr) {
                     process(ArySelExpr.class.cast(item));
                 } else if (item instanceof DotSfx) {
@@ -85,17 +82,17 @@ public class PostfixExpression {
      * @return true if constructor pattern, and also process.
      */
     private boolean isConstructor() {
-        if (2 <= m_stk.size()) {
-            if (m_stk.get(1) instanceof DotSfx) {
-                final DotSfx sfx = downCast(m_stk.get(1));
+        if (2 <= m_eles.size()) {
+            if (m_eles.get(1) instanceof DotSfx) {
+                final DotSfx sfx = downCast(m_eles.get(1));
                 if (!sfx.getExpr().isNew()) {
                     return false;
                 }
                 assert (!sfx.getExpr().endsWithQmark());
-                final laol.ast.PrimaryExpression primExpr = downCast(m_stk.pop());
-                m_stk.pop(); //we already grabbed sfx above
+                final PrimExpr primExpr = downCast(m_eles.pop());
+                m_eles.pop(); //we already grabbed sfx above
                 //NOTE: sfx could contain block!
-                final laol.ast.ScopedName name = downCast(primExpr.getExpr());
+                final laol.ast.ScopedName name = downCast(primExpr.getExpr().getExpr());
                 os().format("(new %s(", name.toString());
                 if (sfx.hasBlock()) {
                     AnonymousFunctionDefn.process(sfx.getBlock(), m_ctx);
@@ -130,8 +127,8 @@ public class PostfixExpression {
     }
 
     private boolean isPrimExprList(boolean addComma, boolean toVec) {
-        if (m_stk.peek() instanceof PrimExprList) {
-            final PrimExprList expr = downCast(m_stk.pop());
+        if (m_eles.peek() instanceof PrimExprList) {
+            final PrimExprList expr = downCast(m_eles.pop());
             final List<ParamEle> parms = expr.getExpr();
             if (addComma && !parms.isEmpty()) {
                 os().print(", ");
@@ -180,10 +177,10 @@ public class PostfixExpression {
     }
 
     private PostfixExpression(final laol.ast.PostfixExpression pfExpr, final Context ctx) {
-        m_stk = new Stack(pfExpr.getExprs());
+        m_eles = new LinkedList(pfExpr.getExprs());
         m_ctx = ctx;
     }
 
-    private final Stack<Item> m_stk;
+    private final LinkedList<Item> m_eles;
     private final Context m_ctx;
 }

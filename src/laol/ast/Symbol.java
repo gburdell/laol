@@ -24,6 +24,7 @@
 package laol.ast;
 
 import apfe.runtime.Sequence;
+import gblib.Util;
 
 /**
  *
@@ -39,6 +40,12 @@ public class Symbol extends Item {
             //operator
             m_symbol = createItem(asPrioritizedChoice(seq.itemAt(1)).getAccepted());
         }
+    }
+    
+    @Override
+    public String toString() {
+        assert(isIdent());
+        return Util.<Ident>downCast(m_symbol).toString();
     }
     
     public boolean isIdent() {

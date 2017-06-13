@@ -113,4 +113,6 @@ public class Util {
     public static final String CXX_PARAM_TYPE = "const LaolObj&";
 
     public static final String TO_VEC = "toV";
+    
+    public static final String MKSYM = "mkSym"; 
 }

@@ -79,6 +79,9 @@ namespace laol {
             static METHOD_BY_NAME stMethodByName;
         };
 
+		inline LaolObj mkSym(const string& s) {
+			return Symbol::sym(s);
+		}
     }
 }
 
