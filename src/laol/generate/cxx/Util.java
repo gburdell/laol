@@ -23,6 +23,7 @@
  */
 package laol.generate.cxx;
 
+import java.io.PrintStream;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Collection;
@@ -110,9 +111,22 @@ public class Util {
         return toMethodName(kwrd.toString());
     }
 
+    public static PrintStream print(final Context ctx, final String s) {
+        ctx.os().print(s);
+        return ctx.os();
+    }
+
+    public static PrintStream print(final Context ctx, final Item item) {
+        return print(ctx, item.toString());
+    }
+
+    public static PrintStream printSymbol(final Context ctx, final Object sym) {
+        return print(ctx, String.format("%s(\"%s\")", MKSYM, sym.toString()));
+    }
+    
     public static final String CXX_PARAM_TYPE = "const LaolObj&";
 
     public static final String TO_VEC = "toV";
-    
-    public static final String MKSYM = "mkSym"; 
+
+    public static final String MKSYM = "mkSym";
 }

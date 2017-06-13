@@ -28,6 +28,7 @@ import apfe.runtime.Sequence;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Objects;
 import laol.parser.apfe.LBRACK;
 
 /**
@@ -75,6 +76,14 @@ public class ArrayPrimary extends Item {
         private final List<Ident> m_eles = new LinkedList<>();
     }
 
+    public ExpressionList asExprList() {
+        return gblib.Util.downCast(m_ele);
+    }
+    
+    public List<Ident> asIdents() {
+        return gblib.Util.<WordsOrSymbols>downCast(m_ele).getIdents();
+    }
+    
     public EType getType() {
         return (null == m_ele)
                 ? EType.eUnknown
@@ -82,22 +91,6 @@ public class ArrayPrimary extends Item {
                 ? EType.eExpressions
                 : gblib.Util.<WordsOrSymbols>downCast(m_ele).getType() == EType.eWords
                 ? EType.eWords : EType.eSymbols;
-    }
-
-    public List<Item> getElements() {
-        List<Item> eles = new LinkedList<>();
-        switch (getType()) {
-            case eExpressions:
-                eles.addAll(gblib.Util.<ExpressionList>downCast(m_ele).getExpressions());
-                break;
-            case eWords: //fall through
-            case eSymbols:
-                eles.addAll(gblib.Util.<WordsOrSymbols>downCast(m_ele).getIdents());
-                break;
-            default:
-                //do nothing
-        }
-        return Collections.unmodifiableList(eles);
     }
 
     private final Item m_ele;

@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2016 kpfalzer.
+ * Copyright 2017 kpfalzer.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -21,47 +21,26 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package laol.ast;
+package laol.generate.cxx;
 
-import apfe.runtime.Acceptor;
-import laol.test.TestRunner;
-import org.junit.Test;
-import static org.junit.Assert.*;
+import laol.ast.HashKeyValue;
+import static laol.generate.cxx.Util.print;
 
 /**
  *
  * @author kpfalzer
  */
-public class ArrayPrimaryTest extends TestRunner {
-
-    private final String TESTS[] = {
-        "3[1,2,3]",
-        "4%w{abc def ghi jkl}"
-    };
-
-    @Override
-    public Acceptor getGrammar() {
-        return new laol.parser.apfe.ArrayPrimary();
-    }
-
-    @Override
-    public String getTest(String test) {
-        m_expectCnt = Integer.parseInt(test.substring(0, 1));
-        return test.substring(1);
-    }
-
-    @Override
-    public void generateAndTestAst(Acceptor parsed) {
-        laol.ast.ArrayPrimary dut = new laol.ast.ArrayPrimary((laol.parser.apfe.ArrayPrimary) parsed);
-        //assertTrue(m_expectCnt == dut.getElements().size());
-        assertTrue(m_test.equals(m_accepted));
-    }
-
-    private int m_expectCnt = Integer.MAX_VALUE;
-
-    @Test
-    public void testArrayPrimary() {
-        TestRunner runner = new ArrayPrimaryTest();
-        runner.runTests(TESTS);
+public class HashPrimary {
+    public static void process(final laol.ast.HashPrimary item, final Context ctx) {
+        //generate list of pair, as in: {{1, 'a'}, {3, 'b'}, {5, 'c'}, {7, 'd'}}
+        print(ctx, "(new Map({");
+        Util.processAsCSV(item.getVals(), ctx, (HashKeyValue kv) -> {
+            print(ctx, "{");
+            Expression.process(kv.getKey(), ctx);
+            print(ctx, ", ");
+            Expression.process(kv.getValue(), ctx);
+            print(ctx, "}");
+        });
+        print(ctx, "})");
     }
 }

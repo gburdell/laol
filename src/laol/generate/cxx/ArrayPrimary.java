@@ -23,9 +23,7 @@
  */
 package laol.generate.cxx;
 
-import laol.ast.AString;
-import laol.ast.Item;
-import laol.ast.ScopedName;
+import laol.ast.ArrayPrimary.EType;
 import static laol.generate.cxx.Util.print;
 import static laol.generate.cxx.Util.printSymbol;
 
@@ -33,30 +31,31 @@ import static laol.generate.cxx.Util.printSymbol;
  *
  * @author kpfalzer
  */
-public class PrimaryExpression {
+public class ArrayPrimary {
 
-    public static void process(final laol.ast.PrimaryExpression item, final Context ctx) {
-        if (item.isNull()) {
-            print(ctx, "NULLOBJ");
-        } else {
-            Item expr = item.getExpr();
-            if (item.isKeyword()) {
-                print(ctx, expr);
-            } else if (item.isScopedName()) {
-                print(ctx, gblib.Util.<ScopedName>downCast(expr));
-            } else if (item.isSymbol()) {
-                printSymbol(ctx, gblib.Util.downCast(expr));
-            } else if (item.isString()) {
-                print(ctx, String.format("\"%s\"", gblib.Util.<AString>downCast(expr).toString()));
-            } else if (item.isParenthesizedExpr()) {
-                print(ctx, "(");
-                Expression.process(gblib.Util.<laol.ast.Expression>downCast(expr), ctx);
-                print(ctx, ")");
+    public static void process(final laol.ast.ArrayPrimary prim, final Context ctx) {
+        //generate list, as in: {v1, v2, ...}
+        final EType type = prim.getType();
+        print(ctx, "(new Array(");
+        if (EType.eUnknown != type) {
+            print(ctx, "{");
+            if (EType.eExpressions == type) {
+                Util.processAsCSV(prim.asExprList().getExpressions(), ctx,
+                        (laol.ast.Expression expr) -> {
+                            Expression.process(expr, ctx);
+                        });
             } else {
-                Generate.callProcess(expr, ctx);
-                print(ctx, item.toString());
+                Util.processAsCSV(prim.asIdents(), ctx,
+                        (laol.ast.Ident id) -> {
+                            if (EType.eSymbols == type) {
+                                printSymbol(ctx, id);
+                            } else {
+                               print(ctx, String.format("\"%s\"", id.toString())); 
+                            }
+                        });
             }
+            print(ctx, "}");
         }
+        print(ctx, ")");
     }
-
- }
+}

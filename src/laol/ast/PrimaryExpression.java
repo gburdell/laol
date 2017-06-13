@@ -77,6 +77,10 @@ public class PrimaryExpression extends Item {
         return (getExpr() instanceof ScopedName);
     }
     
+    public boolean isParenthesizedExpr() {
+        return (getExpr() instanceof Expression);
+    }
+    
     public Item getExpr() {
         return m_expr;
     }
