@@ -23,44 +23,12 @@
  */
 package laol.generate.cxx;
 
-import java.io.PrintStream;
-import java.util.List;
-import laol.ast.IStatements;
-
 /**
  *
  * @author gburdell
  */
-public class MethodBody {
-
-    public static void process(final laol.ast.MethodBody item, final Context ctx) {
-        (new MethodBody(item, ctx)).process();
+public class ClassBodyStatement {
+    public static void process(final laol.ast.ClassBodyStatement item, final Context ctx) {
+        Statement.process(item, ctx);
     }
-
-    /**
-     * Process statements which are not method declarations.
-     * @param stmts candidate statements.
-     * @param ctx context.
-     */
-    public static void processStmts(IStatements stmts, final Context ctx) {
-        ctx.cxx().println("{");
-        stmts.getStatements()
-                .stream()
-                .map(stmt -> stmt.getStmt())
-                .filter(stmt -> !(stmt instanceof laol.ast.MethodDeclaration))
-                .forEachOrdered(item -> Generate.callProcess(item, ctx));
-        ctx.cxx().println("}");
-    }
-
-    private void process() {
-        processStmts(m_body, m_ctx);
-    }
-
-    private MethodBody(final laol.ast.MethodBody body, final Context ctx) {
-        m_ctx = ctx;
-        m_body = body;
-    }
-
-    private final laol.ast.MethodBody m_body;
-    private final Context m_ctx;
 }
