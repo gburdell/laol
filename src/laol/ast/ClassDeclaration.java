@@ -90,11 +90,13 @@ public class ClassDeclaration extends Item implements IModifiers {
         public Constructor(ClassDeclaration decl) {
             m_parms = decl.getParms();
             m_baseInits = decl.getBaseInitializers();
+            m_stmts = decl.getBody();
         }
 
         public Constructor(MethodDeclaration decl) {
             m_parms = MethodParamDecl.getParms(decl.getParmDecl());
             m_baseInits = decl.getBody().getBaseInitializers(getBaseNames());
+            m_stmts = decl.getBody();
         }
 
         public List<MethodParamDeclEle> getParms() {
@@ -105,8 +107,13 @@ public class ClassDeclaration extends Item implements IModifiers {
             return unmodifiableList(m_baseInits);
         }
 
+        public IStatements getStatements() {
+            return m_stmts;
+        }
+        
         private final List<MethodParamDeclEle> m_parms;
         private final List<BaseClassInitializer> m_baseInits;
+        private final IStatements m_stmts;
     }
 
     public List<Constructor> getConstructors() {

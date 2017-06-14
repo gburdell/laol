@@ -53,6 +53,7 @@ public class InterfaceDeclaration {
         m_ctx = ctx;
         m_clsName = m_decl.getIdent().toString();
         m_helper = new ClassInterfaceDeclaration(m_clsName, m_decl.getBody(), hxx(), cxx());
+        m_ctx.setClassName(m_clsName);
     }
     
     private InterfaceDeclaration declare() {
@@ -101,6 +102,7 @@ public class InterfaceDeclaration {
                 .methodByName()
                 //todo
                 .close();
+        m_ctx.clrClassName();
     }
     
     private final laol.ast.InterfaceDeclaration m_decl;

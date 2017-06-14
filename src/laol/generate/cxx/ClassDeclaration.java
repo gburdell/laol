@@ -34,7 +34,6 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import laol.ast.BaseClassInitializer;
 import laol.ast.ClassDeclaration.Constructor;
-import laol.ast.MethodDeclaration;
 import laol.ast.MethodParamDeclEle;
 import laol.ast.MethodType;
 import laol.ast.ParamName;
@@ -60,10 +59,18 @@ public class ClassDeclaration {
                 .hereMethods()
                 .methodByName()
                 .constructorDefn()
+                .methodDefinitions()
                 .close();
+        m_ctx.clrClassName(); //we're done with this class scope
     }
 
     public static final String METHOD_SIGNATURE = "(const LaolObj& self, const LaolObj& args) const";
+
+    private ClassDeclaration methodDefinitions() {
+        m_helper.getMethodDeclarations()
+                .forEachOrdered(methodDecl -> MethodDeclaration.process(methodDecl, m_ctx));
+        return this;
+    }
 
     private ClassDeclaration memberAccessors() {
         if (!m_members.isEmpty()) {
@@ -130,7 +137,7 @@ public class ClassDeclaration {
                                                 .map(parm -> String.format("m_%s(%s)", parm, parm))
                                                 .collect(Collectors.toList())));
             }
-            cxx().println("{/*TODO: ConstructorBody*/}");
+            MethodBody.processStmts(con.getStatements(), m_ctx);
         });
         return this;
     }
@@ -167,6 +174,7 @@ public class ClassDeclaration {
         m_ctx = ctx;
         m_clsName = m_decl.getIdent().toString();
         m_helper = new ClassInterfaceDeclaration(m_clsName, m_decl.getBody(), hxx(), cxx());
+        m_ctx.setClassName(m_clsName);
     }
 
     private PrintStream hxx() {

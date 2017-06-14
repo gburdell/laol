@@ -29,6 +29,7 @@ import java.util.List;
 import java.util.Objects;
 import static java.util.Objects.nonNull;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 import laol.ast.IStatements;
 import laol.ast.MethodDeclaration;
 import laol.ast.MethodType;
@@ -56,13 +57,21 @@ public class ClassInterfaceDeclaration {
         return m_cxx;
     }
 
-    public void hereMethods() {
-        m_stmts.getStatements()
+    /**
+     * Get non-constructor methods.
+     * @return non-constructor methods.
+     */
+    public Stream<MethodDeclaration> getMethodDeclarations() {
+        return m_stmts.getStatements()
                 .stream()
                 .map(stmt -> stmt.getStmt())
                 .map(stmt -> (stmt instanceof laol.ast.MethodDeclaration) ? MethodDeclaration.class.cast(stmt) : null)
                 .filter(methodDecl -> nonNull(methodDecl))
-                .filter(methodDecl -> !methodDecl.getName().toString().equals(m_clsName))
+                .filter(methodDecl -> !methodDecl.getName().toString().equals(m_clsName));
+    }
+
+    public void hereMethods() {
+        getMethodDeclarations()
                 .forEachOrdered(methodDecl -> {
                     final MethodType type = methodDecl.getType();
                     final String name = methodDecl.getName().toString();//asScopedName().toString();

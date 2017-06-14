@@ -228,6 +228,30 @@ public class Context implements AutoCloseable {
         private final String m_fname;
     }
 
+    /**
+     * Set enclosing class/interface name.
+     * @param name enclosing name.
+     * @return new enclosing name.
+     */
+    public String setClassName(String name) {
+        assert(isNull(name) || isNull(getClassName()));
+        m_className = name;
+        return m_className;
+    }
+    
+    public void clrClassName() {
+        setClassName(null);
+    }
+    
+    public String getClassName() {
+        return m_className;
+    }
+    
+    /**
+     * Name of class/interface of method.
+     */
+    private String m_className = null;
+    
     private NamedPrintStream m_hxx, m_cxx;
     private final Contents m_contents;
     private final Config m_config;
