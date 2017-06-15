@@ -25,12 +25,17 @@ package laol.ast;
 
 import apfe.runtime.Sequence;
 import gblib.Util;
+import static gblib.Util.downCast;
 import java.lang.reflect.Modifier;
+import java.util.Collection;
 import java.util.Collections;
 import static java.util.Collections.unmodifiableList;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Objects;
+import java.util.Set;
+import java.util.stream.Collectors;
 import laol.ast.etc.IModifiers;
 
 /**
@@ -77,6 +82,21 @@ public class ClassDeclaration extends Item implements IModifiers {
         return m_name;
     }
 
+    /**
+     * Get names declared as members in body of default constructor.
+     * Any variable declared in bofy of default constructor is a member (see notes.txt).
+     * @return declared member names.
+     */
+    public List<String> getDeclaredMemberNames() {
+        Set<String> members = new HashSet<>();
+        getBody().getStatements().stream()
+                .map(stmt -> stmt.getStmt())
+                .filter(item -> item instanceof VarDeclStatement)
+                .map(item -> gblib.Util.<VarDeclStatement>downCast(item))
+                .forEach(decl -> members.addAll(decl.getLhsNames()));
+        return members.stream().collect(Collectors.toList());
+    }
+    
     /**
      * Get parameters of primary constructor.
      * @return primary constructor parameters.

@@ -75,6 +75,18 @@ public class Util {
         return names;
     }
 
+    /**
+     * Get parameter names marked as members.
+     * @param parms all parameters.
+     * @return member names.
+     */
+    public static List<String> getMemberNames(List<MethodParamDeclEle> parms) {
+        return parms.stream()
+                .filter(parm -> parm.getParamName().isMember())
+                .map(parm -> parm.getParamName().getName().toString())
+                .collect(Collectors.toList());
+    }
+    
     public static String getCxxDeclNames(List<String> parms, final String sep) {
         return String.join(sep, parms
                 .stream()

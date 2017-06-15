@@ -25,15 +25,16 @@ package laol.ast;
 
 import apfe.runtime.Repetition;
 import apfe.runtime.Sequence;
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
-import laol.ast.etc.IModifiers;
+import java.util.stream.Collectors;
 
 /**
  *
  * @author gburdell
  */
-public class VarDeclStatement extends Item  {
+public class VarDeclStatement extends Item {
 
     public VarDeclStatement(final laol.parser.apfe.VarDeclStatement decl) {
         super(decl);
@@ -52,30 +53,6 @@ public class VarDeclStatement extends Item  {
         }
     }
 
-    /**
-     * An inner class (so can access enclosing info) capturing declared
-     * var(s) as ISymbol.
-     */
-    public class Symbol implements IModifiers {
-
-        private Symbol(ScopedName name, int modifiers) {
-            m_name = name;
-            m_modifers = modifiers;
-        }
-
-        public ScopedName getIdent() {
-            return m_name;
-        }
-
-        @Override
-        public int getModifiers() {
-            return m_modifers;
-        }
-
-        private final int m_modifers;
-        private final ScopedName m_name;
-    }
-
     public AssignmentOp getOp() {
         return m_op;
     }
@@ -86,6 +63,12 @@ public class VarDeclStatement extends Item  {
 
     public MutTypeDecl getType() {
         return m_type;
+    }
+
+    public List<String> getLhsNames() {
+        return m_names.stream()
+                .map(name -> name.toString())
+                .collect(Collectors.toList());
     }
 
     private final MutTypeDecl m_type;

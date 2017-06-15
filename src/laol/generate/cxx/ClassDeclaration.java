@@ -39,6 +39,7 @@ import laol.ast.MethodType;
 import laol.ast.ParamName;
 import laol.generate.Util;
 import static laol.generate.cxx.Util.getNames;
+import static laol.generate.cxx.Util.getMemberNames;
 import static laol.generate.cxx.Util.getCxxDeclNames;
 
 /**
@@ -73,6 +74,8 @@ public class ClassDeclaration {
     }
 
     private ClassDeclaration memberAccessors() {
+        //Check for member declarations default constructor
+        m_members.addAll(m_decl.getDeclaredMemberNames());
         if (!m_members.isEmpty()) {
             hxx().println("\n//accessors {");
         }
@@ -90,11 +93,11 @@ public class ClassDeclaration {
 
     private ClassDeclaration constructorDecl() {
         m_decl.getConstructors().forEach((Constructor con) -> {
-            final List<String> conParms = getNames(con.getParms());
-            m_members.addAll(conParms);
+            //get @parmName parameters in constructors
+            m_members.addAll(getMemberNames(con.getParms()));
             hxx()
                     .format("explicit %s(", m_clsName)
-                    .format("%s);\n", getCxxDeclNames(conParms));
+                    .format("%s);\n", getCxxDeclNames(getNames(con.getParms())));
         });
         hxx()
                 .format("NO_COPY_CONSTRUCTORS(%s);\n", m_clsName)
