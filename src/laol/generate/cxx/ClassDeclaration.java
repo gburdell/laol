@@ -152,7 +152,7 @@ public class ClassDeclaration {
 
     private ClassDeclaration declare() {
         StringBuilder ext = new StringBuilder(": public virtual Laol");
-        getBaseNames().forEach(ext.append(", ")::append);
+        getBaseNames().forEach(bn -> ext.append(", ").append(bn));
         hxx().format("class %s %s {\npublic:\n", m_clsName, ext);
         return this;
     }

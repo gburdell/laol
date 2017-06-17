@@ -26,6 +26,8 @@ package laol.generate.cxx;
 import java.io.PrintStream;
 import java.util.List;
 import laol.ast.IStatements;
+import laol.ast.MethodParamDeclEle;
+import laol.ast.ParamName;
 
 /**
  *
@@ -33,34 +35,70 @@ import laol.ast.IStatements;
  */
 public class MethodBody {
 
-    public static void process(final laol.ast.MethodBody item, final Context ctx) {
+    public static void process(final laol.ast.MethodDeclaration item, final Context ctx) {
         (new MethodBody(item, ctx)).process();
     }
 
     /**
      * Process statements which are not method declarations.
+     *
      * @param stmts candidate statements.
      * @param ctx context.
+     * @param doEnclose true to enclose in {...}".
      */
-    public static void processStmts(IStatements stmts, final Context ctx) {
-        ctx.cxx().println("{");
+    public static void processStmts(IStatements stmts, final Context ctx, boolean doEnclose) {
+        final PrintStream os = ctx.cxx();
+        if (doEnclose) {
+            os.println("{");
+        }
         stmts.getStatements()
                 .stream()
                 .map(stmt -> stmt.getStmt())
                 .filter(stmt -> !(stmt instanceof laol.ast.MethodDeclaration))
                 .forEachOrdered(item -> Generate.callProcess(item, ctx));
-        ctx.cxx().println("}");
+        if (doEnclose) {
+            os.println("}");
+        }
+    }
+
+    public static void processStmts(IStatements stmts, final Context ctx) {
+        processStmts(stmts, ctx, true);
+    }
+
+    /**
+     * Expand args into actual parameters.
+     */
+    private void expandArgs() {
+        if (m_decl.hasParmDecl()) {
+            List<MethodParamDeclEle> parms = m_decl.getParmDecl().getDecl();
+            int i = 0;
+            for (MethodParamDeclEle p : parms) {
+                //todo: support anon func decl (lambda)
+                assert (p.isNamed());
+                final String name = p.getParamName().getName().toString();
+                os().printf("LaolObj %s = args[%d];\n", name, i++);
+            }
+        }
+    }
+
+    private PrintStream os() {
+        return m_ctx.os();
     }
 
     private void process() {
-        processStmts(m_body, m_ctx);
+        os().println("{");
+        expandArgs();
+        processStmts(m_body, m_ctx, false);
+        os().println("}");
     }
 
-    private MethodBody(final laol.ast.MethodBody body, final Context ctx) {
+    private MethodBody(final laol.ast.MethodDeclaration decl, final Context ctx) {
+        m_decl = decl;
         m_ctx = ctx;
-        m_body = body;
+        m_body = m_decl.getBody();
     }
 
     private final laol.ast.MethodBody m_body;
+    private final laol.ast.MethodDeclaration m_decl;
     private final Context m_ctx;
 }

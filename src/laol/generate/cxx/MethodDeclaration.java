@@ -57,7 +57,7 @@ public class MethodDeclaration {
         cxx().printf("\nRef %s %s", 
                 (Objects.nonNull(m_className) ? (m_className + "::") : "") + m_methodName, 
                 METHOD_SIGNATURE);
-        MethodBody.process(m_decl.getBody(), m_ctx);
+        MethodBody.process(m_decl, m_ctx);
     }
 
     private MethodDeclaration(final laol.ast.MethodDeclaration decl, final Context ctx) {
