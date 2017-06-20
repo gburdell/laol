@@ -308,9 +308,9 @@ statement <-
 /   class_declaration
 /   interface_declaration 
 /   method_declaration 
+/   var_decl_statement
 /   assign_statement
 /   expression_statement
-/   var_decl_statement
 /   dsl_statement
 
 // same as statement: but no inner class/interface
@@ -329,9 +329,9 @@ class_body_statement <-
 /   try_statement 
 /   throw_statement
 /   method_declaration 
+/   var_decl_statement
 /   assign_statement
 /   expression_statement
-/   var_decl_statement
 /   dsl_statement
 
 interface_body_statement <-
