@@ -24,55 +24,54 @@
 package laol.generate.cxx;
 
 import java.io.PrintStream;
-import java.util.function.Consumer;
-import laol.ast.Keyword;
+import java.util.List;
+import java.util.ListIterator;
+import laol.ast.IfStatement.ExprStmt;
 
 /**
  *
  * @author gburdell
  */
-public class StatementModifier {
+public class IfStatement {
 
-    public static void process(
-            final laol.ast.StatementModifier item,
-            final Context ctx,
-            final Consumer<Void> body) {
-        (new StatementModifier(item, ctx, body)).process();
+    public static void process(final laol.ast.IfStatement item, final Context ctx) {
+        (new IfStatement(item, ctx)).process();
     }
 
     private void process() {
-        final Keyword kwrd = m_stmtModifier.getType();
-        if (kwrd.getClz().equals(laol.parser.apfe.KUNTIL.class)) {
-            os().println("do {");
-            m_body.accept(null);
-            //Expression.process(m_item.getExpr(), m_ctx);
-            os().printf("} while (toBool(");
-            Expression.process(m_stmtModifier.getExpr(), m_ctx);
-            os().println("));");
-        } else {
-            os().printf("%s (toBool(", kwrd.toString().toLowerCase());
-            Expression.process(m_stmtModifier.getExpr(), m_ctx);
-            os().println(")) {");
-            m_body.accept(null);
-            //Expression.process(m_item.getExpr(), m_ctx);
-            os().println("}");
+        final List<ExprStmt> stmts = m_item.getClauses();
+        os().print("if ");
+        process(stmts.get(0), m_item.isUnless());
+        for (ListIterator<ExprStmt> iter = stmts.listIterator(1); iter.hasNext();) {
+            os().println(" else if ");
+            process(iter.next());
         }
-
+        if (m_item.hasElse()) {
+            os().println(" else");
+            Statement.process(m_item.getElse(), m_ctx);
+        }
     }
 
+    private void process(final ExprStmt condStmt, boolean isNot) {
+        os().printf("(%c toBool(", isNot ? '!' : ' ');
+        Expression.process(condStmt.v1, m_ctx);
+        os().println("))");
+        Statement.process(condStmt.v2, m_ctx);
+    }
+
+    private void process(final ExprStmt condStmt) {
+        process(condStmt, false);
+    }
+    
     private PrintStream os() {
         return m_ctx.cxx();
     }
 
-    private StatementModifier(final laol.ast.StatementModifier item,
-            final Context ctx,
-            final Consumer<Void> body) {
-        m_stmtModifier = item;
+    private IfStatement(final laol.ast.IfStatement item, final Context ctx) {
+        m_item = item;
         m_ctx = ctx;
-        m_body = body;
     }
 
-    private final laol.ast.StatementModifier m_stmtModifier;
+    private final laol.ast.IfStatement m_item;
     private final Context m_ctx;
-    private final Consumer<Void> m_body;
 }

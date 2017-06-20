@@ -36,6 +36,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
 import static java.util.Objects.isNull;
+import java.util.Set;
 import java.util.stream.Collectors;
 import laol.ast.Contents;
 import laol.ast.Ident;
@@ -241,10 +242,20 @@ public class Context implements AutoCloseable {
     
     public void clrClassName() {
         setClassName(null);
+        setMemberNames(null);
     }
     
     public String getClassName() {
         return m_className;
+    }
+    
+    public void setMemberNames(final Set<String> memberNames) {
+        assert(isNull(memberNames) || isNull(m_memberNames));
+        m_memberNames = memberNames;
+    }
+    
+    public boolean isMemberName(final String name) {
+        return isNull(m_memberNames) ? false : m_memberNames.contains(name);
     }
     
     /**
@@ -257,4 +268,5 @@ public class Context implements AutoCloseable {
     private final Config m_config;
     private final String m_srcFname, m_baseName;
     private NamedPrintStream m_currStrm = null;
+    private Set<String> m_memberNames = null;
 }

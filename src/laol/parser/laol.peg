@@ -338,7 +338,10 @@ interface_body_statement <-
 	method_declaration 
 /   assign_statement
 
-block_statement <- LCURLY sp statement* RCURLY eos ;
+block_statement <- 
+	LCURLY RCURLY
+/	LCURLY sp statement* RCURLY eos ;
+
 break_statement <- K_BREAK eos ;
 next_statement <-  K_NEXT eos ;
 alias_statement <- K_ALIAS method_name method_name eos ;
@@ -669,7 +672,8 @@ eos <- SemiOrEOL
 /      &EOF
 ;
 
-statement_modifier <- (K_IF / K_UNLESS / K_WHILE / K_UNTIL) expression eos
+//Do not allow 'eos' since would open the "gates of confusion"
+statement_modifier <- (K_IF / K_UNLESS / K_WHILE / K_UNTIL) expression sp
 ;
 
 SemiOrEOL.  //true if SpacingWithSemi ended w/ semi or nl

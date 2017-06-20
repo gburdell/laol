@@ -69,7 +69,7 @@ public class PostfixExpression {
                 } else if (item instanceof IncDec) {
                     os().print(laol.ast.Keyword.class.cast(item).toString());
                 } else {
-                    PrimaryExpression.process(gblib.Util.<PrimExpr>downCast(item).getExpr(), m_ctx);
+                    process(gblib.Util.<PrimExpr>downCast(item));
                 }
             }
         }
@@ -106,6 +106,25 @@ public class PostfixExpression {
         return false;
     }
 
+    private void process(final PrimExpr expr) {
+        final laol.ast.PrimaryExpression primExpr = expr.getExpr();
+        if (primExpr.isSimpleName()) {
+            final String name = primExpr.toSimpleName();
+            if (m_ctx.isMemberName(name)) {
+                boolean isLocalMemberName = m_eles.isEmpty();
+                if (!isLocalMemberName) {
+                    final Item peek = m_eles.peek();
+                    isLocalMemberName = (peek instanceof ArySelExpr) || (peek instanceof IncDec);
+                }
+                if (isLocalMemberName) {
+                    os().printf("self(\"%s\")", name);
+                    return;
+                }
+            }
+        }
+        PrimaryExpression.process(primExpr, m_ctx);
+    }
+    
     private void process(final DotSfx expr) {
         final DotSuffix suffix = expr.getExpr();
         assert (!suffix.isNew());    //do w/ isConstructor

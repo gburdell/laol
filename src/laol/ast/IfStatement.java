@@ -66,12 +66,20 @@ public class IfStatement extends Item {
         return Collections.unmodifiableList(m_clauses);
     }
 
-    public Statement geElse() {
+    public boolean hasElse() {
+        return isNonNull(m_else);
+    }
+    
+    public Statement getElse() {
         return m_else;
     }
 
     public boolean isIf() {
         return m_if;
+    }
+    
+    public boolean isUnless() {
+        return !isIf();
     }
     
     /**

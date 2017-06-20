@@ -77,6 +77,15 @@ public class PrimaryExpression extends Item {
         return (getExpr() instanceof ScopedName);
     }
     
+    public boolean isSimpleName() {
+        return isScopedName() && gblib.Util.<ScopedName>downCast(getExpr()).isSimpleName();
+    }
+    
+    public String toSimpleName() {
+        assert(isSimpleName());
+        return gblib.Util.<ScopedName>downCast(getExpr()).toString();
+    }
+    
     public boolean isParenthesizedExpr() {
         return (getExpr() instanceof Expression);
     }

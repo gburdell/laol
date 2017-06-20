@@ -88,13 +88,14 @@ public class ClassDeclaration {
             m_members.forEach(parm -> hxx().format("LaolObj m_%s;\n", parm));
             hxx().println("\n//accessors }\n\npublic:");
         }
+        m_ctx.setMemberNames(m_members);
         return this;
     }
 
     private ClassDeclaration constructorDecl() {
         m_decl.getConstructors().forEach((Constructor con) -> {
-            //get @parmName parameters in constructors
-            m_members.addAll(getMemberNames(con.getParms()));
+            //get parmName parameters in constructors
+            m_members.addAll(getNames(con.getParms()));
             hxx()
                     .format("explicit %s(", m_clsName)
                     .format("%s);\n", getCxxDeclNames(getNames(con.getParms())));
@@ -106,6 +107,7 @@ public class ClassDeclaration {
     }
 
     private ClassDeclaration constructorDefn() {
+        m_ctx.setCurrStream(Context.EType.eCxx);
         m_decl.getConstructors().forEach((Constructor con) -> {
             //constructor declaration (in definition)
             final List<String> conParms = getNames(con.getParms());
@@ -116,7 +118,6 @@ public class ClassDeclaration {
             String colon = ": ";
             if (!con.getBaseInits().isEmpty()) {
                 cxx().println(":");
-                m_ctx.setCurrStream(Context.EType.eCxx);
                 boolean doComma = false;
                 for (BaseClassInitializer init : con.getBaseInits()) {
                     if (doComma) {

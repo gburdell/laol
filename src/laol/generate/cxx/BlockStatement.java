@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2016 gburdell.
+ * Copyright 2017 gburdell.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -21,42 +21,30 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package laol.ast;
+package laol.generate.cxx;
 
-import apfe.runtime.Sequence;
-import java.util.Collections;
 import java.util.List;
+import laol.ast.Item;
 
 /**
  *
  * @author gburdell
  */
-public class BlockStatement extends Item {
-
-    public BlockStatement(final laol.parser.apfe.BlockStatement decl) {
-        super(decl);
-        if (0 == asPrioritizedChoice().whichAccepted()) {
-            m_stmts = Collections.EMPTY_LIST;
-            m_stmtModifier = null;
+public class BlockStatement {
+    public static void process(final laol.ast.BlockStatement item, final Context ctx) {
+        final List<Item> statements = item.getStatements();
+        if (item.hasStmtModifier()) {
+            StatementModifier.process(item.getStmtModifier(), ctx, __->process(statements, ctx));
         } else {
-            final Sequence seq = asSequence();
-            m_stmts = zeroOrMore(seq, 1);
-            m_stmtModifier = getStatementModifier(seq, 3);
+            ctx.cxx().println("{");
+            process(statements, ctx);
+            ctx.cxx().println("}");
         }
     }
-
-    public List<Item> getStatements() {
-        return Collections.unmodifiableList(m_stmts);
+    
+    private static void process(final List<Item> statements, final Context ctx) {
+        statements.forEach((stmt) -> {
+            Generate.callProcess(stmt, ctx);
+        });
     }
-
-    public boolean hasStmtModifier() {
-        return isNonNull(getStmtModifier());
-    }
-
-    public StatementModifier getStmtModifier() {
-        return m_stmtModifier;
-    }
-
-    private final List<Item> m_stmts;
-    private final StatementModifier m_stmtModifier;
 }

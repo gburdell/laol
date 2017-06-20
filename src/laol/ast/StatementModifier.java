@@ -34,15 +34,10 @@ public class StatementModifier extends Item {
         final Sequence seq = asSequence();
         m_type = new Keyword(asPrioritizedChoice(seq.itemAt(0)).getAccepted());
         m_expr = createItem(seq, 1);
-        m_stmtModifier = getStatementModifier(seq, 2);
     }
 
     public Expression getExpr() {
         return m_expr;
-    }
-
-    public StatementModifier getStmtModifier() {
-        return m_stmtModifier;
     }
 
     public Keyword getType() {
@@ -51,5 +46,4 @@ public class StatementModifier extends Item {
     
     private final Keyword m_type;
     private final Expression m_expr;
-    private final StatementModifier m_stmtModifier;
 }

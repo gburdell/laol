@@ -42,6 +42,10 @@ public class ExpressionStatement extends Item {
         return m_expr;
     }
 
+    public boolean hasStmtModifier() {
+        return isNonNull(getStmtModifier());
+    }
+    
     public StatementModifier getStmtModifier() {
         return m_stmtModifier;
     }
