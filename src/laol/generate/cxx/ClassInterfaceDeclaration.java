@@ -70,6 +70,9 @@ public class ClassInterfaceDeclaration {
                 .filter(methodDecl -> !methodDecl.getName().toString().equals(m_clsName));
     }
 
+    /**
+     * Generate method declarations.
+     */
     public void hereMethods() {
         getMethodDeclarations()
                 .forEachOrdered(methodDecl -> {
@@ -88,7 +91,7 @@ public class ClassInterfaceDeclaration {
                 });
     }
 
-    public void methodByName(List<String> names) {
+    public void methodLookup(List<String> names) {
         hxx().println("protected:\n"
                 + "virtual const METHOD_BY_NAME& getMethodByName() override;\n"
                 + "private:\n"

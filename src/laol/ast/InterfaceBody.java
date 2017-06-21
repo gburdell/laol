@@ -37,9 +37,7 @@ public class InterfaceBody extends Item implements IStatements {
 
     @Override
     public List<Statement> getStatements() {
-        return isNonNull(m_stmts) 
-                ? Collections.unmodifiableList(m_stmts) 
-                : gblib.Util.emptyUnmodifiableList();
+        return Collections.unmodifiableList(m_stmts);
     }
     
     private final List<Statement>   m_stmts;

@@ -117,7 +117,7 @@ public class PostfixExpression {
                     isLocalMemberName = (peek instanceof ArySelExpr) || (peek instanceof IncDec);
                 }
                 if (isLocalMemberName) {
-                    os().printf("self(\"%s\")", name);
+                    os().printf("m_%s", name); //use accessor
                     return;
                 }
             }

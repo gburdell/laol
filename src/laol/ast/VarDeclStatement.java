@@ -57,6 +57,10 @@ public class VarDeclStatement extends Item {
         return m_op;
     }
 
+    public boolean isAssign() {
+        return isNonNull(getOp());
+    }
+    
     public AssignmentRhs getRhs() {
         return m_rhs;
     }

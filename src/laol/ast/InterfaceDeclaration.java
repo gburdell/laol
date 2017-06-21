@@ -55,20 +55,20 @@ public class InterfaceDeclaration extends Item implements IModifiers {
         m_body = createItem(seq, 5);
     }
 
+    public List<String> getBaseNames() {
+        return Util.getUnModifiableList(getImplements(),
+                scopedNames -> scopedNames.getNames().stream()
+                        .map(scoped -> scoped.toString())
+                        .collect(Collectors.toList())
+        );
+    }
+
     public AccessModifier getAccess() {
         return m_access;
     }
 
     public InterfaceBody getBody() {
         return m_body;
-    }
-
-    public List<String> getBaseNames() {
-        return nonNull(getImplements())
-                ? getImplements().getNames().stream()
-                        .map(scoped -> scoped.toString())
-                        .collect(Collectors.toList())
-                : gblib.Util.emptyUnmodifiableList();
     }
 
     public ScopedNameList getImplements() {

@@ -75,10 +75,10 @@ public class AString extends Item {
                 m_items.addAll(zeroOrMore(items, 1));
                 break;
             case 1:
-                final int n = getParsed().toString().length();
+                final String s = items.toString();
+                final int n = s.length();
                 if (2 < n) {
-                    final String s = getParsed().toString().substring(1, n - 1);
-                    m_items.add(new S(decl, s));
+                    m_items.add(new S(decl, s.substring(1, n-1)));
                 }
                 break;
             default:

@@ -54,7 +54,6 @@ public class PrimaryExpression {
                 print(ctx, ")");
             } else {
                 Generate.callProcess(expr, ctx);
-                print(ctx, item.toString());
             }
         }
     }

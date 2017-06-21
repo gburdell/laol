@@ -32,6 +32,7 @@ public class ExpressionStatement {
     public static void process(final laol.ast.ExpressionStatement item, final Context ctx) {
         if (!item.hasStmtModifier()) {
             Expression.process(item.getExpr(), ctx);
+            ctx.os().println(" ;");
         } else {
             StatementModifier.process(
                     item.getStmtModifier(),

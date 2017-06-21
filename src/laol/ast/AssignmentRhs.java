@@ -23,6 +23,8 @@
  */
 package laol.ast;
 
+import static gblib.Util.downCast;
+
 /**
  *
  * @author gburdell
@@ -36,6 +38,15 @@ public class AssignmentRhs extends Item {
 
     public Item getRhs() {
         return m_rhs;
+    }
+    
+    public boolean isExprList() {
+        return (getRhs() instanceof ExpressionList);
+    }
+    
+    public ExpressionList asExprList() {
+        assert(isExprList());
+        return downCast(getRhs());
     }
     
     private final Item  m_rhs;

@@ -84,7 +84,8 @@ public class ClassDeclaration extends Item implements IModifiers {
 
     /**
      * Get names declared as members in body of default constructor.
-     * Any variable declared in bofy of default constructor is a member (see notes.txt).
+     * Any variable declared in body of default constructor is a member (see notes.txt).
+     * todo: consider !name to indicate 'name' as parameter/member w/o accessor.
      * @return declared member names.
      */
     public List<String> getDeclaredMemberNames() {

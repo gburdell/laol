@@ -58,7 +58,7 @@ public class ClassDeclaration {
                 .constructorDecl()
                 .memberAccessors()
                 .hereMethods()
-                .methodByName()
+                .methodLookup()
                 .constructorDefn()
                 .methodDefinitions()
                 .close();
@@ -168,8 +168,8 @@ public class ClassDeclaration {
      *
      * @return this.
      */
-    private ClassDeclaration methodByName() {
-        m_helper.methodByName(getBaseNames());
+    private ClassDeclaration methodLookup() {
+        m_helper.methodLookup(getBaseNames());
         return this;
     }
 

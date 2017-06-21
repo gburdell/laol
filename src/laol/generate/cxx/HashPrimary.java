@@ -41,6 +41,6 @@ public class HashPrimary {
             Expression.process(kv.getValue(), ctx);
             print(ctx, "}");
         });
-        print(ctx, "})");
+        print(ctx, "}))");
     }
 }

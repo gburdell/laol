@@ -42,12 +42,12 @@ import static laol.generate.cxx.ClassDeclaration.METHOD_SIGNATURE;
  * @author gburdell
  */
 public class InterfaceDeclaration {
-    
+
     public static void process(final laol.ast.InterfaceDeclaration item, final Context ctx) throws FileNotFoundException, Util.EarlyTermination {
         final InterfaceDeclaration idecl = new InterfaceDeclaration(item, ctx);
         idecl.process();
     }
-    
+
     public InterfaceDeclaration(final laol.ast.InterfaceDeclaration decl, final Context ctx) {
         m_decl = decl;
         m_ctx = ctx;
@@ -55,7 +55,7 @@ public class InterfaceDeclaration {
         m_helper = new ClassInterfaceDeclaration(m_clsName, m_decl.getBody(), hxx(), cxx());
         m_ctx.setClassName(m_clsName);
     }
-    
+
     private InterfaceDeclaration declare() {
         StringBuilder ext = new StringBuilder(": public virtual Laol");
         if (nonNull(m_decl.getImplements())) {
@@ -65,46 +65,53 @@ public class InterfaceDeclaration {
         hxx().format("class %s %s {\npublic:\n", m_clsName, ext);
         return this;
     }
-    
+
     private InterfaceDeclaration hereMethods() {
         m_helper.hereMethods();
         return this;
     }
-    
+
     private InterfaceDeclaration emptyConstructor() {
         hxx().format("protected:\n%s(){/*empty*/}\nvirtual ~%s() = 0;\n",
                 m_clsName, m_clsName);
         return this;
     }
-    
-    private InterfaceDeclaration methodByName() {
-        m_helper.methodByName(m_decl.getBaseNames());
+
+    private InterfaceDeclaration methodLookup() {
+        m_helper.methodLookup(m_decl.getBaseNames());
         return this;
     }
-    
+
     private InterfaceDeclaration close() {
         m_helper.close();
         return this;
     }
-    
+
     private PrintStream hxx() {
         return m_ctx.hxx();
     }
-    
+
     private PrintStream cxx() {
         return m_ctx.cxx();
     }
-    
+
     private void process() {
         declare()
                 .hereMethods()
                 .emptyConstructor()
-                .methodByName()
-                //todo
+                .methodLookup()
+                .methodDefinitions()
                 .close();
         m_ctx.clrClassName();
     }
-    
+
+    private InterfaceDeclaration methodDefinitions() {
+        m_ctx.setCurrStream(Context.EType.eCxx);
+        m_helper.getMethodDeclarations()
+                .forEachOrdered(methodDecl -> laol.generate.cxx.MethodDeclaration.process(methodDecl, m_ctx));
+        return this;
+    }
+
     private final laol.ast.InterfaceDeclaration m_decl;
     private final Context m_ctx;
     private final String m_clsName;
