@@ -23,6 +23,7 @@
  */
 package laol.ast;
 
+import laol.ast.etc.IStatements;
 import apfe.runtime.Acceptor;
 import gblib.Util;
 import java.util.Collections;
@@ -32,11 +33,11 @@ import java.util.List;
 /**
  *
  * @author gburdell
- * @param <T> ClassBody or MethodBody (not checked)
+ * @param <T> ClassBody or ClassMethodBody (not checked)
  */
-public class BodyBase<T extends Acceptor> extends Item implements IStatements {
+public class ClassMethodBase<T extends Acceptor> extends Item implements IStatements {
 
-    protected BodyBase(final T decl) {
+    protected ClassMethodBase(final T decl) {
         super(decl);
         m_baseInitializers = zeroOrMore(0);
         m_stmts = zeroOrMore(1);
@@ -97,3 +98,4 @@ public class BodyBase<T extends Acceptor> extends Item implements IStatements {
     private final List<BaseClassInitializer> m_baseInitializers;
     private final List<Statement> m_stmts;
 }
+

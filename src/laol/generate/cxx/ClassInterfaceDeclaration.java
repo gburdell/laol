@@ -30,7 +30,7 @@ import java.util.Objects;
 import static java.util.Objects.nonNull;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-import laol.ast.IStatements;
+import laol.ast.etc.IStatements;
 import laol.ast.MethodDeclaration;
 import laol.ast.MethodType;
 import laol.ast.ScopedName;

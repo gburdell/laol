@@ -23,6 +23,7 @@
  */
 package laol.ast;
 
+import laol.ast.etc.IStatements;
 import apfe.runtime.Sequence;
 import gblib.Util;
 import static gblib.Util.downCast;
@@ -114,7 +115,7 @@ public class ClassDeclaration extends Item implements IModifiers {
             m_stmts = decl.getBody();
         }
 
-        public Constructor(MethodDeclaration decl) {
+        public Constructor(ClassMethodDeclaration decl) {
             m_parms = MethodParamDecl.getParms(decl.getParmDecl());
             m_baseInits = decl.getBody().getBaseInitializers(getBaseNames());
             m_stmts = decl.getBody();
@@ -141,9 +142,9 @@ public class ClassDeclaration extends Item implements IModifiers {
         List<Constructor> cons = new LinkedList<>();
         cons.add(new Constructor(this));
         getBody().getStatements().forEach((Statement stmt) -> {
-            boolean isDecl = stmt.getStmt() instanceof MethodDeclaration;
+            boolean isDecl = stmt.getStmt() instanceof ClassMethodDeclaration;
             if (isDecl) {
-                final MethodDeclaration mdecl = MethodDeclaration.class.cast(stmt.getStmt());
+                final ClassMethodDeclaration mdecl = ClassMethodDeclaration.class.cast(stmt.getStmt());
                 isDecl = mdecl.getName().toString().equals(getIdent().toString());
                 if (isDecl) {
                     cons.add(new Constructor(mdecl));

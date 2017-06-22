@@ -22,24 +22,14 @@
  * THE SOFTWARE.
  */
 package laol.ast;
-import laol.ast.etc.IStatements;
-import java.util.Collections;
-import java.util.List;
 
 /**
  *
  * @author gburdell
  */
-public class MethodBody extends Item implements IStatements {
-    public MethodBody(final laol.parser.apfe.MethodBody decl) {
+public class ClassMethodBody extends ClassMethodBase<laol.parser.apfe.ClassMethodBody> {
+    public ClassMethodBody(final laol.parser.apfe.ClassMethodBody decl) {
         super(decl);
-        m_stmts = zeroOrMore(decl.getBaseAccepted());
     }
     
-    @Override
-    public List<Statement> getStatements() {
-        return Collections.unmodifiableList(m_stmts);
-    }
-    
-    private final List<Statement> m_stmts;
 }

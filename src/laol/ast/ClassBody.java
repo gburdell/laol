@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2016 gburdell.
+ * Copyright 2017 gburdell.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -23,13 +23,75 @@
  */
 package laol.ast;
 
+import laol.ast.etc.IStatements;
+import gblib.Util;
+import java.util.LinkedList;
+import java.util.List;
+
 /**
  *
  * @author gburdell
  */
-public class ClassBody extends BodyBase<laol.parser.apfe.ClassBody> {
+public class ClassBody extends Item implements IStatements {
 
-    public ClassBody(final laol.parser.apfe.ClassBody decl) {
+    protected ClassBody(final laol.parser.apfe.ClassBody decl) {
         super(decl);
+        m_baseInitializers = zeroOrMore(0);
+        m_stmts = zeroOrMore(1);
     }
+
+    /**
+     * Get base class initializer which match actual base names.
+     *
+     * @param baseNames list of base class names.
+     * @return base class initializers. The initializers are removed from here
+     * upon return.
+     */
+    public List<BaseClassInitializer> getBaseInitializers(List<String> baseNames) {
+        List<BaseClassInitializer> inits = new LinkedList<>();
+        getBaseInitializers().stream()
+                .filter(init -> baseNames.contains(init.getBaseName()))
+                .forEach(init -> inits.add(init));
+        remove(inits);
+        return inits;
+    }
+
+    /**
+     * Get list of possible base class initializers. If the leadining IDENT does
+     * not match a base class, then actually a statement.
+     *
+     * @return possible base class initializers.
+     */
+    private List<BaseClassInitializer> getBaseInitializers() {
+        return Util.getUnModifiableList(m_baseInitializers, self -> self);
+    }
+
+    /**
+     * Remove initializer after processed. We do so in order to keep any
+     * statements which actually matched as base initializer.
+     *
+     * @param init initializer to remove.
+     */
+    private void remove(List<BaseClassInitializer> init) {
+        if (!init.isEmpty()) {
+            final boolean ok = m_baseInitializers.removeAll(init);
+            assert (ok);
+        }
+    }
+
+    /**
+     * Get statements of class body. If there are any remaining
+     * BaseClassInitializer remaining; then those should be processed first as
+     * statement-like.
+     *
+     * @return class body statements.
+     */
+    @Override
+    public List<Statement> getStatements() {
+        assert (getBaseInitializers().isEmpty());    //see above
+        return Util.getUnModifiableList(m_stmts, self -> self);
+    }
+
+    private final List<BaseClassInitializer> m_baseInitializers;
+    private final List<Statement> m_stmts;
 }

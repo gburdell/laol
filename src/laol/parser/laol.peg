@@ -336,7 +336,7 @@ class_body_statement <-
 
 interface_body_statement <-
 	method_declaration 
-/   assign_statement
+/   assign_statement  //static/constants
 
 block_statement <- 
 	LCURLY RCURLY
@@ -464,7 +464,19 @@ method_declaration <-
     method_name method_param_decl? method_return_decl?
         //NOTE: abstract declaration if empty
         (LCURLY sp method_body sp RCURLY)?
-        eos
+
+//same as method_declaration but uses 'class_method_body' (base-initializer)
+class_method_declaration <-
+    access_modifier?
+    method_type
+    method_name method_param_decl? method_return_decl?
+        //NOTE: abstract declaration if empty
+        (LCURLY sp class_method_body sp RCURLY)?
+    
+method_body <- statement*
+
+// Constructors defined as methods could have base class initializers
+class_method_body <- base_class_initializer* statement*
     
 method_name <-
     method_name_op
@@ -482,9 +494,6 @@ method_name_op <-
 /   PLUS2 / MINUS2  //postix operator
 /   ("++_" / "--_") sp //prefix operator
 
-// Constructors defined as methods could have base class initializers
-method_body <- base_class_initializer* statement*
-    
 case_statement <-
     K_CASE expression LCURLY 
         (K_WHEN expression_list COLON statement)*

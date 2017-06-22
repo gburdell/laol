@@ -25,7 +25,7 @@ package laol.generate.cxx;
 
 import java.io.PrintStream;
 import java.util.List;
-import laol.ast.IStatements;
+import laol.ast.etc.IStatements;
 import laol.ast.MethodParamDeclEle;
 import laol.ast.ParamName;
 
