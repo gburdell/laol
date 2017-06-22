@@ -34,7 +34,7 @@ import java.util.List;
  */
 public class ClassBody extends Item implements IStatements {
 
-    protected ClassBody(final laol.parser.apfe.ClassBody decl) {
+    public ClassBody(final laol.parser.apfe.ClassBody decl) {
         super(decl);
         m_baseInitializers = zeroOrMore(0);
         m_stmts = zeroOrMore(1);

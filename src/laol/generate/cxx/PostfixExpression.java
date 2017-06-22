@@ -110,16 +110,31 @@ public class PostfixExpression {
         final laol.ast.PrimaryExpression primExpr = expr.getExpr();
         if (primExpr.isSimpleName()) {
             final String name = primExpr.toSimpleName();
+            final Item peek = m_eles.peek();
             if (m_ctx.isMemberName(name)) {
                 boolean isLocalMemberName = m_eles.isEmpty();
                 if (!isLocalMemberName) {
-                    final Item peek = m_eles.peek();
                     isLocalMemberName = (peek instanceof ArySelExpr) || (peek instanceof IncDec);
                 }
                 if (isLocalMemberName) {
                     os().printf("m_%s", name); //use accessor
                     return;
                 }
+                assert(false); //todo?
+            } else {
+                /*
+                 * A simple name which is not a local member name.
+                 * Could be: 
+                 *   1) local/super method
+                 *   2) local var
+                 */
+                os().printf("%s", name);
+                if (peek instanceof PrimExprList) {
+                    os().print("(self");
+                    isPrimExprList(true, true);
+                    os().print(")");
+                } 
+                return;
             }
         }
         PrimaryExpression.process(primExpr, m_ctx);

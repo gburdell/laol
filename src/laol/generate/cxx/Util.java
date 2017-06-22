@@ -116,7 +116,7 @@ public class Util {
     }
 
     public static String toMethodName(String name) {
-        return name.replaceFirst("\\?$", "_PRED").replaceFirst("\\!$", "_SELF").trim();
+       return name.replaceFirst("\\?$", "_PRED").replaceFirst("\\!$", "_SELF").trim();
     }
 
     public static String toMethodName(Keyword kwrd) {
