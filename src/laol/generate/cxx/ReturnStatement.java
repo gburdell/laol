@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2016 gburdell.
+ * Copyright 2017 gburdell.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -21,31 +21,35 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package laol.ast;
-import apfe.runtime.Sequence;
-import laol.ast.etc.IStatementModifier;
+package laol.generate.cxx;
+
+import java.io.PrintStream;
+import java.util.Objects;
 
 /**
  *
  * @author gburdell
  */
-public class ReturnStatement extends Item implements IStatementModifier {
-    public ReturnStatement(final laol.parser.apfe.ReturnStatement decl) {
-        super(decl);
-        final Sequence seq = asSequence();
-        m_expr = oneOrNone(seq, 1);
-        m_stmtModifier = getStatementModifier(seq, 2);
+public class ReturnStatement {
+
+    public static void process(final laol.ast.ReturnStatement item, final Context ctx) {
+        final PrintStream os = ctx.cxx();
+        final laol.ast.Expression expr = item.getExpr();
+        if (item.hasStmtModifier()) {
+            StatementModifier.process(
+                    item.getStmtModifier(), 
+                    ctx, __->process(os, expr, ctx)
+            );
+        } else {
+            process(os, expr, ctx);
+        }
     }
 
-    public Expression getExpr() {
-        return m_expr;
+    private static void process(final PrintStream os, final laol.ast.Expression expr, final Context ctx) {
+        os.print("return ");
+        if (Objects.nonNull(expr)) {
+            Expression.process(expr, ctx);
+        }
+        os.println(" ;");
     }
-
-    @Override
-    public StatementModifier getStmtModifier() {
-        return m_stmtModifier;
-    }
- 
-    private final Expression m_expr;
-    private final StatementModifier m_stmtModifier;
 }

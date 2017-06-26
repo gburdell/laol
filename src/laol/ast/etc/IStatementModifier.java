@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2016 gburdell.
+ * Copyright 2017 kwpfalzer.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -21,31 +21,21 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package laol.ast;
-import apfe.runtime.Sequence;
-import laol.ast.etc.IStatementModifier;
+package laol.ast.etc;
+
+import java.util.Objects;
+import laol.ast.StatementModifier;
 
 /**
  *
- * @author gburdell
+ * @author kwpfalzer
  */
-public class ReturnStatement extends Item implements IStatementModifier {
-    public ReturnStatement(final laol.parser.apfe.ReturnStatement decl) {
-        super(decl);
-        final Sequence seq = asSequence();
-        m_expr = oneOrNone(seq, 1);
-        m_stmtModifier = getStatementModifier(seq, 2);
+public interface IStatementModifier {
+
+    public default boolean hasStmtModifier() {
+        return Objects.nonNull(getStmtModifier());
     }
 
-    public Expression getExpr() {
-        return m_expr;
-    }
+    public StatementModifier getStmtModifier();
 
-    @Override
-    public StatementModifier getStmtModifier() {
-        return m_stmtModifier;
-    }
- 
-    private final Expression m_expr;
-    private final StatementModifier m_stmtModifier;
 }

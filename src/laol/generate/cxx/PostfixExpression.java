@@ -112,11 +112,7 @@ public class PostfixExpression {
             final String name = primExpr.toSimpleName();
             final Item peek = m_eles.peek();
             if (m_ctx.isMemberName(name)) {
-                boolean isLocalMemberName = m_eles.isEmpty();
-                if (!isLocalMemberName) {
-                    isLocalMemberName = (peek instanceof ArySelExpr) || (peek instanceof IncDec);
-                }
-                if (isLocalMemberName) {
+                if (m_eles.isEmpty() || (peek instanceof ArySelExpr) || (peek instanceof IncDec)) {
                     os().printf("m_%s", name); //use accessor
                     return;
                 }

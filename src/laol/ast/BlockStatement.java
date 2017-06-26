@@ -26,12 +26,13 @@ package laol.ast;
 import apfe.runtime.Sequence;
 import java.util.Collections;
 import java.util.List;
+import laol.ast.etc.IStatementModifier;
 
 /**
  *
  * @author gburdell
  */
-public class BlockStatement extends Item {
+public class BlockStatement extends Item implements IStatementModifier {
 
     public BlockStatement(final laol.parser.apfe.BlockStatement decl) {
         super(decl);
@@ -49,10 +50,7 @@ public class BlockStatement extends Item {
         return Collections.unmodifiableList(m_stmts);
     }
 
-    public boolean hasStmtModifier() {
-        return isNonNull(getStmtModifier());
-    }
-
+    @Override
     public StatementModifier getStmtModifier() {
         return m_stmtModifier;
     }
