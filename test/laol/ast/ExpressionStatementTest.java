@@ -35,6 +35,7 @@ import static org.junit.Assert.*;
 public class ExpressionStatementTest extends TestRunner {
 
     private final String TESTS[] = {
+        "severity.toString.capitalize + \": \" + message",
         "foo.bar++ unless f==bar;",
         "bar[:foo][7].goop({a:5}) + 1",
         "fn(a:4,f:5,g[:bar]) << 45"

@@ -31,12 +31,15 @@ import gblib.Util;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Collections;
+import java.util.stream.Collectors;
+import laol.ast.etc.IStatementModifier;
+import laol.ast.etc.IStatements;
 
 /**
  *
  * @author gburdell
  */
-public class CaseStatement extends Item {
+public class CaseStatement extends Item implements IStatementModifier, IStatements {
 
     public CaseStatement(final laol.parser.apfe.CaseStatement decl) {
         super(decl);
@@ -73,6 +76,18 @@ public class CaseStatement extends Item {
         m_alts.add(new WhenClause(exprs, stmt));
     }
 
+    /**
+     * Get collection of all statements.
+     *
+     * @return collection of all statements across all whens of this case.
+     */
+    @Override
+    public List<Statement> getStatements() {
+        return m_alts.stream()
+                .map(when -> when.v2)
+                .collect(Collectors.toList());
+    }
+
     public static final class WhenClause extends Pair<ExpressionList, Statement> {
 
         private WhenClause(final ExpressionList expr, final Statement stmt) {
@@ -80,6 +95,7 @@ public class CaseStatement extends Item {
         }
     }
 
+    @Override
     public StatementModifier getStmtModifier() {
         return m_stmtModifier;
     }

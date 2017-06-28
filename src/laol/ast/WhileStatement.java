@@ -25,12 +25,14 @@ package laol.ast;
 
 import apfe.runtime.Marker;
 import apfe.runtime.Sequence;
+import java.util.List;
+import laol.ast.etc.IStatements;
 
 /**
  *
  * @author gburdell
  */
-public class WhileStatement extends Item {
+public class WhileStatement extends Item implements IStatements {
 
     public WhileStatement(final laol.parser.apfe.WhileStatement decl) {
         super(decl);
@@ -45,6 +47,11 @@ public class WhileStatement extends Item {
 
     public Expression getExpr() {
         return m_expr;
+    }
+
+    @Override
+    public List<Statement> getStatements() {
+        return getClause().getStatements();
     }
 
     private final Expression m_expr;

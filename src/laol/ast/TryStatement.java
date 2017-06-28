@@ -22,15 +22,20 @@
  * THE SOFTWARE.
  */
 package laol.ast;
+
 import apfe.runtime.Marker;
 import apfe.runtime.Sequence;
+import java.util.Collections;
+import java.util.LinkedList;
 import java.util.List;
+import laol.ast.etc.IStatements;
 
 /**
  *
  * @author gburdell
  */
-public class TryStatement extends Item {
+public class TryStatement extends Item implements IStatements {
+
     public TryStatement(final laol.parser.apfe.TryStatement decl) {
         super(decl);
         final Sequence seq = asSequence();
@@ -38,9 +43,27 @@ public class TryStatement extends Item {
         m_catch = zeroOrMore(asRepetition(seq, 2));
         m_finally = oneOrNone(seq, 3);
     }
-    
+
+    public List<CatchStatement> getCatchStmt() {
+        return Collections.unmodifiableList(m_catch);
+    }
+
+    public FinallyStatement getFinallyStmt() {
+        return m_finally;
+    }
+
+    public Statement getTryStmt() {
+        return m_stmt;
+    }
+
+    @Override
+    public List<Statement> getStatements() {
+        List<Statement> stmts = new LinkedList<>();
+        
+        return stmts;
+    }
 
     private final Statement m_stmt;
-    private final List<CatchStatement>  m_catch;
+    private final List<CatchStatement> m_catch;
     private final FinallyStatement m_finally;
 }

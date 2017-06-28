@@ -48,7 +48,13 @@ public class ConditionalExpression {
 
     private void process() {
         if (m_condExpr.hasConditional()) {
-            os().println("//TODO");//todo
+            os().print("(toBool(");
+            process(m_condExpr.getCondExpr());
+            os().print("))\n? (");
+            Expression.process(m_condExpr.getIfTrue(), m_ctx);
+            os().print(")\n: (");
+            Expression.process(m_condExpr.getIfFalse(), m_ctx);
+            os().print(")");
         } else {
             process(m_condExpr.getCondExpr());
         }

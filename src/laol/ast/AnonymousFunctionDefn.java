@@ -22,14 +22,17 @@
  * THE SOFTWARE.
  */
 package laol.ast;
+
 import apfe.runtime.Sequence;
 import java.util.List;
+import laol.ast.etc.IStatements;
 
 /**
  *
  * @author gburdell
  */
-public class AnonymousFunctionDefn extends Item {
+public class AnonymousFunctionDefn extends Item implements IStatements {
+
     public AnonymousFunctionDefn(final laol.parser.apfe.AnonymousFunctionDefn decl) {
         super(decl);
         final Sequence seq = asSequence(asPrioritizedChoice().getAccepted());
@@ -54,9 +57,14 @@ public class AnonymousFunctionDefn extends Item {
     public MethodReturnDecl getReturn() {
         return m_return;
     }
-    
-    private final List<MethodParamDeclEle>   m_parms;
-    private final MethodReturnDecl      m_return;
-    private final MethodBody            m_body;
-    
+
+    @Override
+    public List<Statement> getStatements() {
+        return getBody().getStatements();
+    }
+
+    private final List<MethodParamDeclEle> m_parms;
+    private final MethodReturnDecl m_return;
+    private final MethodBody m_body;
+
 }

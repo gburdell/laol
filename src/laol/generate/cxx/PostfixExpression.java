@@ -108,8 +108,8 @@ public class PostfixExpression {
 
     private void process(final PrimExpr expr) {
         final laol.ast.PrimaryExpression primExpr = expr.getExpr();
-        if (primExpr.isSimpleName()) {
-            final String name = primExpr.toSimpleName();
+        if (primExpr.isScopedName()) {
+            final String name = primExpr.toScopedName();
             final Item peek = m_eles.peek();
             if (m_ctx.isMemberName(name)) {
                 if (m_eles.isEmpty() || (peek instanceof ArySelExpr) || (peek instanceof IncDec)) {
@@ -119,7 +119,7 @@ public class PostfixExpression {
                 assert(false); //todo?
             } else {
                 /*
-                 * A simple name which is not a local member name.
+                 * A simple/scoped name which is not a local member name.
                  * Could be: 
                  *   1) local/super method
                  *   2) local var

@@ -23,11 +23,15 @@
  */
 package laol.ast;
 
+import java.util.List;
+import laol.ast.etc.IStatements;
+
 /**
  *
  * @author gburdell
  */
-public class FinallyStatement extends Item {
+public class FinallyStatement extends Item implements IStatements {
+
     public FinallyStatement(final laol.parser.apfe.FinallyStatement decl) {
         super(decl);
         m_stmtClause = createItem(1);
@@ -36,6 +40,11 @@ public class FinallyStatement extends Item {
     public StatementClause getStmtClause() {
         return m_stmtClause;
     }
-    
+
+    @Override
+    public List<Statement> getStatements() {
+        return getStmtClause().getStatements();
+    }
+
     private final StatementClause m_stmtClause;
 }

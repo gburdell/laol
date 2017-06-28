@@ -32,7 +32,7 @@ import laol.ast.Item;
  */
 public class BlockStatement {
     public static void process(final laol.ast.BlockStatement item, final Context ctx) {
-        final List<Item> statements = item.getStatements();
+        final List<Item> statements = item.getStatementsAsItems();
         if (item.hasStmtModifier()) {
             StatementModifier.process(item.getStmtModifier(), ctx, __->process(statements, ctx));
         } else {

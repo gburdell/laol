@@ -25,12 +25,17 @@ package laol.ast;
 import apfe.runtime.Acceptor;
 import apfe.runtime.Sequence;
 import apfe.runtime.Util;
+import java.util.Collections;
+import java.util.LinkedList;
+import java.util.List;
+import laol.ast.etc.IStatementModifier;
+import laol.ast.etc.IStatements;
 
 /**
  *
  * @author gburdell
  */
-public class StatementClause extends Item {
+public class StatementClause extends Item implements IStatementModifier, IStatements {
     public StatementClause(final laol.parser.apfe.StatementClause decl) {
         super(decl);
         final Acceptor acc = asPrioritizedChoice().getAccepted();
@@ -48,10 +53,18 @@ public class StatementClause extends Item {
         return m_stmt;
     }
 
+    @Override
     public StatementModifier getStmtModifier() {
         return m_stmtModifier;
     }
     
     private final Statement m_stmt;
     private final StatementModifier m_stmtModifier;
+
+    @Override
+    public List<Statement> getStatements() {
+        List<Statement> stmts = new LinkedList<>();
+        stmts.add(getStmtClause());
+        return Collections.unmodifiableList(stmts);
+    }
 }

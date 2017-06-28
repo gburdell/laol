@@ -29,6 +29,7 @@ package laol.generate.cxx;
  */
 public class AnonymousFunctionDefn {
     public static void process(final laol.ast.AnonymousFunctionDefn item, final Context ctx) {
+        //http://en.cppreference.com/w/cpp/language/lambda  use [&] !!
         ctx.os().print("/*TODO: new AnonymousFunctionDefn(...)*/");
     }
 }

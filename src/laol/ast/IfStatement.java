@@ -31,12 +31,14 @@ import gblib.Util;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.stream.Collectors;
+import laol.ast.etc.IStatements;
 
 /**
  *
  * @author gburdell
  */
-public class IfStatement extends Item {
+public class IfStatement extends Item implements IStatements {
 
     public IfStatement(final laol.parser.apfe.IfStatement decl) {
         super(decl);
@@ -62,6 +64,22 @@ public class IfStatement extends Item {
         }
     }
 
+    /**
+     * Return statements across all branches.
+     *
+     * @return statements of all branches.
+     */
+    @Override
+    public List<Statement> getStatements() {
+        List<Statement> stmts = getClauses().stream()
+                .map(exprStmt -> exprStmt.v2)
+                .collect(Collectors.toList());
+        if (hasElse()) {
+            stmts.add(getElse());
+        }
+        return stmts;
+    }
+
     public List<ExprStmt> getClauses() {
         return Collections.unmodifiableList(m_clauses);
     }
@@ -69,7 +87,7 @@ public class IfStatement extends Item {
     public boolean hasElse() {
         return isNonNull(m_else);
     }
-    
+
     public Statement getElse() {
         return m_else;
     }
@@ -77,11 +95,11 @@ public class IfStatement extends Item {
     public boolean isIf() {
         return m_if;
     }
-    
+
     public boolean isUnless() {
         return !isIf();
     }
-    
+
     /**
      * True on if-statement; false on unless-statement.
      */

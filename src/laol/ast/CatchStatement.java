@@ -24,12 +24,14 @@
 package laol.ast;
 
 import apfe.runtime.Sequence;
+import java.util.List;
+import laol.ast.etc.IStatements;
 
 /**
  *
  * @author gburdell
  */
-public class CatchStatement extends Item {
+public class CatchStatement extends Item implements IStatements {
 
     public CatchStatement(final laol.parser.apfe.CatchStatement decl) {
         super(decl);
@@ -48,4 +50,9 @@ public class CatchStatement extends Item {
 
     private final Expression m_expr;
     private final StatementClause m_stmt;
+
+    @Override
+    public List<Statement> getStatements() {
+        return getStmt().getStatements();
+    }
 }

@@ -24,10 +24,12 @@
 package laol.generate.cxx;
 
 import java.io.PrintStream;
+import java.util.LinkedList;
 import java.util.List;
+import laol.ast.Item;
 import laol.ast.etc.IStatements;
 import laol.ast.MethodParamDeclEle;
-import laol.ast.ParamName;
+import laol.ast.etc.IStatementModifier;
 
 /**
  *
@@ -45,24 +47,57 @@ public class MethodBody {
      * @param stmts candidate statements.
      * @param ctx context.
      * @param doEnclose true to enclose in {...}".
+     * @param addReturn true to add a (missing) return statement.
      */
-    public static void processStmts(IStatements stmts, final Context ctx, boolean doEnclose) {
+    public static void processStmts(IStatements stmts, final Context ctx,
+            boolean doEnclose, boolean addReturn) {
         final PrintStream os = ctx.cxx();
+        addReturn &= !hasReturnStmt(stmts);
         if (doEnclose) {
             os.println("{");
         }
-        stmts.getStatements()
-                .stream()
+        List<laol.ast.Statement> statements = stmts.getStatements();
+        boolean addReturnNull = false;
+        if (addReturn) {
+            statements = new LinkedList<>(statements);
+            final int n = statements.size();
+            laol.ast.Statement lastStmt = statements.remove(n - 1);
+            Item lastStmtItem = lastStmt.getStmt();
+            if ((lastStmtItem instanceof laol.ast.AssignStatement)
+                    || (lastStmtItem instanceof laol.ast.ExpressionStatement)) {
+                final IStatementModifier lastStmtMod = gblib.Util.downCast(lastStmtItem);
+                if (lastStmtMod.hasStmtModifier()) {
+                    addReturnNull = true;
+                } else {
+                    if (lastStmtItem instanceof laol.ast.AssignStatement) {
+                        lastStmtItem = new laol.ast.ReturnStatement(gblib.Util.<laol.ast.AssignStatement>downCast(lastStmtItem));
+                    } else {
+                        lastStmtItem = new laol.ast.ReturnStatement(gblib.Util.<laol.ast.ExpressionStatement>downCast(lastStmtItem));
+                    }
+                    lastStmt = new laol.ast.Statement(lastStmtItem);
+                }
+                statements.add(lastStmt);
+            }
+        }
+        statements.stream()
                 .map(stmt -> stmt.getStmt())
                 .filter(stmt -> !(stmt instanceof laol.ast.MethodDeclaration))
                 .forEachOrdered(item -> Generate.callProcess(item, ctx));
+        if (addReturnNull) {
+            os.println("return NULLOBJ;");
+        }
         if (doEnclose) {
             os.println("}");
         }
     }
 
+    public static boolean hasReturnStmt(final IStatements stmts) {
+        return stmts.getAllStatements(true).stream()
+                .anyMatch((stmt) -> (stmt instanceof laol.ast.ReturnStatement));
+    }
+
     public static void processStmts(IStatements stmts, final Context ctx) {
-        processStmts(stmts, ctx, true);
+        processStmts(stmts, ctx, true, false);
     }
 
     /**
@@ -88,7 +123,7 @@ public class MethodBody {
     private void process() {
         os().println("{");
         expandArgs();
-        processStmts(m_body, m_ctx, false);
+        processStmts(m_body, m_ctx, false, true);
         os().println("}");
     }
 

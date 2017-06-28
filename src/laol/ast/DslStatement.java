@@ -29,12 +29,13 @@ import apfe.runtime.Sequence;
 import apfe.runtime.Util;
 import java.util.LinkedList;
 import java.util.List;
+import laol.ast.etc.IStatementModifier;
 
 /**
  *
  * @author gburdell
  */
-public class DslStatement extends Item {
+public class DslStatement extends Item implements IStatementModifier {
     public DslStatement(final laol.parser.apfe.DslStatement decl) {
         super(decl);
         final Sequence seq = asSequence();
@@ -51,6 +52,7 @@ public class DslStatement extends Item {
         return m_params;
     }
 
+    @Override
     public StatementModifier getStmtModifier() {
         return m_stmtModifier;
     }

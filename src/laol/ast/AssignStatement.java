@@ -24,12 +24,13 @@
 package laol.ast;
 
 import apfe.runtime.Sequence;
+import laol.ast.etc.IStatementModifier;
 
 /**
  *
  * @author gburdell
  */
-public class AssignStatement extends Item {
+public class AssignStatement extends Item implements IStatementModifier {
 
     public AssignStatement(final laol.parser.apfe.AssignStatement decl) {
         super(decl);
@@ -52,6 +53,7 @@ public class AssignStatement extends Item {
         return m_rhs;
     }
 
+    @Override
     public StatementModifier getStmtModifier() {
         return m_stmtModifier;
     }

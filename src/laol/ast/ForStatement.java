@@ -24,12 +24,14 @@
 package laol.ast;
 
 import apfe.runtime.Sequence;
+import java.util.List;
+import laol.ast.etc.IStatements;
 
 /**
  *
  * @author gburdell
  */
-public class ForStatement extends Item {
+public class ForStatement extends Item implements IStatements {
 
     public ForStatement(final laol.parser.apfe.ForStatement decl) {
         super(decl);
@@ -47,11 +49,16 @@ public class ForStatement extends Item {
         return m_stmtClause;
     }
 
+    @Override
+    public List<Statement> getStatements() {
+        return getStmtClause().getStatements();
+    }
+
     public Ident getVarNm() {
         return m_varNm;
     }
 
     private final Ident m_varNm;
-    private final EnumerableExpression  m_bounds;
+    private final EnumerableExpression m_bounds;
     private final StatementClause m_stmtClause;
 }

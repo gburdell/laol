@@ -27,12 +27,13 @@ import apfe.runtime.Sequence;
 import java.util.Collections;
 import java.util.List;
 import laol.ast.etc.IStatementModifier;
+import laol.ast.etc.IStatements;
 
 /**
  *
  * @author gburdell
  */
-public class BlockStatement extends Item implements IStatementModifier {
+public class BlockStatement extends Item implements IStatementModifier, IStatements {
 
     public BlockStatement(final laol.parser.apfe.BlockStatement decl) {
         super(decl);
@@ -46,7 +47,8 @@ public class BlockStatement extends Item implements IStatementModifier {
         }
     }
 
-    public List<Item> getStatements() {
+    @Override
+    public List<Statement> getStatements() {
         return Collections.unmodifiableList(m_stmts);
     }
 
@@ -55,6 +57,6 @@ public class BlockStatement extends Item implements IStatementModifier {
         return m_stmtModifier;
     }
 
-    private final List<Item> m_stmts;
+    private final List<Statement> m_stmts;
     private final StatementModifier m_stmtModifier;
 }

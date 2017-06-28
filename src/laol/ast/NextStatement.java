@@ -23,15 +23,23 @@
  */
 package laol.ast;
 
+import laol.ast.etc.IStatementModifier;
+
 /**
  *
  * @author gburdell
  */
-public class NextStatement extends Item {
+public class NextStatement extends Item implements IStatementModifier {
+
     public NextStatement(final laol.parser.apfe.NextStatement decl) {
         super(decl);
         m_stmtModifier = getStatementModifier(asSequence(), 1);
     }
- 
+
+    @Override
+    public StatementModifier getStmtModifier() {
+        return m_stmtModifier;
+    }
+
     private final StatementModifier m_stmtModifier;
 }

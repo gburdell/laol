@@ -25,12 +25,13 @@ package laol.ast;
 
 import apfe.runtime.Sequence;
 import apfe.runtime.Util;
+import laol.ast.etc.IStatementModifier;
 
 /**
  *
  * @author gburdell
  */
-public class ExpressionStatement extends Item {
+public class ExpressionStatement extends Item implements IStatementModifier {
     public ExpressionStatement(final laol.parser.apfe.ExpressionStatement decl) {
         super(decl);
         final Sequence seq = asSequence();
@@ -42,10 +43,12 @@ public class ExpressionStatement extends Item {
         return m_expr;
     }
 
+    @Override
     public boolean hasStmtModifier() {
         return isNonNull(getStmtModifier());
     }
     
+    @Override
     public StatementModifier getStmtModifier() {
         return m_stmtModifier;
     }

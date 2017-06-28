@@ -22,14 +22,18 @@
  * THE SOFTWARE.
  */
 package laol.ast;
+
 import apfe.runtime.Marker;
 import apfe.runtime.Sequence;
+import java.util.List;
+import laol.ast.etc.IStatements;
 
 /**
  *
  * @author gburdell
  */
-public class UntilStatement extends Item {
+public class UntilStatement extends Item implements IStatements {
+
     public UntilStatement(final laol.parser.apfe.UntilStatement decl) {
         super(decl);
         final Sequence seq = asSequence();
@@ -44,7 +48,12 @@ public class UntilStatement extends Item {
     public Expression getExpr() {
         return m_expr;
     }
- 
-    private final Expression    m_expr;
-    private final StatementClause   m_clause;
+
+    @Override
+    public List<Statement> getStatements() {
+        return getClause().getStatements();
+    }
+
+    private final Expression m_expr;
+    private final StatementClause m_clause;
 }

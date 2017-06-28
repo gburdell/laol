@@ -35,6 +35,9 @@ import static org.junit.Assert.*;
 public class MethodDeclarationTest extends TestRunner {
 
     private final String TESTS[] = {
+        "default def message(severity, message) {\n"
+        + "        severity.toString.capitalize + \": \" + message\n"
+        + "    }",
         "def a(){}"
     };
 

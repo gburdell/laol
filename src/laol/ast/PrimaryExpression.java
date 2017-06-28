@@ -81,6 +81,11 @@ public class PrimaryExpression extends Item {
         return isScopedName() && gblib.Util.<ScopedName>downCast(getExpr()).isSimpleName();
     }
     
+    public String toScopedName() {
+        assert(isScopedName());
+        return gblib.Util.<ScopedName>downCast(getExpr()).toString();
+    }
+    
     public String toSimpleName() {
         assert(isSimpleName());
         return gblib.Util.<ScopedName>downCast(getExpr()).toString();

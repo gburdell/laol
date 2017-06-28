@@ -23,6 +23,7 @@
  */
 package laol.ast;
 import apfe.runtime.Sequence;
+import java.util.Objects;
 import laol.ast.etc.IStatementModifier;
 
 /**
@@ -35,8 +36,32 @@ public class ReturnStatement extends Item implements IStatementModifier {
         final Sequence seq = asSequence();
         m_expr = oneOrNone(seq, 1);
         m_stmtModifier = getStatementModifier(seq, 2);
+        m_assignStmt = null;
     }
 
+    public ReturnStatement(final ExpressionStatement stmt) {
+        super(stmt.getParsed());
+        m_expr = stmt.getExpr();
+        m_stmtModifier = stmt.getStmtModifier();
+        m_assignStmt = null;
+    }
+    
+    public ReturnStatement(final AssignStatement asgn) {
+        super(asgn.getParsed());
+        assert(! asgn.hasStmtModifier());
+        m_assignStmt = asgn;
+        m_expr = null;
+        m_stmtModifier = null;
+    }
+    
+    public boolean isAssignStmt() {
+        return Objects.nonNull(getAssignStmt());
+    }
+    
+    public AssignStatement getAssignStmt() {
+        return m_assignStmt;
+    }
+    
     public Expression getExpr() {
         return m_expr;
     }
@@ -46,6 +71,7 @@ public class ReturnStatement extends Item implements IStatementModifier {
         return m_stmtModifier;
     }
  
+    private final AssignStatement m_assignStmt;
     private final Expression m_expr;
     private final StatementModifier m_stmtModifier;
 }

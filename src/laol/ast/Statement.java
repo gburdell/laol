@@ -35,6 +35,11 @@ public class Statement extends Item {
         this((Acceptor)decl);
     }
 
+    public Statement(final Item stmt) {
+        super(stmt.getParsed());
+        m_stmt = stmt;
+    }
+    
     protected Statement(final Acceptor decl) {
         super(decl);
         m_stmt = createItem(asPrioritizedChoice().getAccepted());

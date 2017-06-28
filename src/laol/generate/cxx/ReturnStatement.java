@@ -40,6 +40,10 @@ public class ReturnStatement {
                     item.getStmtModifier(), 
                     ctx, __->process(os, expr, ctx)
             );
+        } else if (item.isAssignStmt()) {
+            os.print("return (");
+            AssignStatement.process(item.getAssignStmt(), ctx);
+            os.println(");");
         } else {
             process(os, expr, ctx);
         }
