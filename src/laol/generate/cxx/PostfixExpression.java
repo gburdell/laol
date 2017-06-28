@@ -112,7 +112,11 @@ public class PostfixExpression {
             final String name = primExpr.toScopedName();
             final Item peek = m_eles.peek();
             if (m_ctx.isMemberName(name)) {
-                if (m_eles.isEmpty() || (peek instanceof ArySelExpr) || (peek instanceof IncDec)) {
+                if (m_eles.isEmpty() 
+                        || (peek instanceof ArySelExpr) 
+                        || (peek instanceof IncDec)
+                        || (peek instanceof DotSfx)
+                        ) {
                     os().printf("m_%s", name); //use accessor
                     return;
                 }
