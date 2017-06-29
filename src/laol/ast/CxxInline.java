@@ -37,11 +37,13 @@ import java.util.List;
 public class CxxInline extends Item {
     public CxxInline(final laol.parser.apfe.CxxInline decl) {
         super(decl);
-        final Sequence seq = asSequence();
-        m_isHxx = ('h' == seq.itemAt(1).toString().toLowerCase().charAt(0));
-        StringBuilder buf = new StringBuilder();
-        zeroOrMore(3).forEach(ele -> buf.append(ele.toString()));
-        m_content = buf.toString();
+        //todo: nasty!  Sequence.toString() does not work, as it grabs 
+        //other stuff past parse.  Me thinks the whole Acceptor.toString()
+        //has major flaw.
+        final Sequence seq = (Sequence)decl.getBaseAccepted();
+        String text = seq.getTexts(0, seq.length()-1).toString();
+        m_isHxx = ('h' == text.substring(0, 1).toLowerCase().charAt(0));
+        m_content = text.substring(4);
     }
     
     @Override

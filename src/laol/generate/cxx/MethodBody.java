@@ -76,8 +76,10 @@ public class MethodBody {
                     }
                     lastStmt = new laol.ast.Statement(lastStmtItem);
                 }
-                statements.add(lastStmt);
+            } else {
+                addReturnNull = true;
             }
+            statements.add(lastStmt);
         }
         statements.stream()
                 .map(stmt -> stmt.getStmt())

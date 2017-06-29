@@ -4,4 +4,5 @@ nbproject/private
 dist/
 .DS_Store
 src/.DS_Store
+c++/xcode/laolrt_test/DerivedData
 

@@ -53,13 +53,12 @@ namespace laol {
 
         LaolObj
         Symbol::equal(const LaolObj&, const LaolObj& opB) const {
-            /* we never get here: since LaolObj default == checks for
-             * objects same: which we will have.
-             * Anyway, we'll put in the code but preface w/ assert to see if 
-             * we ever get here.
+            /* LaolObj default == checks for
+             * objects same: which we will have for Symbols.
+             * So, if we get here: we're always false.
              */
-            ASSERT_NEVER;
-            return opB.isA<Symbol>() ? (m_val == opB.toType<Symbol>().m_val) : false;
+            return false;
+            //return opB.isA<Symbol>() ? (m_val == opB.toType<Symbol>().m_val) : false;
         }
 
         /*
