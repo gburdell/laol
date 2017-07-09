@@ -34,8 +34,8 @@ namespace laol {
                 stMethodByName = Laol::join(
 						stMethodByName, 
 						METHOD_BY_NAME({
-                    {"next?", static_cast<TPMethod> (&Iterator::next_PRED)},
-                    {"next", static_cast<TPMethod> (&Iterator::next)}
+                    {"next?", reinterpret_cast<TPMethod> (&Iterator::next_PRED)},
+                    {"next", reinterpret_cast<TPMethod> (&Iterator::next)}
 
                 }));
             }
@@ -44,7 +44,7 @@ namespace laol {
 
         Ref
         Iterator::next(const LaolObj&, const LaolObj&) const {
-            return unconst(this)->next();
+            return unconst(this)->xnext();
         }
 
         Ref

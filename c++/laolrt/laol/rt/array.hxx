@@ -35,7 +35,9 @@
 #include <vector>
 #include <algorithm>
 #include "laol/rt/laol.hxx"
-#include "laol/rt/exception.hxx"    
+#include "laol/rt/iterator.hxx"
+#include "laol/rt/exception.hxx" 
+#include "laol/rt/lambda.hxx"
 
 namespace laol {
     namespace rt {
@@ -54,9 +56,10 @@ namespace laol {
             //unique methods
 
             virtual Ref empty_PRED(const LaolObj& self, const LaolObj& args) const;
+            virtual Ref length(const LaolObj& self, const LaolObj& args) const;
             virtual Ref reverse(const LaolObj& self, const LaolObj& args) const = 0;
             virtual Ref reverse_SELF(const LaolObj& self, const LaolObj& args) const = 0;
-            virtual Ref length(const LaolObj& self, const LaolObj& args) const;
+            virtual Ref foreach(const LaolObj& self, const LaolObj& args) const = 0;
 
             //single element access via 0-origin ix
             virtual Ref operator[](size_t ix) const = 0;
@@ -118,6 +121,14 @@ namespace laol {
                 return self;
             }
 
+            virtual Ref foreach(const LaolObj& self, const LaolObj& args) const override {
+                const Lambda& lambda = args.toType<Lambda>();
+                for (auto ele : m_ar) {
+                    lambda.call(self, ele);
+                }
+                return self;
+            }
+            
             virtual bool isEmpty() const override {
                 return m_ar.empty();
             }

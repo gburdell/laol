@@ -52,10 +52,6 @@ namespace laol {
             return m_reason.c_str();
         }
 
-        /*static*/
-        const string
-        NoMethodException::REASON = "no method found";
-
         NoMethodException::NoMethodException(const std::type_info& obj, const string& type, const string& op)
         : Exception(
         string("no ")

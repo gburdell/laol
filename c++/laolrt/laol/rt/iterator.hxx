@@ -38,13 +38,18 @@ namespace laol {
     namespace rt {
         // Iterator interface
 
-        class Iterator : public Laol {
+		//NOTE/TODO:
+		//this is not used except in String: which is ifdef'd out.
+		//need to rethink this: even Array dont use!
+
+        class Iterator : public virtual Laol {
         public:
             //allow copy constructors
 
             //unique methods
             virtual Ref next_PRED(const LaolObj&, const LaolObj&) const;
             virtual Ref next(const LaolObj&, const LaolObj&) const;
+            virtual Ref foreach(const LaolObj& self, const LaolObj& lambda) const = 0;
             
             virtual ~Iterator() {
             };
@@ -55,9 +60,9 @@ namespace laol {
             // Implementation for builtins: String, Array, ...
             virtual Ref hasNext() const = 0;
 
-            virtual Ref next() = 0;
+            virtual Ref xnext() = 0;
 
-		private:
+        private:
             static METHOD_BY_NAME stMethodByName;
         };
 

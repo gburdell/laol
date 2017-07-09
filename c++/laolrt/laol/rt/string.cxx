@@ -23,7 +23,9 @@
  */
 
 #include <algorithm>
+#include <type_traits>
 #include "laol/rt/string.hxx"
+#include "laol/rt/range.hxx"
 
 namespace laol {
     namespace rt {
@@ -64,7 +66,8 @@ namespace laol {
                     {"prepend", static_cast<TPMethod> (&String::prepend)},
                     {"prepend!", static_cast<TPMethod> (&String::prepend_SELF)},
                     {"at", static_cast<TPMethod> (&String::at)},
-                    {"iterator", static_cast<TPMethod> (&String::at)}
+                    {"capitalize", static_cast<TPMethod> (&String::capitalize)},
+                    {"capitalize!", static_cast<TPMethod> (&String::capitalize_SELF)}
                 }));
             }
             return stMethodByName;
@@ -130,6 +133,50 @@ namespace laol {
             return c;
         }
 
+        static
+        bool
+        capitalize(const std::string& orig, std::string& copy) {
+            static_assert('a' < 'z', "'a' < 'z'");
+            static_assert('A' < 'Z', "'A' < 'Z'");
+            if (orig.empty()) {
+                return false;
+            }
+            char first = orig[0];
+            if (('A' <= first && 'Z' >= first) || !('a' <= first && 'z' >= first)) {
+                return false;
+            }
+            copy = orig;
+            copy[0] = 'A' + (first - 'a');
+            return true;
+        }
+        
+        Ref
+        String::capitalize(const LaolObj& self, const LaolObj&) const {
+            std::string copy;
+            if (!laol::rt::capitalize(m_str, copy)) {
+                return self;
+            }
+            return new String(copy);
+        }
+        
+        Ref
+        String::capitalize_SELF(const LaolObj& self, const LaolObj&) const {
+            std::string copy;
+            if (!laol::rt::capitalize(m_str, copy)) {
+                return false;
+            }
+            unconst(this)->m_str = copy;
+            return true;
+        }
+        
+        Ref
+        String::subscript(const LaolObj& self, const LaolObj& rng) const {
+            const Range& range = rng.toType<Range>();
+            const int begin = range.begin().toInt();
+            const size_t npos = 1 + (actualIndex(range.end().toInt(), m_str.length()) - begin);
+            return new String(m_str.substr(begin, npos));
+        }
+        
         Ref
         String::iterator(const LaolObj& self, const LaolObj& args) const {
             return self; //todo

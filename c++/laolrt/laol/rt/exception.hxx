@@ -57,14 +57,6 @@ namespace laol {
         class NoMethodException : public Exception {
         public:
 
-            explicit NoMethodException()
-            : Exception(REASON) {
-            }
-
-            explicit NoMethodException(const string& reason)
-            : Exception(reason) {
-            }
-
             explicit NoMethodException(const std::type_info &obj, const string& type, const string& op);
 
             explicit NoMethodException(const std::type_info &obj, const string& op)

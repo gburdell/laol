@@ -110,10 +110,10 @@ namespace laol {
             : m_obj(rhs) {
             }
 
-            LaolObj(const Laol* rhs) {
-                NOT_SUPPORTED;
+            LaolObj(const Laol* rhs)
+            : LaolObj(const_cast<Laol*>(rhs)) {
             }
-
+            
             LaolObj(int rhs);
 
             LaolObj(unsigned int rhs);
@@ -268,6 +268,8 @@ namespace laol {
             }
 
             bool isSameObject(const LaolObj& other) const;
+            
+            const std::type_info& typeInfo() const;
 
             // Convert to std::string with quoted string
             string toQString() const;
@@ -287,6 +289,14 @@ namespace laol {
                 return const_cast<TRcLaol*> (&m_obj);
             }
 
+            const TRcLaol* asTPCRcLaol() const {
+                return (&m_obj);
+            }
+            
+            const Laol& asConstT() const {
+                return asTPCRcLaol()->asT();
+            }
+            
             TRcLaol& asTRcLaol() const {
                 return const_cast<TRcLaol&> (m_obj);
             }
@@ -463,7 +473,7 @@ namespace laol {
             /* %  */ virtual LaolObj modulus(const LaolObj& self, const LaolObj& opB) const;
             /* =  */ virtual LaolObj assign(const LaolObj& self, const LaolObj& opB) const;
 
-            /* [] */ virtual Ref subscript(const LaolObj& self, const LaolObj& opB) const;
+            /* [] */ virtual Ref subscript(const LaolObj& self, const LaolObj& range) const;
 
             /* == */ virtual LaolObj equal(const LaolObj& self, const LaolObj& opB) const;
             /* <  */ virtual LaolObj less(const LaolObj& self, const LaolObj& opB) const;

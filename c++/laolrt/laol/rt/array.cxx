@@ -57,7 +57,8 @@ namespace laol {
                 stMethodByName = join(stMethodByName,
                         METHOD_BY_NAME({
                     {"length", reinterpret_cast<TPMethod> (&IArray::length)},
-                    {"empty?", reinterpret_cast<TPMethod> (&IArray::empty_PRED)}
+                    {"empty?", reinterpret_cast<TPMethod> (&IArray::empty_PRED)},
+                    {"foreach", reinterpret_cast<TPMethod> (&IArray::foreach)}
                 }));
             }
             return stMethodByName;
@@ -85,7 +86,9 @@ namespace laol {
                         IArray::getMethodByName(),
                         METHOD_BY_NAME({
                     {"left_shift", reinterpret_cast<TPMethod> (&Array::left_shift)},
-                    {"right_shift", reinterpret_cast<TPMethod> (&Array::right_shift)}
+                    {"right_shift", reinterpret_cast<TPMethod> (&Array::right_shift)},
+                    {"reverse", reinterpret_cast<TPMethod> (&Array::reverse)},
+                    {"reverse!", reinterpret_cast<TPMethod> (&Array::reverse_SELF)}
                 }));
             }
             return stMethodByName;

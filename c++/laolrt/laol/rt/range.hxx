@@ -48,6 +48,14 @@ namespace laol {
             virtual ~Range() {
             }
 
+            const LaolObj& begin() const {
+                return m_begin;
+            }
+            
+            const LaolObj& end() const {
+                return m_end;
+            }
+            
             const LaolObj m_begin, m_end;
 
         protected:

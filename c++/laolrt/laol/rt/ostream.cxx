@@ -47,8 +47,8 @@ namespace laol {
 
             const METHOD_BY_NAME& getMethodByName() override {
                 if (stMethodByName.empty()) {
-                    stMethodByName = Laol::join(stMethodByName, 
-					METHOD_BY_NAME({
+                    stMethodByName = Laol::join(stMethodByName,
+                            METHOD_BY_NAME({
                         {"call", static_cast<TPMethod> (&Endl::call)}
                     }));
                 }
@@ -75,7 +75,7 @@ namespace laol {
             : m_os(os) {
             }
 
-            Ref append_SELF(const LaolObj& self, const LaolObj& args) const override {
+            Ref print(const LaolObj& self, const LaolObj& args) const override {
                 /*todo
                 if (args.isBool()) {
                     m_os << String::toStdString(args);
@@ -119,8 +119,15 @@ namespace laol {
         Laol::METHOD_BY_NAME OStream::stMethodByName;
 
         Ref
-        OStream::flush(const LaolObj& self, const LaolObj&) const {
-            return self;
+        OStream::append_SELF(const LaolObj& self, const LaolObj& args) const {
+            return print(self, args);
+        }
+
+        Ref
+        OStream::println(const LaolObj& self, const LaolObj& args) const {
+            print(self, args);
+            print(self, Endl::NL);
+            return flush(self, NULLOBJ);
         }
 
         const Laol::METHOD_BY_NAME&
@@ -128,7 +135,9 @@ namespace laol {
             if (stMethodByName.empty()) {
                 stMethodByName = {
                     {"append!", static_cast<TPMethod> (&OStream::append_SELF)},
-                    {"flush", static_cast<TPMethod> (&OStream::flush)}
+                    {"flush", static_cast<TPMethod> (&OStream::flush)},
+                    {"print", static_cast<TPMethod> (&OStream::print)},
+                    {"println", static_cast<TPMethod> (&OStream::println)}
                 };
             }
             return stMethodByName;
@@ -145,7 +154,7 @@ namespace laol {
             if (stMethodByName.empty()) {
                 stMethodByName = Laol::join(
                         stMethodByName,
-                        OStream::getMethodByName(),METHOD_BY_NAME({
+                        OStream::getMethodByName(), METHOD_BY_NAME({
                     {"close", static_cast<TPMethod> (&FileOutputStream::close)},
                     {"fail_PRED", static_cast<TPMethod> (&FileOutputStream::fail_PRED)}
                 }));
@@ -162,7 +171,7 @@ namespace laol {
         }
 
         Ref
-        FileOutputStream::append_SELF(const LaolObj& self, const LaolObj& args) const {
+        FileOutputStream::print(const LaolObj& self, const LaolObj& args) const {
             if (args.isBool()) {
                 unconst(this)->m_ofs << String::toStdString(args);
                 unconst(args).ifMethod("call", self);
@@ -172,7 +181,7 @@ namespace laol {
                     unconst(this)->m_ofs << val;
                     return val;
                 });
-                */;
+                 */;
             }
             return self;
         }

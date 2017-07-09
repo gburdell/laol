@@ -197,6 +197,12 @@ namespace laol {
             return "todo";
         }
 
+        const std::type_info&
+        LaolObj::typeInfo() const {
+            const Laol& ref = asTPRcLaol()->asT();
+            return typeid(ref);
+        }
+        
         LaolObj
         LaolObj::operator=(const LaolObj& rhs) {
             if (this == &rhs) {
@@ -247,8 +253,8 @@ namespace laol {
         //todo: test if consecutive: a[][][]... work???
 
         Ref
-        LaolObj::operator[](const LaolObj& opB) const {
-            return asTPLaol()->subscript(*this, opB);
+        LaolObj::operator[](const LaolObj& range) const {
+            return asTPLaol()->subscript(*this, range);
         }
 
         LaolObj
@@ -331,7 +337,7 @@ namespace laol {
             if (nullptr != pMethod) {
                 return (pObj->*pMethod)(*this, args);
             } else if (mustFind) {
-                ASSERT_NEVER; //not implemented
+                throw NoMethodException(typeInfo(), methodNm);
             }
             return NULLOBJ;
         }
@@ -478,7 +484,7 @@ namespace laol {
         LaolObj Laol::modulus DEFINE_NO_IMPL
 
         //LaolObj Laol::subscript DEFINE_NO_IMPL
-        Ref Laol::subscript(const LaolObj&, const LaolObj & self) const {
+        Ref Laol::subscript(const LaolObj&, const LaolObj& range) const {
             ASSERT_NEVER;
             return NULLOBJ;
         }

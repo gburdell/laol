@@ -77,7 +77,11 @@ namespace laol {
                 return append(self, opB);
             }
 
+            virtual Ref subscript(const LaolObj& self, const LaolObj& range) const override;
+                
             //unique methods
+            virtual Ref capitalize(const LaolObj& self, const LaolObj& args) const;
+            virtual Ref capitalize_SELF(const LaolObj& self, const LaolObj& args) const;
             virtual Ref empty_PRED(const LaolObj& self, const LaolObj& args) const;
             virtual Ref reverse(const LaolObj& self, const LaolObj& args) const;
             virtual Ref reverse_SELF(const LaolObj& self, const LaolObj& args) const;
@@ -97,6 +101,7 @@ namespace laol {
 
             virtual ~String();
 
+#ifdef TODO
             // NOTE: this iterator works for reading/sourcing (rhs) values.
             // TODO: modify for use in assign/lhs.
 
@@ -113,7 +118,8 @@ namespace laol {
                 size_t m_curr, m_len;
                 string& m_str;
             };
-
+#endif
+                
         protected:
             virtual const METHOD_BY_NAME& getMethodByName() override;
 
