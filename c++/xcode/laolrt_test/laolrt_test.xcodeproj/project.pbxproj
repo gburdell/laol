@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		F4F5D2111E94375B0093899C /* test.cxx in Sources */ = {isa = PBXBuildFile; fileRef = F4F5D2101E94375B0093899C /* test.cxx */; };
+		171BAB0C1F2B9D3F0039541C /* main.cxx in Sources */ = {isa = PBXBuildFile; fileRef = 171BAB0B1F2B9D3F0039541C /* main.cxx */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -54,10 +54,10 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		171BAB0B1F2B9D3F0039541C /* main.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = main.cxx; path = ../../laolrt_test/main.cxx; sourceTree = "<group>"; };
 		F44947171EA15B5300EDB4A6 /* xyzzy.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = xyzzy.xcodeproj; path = ../../../../xyzzy/xcode/xyzzy/xyzzy.xcodeproj; sourceTree = "<group>"; };
 		F449471D1EA15B6A00EDB4A6 /* laolrt.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = laolrt.xcodeproj; path = ../laolrt/laolrt.xcodeproj; sourceTree = "<group>"; };
 		F4F5D2061E942CC10093899C /* laolrt_test */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = laolrt_test; sourceTree = BUILT_PRODUCTS_DIR; };
-		F4F5D2101E94375B0093899C /* test.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = test.cxx; path = ../../laolrt/laol/rt/tests/test.cxx; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -90,9 +90,9 @@
 		F4F5D1FD1E942CC10093899C = {
 			isa = PBXGroup;
 			children = (
+				171BAB0B1F2B9D3F0039541C /* main.cxx */,
 				F449471D1EA15B6A00EDB4A6 /* laolrt.xcodeproj */,
 				F44947171EA15B5300EDB4A6 /* xyzzy.xcodeproj */,
-				F4F5D2101E94375B0093899C /* test.cxx */,
 				F4F5D2071E942CC10093899C /* Products */,
 			);
 			sourceTree = "<group>";
@@ -191,7 +191,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				F4F5D2111E94375B0093899C /* test.cxx in Sources */,
+				171BAB0C1F2B9D3F0039541C /* main.cxx in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

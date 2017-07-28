@@ -39,7 +39,7 @@ namespace laol {
                 obj = new Symbol();
                 stMap[s] = obj;
                 // removed reference here/static: so we delete when no more external references
-                obj.decrRefCnt();
+                //TODO: reference count ok?
             } else {
                 obj = found->second;
             }

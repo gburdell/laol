@@ -61,8 +61,8 @@ namespace laol {
 
             virtual ~Symbol();
 
-		protected:
-			//virtual const METHOD_BY_NAME& getMethodByName() override;
+        protected:
+            //virtual const METHOD_BY_NAME& getMethodByName() override;
 
         private:
             const VAL m_val;
@@ -79,9 +79,9 @@ namespace laol {
             static METHOD_BY_NAME stMethodByName;
         };
 
-		inline LaolObj mkSym(const string& s) {
-			return Symbol::sym(s);
-		}
+        inline LaolObj mkSym(const string& s) {
+            return Symbol::sym(s);
+        }
     }
 }
 

@@ -38,8 +38,8 @@
 #include <array>
 #include <string>
 #include <map>
+#include <memory>
 #include "xyzzy/assert.hxx"
-#include "xyzzy/refcnt.hxx"
 #include "laol/rt/exception.hxx"
 
 #define NO_COPY_CONSTRUCTORS(_t)            \
@@ -53,6 +53,7 @@ namespace laol {
         using std::vector;
         using std::string;
         using std::array;
+        using std::shared_ptr;
 
         template<typename T>
         inline string getClassName(T p) {
@@ -63,11 +64,8 @@ namespace laol {
             return reinterpret_cast<unsigned long int> (p);
         }
 
-        using xyzzy::TRcObj;
-        using xyzzy::PTRcObjPtr;
-
         class Laol;
-        typedef PTRcObjPtr<Laol> TRcLaol;
+        typedef shared_ptr<Laol> TRcLaol;
 
         class LaolObj;
         class Ref;
@@ -91,6 +89,9 @@ namespace laol {
             explicit LaolObj() {
             }
 
+            //vector likes to use this...
+            LaolObj(LaolObj&& r) = default;
+
             // Primitive: LaolRef lhs = val...
 
             // LaolObj a1 = std::array<LaolObj,2>{23,34};
@@ -106,14 +107,18 @@ namespace laol {
 
             LaolObj(Args r);
 
+            //todo: this should use make_shared!
+
             LaolObj(Laol* rhs)
             : m_obj(rhs) {
             }
 
+            //todo: this should use make_shared!
+
             LaolObj(const Laol* rhs)
-            : LaolObj(const_cast<Laol*>(rhs)) {
+            : LaolObj(const_cast<Laol*> (rhs)) {
             }
-            
+
             LaolObj(int rhs);
 
             LaolObj(unsigned int rhs);
@@ -132,25 +137,19 @@ namespace laol {
 
             LaolObj(const char* rhs);
 
-            LaolObj(TRcLaol* val)
-            : m_obj(*val) {
+            LaolObj(TRcLaol* val) {
+                NOT_SUPPORTED; //from whence we came?
             }
 
             LaolObj(const LaolObj& val);
 
+            // New object/copy.  Not reference.
             LaolObj(const Ref& r);
-
-            LaolObj(const LaolObj* val) {
-                NOT_SUPPORTED;
-            }
 
             LaolObj operator=(const LaolObj& rhs);
 
-            //vector likes to use this...
-            LaolObj(LaolObj&& r) = default;
-
             bool isNull() const {
-                return m_obj.isNull();
+                return (nullptr == asTPLaol());
             }
 
             // true if int variant
@@ -247,8 +246,9 @@ namespace laol {
             typedef Ref(Laol::* TPMethod)(const LaolObj& self, const LaolObj& args) const;
 
             //call method
-            Ref operator()(const string& methodNm, const LaolObj& args, bool mustFind = true) const;
-            Ref operator()(const string& methodNm) const;
+            Ref operator()(const string& methodNm, const LaolObj& args, bool mustFind) const;
+            virtual Ref operator()(const string& methodNm, const LaolObj& args) const;
+            virtual Ref operator()(const string& methodNm) const;
 
             //call method if it exists (no error: as operator() does).
 
@@ -257,18 +257,28 @@ namespace laol {
             //cast as subclass of Laol
 
             template<typename T>
+            static const T& toType(const TRcLaol& r) {
+                return dynamic_cast<const T&> (asTRCLaol(r));
+            }
+
+            template<typename T>
+            static bool isA(const TRcLaol& r) {
+                return (nullptr != dynamic_cast<T*> (asTPLaol(r)));
+            }
+
+            template<typename T>
             const T& toType() const {
                 //ASSERT_TRUE(isA<T>());
-                return dynamic_cast<const T&> (asTPRcLaol()->asT());
+                return toType<T>(m_obj);
             }
 
             template<typename T>
             bool isA() const {
-                return (0 != dynamic_cast<const T*> (asTPLaol()));
+                return isA<T>(m_obj);
             }
 
             bool isSameObject(const LaolObj& other) const;
-            
+
             const std::type_info& typeInfo() const;
 
             // Convert to std::string with quoted string
@@ -285,31 +295,31 @@ namespace laol {
             //From copy constructor or assign/= op.
             const LaolObj& set(const LaolObj& rhs);
 
-            TRcLaol* asTPRcLaol() const {
-                return const_cast<TRcLaol*> (&m_obj);
+            static
+            const Laol& asTRCLaol(const TRcLaol& r) {
+                return *r.get();
             }
 
-            const TRcLaol* asTPCRcLaol() const {
-                return (&m_obj);
+            const Laol& asTRCLaol() const {
+                return asTRCLaol(m_obj);
             }
-            
-            const Laol& asConstT() const {
-                return asTPCRcLaol()->asT();
+
+            static
+            Laol* asTPLaol(const TRcLaol& r) {
+                return r.get();
             }
-            
-            TRcLaol& asTRcLaol() const {
-                return const_cast<TRcLaol&> (m_obj);
+
+            static
+            Laol* asTPLaol(TRcLaol& r) {
+                return r.get();
             }
 
             Laol* asTPLaol() const {
                 //ASSERT_TRUE(!isNull());
-                return asTPRcLaol()->getPtr();
+                return asTPLaol(m_obj);
             }
 
             string toStdString() const;
-
-            void decrRefCnt();
-            void incrRefCnt();
 
             friend class Laol; //to optimize operator=()
             friend struct LaolObjKey;
@@ -326,55 +336,55 @@ namespace laol {
             return const_cast<LaolObj&> (self);
         }
 
-        // Look like LaolRef, so can do foo[i].method...
+        // Look like LaolObj, so can do foo[i].method...
 
-        class Ref {
+        class Ref : public LaolObj {
         public:
 
-            Ref() : m_ref(nullptr), m_ownsObject(false) {
+            Ref()
+            : LaolObj(), mp_ref(nullptr) {
             }
 
             // Constructor to create reference of actual/rvalue.
-            // Make sure to not reference a stacked/temporary object.
-            Ref(const LaolObj& r);
 
-            Ref(const Ref& r);
+            Ref(const LaolObj* p)
+            : LaolObj(*p) {
+                mp_ref = const_cast<LaolObj*>(p);
+            }
+
+            Ref(const LaolObj& r)
+            : LaolObj(r) {
+                mp_ref = this;
+            }
+
+            Ref(const Ref& r) = default;
+            Ref(Ref&& r) = default;
 
             // Constructor for primitive types.
 
             template<typename T>
-            Ref(T rhs) : m_ownsObject(true), m_ref(new LaolObj(rhs)) {
+            Ref(T rhs)
+            : LaolObj(rhs) {
+                mp_ref = this;
             }
 
-            // Allow move constructor to easily pass back return vals
-            Ref(Ref&& from);
-
-            const LaolObj& toObj() const {
-                return *m_ref;
-            }
-
+            // Change value only (to rhs) of object to which we refer
             const Ref& operator=(const LaolObj& rhs);
 
-            const Ref& operator=(const Ref& r);
+            // Change value and ref (to rhs) of object to which we refer
+            const Ref& operator=(const Ref& rhs);
 
-            Ref operator[](const LaolObj& subscript) const;
+            Ref operator[](const LaolObj& subscript) const override;
 
-            Ref operator()(const string& methodNm, const LaolObj& args) const {
-                return m_ref->operator()(methodNm, args);
-            }
+            Ref operator()(const string& methodNm, const LaolObj& args) const override;
 
-            Ref operator()(const string& methodNm) const {
-                return m_ref->operator()(methodNm);
-            }
+            Ref operator()(const string& methodNm) const override;
 
             // No subclass
             virtual ~Ref() final;
 
         private:
-            LaolObj* m_ref;
-            bool m_ownsObject;
-
-            void cleanup();
+            LaolObj* mp_ref;
 
             friend class LaolObj;
         };
@@ -455,7 +465,7 @@ namespace laol {
 
         // Base class for any object
 
-        class Laol : public TRcObj {
+        class Laol {
         public:
 
             explicit Laol();
@@ -529,11 +539,8 @@ namespace laol {
             static TPMethod getFunc(const METHOD_BY_NAME& methodByName, const string& methodNm);
         };
 
-        // For 'builtin/Ref op LaolObj'
+#       // For 'builtin op LaolObj'
 #define BINARY_OP(_op) \
-        inline LaolObj operator _op(const Ref& a, const Ref& b) { \
-            return LaolObj(a).operator _op(b); \
-        } \
         template<typename T> \
         inline LaolObj operator _op(T a, const LaolObj& b) { \
             return LaolObj(a).operator _op(b); \
@@ -557,7 +564,7 @@ namespace laol {
         BINARY_OP(^)
 
 #undef BINARY_OP
-
+#               
     }
 
 }

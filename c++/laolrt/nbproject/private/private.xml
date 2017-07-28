@@ -4,12 +4,32 @@
         <activeConfTypeElem>3</activeConfTypeElem>
         <activeConfIndexElem>2</activeConfIndexElem>
     </data>
-    <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="6">
+    <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="10">
         <file>
             <url>laol/rt/laol.hxx</url>
             <bookmark id="3">
                 <name/>
-                <line>134</line>
+                <line>139</line>
+                <key/>
+            </bookmark>
+            <bookmark id="9">
+                <name/>
+                <line>146</line>
+                <key/>
+            </bookmark>
+            <bookmark id="10">
+                <name/>
+                <line>299</line>
+                <key/>
+            </bookmark>
+            <bookmark id="8">
+                <name/>
+                <line>340</line>
+                <key/>
+            </bookmark>
+            <bookmark id="7">
+                <name/>
+                <line>364</line>
                 <key/>
             </bookmark>
         </file>
@@ -22,31 +42,30 @@
             </bookmark>
             <bookmark id="5">
                 <name/>
-                <line>97</line>
+                <line>107</line>
                 <key/>
             </bookmark>
             <bookmark id="1">
                 <name/>
-                <line>101</line>
+                <line>111</line>
                 <key/>
             </bookmark>
             <bookmark id="6">
                 <name/>
-                <line>311</line>
+                <line>310</line>
                 <key/>
             </bookmark>
             <bookmark id="2">
                 <name/>
-                <line>326</line>
+                <line>325</line>
                 <key/>
             </bookmark>
         </file>
     </editor-bookmarks>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/Users/Shared/projects/laol/c++/laolrt/laol/rt/ostream.cxx</file>
-            <file>file:/Users/Shared/projects/laol/c++/laolrt/laol/rt/string.cxx</file>
-            <file>file:/Users/Shared/projects/laol/c++/laolrt/laol/rt/ostream.hxx</file>
+            <file>file:/Users/Shared/projects/laol/c++/laolrt/laol/rt/laol.cxx</file>
+            <file>file:/Users/Shared/projects/laol/c++/laolrt/laol/rt/laol.hxx</file>
         </group>
     </open-files>
 </project-private>

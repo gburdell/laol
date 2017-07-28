@@ -96,7 +96,7 @@ namespace laol {
                     const auto N = xlength();
                     if (N == other.xlength()) {
                         for (auto i = 0; i < N; i++) {
-                            if ((m_ar[i] != other[i].toObj()).toBool()) {
+                            if ((m_ar[i] != other[i]).toBool()) {
                                 return false;
                             }
                         }

@@ -141,7 +141,7 @@ namespace laol {
             }
         }
 
-        const Array::Vector 
+        const Array::Vector
         Array::toVector(const LaolObj& opB) {
             return opB.isA<Array>() ? opB.toType<Array>().m_ar : toV(opB);
         }
@@ -157,22 +157,20 @@ namespace laol {
                 return m_ar[actualIndex(args[0].toLongInt())];
             }
             //else, build up ArrayOfRef
-            ArrayOfRef *prefs = new ArrayOfRef();
-#ifdef FIXME
-            for (const LaolObj& sub : args) {
-                if (sub.isInt()) {
-                    *prefs << m_ar[actualIndex(sub.toLongInt())];
-                } else if (sub.isA<Range>()) {
-                    iterate(sub.toType<Range>(), [this, &prefs](auto i) {
+            ArrayOfRef* pRefs = new ArrayOfRef();
+            for (const LaolObj& ix : args) {
+                if (ix.isInt()) {
+                    *pRefs << m_ar[actualIndex(ix.toLongInt())];
+                } else if (ix.isA<Range>()) {
+                    iterate(ix.toType<Range>(), [this, &pRefs](auto i) {
                         //this-> work around gcc 5.1.0 bug
-                        *prefs << m_ar[this->actualIndex(i)];
+                        *pRefs << m_ar[this->actualIndex(i)];
                     });
                 } else {
                     ASSERT_NEVER; //todo: error
                 }
             }
-#endif
-            return LaolObj(prefs);
+            return LaolObj(pRefs);
         }
 
         Ref

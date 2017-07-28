@@ -1,1 +1,0 @@
-../../laolrt/laol/rt/tests/number1.cpp

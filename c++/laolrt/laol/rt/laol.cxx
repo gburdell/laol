@@ -55,42 +55,53 @@ namespace laol {
             set(args);
         }
 
-        LaolObj::LaolObj(int rhs) : LaolObj(new Int(rhs)) {
+        LaolObj::LaolObj(int rhs)
+        : LaolObj(new Int(rhs)) {
         }
 
-        LaolObj::LaolObj(unsigned int rhs) : LaolObj(new UnsignedInt(rhs)) {
+        LaolObj::LaolObj(unsigned int rhs)
+        : LaolObj(new UnsignedInt(rhs)) {
         }
 
-        LaolObj::LaolObj(long int rhs) : LaolObj(new LongInt(rhs)) {
+        LaolObj::LaolObj(long int rhs)
+        : LaolObj(new LongInt(rhs)) {
         }
 
-        LaolObj::LaolObj(unsigned long int rhs) : LaolObj(new UnsignedLongInt(rhs)) {
+        LaolObj::LaolObj(unsigned long int rhs)
+        : LaolObj(new UnsignedLongInt(rhs)) {
         }
 
-        LaolObj::LaolObj(char rhs) : LaolObj(new Char(rhs)) {
+        LaolObj::LaolObj(char rhs)
+        : LaolObj(new Char(rhs)) {
         }
 
-        LaolObj::LaolObj(double rhs) : LaolObj(new Double(rhs)) {
+        LaolObj::LaolObj(double rhs)
+        : LaolObj(new Double(rhs)) {
         }
 
-        LaolObj::LaolObj(float rhs) : LaolObj(new Float(rhs)) {
+        LaolObj::LaolObj(float rhs)
+        : LaolObj(new Float(rhs)) {
         }
 
-        LaolObj::LaolObj(bool rhs) : LaolObj(rhs ? TRUE : FALSE) {
+        LaolObj::LaolObj(bool rhs)
+        : LaolObj(rhs ? TRUE : FALSE) {
         }
 
-        LaolObj::LaolObj(const char* rhs) : LaolObj(new String(rhs)) {
+        LaolObj::LaolObj(const char* rhs)
+        : LaolObj(new String(rhs)) {
         }
 
-        LaolObj::LaolObj(const LaolObj& rhs) : m_obj(rhs.m_obj) {
+        LaolObj::LaolObj(const LaolObj& rhs)
+        : m_obj(rhs.m_obj) {
         }
 
-        LaolObj::LaolObj(const Ref& r) : LaolObj(static_cast<const LaolObj&> (*(r.m_ref))) {
+        LaolObj::LaolObj(const Ref& r)
+        : m_obj(r.m_obj) { //create copy, not ref
         }
 
         const LaolObj&
         LaolObj::set(Args args) {
-            m_obj = new Array(args);
+            m_obj = std::make_shared<Array>(args); //new Array(args);
             return *this;
         }
 
@@ -98,19 +109,8 @@ namespace laol {
 
         const LaolObj&
         LaolObj::set(const LaolObj& rhs) {
-            TRcLaol &rhsRef = unconst(rhs).asTRcLaol();
-            m_obj = rhsRef;
+            m_obj = rhs.m_obj;
             return *this;
-        }
-
-        void
-        LaolObj::decrRefCnt() {
-            unconst(this)->asTPRcLaol()->decr();
-        }
-
-        void
-        LaolObj::incrRefCnt() {
-            unconst(this)->asTPRcLaol()->incr();
         }
 
         bool
@@ -199,10 +199,10 @@ namespace laol {
 
         const std::type_info&
         LaolObj::typeInfo() const {
-            const Laol& ref = asTPRcLaol()->asT();
-            return typeid(ref);
+            const Laol& ref = asTRCLaol();
+            return typeid (ref);
         }
-        
+
         LaolObj
         LaolObj::operator=(const LaolObj& rhs) {
             if (this == &rhs) {
@@ -342,6 +342,11 @@ namespace laol {
             return NULLOBJ;
         }
 
+        Ref 
+        LaolObj::operator()(const string& methodNm, const LaolObj& args) const {
+          return this->operator()(methodNm, args, true);  
+        }
+            
         Ref
         LaolObj::operator()(const string& methodNm) const {
             return this->operator()(methodNm, NULLOBJ);
@@ -372,40 +377,24 @@ namespace laol {
             return asTPLaol()->toString();
         }
 
-        Ref::Ref(const LaolObj& r) : m_ref(unconst(&r)), m_ownsObject(false) {
-        }
-
-        Ref::Ref(const Ref& r) : m_ref(r.m_ref), m_ownsObject(false) {
-            //mark reference
-            m_ref->incrRefCnt();
-        }
-
-        Ref::Ref(Ref&& from) {
-            //from whence we came?
-            ASSERT_NEVER;
-        }
-
-        const Ref& Ref::operator=(const LaolObj& rhs) {
-            m_ref->LaolObj::operator=(rhs);
+        const Ref&
+        Ref::operator=(const LaolObj& rhs) {
+            LaolObj::operator=(rhs);
+            mp_ref = this;
             return *this;
         }
 
-        const Ref& Ref::operator=(const Ref& r) {
-            if (m_ref != r.m_ref) {
-                if (nullptr != m_ref) {
-                    //ASSERT_TRUE(!r.m_ownsObject); //???
-                    m_ref->LaolObj::operator=(*(r.m_ref));
-                } else {
-                    cleanup();
-                    m_ref = r.m_ref;
-                }
-            }
+        const Ref&
+        Ref::operator=(const Ref& rhs) {
+            LaolObj::operator=(rhs);
+            mp_ref = rhs.mp_ref;
             return *this;
         }
-
+        
+        /**
         Ref
         Ref::operator[](const LaolObj& subscript) const {
-            if (!m_ref->isA<ArrayOfRef>()) {
+            if (!LaolObj::isA<ArrayOfRef>(m_ref)) {
                 return m_ref->LaolObj::operator[](subscript);
             } else {
                 ASSERT_NEVER;
@@ -414,19 +403,20 @@ namespace laol {
                 return refs.subscript(*this, subscript);
             }
         }
+        **/
 
-        void
-        Ref::cleanup() {
-            if (m_ownsObject) {
-                // 1 count for our original here
-                if (1 == m_ref->asTPRcLaol()->getRefCnt()) {
-                    delete m_ref;
-                }
-            }
+        Ref
+        Ref::operator()(const string& methodNm, const LaolObj& args) const {
+            return mp_ref->operator()(methodNm, args);
+        }
+
+        Ref
+        Ref::operator()(const string& methodNm) const {
+            return mp_ref->operator()(methodNm);
         }
 
         Ref::~Ref() {
-            cleanup();
+            mp_ref = nullptr;   //do not delete anything
         }
 
         /*static*/
@@ -439,8 +429,7 @@ namespace laol {
         /*static*/
         string
         Laol::getClassName(const LaolObj & r) {
-            const TRcObj& q = r.asTPRcLaol()->asT();
-            return demangleName(typeid (q).name());
+            return r.asTRCLaol().getClassName();
         }
 
         string
