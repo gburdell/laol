@@ -10,12 +10,12 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "../../laolrt_test/main.cxx"
-            timestampString = "523500390.35222"
+            timestampString = "523577266.616882"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "82"
-            endingLineNumber = "82"
-            landmarkName = "test2()"
+            startingLineNumber = "216"
+            endingLineNumber = "216"
+            landmarkName = "test6()"
             landmarkType = "9">
          </BreakpointContent>
       </BreakpointProxy>

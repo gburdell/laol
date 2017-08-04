@@ -92,7 +92,7 @@ void test2() {
         const auto V1 = toV(9, 8, I3);
         LaolObj ar1 = new Array(toV(I1, V1, 3, 4));
         LaolObj ix1 = ar1[0];
-        ar1[0] = Ref(I2);
+        ar1[0] = I2;//Ref(I2);
         ASSERT_TRUE(ix1.toLongInt() == I1);
         ASSERT_TRUE(ar1[0].toLongInt() == I2);
         LaolObj ix2 = ar1[-3];
@@ -115,7 +115,7 @@ void test2() {
     cout << "test2: END" << endl;
 }
 
-void test3(const int NN = 10000) {
+void test3(const int NN = 100) {//00) {
     LaolObj N(NN);
     cout << "test3: (Array-Triangle): N=" << NN << " BEGIN" << endl;
     LaolObj triangle = new Array();
@@ -166,10 +166,10 @@ public:
     }
 
     Ref v1(const LaolObj& self, const LaolObj&) {
-        return m_v1;
+        return &m_v1;
     }
     Ref v2(const LaolObj& self, const LaolObj&) {
-        return m_v2;
+        return &m_v2;
     }
 
     const METHOD_BY_NAME& getMethodByName() override;
@@ -208,11 +208,12 @@ void test5() {
 }
 
 void test6() {
-    cout << "test6: (fails RELEASE): BEGIN" << endl;
+    cout << "test6: (...): BEGIN" << endl;
     LaolObj ar1 = new Array(toV(1,2,3));
     auto n = ar1("length");
     LaolObj nn = n;
     ASSERT_TRUE(nn.toSizet() == 3);
+    auto r = Ref(new String("foobar"));
     cout << "test6: END" << endl;
 }
 

@@ -362,18 +362,46 @@ namespace laol {
 
             // Constructor for primitive types.
 
+#ifdef NO
+            Ref(Laol* p)
+            : LaolObj(p) {
+                mp_ref = this;
+            }
+            
             template<typename T>
             Ref(T rhs)
             : LaolObj(rhs) {
+                static_assert(
+                              std::is_integral<T>::value
+                              || std::is_floating_point<T>::value
+                              || std::is_pointer<T>::value,
+                              "Expect integral or pointer type.");
                 mp_ref = this;
             }
-
-            // Change value only (to rhs) of object to which we refer
+#else
+            // Explicitly declare, since template<T> leaves open pandoras box!
+#define GEN_PRIM(_t) Ref(_t rhs) : LaolObj(rhs) {mp_ref = this;}
+            GEN_PRIM(int);
+            GEN_PRIM(unsigned int);
+            GEN_PRIM(long int);
+            GEN_PRIM(unsigned long int);
+            GEN_PRIM(char);
+            GEN_PRIM(double);
+            GEN_PRIM(float);
+            GEN_PRIM(bool);
+            GEN_PRIM(const char*);
+            GEN_PRIM(Laol*)
+#undef GEN_PRIM
+#endif
+            
+#ifdef NO
+            // Change value and ref (to rhs) of object to which we refer
             const Ref& operator=(const LaolObj& rhs);
-
+#endif
+            
             // Change value and ref (to rhs) of object to which we refer
             const Ref& operator=(const Ref& rhs);
-
+            
             Ref operator[](const LaolObj& subscript) const override;
 
             Ref operator()(const string& methodNm, const LaolObj& args) const override;

@@ -377,20 +377,22 @@ namespace laol {
             return asTPLaol()->toString();
         }
 
+#ifdef NO
         const Ref&
         Ref::operator=(const LaolObj& rhs) {
             LaolObj::operator=(rhs);
-            mp_ref = this;
+            *mp_ref = rhs;
             return *this;
         }
-
+#endif
+        
         const Ref&
         Ref::operator=(const Ref& rhs) {
             LaolObj::operator=(rhs);
-            mp_ref = rhs.mp_ref;
+            *mp_ref = rhs;
             return *this;
         }
-        
+
         Ref
         Ref::operator[](const LaolObj& subscript) const {
             return mp_ref->operator[](subscript);
