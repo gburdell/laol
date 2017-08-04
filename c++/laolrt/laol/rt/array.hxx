@@ -208,6 +208,14 @@ namespace laol {
 
             ~ArrayOfRef() {
             }
+            
+        private:
+            
+            void push_back(const LaolObj* ele) {
+                this->operator<<(ele);
+            }
+            
+            friend class Array;
         };
 
     }

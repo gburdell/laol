@@ -29,7 +29,7 @@
  * Created on May 14, 2017, 7:10 PM
  */
 
-#include <stdlib.h>
+#include <cstdlib>
 #include <iostream>
 #include <array>
 #include <chrono>
@@ -79,12 +79,12 @@ void test2() {
         LaolObj i2 = ar1 << i1 << F1; //cool: we get 1234 to LaolRef conversion!
         LaolObj ix0 = ar1[0];
         const int I1 = 777, I2 = 45;
-        ar1[0] = Ref(I1);
-        ASSERT_TRUE(ar1[0].toObj().toLongInt() == I1);
+        ar1[0] = LaolObj(I1);
+        ASSERT_TRUE(ar1[0].toLongInt() == I1);
         i2 = ar1[0] + I2;
         ASSERT_TRUE(i2.toLongInt() == I1 + I2);
         ar1[0] = ar1[1];
-        ASSERT_TRUE(ar1[0].toObj().toDouble() == F1);
+        ASSERT_TRUE(ar1[0].toDouble() == F1);
     }
     {
         //2d arrays
@@ -94,7 +94,7 @@ void test2() {
         LaolObj ix1 = ar1[0];
         ar1[0] = Ref(I2);
         ASSERT_TRUE(ix1.toLongInt() == I1);
-        ASSERT_TRUE(ar1[0].toObj().toLongInt() == I2);
+        ASSERT_TRUE(ar1[0].toLongInt() == I2);
         LaolObj ix2 = ar1[-3];
         //cout << "DEBUG1: " <<  endl;
         LaolObj n = ix2("length");
@@ -105,12 +105,12 @@ void test2() {
         ASSERT_TRUE((V1 == ix2).toBool());
         LaolObj ix3 = ix2[-2];
         ASSERT_TRUE(ix3.toLongInt() == 8);
-        ASSERT_TRUE(ar1[-3][-2].toObj().toLongInt() == 8);
+        ASSERT_TRUE(ar1[-3][-2].toLongInt() == 8);
         LaolObj a11 = ar1[1][-1];
         ASSERT_TRUE(a11.toLongInt() == I3);
         LaolObj v1 = ar1[1][-1] = Ref(I4);
         ASSERT_TRUE(a11.toLongInt() == I3);
-        ASSERT_TRUE(ar1[1][-1].toObj().toLongInt() == I4);
+        ASSERT_TRUE(ar1[1][-1].toLongInt() == I4);
     }
     cout << "test2: END" << endl;
 }
@@ -199,7 +199,7 @@ void test5() {
     LaolObj i1 = c1("v1") + I2;
     ASSERT_TRUE(i1.toInt() == I1+I2);
     c1("v1") = Ref(I3);
-    ASSERT_TRUE(I3 == c1("v1").toObj().toInt());
+    ASSERT_TRUE(I3 == c1("v1").toInt());
     LaolObj i2 = c1("v2")("length");
     ASSERT_TRUE((i2 == 3).toBool());
     i1 = c1("v2")[-3];

@@ -391,19 +391,10 @@ namespace laol {
             return *this;
         }
         
-        /**
         Ref
         Ref::operator[](const LaolObj& subscript) const {
-            if (!LaolObj::isA<ArrayOfRef>(m_ref)) {
-                return m_ref->LaolObj::operator[](subscript);
-            } else {
-                ASSERT_NEVER;
-                //todo: we dont need this???
-                const ArrayOfRef& refs = m_ref->toType<ArrayOfRef>();
-                return refs.subscript(*this, subscript);
-            }
+            return mp_ref->operator[](subscript);
         }
-        **/
 
         Ref
         Ref::operator()(const string& methodNm, const LaolObj& args) const {

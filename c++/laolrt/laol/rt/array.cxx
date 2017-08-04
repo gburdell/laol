@@ -154,17 +154,17 @@ namespace laol {
             const Vector args = toVector(opB);
             //degenerate case of single index
             if ((1 == args.size()) && args[0].isInt()) {
-                return m_ar[actualIndex(args[0].toLongInt())];
+                return &m_ar[actualIndex(args[0].toLongInt())];
             }
             //else, build up ArrayOfRef
             ArrayOfRef* pRefs = new ArrayOfRef();
             for (const LaolObj& ix : args) {
                 if (ix.isInt()) {
-                    *pRefs << m_ar[actualIndex(ix.toLongInt())];
+                    pRefs->push_back(&m_ar[actualIndex(ix.toLongInt())]);
                 } else if (ix.isA<Range>()) {
                     iterate(ix.toType<Range>(), [this, &pRefs](auto i) {
                         //this-> work around gcc 5.1.0 bug
-                        *pRefs << m_ar[this->actualIndex(i)];
+                        pRefs->push_back(&m_ar[this->actualIndex(i)]);
                     });
                 } else {
                     ASSERT_NEVER; //todo: error
@@ -177,7 +177,7 @@ namespace laol {
         ArrayOfRef::subscript(const LaolObj& self, const LaolObj& opB) const {
             const Array::Vector args = Array::toVector(opB);
             if ((1 == args.size()) && args[0].isInt()) {
-                return m_ar[actualIndex(args[0].toLongInt())];
+                return &m_ar[actualIndex(args[0].toLongInt())];
             }
             ASSERT_NEVER; //todo
             return self; //todo
