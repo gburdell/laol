@@ -395,17 +395,18 @@ namespace laol {
 
         Ref
         Ref::operator[](const LaolObj& subscript) const {
+            assert(mp_ref != this); //no infinite loop
             return mp_ref->operator[](subscript);
         }
 
         Ref
         Ref::operator()(const string& methodNm, const LaolObj& args) const {
-            return mp_ref->operator()(methodNm, args);
+            return LaolObj::operator()(methodNm, args);
         }
 
         Ref
         Ref::operator()(const string& methodNm) const {
-            return mp_ref->operator()(methodNm);
+            return LaolObj::operator()(methodNm);
         }
 
         Ref::~Ref() {

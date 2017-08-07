@@ -217,6 +217,15 @@ void test6() {
     cout << "test6: END" << endl;
 }
 
+void test7() {
+    cout << "test7: string: BEGIN" << endl;
+    LaolObj s1 = "a string";
+    LaolObj s3 = ": more";
+    auto s4 = s1 + s3;  //we die because of this?
+    //auto s2 = s1 + ": more";
+    cout << "test7: END" << endl;
+}
+
 int main(int argc, char** argv) {
     test1();
     test2();
@@ -225,6 +234,7 @@ int main(int argc, char** argv) {
         //test4();
     test5();
     test6();
+    test7();
     cout << "END: all tests" << endl;
     return (EXIT_SUCCESS);
 }

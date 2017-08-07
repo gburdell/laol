@@ -124,7 +124,11 @@ namespace laol {
 
         LaolObj
         String::toString() const {
+#ifdef IS_THIS_TROUBLEMAKER
             return LaolObj(this);
+#else
+            return new String(m_str);
+#endif
         }
 
         Ref
