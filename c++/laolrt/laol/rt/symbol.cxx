@@ -28,9 +28,15 @@
 namespace laol {
     namespace rt {
 
-        /*static*/ Symbol::MAP Symbol::stMap;
-        /*static*/ Symbol::VAL Symbol::stLastVal = 0;
+        typedef std::unordered_map<string, LaolObj> MAP;
+        typedef Symbol::VAL VAL;
+        
+        static MAP stMap;
+        static VAL stLastVal = 0;
 
+        Symbol::Symbol() : m_val(stLastVal++) {
+        }
+        
         LaolObj
         Symbol::sym(const string& s) {
             LaolObj obj;
@@ -38,8 +44,6 @@ namespace laol {
             if (found == stMap.end()) {
                 obj = new Symbol();
                 stMap[s] = obj;
-                // removed reference here/static: so we delete when no more external references
-                //TODO: reference count ok?
             } else {
                 obj = found->second;
             }
@@ -77,8 +81,7 @@ namespace laol {
         }
 
         Symbol::~Symbol() {
-            //delete from table
-            stMap.erase(toString(true));
+            // do nothing
         }
 
     }

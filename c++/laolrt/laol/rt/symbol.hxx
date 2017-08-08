@@ -67,14 +67,9 @@ namespace laol {
         private:
             const VAL m_val;
 
-            explicit Symbol() : m_val(stLastVal++) {
-            }
-
+            explicit Symbol();
+            
             const string& toString(bool) const;
-
-            typedef std::unordered_map<string, LaolObj> MAP;
-            static MAP stMap;
-            static VAL stLastVal;
 
             static METHOD_BY_NAME stMethodByName;
         };
