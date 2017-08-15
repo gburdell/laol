@@ -50,8 +50,8 @@ namespace laol {
 
             virtual ~Lambda();
 
-		protected:
-			virtual const METHOD_BY_NAME& getMethodByName() override;
+        protected:
+            virtual const METHOD_BY_NAME& getMethodByName() override;
 
         private:
             const FUNC m_fn;

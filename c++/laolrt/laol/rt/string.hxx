@@ -96,6 +96,8 @@ namespace laol {
 
             virtual LaolObj toString() const override;
 
+            virtual std::ostream& print(std::ostream& os) const override;
+            
             // Get primitive std::string from 'from'
             static string toStdString(const LaolObj& from, bool quote = false);
 

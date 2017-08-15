@@ -56,7 +56,7 @@ namespace laol {
         String::getMethodByName() {
             if (stMethodByName.empty()) {
                 stMethodByName = Laol::join(stMethodByName,
-						METHOD_BY_NAME({
+                        METHOD_BY_NAME({
                     {"length", static_cast<TPMethod> (&String::length)},
                     {"empty?", static_cast<TPMethod> (&String::empty_PRED)},
                     {"reverse", static_cast<TPMethod> (&String::reverse)},
@@ -120,15 +120,9 @@ namespace laol {
             return self;
         }
 
-        //We're already a string!
-
         LaolObj
         String::toString() const {
-#ifdef IS_THIS_TROUBLEMAKER
-            return LaolObj(this);
-#else
             return new String(m_str);
-#endif
         }
 
         Ref
@@ -153,7 +147,7 @@ namespace laol {
             copy[0] = 'A' + (first - 'a');
             return true;
         }
-        
+
         Ref
         String::capitalize(const LaolObj& self, const LaolObj&) const {
             std::string copy;
@@ -162,7 +156,7 @@ namespace laol {
             }
             return new String(copy);
         }
-        
+
         Ref
         String::capitalize_SELF(const LaolObj& self, const LaolObj&) const {
             std::string copy;
@@ -172,7 +166,7 @@ namespace laol {
             unconst(this)->m_str = copy;
             return true;
         }
-        
+
         Ref
         String::subscript(const LaolObj& self, const LaolObj& rng) const {
             const Range& range = rng.toType<Range>();
@@ -180,11 +174,18 @@ namespace laol {
             const size_t npos = 1 + (actualIndex(range.end().toInt(), m_str.length()) - begin);
             return new String(m_str.substr(begin, npos));
         }
-        
+
         Ref
         String::iterator(const LaolObj& self, const LaolObj& args) const {
             return self; //todo
         }
+
+        std::ostream& 
+        String::print(std::ostream& os) const {
+            os << m_str;
+            return os;
+        }
+
     }
 }
 

@@ -39,6 +39,7 @@
 #include <string>
 #include <map>
 #include <memory>
+#include <iostream>
 #include "xyzzy/assert.hxx"
 #include "laol/rt/exception.hxx"
 
@@ -283,7 +284,9 @@ namespace laol {
 
             // Convert to std::string with quoted string
             string toQString() const;
-
+            
+            std::ostream& print(std::ostream& os) const;
+            
             virtual ~LaolObj();
 
         private:
@@ -323,7 +326,6 @@ namespace laol {
 
             friend class Laol; //to optimize operator=()
             friend struct LaolObjKey;
-            friend class Symbol; //decrRefCnt()
             friend class Ref;
         };
 
@@ -528,6 +530,8 @@ namespace laol {
             /*++() */ virtual LaolObj pre_increment(const LaolObj& self, const LaolObj& opB) const;
             /*--() */ virtual LaolObj pre_decrement(const LaolObj& self, const LaolObj& opB) const;
 
+            virtual std::ostream& print(std::ostream& os) const;
+            
             //Operator methods
             virtual LaolObj toString() const;
             virtual LaolObj objectId() const;

@@ -76,17 +76,7 @@ namespace laol {
             }
 
             Ref print(const LaolObj& self, const LaolObj& args) const override {
-                /*todo
-                if (args.isBool()) {
-                    m_os << String::toStdString(args);
-                    unconst(args).ifMethod("call", self);
-                } else {
-                    args.primitiveApply([this](auto val) {
-                        m_os << val;
-                        return val;
-                    });
-                }
-                 */
+                args.print(m_os);
                 return self;
             }
 
@@ -172,17 +162,7 @@ namespace laol {
 
         Ref
         FileOutputStream::print(const LaolObj& self, const LaolObj& args) const {
-            if (args.isBool()) {
-                unconst(this)->m_ofs << String::toStdString(args);
-                unconst(args).ifMethod("call", self);
-            } else {
-                /*todo
-                args.primitiveApply([this](auto val) {
-                    unconst(this)->m_ofs << val;
-                    return val;
-                });
-                 */;
-            }
+            args.print(const_cast<std::ofstream&>(m_ofs));
             return self;
         }
 

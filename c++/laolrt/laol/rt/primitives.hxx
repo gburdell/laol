@@ -54,12 +54,17 @@ namespace laol {
             explicit Bool(bool val) : m_val(val) {
             }
 
-            LaolObj negate(const LaolObj&, const LaolObj&) const override {
+            virtual LaolObj negate(const LaolObj&, const LaolObj&) const override {
                 return !m_val;
             }
 
-            LaolObj complement(const LaolObj&, const LaolObj&) const override {
+            virtual LaolObj complement(const LaolObj&, const LaolObj&) const override {
                 return ~m_val;
+            }
+
+            virtual std::ostream& print(std::ostream& os) const override {
+                os << (m_val ? "true" : "false");
+                return os;
             }
 
             //allow copy constructors
@@ -109,124 +114,129 @@ namespace laol {
 
             /* Integer only operations
              */
-            LaolObj left_shift(const LaolObj&, const LaolObj& opB) const override {
+            virtual LaolObj left_shift(const LaolObj&, const LaolObj& opB) const override {
                 return getIntVal(opB, [this](auto bb) {
                     return m_val << bb;
                 });
             }
 
-            LaolObj right_shift(const LaolObj&, const LaolObj& opB) const override {
+            virtual LaolObj right_shift(const LaolObj&, const LaolObj& opB) const override {
                 return getIntVal(opB, [this](auto bb) {
                     return m_val >> bb;
                 });
             }
 
-            LaolObj modulus(const LaolObj&, const LaolObj& opB) const override {
+            virtual LaolObj modulus(const LaolObj&, const LaolObj& opB) const override {
                 return getIntVal(opB, [this](auto bb) {
                     return m_val % bb;
                 });
             }
 
-            LaolObj logical_and(const LaolObj&, const LaolObj& opB) const override {
+            virtual LaolObj logical_and(const LaolObj&, const LaolObj& opB) const override {
                 return getIntVal(opB, [this](auto bb) {
                     return m_val && bb;
                 });
             }
 
-            LaolObj logical_or(const LaolObj&, const LaolObj& opB) const override {
+            virtual LaolObj logical_or(const LaolObj&, const LaolObj& opB) const override {
                 return getIntVal(opB, [this](auto bb) {
                     return m_val || bb;
                 });
             }
 
-            LaolObj bitwise_and(const LaolObj&, const LaolObj& opB) const override {
+            virtual LaolObj bitwise_and(const LaolObj&, const LaolObj& opB) const override {
                 return getIntVal(opB, [this](auto bb) {
                     return m_val & bb;
                 });
             }
 
-            LaolObj bitwise_or(const LaolObj&, const LaolObj& opB) const override {
+            virtual LaolObj bitwise_or(const LaolObj&, const LaolObj& opB) const override {
                 return getIntVal(opB, [this](auto bb) {
                     return m_val | bb;
                 });
             }
 
-            LaolObj bitwise_xor(const LaolObj&, const LaolObj& opB) const override {
+            virtual LaolObj bitwise_xor(const LaolObj&, const LaolObj& opB) const override {
                 return getIntVal(opB, [this](auto bb) {
                     return m_val ^ bb;
                 });
             }
 
-            LaolObj complement(const LaolObj&, const LaolObj&) const override {
+            virtual LaolObj complement(const LaolObj&, const LaolObj&) const override {
                 return ~m_val;
             }
 
             // Generate specializations for Int here for performance
 
-            LaolObj post_increment(const LaolObj& self, const LaolObj&) const override {
+            virtual LaolObj post_increment(const LaolObj& self, const LaolObj&) const override {
                 return unconst(this)->m_val++;
             }
 
-            LaolObj post_decrement(const LaolObj& self, const LaolObj&) const override {
+            virtual LaolObj post_decrement(const LaolObj& self, const LaolObj&) const override {
                 return unconst(this)->m_val--;
             }
 
-            LaolObj pre_increment(const LaolObj& self, const LaolObj&) const override {
+            virtual LaolObj pre_increment(const LaolObj& self, const LaolObj&) const override {
                 unconst(this)->m_val = m_val + 1;
                 return self;
             }
 
-            LaolObj pre_decrement(const LaolObj& self, const LaolObj&) const override {
+            virtual LaolObj pre_decrement(const LaolObj& self, const LaolObj&) const override {
                 unconst(this)->m_val = m_val - 1;
                 return self;
             }
 
-            LaolObj add(const LaolObj&, const LaolObj& opB) const override {
+            virtual LaolObj add(const LaolObj&, const LaolObj& opB) const override {
                 return getVal(opB, [this](auto bb) {
                     return m_val + bb;
                 });
             }
 
-            LaolObj subtract(const LaolObj&, const LaolObj& opB) const override {
+            virtual LaolObj subtract(const LaolObj&, const LaolObj& opB) const override {
                 return getVal(opB, [this](auto bb) {
                     return m_val - bb;
                 });
             }
 
-            LaolObj multiply(const LaolObj&, const LaolObj& opB) const override {
+            virtual LaolObj multiply(const LaolObj&, const LaolObj& opB) const override {
                 return getVal(opB, [this](auto bb) {
                     return m_val * bb;
                 });
             }
 
-            LaolObj divide(const LaolObj&, const LaolObj& opB) const override {
+            virtual LaolObj divide(const LaolObj&, const LaolObj& opB) const override {
                 return getVal(opB, [this](auto bb) {
                     return m_val / bb;
                 });
             }
 
-            LaolObj equal(const LaolObj&, const LaolObj& opB) const override {
+            virtual LaolObj equal(const LaolObj&, const LaolObj& opB) const override {
                 return getVal(opB, [this](auto bb) {
                     return m_val == bb;
                 });
             }
 
-            LaolObj less(const LaolObj&, const LaolObj& opB) const override {
+            virtual LaolObj less(const LaolObj&, const LaolObj& opB) const override {
                 return getVal(opB, [this](auto bb) {
                     return m_val < bb;
                 });
             }
 
-            LaolObj greater(const LaolObj&, const LaolObj& opB) const override {
+            virtual LaolObj greater(const LaolObj&, const LaolObj& opB) const override {
                 return getVal(opB, [this](auto bb) {
                     return m_val > bb;
                 });
             }
 
-            LaolObj negate(const LaolObj&, const LaolObj&) const override {
+            virtual LaolObj negate(const LaolObj&, const LaolObj&) const override {
                 //For an expression e, 
                 //the unary expression !e is equivalent to the expression (e == 0)
                 return (m_val != 0);
+            }
+
+            virtual std::ostream& print(std::ostream& os) const override {
+                os << m_val;
+                return os;
             }
 
         private:
@@ -244,70 +254,75 @@ namespace laol {
 
             // Generate specializations for Float here for performance
 
-            LaolObj post_increment(const LaolObj& self, const LaolObj&) const override {
+            virtual LaolObj post_increment(const LaolObj& self, const LaolObj&) const override {
                 return unconst(this)->m_val++;
             }
 
-            LaolObj post_decrement(const LaolObj& self, const LaolObj&) const override {
+            virtual LaolObj post_decrement(const LaolObj& self, const LaolObj&) const override {
                 return unconst(this)->m_val--;
             }
 
-            LaolObj pre_increment(const LaolObj& self, const LaolObj&) const override {
+            virtual LaolObj pre_increment(const LaolObj& self, const LaolObj&) const override {
                 unconst(this)->m_val = m_val + 1;
                 return self;
             }
 
-            LaolObj pre_decrement(const LaolObj& self, const LaolObj&) const override {
+            virtual LaolObj pre_decrement(const LaolObj& self, const LaolObj&) const override {
                 unconst(this)->m_val = m_val - 1;
                 return self;
             }
 
-            LaolObj add(const LaolObj&, const LaolObj& opB) const override {
+            virtual LaolObj add(const LaolObj&, const LaolObj& opB) const override {
                 return getVal(opB, [this](auto bb) {
                     return m_val + bb;
                 });
             }
 
-            LaolObj subtract(const LaolObj&, const LaolObj& opB) const override {
+            virtual LaolObj subtract(const LaolObj&, const LaolObj& opB) const override {
                 return getVal(opB, [this](auto bb) {
                     return m_val - bb;
                 });
             }
 
-            LaolObj multiply(const LaolObj&, const LaolObj& opB) const override {
+            virtual LaolObj multiply(const LaolObj&, const LaolObj& opB) const override {
                 return getVal(opB, [this](auto bb) {
                     return m_val * bb;
                 });
             }
 
-            LaolObj divide(const LaolObj&, const LaolObj& opB) const override {
+            virtual LaolObj divide(const LaolObj&, const LaolObj& opB) const override {
                 return getVal(opB, [this](auto bb) {
                     return m_val / bb;
                 });
             }
 
-            LaolObj equal(const LaolObj&, const LaolObj& opB) const override {
+            virtual LaolObj equal(const LaolObj&, const LaolObj& opB) const override {
                 return getVal(opB, [this](auto bb) {
                     return m_val == bb;
                 });
             }
 
-            LaolObj less(const LaolObj&, const LaolObj& opB) const override {
+            virtual LaolObj less(const LaolObj&, const LaolObj& opB) const override {
                 return getVal(opB, [this](auto bb) {
                     return m_val < bb;
                 });
             }
 
-            LaolObj greater(const LaolObj&, const LaolObj& opB) const override {
+            virtual LaolObj greater(const LaolObj&, const LaolObj& opB) const override {
                 return getVal(opB, [this](auto bb) {
                     return m_val > bb;
                 });
             }
 
-            LaolObj negate(const LaolObj&, const LaolObj&) const override {
+            virtual LaolObj negate(const LaolObj&, const LaolObj&) const override {
                 //For an expression e, 
                 //the unary expression !e is equivalent to the expression (e == 0)
                 return (m_val != 0);
+            }
+
+            virtual std::ostream& print(std::ostream& os) const override {
+                os << m_val;
+                return os;
             }
 
         private:

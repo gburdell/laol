@@ -377,14 +377,10 @@ namespace laol {
             return asTPLaol()->toString();
         }
 
-#ifdef NO
-        const Ref&
-        Ref::operator=(const LaolObj& rhs) {
-            LaolObj::operator=(rhs);
-            *mp_ref = rhs;
-            return *this;
+        std::ostream& 
+        LaolObj::print(std::ostream& os) const {
+            return asTRCLaol().print(os);
         }
-#endif
         
         const Ref&
         Ref::operator=(const Ref& rhs) {
@@ -502,6 +498,11 @@ namespace laol {
             auto rval = (search != methodByName.end()) ? search->second : nullptr;
 
             return rval;
+        }
+        
+        std::ostream& Laol::print(std::ostream& os) const {
+            os << getClassName() << "@" << toObjectId(this);
+            return os;
         }
 
         Laol::Laol() {
