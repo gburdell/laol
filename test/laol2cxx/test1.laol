@@ -1,0 +1,9 @@
+import laol::rt::runtime
+
+class C(p1) {
+	def m1 {
+		if (p1) {
+		} else {
+		}
+	}
+}

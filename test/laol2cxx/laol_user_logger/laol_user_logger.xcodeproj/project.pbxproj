@@ -1,0 +1,341 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		173CF7311F47858200736AA4 /* main.cxx in Sources */ = {isa = PBXBuildFile; fileRef = 173CF7301F47858200736AA4 /* main.cxx */; };
+		176B592D1F048B2B005F8D69 /* logger.cxx in Sources */ = {isa = PBXBuildFile; fileRef = 176B592C1F048B2B005F8D69 /* logger.cxx */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		176B59341F0491B6005F8D69 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 176B59301F0491B6005F8D69 /* xyzzy.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = F455C78B1E93F19A00F13033;
+			remoteInfo = xyzzy;
+		};
+		176B593A1F0491C7005F8D69 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 176B59361F0491C7005F8D69 /* laolrt.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = F455C7B91E93F6AE00F13033;
+			remoteInfo = laolrt;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		176B59201F048AC2005F8D69 /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = /usr/share/man/man1/;
+			dstSubfolderSpec = 0;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 1;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXFileReference section */
+		173CF7301F47858200736AA4 /* main.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = main.cxx; path = ../../generate/src/laol/user/main.cxx; sourceTree = "<group>"; };
+		176B59221F048AC2005F8D69 /* laol_user_logger */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = laol_user_logger; sourceTree = BUILT_PRODUCTS_DIR; };
+		176B592C1F048B2B005F8D69 /* logger.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = logger.cxx; path = ../../generate/src/laol/user/logger.cxx; sourceTree = "<group>"; };
+		176B59301F0491B6005F8D69 /* xyzzy.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = xyzzy.xcodeproj; path = ../../../../xyzzy/xcode/xyzzy/xyzzy.xcodeproj; sourceTree = "<group>"; };
+		176B59361F0491C7005F8D69 /* laolrt.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = laolrt.xcodeproj; path = "../../../c++/xcode/laolrt/laolrt.xcodeproj"; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		176B591F1F048AC2005F8D69 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		176B59191F048AC2005F8D69 = {
+			isa = PBXGroup;
+			children = (
+				176B59361F0491C7005F8D69 /* laolrt.xcodeproj */,
+				176B59301F0491B6005F8D69 /* xyzzy.xcodeproj */,
+				176B59241F048AC2005F8D69 /* laol_user_logger */,
+				176B59231F048AC2005F8D69 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		176B59231F048AC2005F8D69 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				176B59221F048AC2005F8D69 /* laol_user_logger */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		176B59241F048AC2005F8D69 /* laol_user_logger */ = {
+			isa = PBXGroup;
+			children = (
+				173CF7301F47858200736AA4 /* main.cxx */,
+				176B592C1F048B2B005F8D69 /* logger.cxx */,
+			);
+			path = laol_user_logger;
+			sourceTree = "<group>";
+		};
+		176B59311F0491B6005F8D69 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				176B59351F0491B6005F8D69 /* xyzzy.a */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		176B59371F0491C7005F8D69 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				176B593B1F0491C7005F8D69 /* laolrt.a */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		176B59211F048AC2005F8D69 /* laol_user_logger */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 176B59291F048AC2005F8D69 /* Build configuration list for PBXNativeTarget "laol_user_logger" */;
+			buildPhases = (
+				176B591E1F048AC2005F8D69 /* Sources */,
+				176B591F1F048AC2005F8D69 /* Frameworks */,
+				176B59201F048AC2005F8D69 /* CopyFiles */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = laol_user_logger;
+			productName = laol_user_logger;
+			productReference = 176B59221F048AC2005F8D69 /* laol_user_logger */;
+			productType = "com.apple.product-type.tool";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		176B591A1F048AC2005F8D69 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0830;
+				ORGANIZATIONNAME = "Karl W Pfalzer";
+				TargetAttributes = {
+					176B59211F048AC2005F8D69 = {
+						CreatedOnToolsVersion = 8.3.3;
+						ProvisioningStyle = Automatic;
+					};
+				};
+			};
+			buildConfigurationList = 176B591D1F048AC2005F8D69 /* Build configuration list for PBXProject "laol_user_logger" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = 176B59191F048AC2005F8D69;
+			productRefGroup = 176B59231F048AC2005F8D69 /* Products */;
+			projectDirPath = "";
+			projectReferences = (
+				{
+					ProductGroup = 176B59371F0491C7005F8D69 /* Products */;
+					ProjectRef = 176B59361F0491C7005F8D69 /* laolrt.xcodeproj */;
+				},
+				{
+					ProductGroup = 176B59311F0491B6005F8D69 /* Products */;
+					ProjectRef = 176B59301F0491B6005F8D69 /* xyzzy.xcodeproj */;
+				},
+			);
+			projectRoot = "";
+			targets = (
+				176B59211F048AC2005F8D69 /* laol_user_logger */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXReferenceProxy section */
+		176B59351F0491B6005F8D69 /* xyzzy.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = xyzzy.a;
+			remoteRef = 176B59341F0491B6005F8D69 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		176B593B1F0491C7005F8D69 /* laolrt.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = laolrt.a;
+			remoteRef = 176B593A1F0491C7005F8D69 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+/* End PBXReferenceProxy section */
+
+/* Begin PBXSourcesBuildPhase section */
+		176B591E1F048AC2005F8D69 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				173CF7311F47858200736AA4 /* main.cxx in Sources */,
+				176B592D1F048B2B005F8D69 /* logger.cxx in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		176B59271F048AC2005F8D69 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "-";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.12;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = macosx;
+			};
+			name = Debug;
+		};
+		176B59281F048AC2005F8D69 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "-";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.12;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				SDKROOT = macosx;
+			};
+			name = Release;
+		};
+		176B592A1F048AC2005F8D69 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_CXX_LANGUAGE_STANDARD = "c++14";
+				"HEADER_SEARCH_PATHS[arch=*]" = (
+					/Users/kwpfalzer/projects/laol/test/laol2cxx/generate/src,
+					"/Users/kwpfalzer/projects/laol/c++/laolrt",
+					/Users/kwpfalzer/projects/xyzzy/src,
+				);
+				OTHER_LDFLAGS = (
+					"/Users/kwpfalzer/projects/laol/c++/xcode/laolrt/Debug/laolrt.a",
+					/Users/kwpfalzer/projects/xyzzy/xcode/xyzzy/Debug/xyzzy.a,
+				);
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SYMROOT = /Users/kwpfalzer/projects/laol/test/laol2cxx/laol_user_logger;
+			};
+			name = Debug;
+		};
+		176B592B1F048AC2005F8D69 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_CXX_LANGUAGE_STANDARD = "c++14";
+				OTHER_LDFLAGS = (
+					"/Users/kwpfalzer/projects/laol/c++/xcode/laolrt/Debug/laolrt.a",
+					/Users/kwpfalzer/projects/xyzzy/xcode/xyzzy/Debug/xyzzy.a,
+				);
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SYMROOT = /Users/kwpfalzer/projects/laol/test/laol2cxx/laol_user_logger;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		176B591D1F048AC2005F8D69 /* Build configuration list for PBXProject "laol_user_logger" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				176B59271F048AC2005F8D69 /* Debug */,
+				176B59281F048AC2005F8D69 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		176B59291F048AC2005F8D69 /* Build configuration list for PBXNativeTarget "laol_user_logger" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				176B592A1F048AC2005F8D69 /* Debug */,
+				176B592B1F048AC2005F8D69 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 176B591A1F048AC2005F8D69 /* Project object */;
+}

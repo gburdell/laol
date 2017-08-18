@@ -1,0 +1,72 @@
+import laol::rt::runtime
+
+interface Logger {
+    default def info(msg) {
+        message(:info, msg)
+    }
+    default def warn(msg) {
+        message(:warn, msg)
+    }
+    default def error(msg) {
+        message(:error, msg)
+    }
+    default def fatal(msg) {
+        message(:fatal, msg)
+    }
+    default def message(severity, message) {
+        severity.toString.capitalize + ": " + message
+	}
+}
+
+class ConsoleLogger implements Logger {
+	const ostreamBySeverity = {
+		:info : lcout, 
+		:warn : lcout, 
+		:error : lcerr, 
+		:fatal : lcerr
+	}
+
+	override def message(severity, message) {
+		var fullMsg = Logger::message(severity, message)
+		ostreamBySeverity[severity].println(fullMsg)
+		return fullMsg
+	}
+}
+
+class FileLogger(logFname) implements Logger {
+	var logStream = FileOutputStream.new(logFname)
+
+	override def message(severity, message) {
+		var fullMsg = Logger::message(severity, message)
+		logStream.println(fullMsg)
+		return fullMsg
+	}
+}
+
+class MultiLogger(loggers) implements Logger {
+	override def message(severity, message) {
+		/**
+		loggers.foreach {|logger| logger.message(severity, message)}
+		**/
+		/**/
+		%cxx{
+			m_loggers("foreach", new Lambda(
+				[&](auto logger){
+					logger("message", toV(severity,message));
+				}
+			));
+		}
+		/**/
+	}
+}
+
+def main {
+	var multiLogger = MultiLogger.new(
+		[ConsoleLogger.new, FileLogger.new("/tmp/xxx")]
+	)
+	multiLogger.info("info1")
+	multiLogger.warn("warn1")
+	multiLogger.error("error1")
+	multiLogger.fatal("fatal1")
+}
+
