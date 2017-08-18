@@ -27,8 +27,10 @@ import java.io.PrintStream;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 import laol.ast.Item;
@@ -141,4 +143,11 @@ public class Util {
     public static final String TO_VEC = "toV";
 
     public static final String MKSYM = "mkSym";
+    
+    public static final Set<String> BUILTIN_METHODS = new HashSet<>();
+    static {
+        BUILTIN_METHODS.add("toString");
+        BUILTIN_METHODS.add("objectId");
+        BUILTIN_METHODS.add("hashCode");
+    }
 }

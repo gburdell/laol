@@ -113,7 +113,11 @@ public class MethodBody {
                 //todo: support anon func decl (lambda)
                 assert (p.isNamed());
                 final String name = p.getParamName().getName().toString();
-                os().printf("LaolObj %s = args[%d];\n", name, i++);
+                if (1 == parms.size()) {
+                    os().printf("const LaolObj& %s = args;\n", name);
+                } else {
+                    os().printf("LaolObj %s = args[%d];\n", name, i++);
+                }
             }
         }
     }

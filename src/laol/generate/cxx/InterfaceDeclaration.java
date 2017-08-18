@@ -107,6 +107,9 @@ public class InterfaceDeclaration {
 
     private InterfaceDeclaration methodDefinitions() {
         m_ctx.setCurrStream(Context.EType.eCxx);
+        cxx()
+                .format("\n// Default destructor\n")
+                .format("%s::~%s(){}\n", m_clsName, m_clsName);
         m_helper.getMethodDeclarations()
                 .forEachOrdered(methodDecl -> laol.generate.cxx.MethodDeclaration.process(methodDecl, m_ctx));
         return this;

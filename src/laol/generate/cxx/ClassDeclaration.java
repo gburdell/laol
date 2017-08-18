@@ -80,7 +80,7 @@ public class ClassDeclaration {
             hxx().println("\n//accessors {");
         }
         m_members.forEach(parm -> {
-            hxx().format("Ref %s %s {return m_%s;}\n", parm, METHOD_SIGNATURE, parm);
+            hxx().format("Ref %s %s {return &m_%s;}\n", parm, METHOD_SIGNATURE, parm);
             m_helper.getMethods().add(parm);
         });
         if (!m_members.isEmpty()) {
@@ -108,6 +108,9 @@ public class ClassDeclaration {
 
     private ClassDeclaration constructorDefn() {
         m_ctx.setCurrStream(Context.EType.eCxx);
+        cxx()
+                .format("\n// Default destructor\n")
+                .format("%s::~%s(){}\n", m_clsName, m_clsName);
         m_decl.getConstructors().forEach((Constructor con) -> {
             //constructor declaration (in definition)
             final List<String> conParms = getNames(con.getParms());

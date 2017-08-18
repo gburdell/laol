@@ -112,15 +112,14 @@ public class PostfixExpression {
             final String name = primExpr.toScopedName();
             final Item peek = m_eles.peek();
             if (m_ctx.isMemberName(name)) {
-                if (m_eles.isEmpty() 
-                        || (peek instanceof ArySelExpr) 
+                if (m_eles.isEmpty()
+                        || (peek instanceof ArySelExpr)
                         || (peek instanceof IncDec)
-                        || (peek instanceof DotSfx)
-                        ) {
+                        || (peek instanceof DotSfx)) {
                     os().printf("m_%s", name); //use accessor
                     return;
                 }
-                assert(false); //todo?
+                assert (false); //todo?
             } else {
                 /*
                  * A simple/scoped name which is not a local member name.
@@ -133,13 +132,13 @@ public class PostfixExpression {
                     os().print("(self");
                     isPrimExprList(true, true);
                     os().print(")");
-                } 
+                }
                 return;
             }
         }
         PrimaryExpression.process(primExpr, m_ctx);
     }
-    
+
     private void process(final DotSfx expr) {
         final DotSuffix suffix = expr.getExpr();
         assert (!suffix.isNew());    //do w/ isConstructor
@@ -149,14 +148,19 @@ public class PostfixExpression {
         } else {
             assert (suffix.isIdent());
             final String methodName = Util.toMethodName(suffix.getSuffix());
-            os().printf("(\"%s\"", methodName);
-            if (expr.hasBlock()) {
-                os().print(", ");
-                AnonymousFunctionDefn.process(expr.getBlock(), m_ctx);
+            if (Util.BUILTIN_METHODS.contains(methodName)) {
+                //builtins dont take args
+                os().printf(".%s()", methodName);
             } else {
-                isPrimExprList(true, true);
+                os().printf("(\"%s\"", methodName);
+                if (expr.hasBlock()) {
+                    os().print(", ");
+                    AnonymousFunctionDefn.process(expr.getBlock(), m_ctx);
+                } else {
+                    isPrimExprList(true, true);
+                }
+                os().print(")");
             }
-            os().print(")");
         }
     }
 
