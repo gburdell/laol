@@ -245,6 +245,10 @@ public class Context implements AutoCloseable {
         setMemberNames(null);
     }
     
+    public boolean hasClassName() {
+        return !isNull(getClassName());
+    }
+    
     public String getClassName() {
         return m_className;
     }

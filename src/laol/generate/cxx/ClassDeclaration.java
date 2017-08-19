@@ -65,7 +65,8 @@ public class ClassDeclaration {
         m_ctx.clrClassName(); //we're done with this class scope
     }
 
-    public static final String METHOD_SIGNATURE = "(const LaolObj& self, const LaolObj& args) const";
+    public static final String METHOD_SIGNATURE_NO_CONST = "(const LaolObj& self, const LaolObj& args)";
+    public static final String METHOD_SIGNATURE = METHOD_SIGNATURE_NO_CONST + " const";
 
     private ClassDeclaration methodDefinitions() {
         m_helper.getMethodDeclarations()

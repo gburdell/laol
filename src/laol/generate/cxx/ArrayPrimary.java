@@ -56,6 +56,6 @@ public class ArrayPrimary {
             }
             print(ctx, "}");
         }
-        print(ctx, ")");
+        print(ctx, "))");
     }
 }

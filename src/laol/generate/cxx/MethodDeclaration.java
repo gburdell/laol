@@ -26,7 +26,9 @@ package laol.generate.cxx;
 import java.io.FileNotFoundException;
 import java.io.PrintStream;
 import java.util.Objects;
+import static java.util.Objects.nonNull;
 import static laol.generate.cxx.ClassDeclaration.METHOD_SIGNATURE;
+import static laol.generate.cxx.ClassDeclaration.METHOD_SIGNATURE_NO_CONST;
 
 /**
  * Generate body of method.
@@ -54,9 +56,10 @@ public class MethodDeclaration {
         if (m_decl.isAbstract() || m_methodName.equals(m_className)) {
             return;
         }
+        final boolean isMemberMethod = nonNull(m_className);
         cxx().printf("\nRef %s %s", 
-                (Objects.nonNull(m_className) ? (m_className + "::") : "") + m_methodName, 
-                METHOD_SIGNATURE);
+                (isMemberMethod ? (m_className + "::") : "") + m_methodName, 
+                (isMemberMethod ? METHOD_SIGNATURE : METHOD_SIGNATURE_NO_CONST));
         MethodBody.process(m_decl, m_ctx);
     }
 
